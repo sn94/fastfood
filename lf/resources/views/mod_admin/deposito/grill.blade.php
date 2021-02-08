@@ -3,29 +3,33 @@
 <table class="table table-secondary text-dark">
 
     <thead style="font-family: mainfont;font-size: 18px;">
-        <th></th>
-        <th></th> 
+        
         <th>DESCRIPCIÓN</th>  
+        <th>STOCK MÍN.</th>
+        <th>STOCK MÁX.</th> 
         <th>ENTRADAS</th>
         <th>SALIDAS</th>
+        <th>SALDO</th>
     </thead>
+
 
     <tbody>
 
     @foreach( $registros as $prov)
         <tr>
-            <td>
-                <a style="color: black;" href="{{url('cargo/update').'/'.$prov->REGNRO}}"> <i class="fa fa-pencil"></i></a>
-            </td>
-            <td>
-            <a onclick="delete_row(event)" style="color: black;" href="{{url('cargo').'/'.$prov->REGNRO}}"> <i class="fa fa-trash"></i></a>
-            </td>
-
             
-            <td>{{$prov->DESCRIPCION}}</td> 
-            <td></td>
-            <td></td>
-           
+            @php 
+            $edit_url="";
+            if(  $CONTEXTO ==  "M")  $edit_url= url('materia-prima/update')."/".$prov->REGNRO;
+            else   $edit_url= url('productos/update')."/".$prov->REGNRO;
+            @endphp 
+
+            <td>  <a style="color: black;" href="{{$edit_url}}"> {{$prov->DESCRIPCION}} </a>  </td> 
+            <td> {{$prov->STOCK_MIN}} </td>
+            <td> {{$prov->STOCK_MAX}}</td>
+            <td> {{$prov->entradas}}</td>
+            <td> {{$prov->salidas}}</td>
+            <td>  {{  $prov->entradas -  $prov->salidas}}  </td>
             
         </tr>
     @endforeach

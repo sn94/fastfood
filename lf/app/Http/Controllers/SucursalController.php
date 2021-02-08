@@ -25,6 +25,15 @@ class SucursalController extends Controller {
             ->whereRaw("  DESCRIPCION LIKE '%$buscado%'  ")  ; 
         }
       
+         //El formato de los datos
+         $formato=  request()->header("formato");
+
+         //Si es JSON retornar
+         if ($formato == "json") {
+             $sucursales =  $sucursales->get();
+             return response()->json($sucursales);
+         }
+
         $sucursales=  $sucursales->paginate( 10 );
         
          

@@ -12,7 +12,7 @@ use App\Helpers\Utilidades;
         <th></th> 
         <th>DESCRIPCIÓN</th> 
         <th class="text-right" >COSTO</th>
-        <th>PROVEEDOR</th>
+        
         <th>STOCK TOT.</th>
     </thead>
 
@@ -30,7 +30,7 @@ use App\Helpers\Utilidades;
             
             <td>{{$prov->DESCRIPCION}}</td> 
             <td  class="text-right" >{{ Utilidades::number_f( $prov->PCOSTO) }}</td>
-            <td>{{ (is_null($prov->proveedor)) ?  ''  :   $prov->proveedor->NOMBRE}}</td>
+     
             <td> {{$prov->STOCKTOTAL}}</td>
             
         </tr>

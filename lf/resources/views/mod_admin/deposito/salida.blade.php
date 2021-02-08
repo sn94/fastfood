@@ -8,6 +8,7 @@
 @php
 //RECURSOS DE DATOS
 
+
 $resource_url= url("productos/buscar");
 $resource_url_item= url("productos/get");
 
@@ -16,13 +17,12 @@ $resource_url= url("materia-prima/buscar");
 $resource_url_item= url("materia-prima/get");
 }
 //URL PARA REGISTRAR LA COMPRA
-$FORM_URL= url("deposito-compra/$CONTEXTO");
+$FORM_URL= url("deposito-salida");
+
 //titulo de pantalla
 $TITULO= $CONTEXTO=="M" ? "Materia prima" : "Productos";
 
-
-
-$RESOURCE_URL=$resource_url; //Listado
+$RESOURCE_URL= $resource_url; //Listado
 $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
 
 @endphp
@@ -49,26 +49,28 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
 <!--URL -->
 <input type="hidden" id="RESOURCE-URL" value="{{$RESOURCE_URL}}">
 <input type="hidden" id="RESOURCE-URL-ITEM" value="{{$RESOURCE_URL_ITEM}}">
-<input type="hidden" id="PROVEEDOR-URL" value="{{url('proveedores')}}">
+<input type="hidden" id="SUCURSAL-URL" value="{{url('sucursal')}}">
 
 
 
-<h2 class="text-center mt-2" style="font-family: titlefont;">Depósito: Compra de {{$TITULO}} </h2>
+<h2 class="text-center mt-2" style="font-family: titlefont;">Depósito: Salidas de {{$TITULO}} </h2>
+
+
 
 
 
 <div id="loaderplace"></div>
 <div class="row m-5">
-
     <div class="col-12 col-md-12">
         <a href="{{url('deposito')}}" class="btn btn-danger">Ir a Menú «Depósito»</a>
     </div>
+
     <div class="col-12 col-md-12">
         <form action="{{$FORM_URL}}" method="POST" onsubmit="guardar(event)">
 
+            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
             <input type="hidden" name="TIPO" value="{{$CONTEXTO}}">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
 
             <div class="row bg-dark mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
@@ -79,22 +81,22 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
                 </div>
 
                 <!-- CABECERA  --->
-                <div class="col-12 col-md-4 col-lg-4 mb-1">
-                    <div style="display: grid;  grid-template-columns: 25%  75%;">
-                        <label style="grid-column-start: 1;" class="mt-1" for="element_7">PROVEEDOR </label>
-                        <input type="hidden" name="PROVEEDOR">
-                        <input oninput="if(this.value=='') document.querySelector('input[name=PROVEEDOR]').value='' ; " style="grid-column-start: 2;" class="form-control proveedor mt-1" type="text" />
+                <div class="col-12 col-md-4 col-lg-5 mb-1">
+                    <div style="display: grid;  grid-template-columns: 30% 10%  60%;">
+                        <label style="grid-column-start: 1;" for="element_7">SUCURSAL DESTINO: </label>
+                        <input class="form-control" style="grid-column-start: 2;background-color: #a8fb37 !important;" readonly type="text" name="SUCURSAL_DESTINO">
+                        <input placeholder="Buscar sucursal.." oninput="if(this.value=='') document.querySelector('input[name=SUCURSAL]').value='' ; " style="grid-column-start: 3;height: 40px;" class="form-control sucursal" type="text" />
                     </div>
                 </div>
                 <div class="col-12 col-md-4 col-lg-4 mb-1">
-                    <div style="display: grid;  grid-template-columns: 30%  70%;">
-                        <label style="grid-column-start: 1;" class="mt-1" for="element_7">FACTURA N°: </label>
+                    <div style="display: grid;  grid-template-columns: 40%  60%;">
+                        <label style="grid-column-start: 1;" class="mt-1" for="element_7">COMPROBANTE N°: </label>
                         <input name="NUMERO" style="grid-column-start: 2;" class="form-control mt-1" type="text" />
                     </div>
                 </div>
 
-                <div class="col-12 col-md-4 col-lg-4 mb-1">
-                    <div style="display: grid;  grid-template-columns: 20%  80%;">
+                <div class="col-12 col-md-4 col-lg-3 mb-1">
+                    <div style="display: grid;  grid-template-columns: 40%  60%;">
                         <label style="grid-column-start: 1;" class="mt-1" for="element_7">FECHA: </label>
                         <input value="{{date('Y-m-d')}}" name="FECHA" style="grid-column-start: 2;" class="form-control mt-1" type="date" />
                     </div>
@@ -136,15 +138,9 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
                     </div>
                 </div>
 
-                <div class="col-12 col-md-4  col-lg-3 mb-1">
-                    <div style="display: grid;  grid-template-columns: 30%  70%; ">
-                        <label style="grid-column-start: 1;">PRECIO: </label>
-                        <input numerico="yes" oninput="formatear_entero(event)" style="grid-column-start: 2;" id="PRECIO" class="form-control text-right" type="text" />
-                        <input type="hidden" id="IVA"> </label>
-                    </div>
-                </div>
 
-                <div class="col-12 col-md-2   col-lg-2 mt-2 d-flex justify-content-center  align-items-center ">
+
+                <div class="col-12 col-md-2   col-lg-1 mt-2 d-flex justify-content-center  align-items-center ">
                     <button type="button" onclick="cargar_tabla()" class="btn btn-warning btn-lg">CARGAR</button>
                 </div>
 
@@ -157,25 +153,20 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
                         <thead>
                             <tr style="font-family: mainfont;font-size: 18px;">
                                 <th>DESCRIPCIÓN</th>
-                                <th class='text-right'>PRECIO</th>
+
                                 <th>UNI.MED.</th>
                                 <th> CANTIDAD</th>
-                                <th class='text-right'>EXENTA</th>
-                                <th class='text-right'>5 %</th>
-                                <th class='text-right'>10 %</th>
+
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody id="COMPRA-DETALLE">
+                        <tbody id="SALIDA_DETALLE">
 
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="4">
+                                <th colspan="3">
                                 </th>
-                                <th class='text-right' id="TOTALEXE">0</th>
-                                <th class='text-right' id="TOTAL5">0</th>
-                                <th class='text-right' id="TOTAL10">0</th>
                                 <th></th>
                             </tr>
                         </tfoot>
@@ -194,16 +185,13 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
 
 
 <script>
-    var compra_model = [];
+    var salida_model = [];
 
 
     var mostrar_item = async function(id) {
         let item = await get_item(id);
         if (Object.keys(item).length > 0) {
-            // let PRECIO=   item.PVENTA;
             $("#MEDIDA").text(item.MEDIDA);
-            $("#IVA").val(item.TRIBUTO);
-
         }
     }
 
@@ -238,7 +226,7 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
         let id = row.attr("id");
         $(esto.parentNode.parentNode).remove();
         //quitar del modelo 
-        compra_model = compra_model.filter(function(arg) {
+        salida_model = salida_model.filter(function(arg) {
 
 
             return String(arg.ITEM) != String(id);
@@ -246,9 +234,10 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
     }
 
     function limpiar_campos_cabecera() {
-        $("input[name=PROVEEDOR]").val("");
-        $(".proveedor").val("");
+        $("input[name=SUCURSAL_DESTINO]").val("");
+        $(".sucursal").val("");
         $("input[name=FECHA]").val("");
+        $("input[name=CONCEPTO]").val("");
         $("input[name=NUMERO]").val("");
     }
 
@@ -256,29 +245,24 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
     function limpiar_campos_detalle() {
         $("#ITEM-ID").val("");
         $("#ITEM").val("");
-        $("#PRECIO").val("");
         $("#CANTIDAD").val("");
         $("#MEDIDA").text("");
-        $("#IVA").val("");
     }
 
 
     function limpiar_tabla() {
-        $("#COMPRA-DETALLE").html("");
-        $("#TOTALEXE").text("0");
-        $("#TOTAL5").text("0");
-        $("#TOTAL10").text("0");
+        $("#SALIDA_DETALLE").html("");
     }
 
     function actualizar_fila(objec) {
-        let existe = compra_model.map((ar) => ar.ITEM).filter((ar) => parseInt(ar) == parseInt(objec.ITEM)).length;
+        let existe = salida_model.map((ar) => ar.ITEM).filter((ar) => parseInt(ar) == parseInt(objec.ITEM)).length;
         if (existe > 0) {
-            let numero_de_filas = $("#COMPRA-DETALLE tr").length;
+            let numero_de_filas = $("#SALIDA_DETALLE tr").length;
             if (numero_de_filas == 0) return false;
 
             for (let nf = 0; nf < numero_de_filas; nf++) {
-                let lafila = $("#COMPRA-DETALLE tr")[nf];
-                console.log(lafila);
+                let lafila = $("#SALIDA_DETALLE tr")[nf];
+
                 if (String(lafila.id) == String(objec.ITEM)) {
                     $(lafila).remove();
                     break;
@@ -288,64 +272,34 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
     }
 
 
-    function calcular_totales() {
 
-        let totales1 = compra_model.map((ar) => ar.EXENTA).reduce(function(suma, elemento) {
-            console.log(suma);
-            return suma + elemento;
-        })
-        let totales2 = compra_model.map((ar) => ar.IVA5).reduce(function(suma, elemento) {
-            console.log(suma);
-            return suma + elemento;
-        });
-        let totales3 = compra_model.map((ar) => ar.IVA10).reduce(function(suma, elemento) {
-            console.log(suma);
-            return suma + elemento;
-        });
-        $("#TOTALEXE").text(dar_formato_millares(totales1));
-        $("#TOTAL5").text(dar_formato_millares(totales2));
-        $("#TOTAL10").text(dar_formato_millares(totales3));
-    }
 
     function cargar_tabla() {
 
         let regnro = $("#ITEM-ID").val();
         let descri = $("#ITEM").val();
-        let precio = limpiar_numero_($("#PRECIO").val());
         let canti = $("#CANTIDAD").val();
         let medida = $("#MEDIDA").text();
-        let iva = parseInt($("#IVA").val());
-        let subtotal = precio * parseInt(canti);
 
-        let exe = iva == 0 ? subtotal : 0;
-        let i5 = iva == 5 ? subtotal : 0;
-        let i10 = iva == 10 ? subtotal : 0;
 
-        if (regnro != "" && precio != "" && canti != "") {
+
+        if (regnro != "" && canti != "") {
 
             let des = "<td> " + descri + "</td>";
-            let prec = "<td class='text-right' >    " + dar_formato_millares(precio) + "</td>";
             let med = "<td>     " + medida + "</td>";
             let cant = "<td>    " + canti + "</td>";
-            let ex = "<td class='text-right' >    " + dar_formato_millares(exe) + "</td>";
-            let iv5 = "<td class='text-right' >    " + dar_formato_millares(i5) + "</td>";
-            let iv10 = "<td class='text-right' >    " + dar_formato_millares(i10) + "</td>";
+
             let del = "<td> <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>";
 
             //agregar al modelo
             let objc = {
                 ITEM: regnro,
-                CANTIDAD: canti,
-                P_UNITARIO: precio,
-                EXENTA: exe,
-                IVA5: i5,
-                IVA10: i10
+                CANTIDAD: canti
             };
-            compra_model.push(objc);
+            salida_model.push(objc);
             actualizar_fila(objc);
-            $("#COMPRA-DETALLE").append("<tr id='" + regnro + "' >" + des + prec + med + cant + ex + iv5 + iv10 + del + "</tr>");
+            $("#SALIDA_DETALLE").append("<tr id='" + regnro + "' >" + des + med + cant + del + "</tr>");
             limpiar_campos_detalle();
-            calcular_totales();
         } else
             alert("Seleccione un item antes de cargar, o complete todos los datos");
 
@@ -476,13 +430,13 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
         show_loader();
         //componer
         let cabecera = {
-            PROVEEDOR: $("input[name=PROVEEDOR]").val(),
-            FECHA: $("input[name=FECHA]").val(),
-            NUMERO: $("input[name=NUMERO]").val(),
+            SUCURSAL: $("input[name=SUCURSAL]").val(),
             TIPO: $("input[name=TIPO]").val(),
-            CONCEPTO: $("input[name=CONCEPTO]").val()
+            CONCEPTO: $("input[name=CONCEPTO]").val(),
+            FECHA: $("input[name=FECHA]").val(),
+            NUMERO: $("input[name=NUMERO]").val()
         }
-        let detalle = compra_model;
+        let detalle = salida_model;
         let req = await fetch(ev.target.action, {
             "method": "POST",
 
@@ -523,8 +477,8 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
 
 
     //Autocomplete
-    async function autocompletado_proveedores() {
-        let url_ = $("#PROVEEDOR-URL").val();
+    async function autocompletado_sucursales() {
+        let url_ = $("#SUCURSAL-URL").val();
         let req = await fetch(url_, {
             headers: {
                 formato: "json"
@@ -534,12 +488,12 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
 
         var dataArray = resp.map(function(value) {
             return {
-                label: value.NOMBRE,
+                label: value.DESCRIPCION,
                 value: value.REGNRO
             };
         });
 
-        let elementosCoincidentes = document.querySelectorAll(".proveedor");
+        let elementosCoincidentes = document.querySelectorAll(".sucursal");
 
         Array.prototype.forEach.call(elementosCoincidentes, function(input) {
             new Awesomplete(input, {
@@ -547,7 +501,7 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
                 // insert label instead of value into the input.
                 replace: function(suggestion) {
                     this.input.value = suggestion.label;
-                    $("input[name=PROVEEDOR]").val(suggestion.value);
+                    $("input[name=SUCURSAL]").val(suggestion.value);
                 }
             });
         });
@@ -599,7 +553,7 @@ $RESOURCE_URL_ITEM= $resource_url_item; //dato por cada item
 
     window.onload = function() {
         autocompletado_items();
-        autocompletado_proveedores();
+        autocompletado_sucursales();
     };
 </script>
 

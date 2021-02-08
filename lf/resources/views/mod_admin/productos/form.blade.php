@@ -14,10 +14,9 @@
  $FAMILIA_NOM= isset( $producto )? ( is_null($producto->familia ) ? '' : $producto->familia->DESCRIPCION ): "";
  $PVENTA= isset( $producto )? Utilidades::number_f( $producto->PVENTA ) : "";
  $PCOSTO= isset( $producto )? Utilidades::number_f( $producto->PCOSTO ) : "";
- $STOCKTOTAL= isset( $producto )? $producto->STOCKTOTAL : "";
- $STOCK_MIN= isset( $producto )? $producto->STOCK_MIN : "";
- $PROVEEDOR= isset( $producto )? $producto->PROVEEDOR : "";
- $PROVEEDOR_NOM= isset( $producto )? ( is_null($producto->proveedor) ? '' : $producto->proveedor->NOMBRE ): "";
+ $STOCK_MAX= isset( $producto )? $producto->STOCK_MAX : "0";
+ $STOCK_MIN= isset( $producto )? $producto->STOCK_MIN : "0";
+  
  $ULT_COMPRA= isset( $producto )? $producto->ULT_COMPRA : "";
  $TIPO= isset( $producto )? $producto->TIPO : "";
  $TIPO_P= $TIPO=='P'? 'checked':'';
@@ -43,7 +42,7 @@
 
 
 
- <input type="hidden" id="PROVEEDOR-URL" value="{{url('proveedores')}}">
+ 
  <input type="hidden" id="FAMILIA-URL" value="{{url('familia')}}">
 
 
@@ -128,14 +127,10 @@
                  <label for="element_5">STOCK MÍNIMO </label>
                  <input numerico="yes" oninput="formatear_entero(event)" name="STOCK_MIN" class="form-control" type="text" maxlength="20" value="{{$STOCK_MIN}}" />
 
-                 <label for="element_6">STOCK TOTAL </label>
-                 <input numerico="yes" oninput="formatear_entero(event)" name="STOCKTOTAL" class="form-control" type="text" maxlength="20" value="{{$STOCKTOTAL}}" />
+                 <label for="element_6">STOCK MÁXIMO </label>
+                 <input numerico="yes" oninput="formatear_entero(event)" name="STOCK_MAX" class="form-control" type="text" maxlength="20" value="{{$STOCK_MAX}}" />
 
-                 <div style="display: grid;  grid-template-columns: 20%  80%;">
-                     <label style="grid-column-start: 1;" class="mt-1" for="element_7">PROVEEDOR </label>
-                     <input type="hidden" name="PROVEEDOR" value="{{$PROVEEDOR}}">
-                     <input oninput="if(this.value=='') document.querySelector('input[name=PROVEEDOR]').value='' ; " style="grid-column-start: 2;" class="form-control proveedor mt-1" type="text" value="{{$PROVEEDOR_NOM}}" />
-                 </div>
+               
 
                  <label for="element_7">ÚLTIMA COMPRA </label>
                  <input name="ULT_COMPRA" class="form-control" type="date" value="{{$ULT_COMPRA}}" />
@@ -385,6 +380,6 @@
 
      window.onload = function() {
          autocompletado_familias();
-         autocompletado_proveedores();
+      //   autocompletado_proveedores();
      };
  </script>

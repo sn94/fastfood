@@ -104,10 +104,15 @@ Route::delete('/familia/{id}',    'FamiliaController@delete' );
 
 
 Route::get('/deposito',   'DepositoController@index' );//Solo una vista
+Route::get('/deposito/{contexto}',   'DepositoController@index' );
+Route::post('/deposito/{contexto}',   'DepositoController@index' ); 
 Route::get('/deposito-compra/{contexto}',   'DepositoController@compra' );
 Route::post('/deposito-compra/{contexto}',   'DepositoController@compra' );
 Route::get('/deposito-recepcion/{contexto}',   'DepositoController@recepcion' );
 Route::post('/deposito-recepcion/{contexto}',   'DepositoController@recepcion' );
+Route::get('/deposito-salida/{contexto}',   'DepositoController@salida' );
+Route::post('/deposito-salida',   'DepositoController@salida' );
+ 
 
 Route::get('/ventas',   'VentasController@create' );
 Route::post('/ventas',   'VentasController@create' );

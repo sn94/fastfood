@@ -13,15 +13,11 @@ class Materiaprima extends Model
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
     protected $fillable = [
-        'CODIGO','DESCRIPCION','PCOSTO','STOCKTOTAL','STOCK_MIN',
-        'PROVEEDOR', 'IMG',  'TRIBUTO', 'MEDIDA', 'TRIBUTO'
+        'CODIGO','DESCRIPCION','PCOSTO','STOCK_MAX','STOCK_MIN',
+         'IMG',  'TRIBUTO', 'MEDIDA', 'TRIBUTO'
         
     ];
 
 
-    public function proveedor()
-    {
-        //                                              foreign     ownerkey
-        return $this->belongsTo(Proveedores::class,  "PROVEEDOR", "REGNRO");
-    }
+    
 }

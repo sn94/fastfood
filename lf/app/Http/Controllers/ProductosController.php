@@ -18,7 +18,9 @@ class ProductosController extends Controller {
      */
     public function index( )
     {
- 
+  
+Artisan::call('storage:link'); 
+
         $buscado= "";
         $tipo= "";
         if(  request()->method() ==  "POST") {
@@ -66,6 +68,9 @@ class ProductosController extends Controller {
         }
         else {
         
+            //artisan
+Artisan::call('storage:link');
+/*** */
 
             
             try{

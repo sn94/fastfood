@@ -12,18 +12,13 @@ class Productos extends Model
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
     protected $fillable = [
-        'CODIGO','BARCODE','BOTON','FAMILIA','PVENTA','DESCRIPCION','PCOSTO','STOCKTOTAL','STOCK_MIN',
-        'PROVEEDOR','ULT_COMPRA', 'IMG',  'TRIBUTO',  'TIPO',  'MEDIDA'
+        'CODIGO','BARCODE','BOTON','FAMILIA','PVENTA','DESCRIPCION','PCOSTO','STOCK_MAX','STOCK_MIN',
+        'ULT_COMPRA', 'IMG',  'TRIBUTO',  'TIPO',  'MEDIDA'
         
     ];
 
 
-    public function proveedor()
-    {
-        return $this->belongsTo(Proveedores::class,  "PROVEEDOR", "REGNRO"  );
-    }
-
-
+  
 
 
     public function compras_detalle()

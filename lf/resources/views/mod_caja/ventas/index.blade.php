@@ -68,13 +68,9 @@
 
         <div class="col-12 col-md-5">
             <label class="text-light" style=" font-weight: 600; font-size: 20px;  ">Cliente:</label>
-            <input type="text" id="CLIENTE-RUC" size="3" readonly style="font-weight: 600; color: black; background-color: #f7ff91;">
+            <input type="text" id="CLIENTE-RUC" size="7" readonly style="font-weight: 600; color: black; background-color: #f7ff91;">
 
-            <div style="display: inline;">
-                <input autocomplete="off" type="text" id="CLIENTE" placeholder="Buscar por nombre, cédula o RUC">
-                <div id="CLIENTES-RESULTADOS" class="d-none">
-                </div>
-            </div>
+            <input oninput="set_default_client( this)" autocomplete="off" type="text" id="CLIENTE" placeholder="Buscar por nombre, cédula o RUC">
         </div>
 
         <div class="col-12 col-md-3">
@@ -167,6 +163,10 @@
 
 
 <script>
+    var ALLCLIENTS = [];
+
+
+
     function show_loader() {
         let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
         $("#loaderplace").html(loader);
@@ -291,8 +291,9 @@
             }
 
         );
-        let resp = await req.text();
-        console.log(resp);
+        let resp = await req.json();
+        if ("ok" in resp) alert("Venta registrada");
+        else alert(resp.error);
     }
 
 
@@ -315,6 +316,19 @@
 
 
 
+
+
+    //Cliente default
+
+    function set_default_client(esto) {
+
+        if (   (esto == undefined  ||  esto.value == ""   ) && ALLCLIENTS.length > 0) {
+            let defau = ALLCLIENTS[0];
+            $("input[name=CLIENTE]").val(defau.REGNRO);
+            $("#CLIENTE-RUC").val(defau.CEDULA_RUC);
+            $("#CLIENTE").val(defau.NOMBRE);
+        }
+    }
     //Autocomplete
     async function autocompletado_clientes() {
         let termino = "";
@@ -332,12 +346,14 @@
             },
             body: "buscado=" + termino
         });
+
         let resp = await req.json();
+        ALLCLIENTS = resp;
         //  $("#loaderplace").html("");
 
         var dataArray = resp.map(function(value) {
             return {
-                label: "(RUC: "+value.CEDULA_RUC + ") " + value.NOMBRE,
+                label: "(RUC: " + value.CEDULA_RUC + ") " + value.NOMBRE,
                 value: value.REGNRO
             };
         });
@@ -351,6 +367,7 @@
                 $("input[name=CLIENTE], #CLIENTE-RUC").val(suggestion.value);
             }
         });
+        set_default_client();
         //  Array.prototype.forEach.call(elementosCoincidentes, function(input) {});
 
     }

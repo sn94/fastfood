@@ -25,6 +25,7 @@
 
 async function guardar(ev) {
         ev.preventDefault();
+      
         //if (campos_vacios()) return;
  
         $("input[name=CEDULA_RUC]").val(limpiar_numero($("input[name=CEDULA_RUC]").val()));

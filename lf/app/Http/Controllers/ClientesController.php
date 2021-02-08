@@ -16,6 +16,14 @@ class ClientesController extends Controller {
     {
 
 
+          //Ya existen clientes?
+          $nro=  Clientes::count();
+          if(  $nro == 0){
+             $clienteDefault= new  Clientes();
+             $clienteDefault->fill(   [ 'REGNRO'=> '1', 'CEDULA_RUC'=>  '44444401-7', 'NOMBRE'=>'CLIENTE OCASIONAL']);
+             $clienteDefault->save();
+          }
+
         $buscado= "";
         if(  request()->method() ==  "POST")  $buscado=  request()->input("buscado");
 
@@ -45,10 +53,21 @@ class ClientesController extends Controller {
 
     public function create()
     {
+      
         if (request()->getMethod()  ==  "GET")
             return view('mod_caja.clientes.create');
         else {
 
+            //
+            //Ya existen clientes?
+            $nro=  Clientes::count();
+            if(  $nro == 0){
+               $clienteDefault= new  Clientes();
+               $clienteDefault->fill(   [ 'REGNRO'=> '1', 'RUC'=>  '44444401-7', 'NOMBRE'=>'CLIENTE OCASIONAL']);
+               $clienteDefault->save();
+            }
+
+            
             if(  $this->ruc_cedula_registrado(  request()->input("CEDULA_RUC")  ))
                 return response()->json(  ['err'=>  "CÉDULA/RUC ya existe"] );
             

@@ -34,9 +34,8 @@
 
 
 
-<input type="hidden" id="GRILL-URL-CUSTOM1" value="{{url('deposito/buscar-materia-prima')}}">
-<input type="hidden" id="GRILL-URL-CUSTOM2" value="{{url('deposito/buscar-producto')}}">
-
+<input type="hidden" id="GRILL-URL-CUSTOM1" value="{{url('deposito/M')}}">
+<input type="hidden" id="GRILL-URL-CUSTOM2" value="{{url('deposito/P')}}">
 
 
 
@@ -45,17 +44,17 @@
 <h2 class="text-center mt-2" style="font-family: titlefont;">Gestión del Depósito (productos y materia prima) </h2>
 
 
-<select id="CONTEXTO" onchange="cambiar_contexto(event)">
+<label for="" style="font-weight: 600; color: white; "> FILTRAR POR: </label>
+ <select style="height: 35px;" id="CONTEXTO" onchange="cambiar_contexto(event)">
     <option selected value="M">MATERIA PRIMA</option>
     <option value="P">PRODUCTOS</option>
 </select>
 
 <a class="btn btn-danger" id="ENTRADA1" href="{{url('deposito-compra/M')}}">REGISTRAR COMPRAS</a>
-<a class="btn btn-danger" id="ENTRADA11" href="{{url('deposito-recepcion/M')}}">REGISTRAR OTRO TIPO DE ENTRADA</a>
 <a class="btn btn-danger" id="SALIDA1" href="{{url('deposito-salida/M')}}">REGISTRAR SALIDAS</a>
 
 <a class="btn btn-danger d-none" id="ENTRADA2" href="{{url('deposito-compra/P')}}">REGISTRAR COMPRAS</a>
-<a class="btn btn-danger d-none" id="ENTRADA22" href="{{url('deposito-recepcion/P')}}">REGISTRAR OTRO TIPO DE ENTRADA</a>
+ 
 <a class="btn btn-danger d-none" id="SALIDA2" href="{{url('deposito-salida/P')}}">REGISTRAR SALIDAS</a>
 
 
@@ -117,6 +116,7 @@
         if (ev.target.value == "M") {
             $("#ENTRADA1").removeClass("d-none");
             $("#SALIDA1").removeClass("d-none");
+            
             $("#ENTRADA2").addClass("d-none");
             $("#SALIDA2").addClass("d-none");
         } else {
@@ -125,7 +125,7 @@
             $("#ENTRADA2").removeClass("d-none");
             $("#SALIDA2").removeClass("d-none");
         }
-
+        buscar();
     }
 
 

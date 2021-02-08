@@ -11,7 +11,7 @@ class Compras extends Model
      
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'NUMERO', 'CONDICION', 'FECHA', 'PROVEEDOR' ,  'CONCEPTO'];
+    protected $fillable = [  'NUMERO', 'CONDICION', 'FECHA', 'PROVEEDOR' ,  'CONCEPTO',  'TIPO'];
 
  
 

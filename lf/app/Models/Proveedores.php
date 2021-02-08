@@ -17,14 +17,7 @@ class Proveedores extends Model
         
     ];
 
+ 
 
-    public function productos()
-    {
-        return $this->hasMany(Productos::class,   'PROVEEDOR', 'REGNRO');
-    }
-
-    public function materiaprimas()
-    {
-        return $this->hasMany(Materiaprima::class,   'PROVEEDOR', 'REGNRO');
-    }
+    
 }
