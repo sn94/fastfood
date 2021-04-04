@@ -11,7 +11,7 @@ class Compras_detalles extends Model
      
     protected $primaryKey = 'REGNRO';
     public $timestamps = false;
-    protected $fillable = [  'COMPRA_ID', 'ITEM', 'CANTIDAD', 'P_UNITARIO', 'EXENTA', 'IVA5',  'IVA10' ];
+    protected $fillable = [  'COMPRA_ID', 'ITEM', 'CANTIDAD', 'P_UNITARIO', 'EXENTA', 'IVA5',  'IVA10', 'TIPO' ];
 
  
 
@@ -21,5 +21,9 @@ class Compras_detalles extends Model
     public function compra()
     {
         return $this->belongsTo(Compras::class, 'REGNRO', 'COMPRA_ID' );
+    }
+
+    public function  stock(){
+        return $this->hasOne(  Stock::class,   "REGNRO", "ITEM");
     }
 }

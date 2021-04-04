@@ -8,17 +8,43 @@ use Illuminate\Database\Eloquent\Model;
 class Compras extends Model
 {
     use HasFactory;
-     
+
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'NUMERO', 'CONDICION', 'FECHA', 'PROVEEDOR' ,  'CONCEPTO',  'TIPO'];
+    protected $fillable = ['NUMERO', 'CONDICION', 'FECHA', 'PROVEEDOR',  
+    'CONCEPTO', 'SUCURSAL', 'FORMA_PAGO', 'REGISTRADO_POR','NPEDIDO_ID'  ];
 
- 
+    protected $dates=[
+        "FECHA"
+    ];
 
-    public function compras_detalle()
+
+    public function  TOTAL()
     {
-        return $this->hasMany( Compras_detalle::class, 'COMPRA_ID',  'REGNRO');
+        $detalle =  $this->compras_detalle;
+        $total = 0;
+        foreach ($detalle as $detail) :
+            $subtotal =  $detail->CANTIDAD  *  $detail->P_UNITARIO;
+            $total +=  $subtotal;
+        endforeach;
+        return  round($total);
     }
 
 
+
+    
+    public function compras_detalle()
+    {
+        return $this->hasMany(Compras_detalles::class, 'COMPRA_ID',  'REGNRO');
+    }
+
+    public function proveedor()
+    {
+        return $this->hasOne(Proveedores::class,  "REGNRO", "PROVEEDOR");
+    }
+
+    public function sucursal()
+    {
+        return $this->hasOne(Sucursal::class,  "REGNRO", "SUCURSAL");
+    }
 }

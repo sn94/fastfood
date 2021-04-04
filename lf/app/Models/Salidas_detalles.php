@@ -11,12 +11,15 @@ class Salidas_detalles extends Model
      
     protected $primaryKey = 'REGNRO';
     public $timestamps = false;
-    protected $fillable = [  'SALIDA_ID', 'ITEM', 'CANTIDAD' ];
+    protected $fillable = [  'SALIDA_ID', 'ITEM', 'CANTIDAD',  'TIPO'];
 
  
 
     
    
+    public function stock(){
+        return $this->hasOne(   Stock::class,  'REGNRO',  'ITEM');
+    }
 
     public function salida()
     {

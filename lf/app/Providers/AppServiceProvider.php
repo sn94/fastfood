@@ -2,7 +2,21 @@
 
 namespace App\Providers;
 
+use App\View\Components\Alert;
+use App\View\Components\CityChooser;
+use App\View\Components\FamiliaStockChooser;
+use App\View\Components\FastFoodModal;
+use App\View\Components\FastFoodNavbar;
+use App\View\Components\FormaPagoChooser;
+use App\View\Components\PrettyCheckbox;
+use App\View\Components\PrettyRadioButton;
+use App\View\Components\ProveedorChooser; 
+use App\View\Components\SearchReportDownloader;
+use App\View\Components\SucursalChooser;
+use App\View\Components\TipoStockChooser;
+use App\View\Components\UserInfoBox;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,5 +45,18 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Paginator::useBootstrap();
+        Blade::component('alert-component', Alert::class);
+        Blade::component('pretty-checkbox', PrettyCheckbox::class);
+        Blade::component('city-chooser', CityChooser::class);
+        Blade::component('search-report-downloader', SearchReportDownloader::class);
+        Blade::component('tipo-stock-chooser', TipoStockChooser::class);
+        Blade::component('familia-stock-chooser', FamiliaStockChooser::class);
+        Blade::component('sucursal-chooser', SucursalChooser::class);
+        Blade::component('fast-food-modal', FastFoodModal::class);
+        Blade::component('pretty-radio-button', PrettyRadioButton::class);
+        Blade::component('fast-food-navbar', FastFoodNavbar::class);
+        Blade::component('proveedor-chooser', ProveedorChooser::class);
+        Blade::component('forma-pago-chooser', FormaPagoChooser::class);
+        Blade::component('user-info-box', UserInfoBox::class);
     }
 }

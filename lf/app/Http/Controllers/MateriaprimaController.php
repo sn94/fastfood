@@ -43,9 +43,9 @@ class MateriaprimaController extends Controller {
         
          
         if( request()->ajax())
-        return view('mod_admin.materiaprima.grill',  ['materiaprima'=>   $materiaprimas]);
+        return view('materiaprima.grill',  ['materiaprima'=>   $materiaprimas]);
         else
-        return view('mod_admin.materiaprima.index');
+        return view('materiaprima.index');
     }
 
 
@@ -55,7 +55,7 @@ class MateriaprimaController extends Controller {
     {
         if (request()->getMethod()  ==  "GET") {
             
-            return view('mod_admin.materiaprima.create');
+            return view('materiaprima.create');
         }
         else {
         
@@ -87,7 +87,7 @@ class MateriaprimaController extends Controller {
     {
         if (request()->getMethod()  ==  "GET") {
             $cli =  Materiaprima::find($id); 
-            return view('mod_admin.materiaprima.update',  ['materiaprima' =>  $cli]);
+            return view('materiaprima.update',  ['materiaprima' =>  $cli]);
         }
         else {
 

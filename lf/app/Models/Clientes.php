@@ -17,4 +17,15 @@ class Clientes extends Model
         
     ];
 
+
+    
+    public function ventas()
+    {
+        return $this->belongsToMany(Ventas::class, 'CLIENTE', 'REGNRO'  ); 
+    }
+
+
+    public function ciudad_(){
+        return $this->belongsTo( Ciudades::class,      'CIUDAD', 'regnro' );
+    }
 }

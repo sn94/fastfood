@@ -19,4 +19,11 @@ class Ventas_det extends Model
         
     ];
 
+
+    public function producto()
+    {
+        return $this->hasOne(Stock::class, 'REGNRO', 'ITEM'  ); 
+    }
+
+
 }

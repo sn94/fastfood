@@ -1,0 +1,394 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Helpers\Utilidades;
+use App\Http\Controllers\Controller;
+use App\Models\Cargo;
+use App\Models\Compras;
+use App\Models\Compras_detalles;
+use App\Models\Ficha_produccion;
+use App\Models\Ficha_produccion_detalles;
+use App\Models\Materiaprima;
+use App\Models\Nota_pedido;
+use App\Models\Nota_pedido_detalles;
+use App\Models\Nota_residuos;
+use App\Models\Nota_residuos_detalle;
+use App\Models\Productos;
+use App\Models\Recepcion;
+use App\Models\Recepcion_detalles;
+use App\Models\Remision_de_terminados;
+use App\Models\Remision_de_terminados_detalle;
+use App\Models\Salidas;
+use App\Models\Salidas_detalles;
+use App\Models\Stock;
+use Exception;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+
+class CompraController extends Controller
+{
+
+    /**
+     * Show the profile for the given user.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function index()
+    {
+
+
+        $SUCURSAL = session("SUCURSAL");
+        $FECHA_DESDE = "";
+        $FECHA_HASTA = "";
+        $PROVEEDOR = "";
+        $FORMA_PAGO = "";
+
+        //parametros
+        if (request()->isMethod("POST")) {
+
+            $SUCURSAL =  request()->has("SUCURSAL") ?   request()->input("SUCURSAL") :  $SUCURSAL;
+            $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
+            $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
+            $PROVEEDOR = request()->has("PROVEEDOR") ?   request()->input("PROVEEDOR") :  $PROVEEDOR;
+            $FORMA_PAGO = request()->has("FORMA_PAGO") ?   request()->input("FORMA_PAGO") :  $FORMA_PAGO;
+        }
+
+
+        $COMPRAS = Compras::orderBy("created_at")
+            ->where("SUCURSAL", $SUCURSAL);
+        //OTROS FILTROS
+
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
+            $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
+        if ($PROVEEDOR != "")
+            $COMPRAS =  $COMPRAS->where("PROVEEDOR",  $PROVEEDOR);
+        if ($FORMA_PAGO != "")
+            $COMPRAS =  $COMPRAS->where("FORMA_PAGO",  $FORMA_PAGO);
+
+
+        //Content Type solicitado
+        //El formato de los datos
+        $formato =  request()->header("formato");
+
+        //Si es JSON retornar
+        if ($formato == "json") {
+            $COMPRAS =  $COMPRAS->get();
+            return response()->json($COMPRAS);
+        }
+
+        if ($formato == "pdf") {
+            $COMPRAS =  $COMPRAS->get();
+            return $this->responsePdf("compra.index.simple",  $COMPRAS, "Compras");
+        }
+
+        //Formato html
+        $COMPRAS = $COMPRAS->paginate(15);
+        if (request()->ajax())
+            return view("compra.index.grill", ['COMPRAS' => $COMPRAS]);
+        else
+            return view('compra.index.index', ['COMPRAS' => $COMPRAS]);
+    }
+
+
+
+
+    public function filtrar($filterParam = NULL)
+    {
+
+        $filtro = is_null($filterParam) ?  (request()->has("FILTRO") ?  request()->input("FILTRO")  : "1")  : $filterParam;
+
+        if (request()->isMethod("GET")  &&  request()->ajax()) {
+            return view("compra.reportes.filters.filter$filtro");
+        }
+
+
+
+        $SUCURSAL = session("SUCURSAL");
+        $COMPRAS =  [];
+
+        if ($filtro ==  "1") {
+            $tipo =  request()->has("TIPO_STOCK") ?  request()->input("TIPO_STOCK") : "";
+            $proveedor =  request()->has("PROVEEDOR") ?  request()->input("PROVEEDOR") : "";
+
+            //costos de producto por tipo y proveedor
+            $COMPRAS =  Compras::join("compras_detalles", "compras_detalles.COMPRA_ID", "=", "compras.REGNRO")
+                ->leftJoin("proveedores", "proveedores.REGNRO",  "compras.PROVEEDOR")
+                ->join("stock", "stock.REGNRO", "=", "compras_detalles.ITEM")
+                ->where("SUCURSAL", $SUCURSAL)
+                ->groupBy("ITEM")->groupBy("stock.REGNRO")->groupBy("PROVEEDOR")
+                ->groupBy("P_UNITARIO")
+                ->groupBy("PVENTA");
+            if ($proveedor != "")
+                $COMPRAS = $COMPRAS->where("compras.PROVEEDOR", $proveedor);
+            if ($tipo != "")
+                $COMPRAS = $COMPRAS->where("stock.TIPO", $tipo);
+            $COMPRAS = $COMPRAS->select(
+                "compras.REGNRO as COMPRA_ID",
+                "compras.NUMERO as FACTURA",
+                "compras.SUCURSAL",
+                "compras.FECHA",
+                "ITEM",
+                "stock.TIPO as TIPO_PRODUCTO",
+                "stock.DESCRIPCION",
+                DB::raw("format(stock.PVENTA, 0, 'de_DE') as PVENTA"),
+                DB::raw("format(P_UNITARIO, 0, 'de_DE') as P_UNITARIO"),
+                "PROVEEDOR",
+                "proveedores.NOMBRE as PROVEEDOR_NOM"
+            );
+            //    dd(  $COMPRAS->get());
+        }
+        if ($filtro ==  "2") { //productos mas comprados
+
+            $FECHA_DESDE = "";
+            $FECHA_HASTA = "";
+            $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
+            $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
+
+            $COMPRAS = Compras::join("compras_detalles", "compras_detalles.COMPRA_ID", "=", "compras.REGNRO")
+                ->join("stock",  "stock.REGNRO", "=", "compras_detalles.ITEM")
+                ->join("unimed",  "stock.MEDIDA", "=", "unimed.REGNRO")
+                ->groupBy("ITEM");
+            if ($FECHA_DESDE != ""   &&  $FECHA_HASTA !=  "")
+                $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
+
+            $COMPRAS = $COMPRAS->select(
+                "stock.*",
+                "unimed.DESCRIPCION as UNI_MEDIDA",
+                DB::raw("count(compras_detalles.REGNRO) AS NRO_COMPRAS"),
+                DB::raw("sum(compras_detalles.CANTIDAD) AS CANTIDAD")
+            );
+        }
+        if ($filtro ==  "3") {
+            /**Comparativos por sucursal */
+            $sucursal =   request()->has("SUCURSAL") ?   request()->input("SUCURSAL") :  "";
+            $FECHA_DESDE = "";
+            $FECHA_HASTA = "";
+            $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
+            $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
+
+            //costos de producto por tipo y proveedor
+            $COMPRAS =  Compras::join("compras_detalles", "compras_detalles.COMPRA_ID", "=", "compras.REGNRO")
+                ->leftJoin("proveedores", "proveedores.REGNRO",  "compras.PROVEEDOR");
+            if ($sucursal !=  "")
+                $COMPRAS = $COMPRAS->where("SUCURSAL", $SUCURSAL);
+
+            if ($FECHA_DESDE != ""   &&  $FECHA_HASTA !=  "")
+                $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
+
+            $COMPRAS = $COMPRAS->select("SUCURSAL", DB::raw("format(sum(P_UNITARIO*CANTIDAD),0,'de_DE') AS TOTAL_COMPRAS"),
+             DB::raw("count(compras.REGNRO) AS NRO_COMPRAS") )
+            ->groupBy("SUCURSAL");
+          //  dd(  $COMPRAS->with("sucursal")->get());
+        }
+        
+        /*
+        $SUCURSAL = session("SUCURSAL");
+        $FECHA_DESDE = "";
+        $FECHA_HASTA = "";
+        $PROVEEDOR = "";
+        $FORMA_PAGO = "";
+
+        //parametros
+        if (request()->isMethod("POST")) {
+
+            $SUCURSAL =  request()->has("SUCURSAL") ?   request()->input("SUCURSAL") :  $SUCURSAL;
+            $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
+            $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
+            $PROVEEDOR = request()->has("PROVEEDOR") ?   request()->input("PROVEEDOR") :  $PROVEEDOR;
+            $FORMA_PAGO = request()->has("FORMA_PAGO") ?   request()->input("FORMA_PAGO") :  $FORMA_PAGO;
+        }
+
+
+        $COMPRAS = Compras::orderBy("created_at")
+            ->where("SUCURSAL", $SUCURSAL);
+        //OTROS FILTROS
+
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
+            $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
+        if ($PROVEEDOR != "")
+            $COMPRAS =  $COMPRAS->where("PROVEEDOR",  $PROVEEDOR);
+        if ($FORMA_PAGO != "")
+            $COMPRAS =  $COMPRAS->where("FORMA_PAGO",  $FORMA_PAGO);
+*/
+
+        //Content Type solicitado
+        //El formato de los datos
+        $formato =  request()->header("formato");
+
+        //Si es JSON retornar
+        if ($formato == "json") {
+            $COMPRAS =  $COMPRAS->get();
+            return response()->json($COMPRAS);
+        }
+
+        if ($formato == "pdf") {
+            $COMPRAS =  $COMPRAS->get();
+            return $this->responsePdf("compra.reportes.views.filter$filtro",  $COMPRAS, "Compras");
+        }
+
+        //Formato html
+        $COMPRAS =  is_array($COMPRAS)  ?  $COMPRAS :  $COMPRAS->paginate(15);
+        if (request()->ajax())
+            return view("compra.reportes.views.filter$filtro", ['FILTRO' => $filtro, 'COMPRAS' => $COMPRAS]);
+        else
+            return view('compra.reportes.index', ['FILTRO' => $filtro, 'COMPRAS' => $COMPRAS]);
+    }
+
+
+
+
+
+    public function create_unitaria()
+    {
+
+        //cantidad
+        $cantidad =  Utilidades::limpiar_numero(request()->input("CANTIDAD"));
+        //itemcod
+        $item = request()->input("ITEM");
+        //NPEDIDO
+        $pedido = request()->input("NPEDIDO_ID");
+        try {
+            DB::beginTransaction();
+            $n_compra = new Compras();
+            $n_compra->SUCURSAL =  session("SUCURSAL");
+            $n_compra->CONDICION = "CONTADO";
+            $n_compra->FECHA = date("Y-m-d");
+            $n_compra->CONCEPTO = "RECEPCIÓN DE PROD. Y MERCAD. DE MATRIZ";
+            $n_compra->FORMA_PAGO = "EFECTIVO";
+            $n_compra->REGISTRADO_POR = session("ID");
+            $n_compra->NPEDIDO_ID = $pedido;
+            $n_compra->save();
+            //detalle
+            $d_compra = new Compras_detalles();
+            //Aditional item data
+            $itemModel = Stock::find($item);
+            /**Detail  */
+            $d_compra->COMPRA_ID =  $n_compra->REGNRO;
+            $d_compra->ITEM =  $item;
+            $d_compra->CANTIDAD =  $cantidad;
+            $d_compra->P_UNITARIO = $itemModel->PCOSTO;
+            $d_compra->EXENTA = 0;
+            $d_compra->IVA5 = $itemModel->TRIBUTO == "5" ? ($cantidad * $itemModel->PCOSTO) : 0;
+            $d_compra->IVA10 = $itemModel->TRIBUTO == "10" ? ($cantidad * $itemModel->PCOSTO) : 0;
+            $d_compra->TIPO = $itemModel->TIPO;
+            $d_compra->save();
+            //ACTUALIZAR ESTADO PEDIDO 
+            $pedidoModel = Nota_pedido::find($pedido);
+            $pedidoModel->ESTADO =  "F"; //Finalizado Aprobado Rechazado Pendiente
+            $pedidoModel->save();
+            DB::commit();
+            return response()->json(['ok' => "Compra N° $n_compra->REGNRO registrada"]);
+        } catch (Exception  $e) {
+            DB::rollBack();
+            return response()->json(['err' =>  $e->getMessage()]);
+        }
+    }
+
+
+
+    public function create()
+    {
+        if (request()->getMethod()  ==  "GET") {
+
+            return view(
+                'compra.proceso.create'
+            );
+        } else {
+
+            $Datos = request()->input();
+            $CABECERA = $Datos['CABECERA'];
+            $DETALLE = $Datos['DETALLE'];
+
+
+            try {
+                DB::beginTransaction();
+                //CABECERA
+                $n_compra = new Compras();
+                $n_compra->fill($CABECERA);
+                $n_compra->save();
+                //DETALLE
+
+                foreach ($DETALLE as $row) :
+                    $datarow = $row;
+                    $datarow['COMPRA_ID'] = $n_compra->REGNRO;
+                    $d_compra =  new Compras_detalles();
+                    $d_compra->fill($datarow);
+                    $d_compra->save();
+                endforeach;
+
+
+                DB::commit();
+                return response()->json(['ok' =>  "Entrada registrada"]);
+            } catch (Exception  $ex) {
+                DB::rollBack();
+                return response()->json(['err' =>   $ex->getMessage()]);
+            }
+        }
+    }
+
+
+
+    public function update($IDCOMPRA = NULL)
+    {
+        if (request()->getMethod()  ==  "GET") {
+
+            $compra = Compras::find($IDCOMPRA);
+            $detalles = $compra->compras_detalle;
+            return view(
+                'compra.proceso.create',
+                ['COMPRA' => $compra, 'DETALLE' =>  $detalles, 'EDICION' => TRUE]
+            );
+        } else {
+
+            $Datos = request()->input();
+            $CABECERA = $Datos['CABECERA'];
+            $DETALLE = $Datos['DETALLE'];
+
+
+            try {
+                DB::beginTransaction();
+                //CABECERA
+                $n_compra = Compras::find($CABECERA['REGNRO']);
+                $n_compra->fill($CABECERA);
+                $n_compra->save();
+                //DETALLE
+
+                Compras_detalles::where("COMPRA_ID",  $n_compra->REGNRO)->delete();
+                foreach ($DETALLE as $row) :
+                    $datarow = $row;
+                    $datarow['COMPRA_ID'] = $n_compra->REGNRO;
+                    $d_compra =  new Compras_detalles();
+                    $d_compra->fill($datarow);
+                    $d_compra->save();
+                endforeach;
+
+
+                DB::commit();
+                return response()->json(['ok' =>  "Compra actualizada"]);
+            } catch (Exception  $ex) {
+                DB::rollBack();
+                return response()->json(['err' =>   $ex->getMessage()]);
+            }
+        }
+    }
+
+
+
+    public function delete($IDCOMPRA = NULL)
+    {
+
+        $compra = Compras::find($IDCOMPRA);
+        try {
+            DB::beginTransaction();
+            if (!is_null($compra))  $compra->delete();
+            //borrar detalle
+            Compras_detalles::where("COMPRA_ID",  $IDCOMPRA)->delete();
+            DB::commit();
+            return response()->json(['ok' =>  "Borrado"]);
+        } catch (Exception $ex) {
+            return response()->json(['err' =>  $ex]);
+        }
+    }
+}

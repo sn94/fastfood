@@ -8,16 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class Proveedores extends Model
 {
     use HasFactory;
-    
+
 
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
     protected $fillable = [
-        'CEDULA_RUC','NOMBRE','DIRECCION','CIUDAD','TELEFONO','CELULAR','EMAIL',  'WEB'
-        
+        'CEDULA_RUC', 'NOMBRE', 'DIRECCION', 'CIUDAD', 'TELEFONO', 'CELULAR', 'EMAIL',  'WEB'
+
     ];
 
- 
 
-    
+
+    public function ciudad()
+    {
+        return $this->belongsTo(Ciudades::class,      'CIUDAD', 'regnro');
+    }
+
+
+   
 }

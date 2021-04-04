@@ -52,9 +52,9 @@ Artisan::call('storage:link');
         
          
         if( request()->ajax())
-        return view('mod_admin.productos.grill',  ['productos'=>   $productos]);
+        return view('productos.grill',  ['productos'=>   $productos]);
         else
-        return view('mod_admin.productos.index');
+        return view('productos.index');
     }
 
 
@@ -64,7 +64,7 @@ Artisan::call('storage:link');
     {
         if (request()->getMethod()  ==  "GET") {
             
-            return view('mod_admin.productos.create');
+            return view('productos.create');
         }
         else {
         
@@ -110,7 +110,7 @@ Artisan::call('storage:link');
             $cli =  Productos::find($id);
             //ruta de img
             
-            return view('mod_admin.productos.update',  ['producto' =>  $cli]);
+            return view('productos.update',  ['producto' =>  $cli]);
         }
         else {
 

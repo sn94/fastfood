@@ -12,7 +12,15 @@ class Familia extends Model
     protected  $table= "familia";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'DESCRIPCION' ];
+    protected $fillable = [  'DESCRIPCION',  'NRO_PESTANA' ];
 
  
+
+
+    public function productos(){
+        return $this->hasMany( Stock::class, "FAMILIA", "REGNRO");
+    }
+
+
+
 }
