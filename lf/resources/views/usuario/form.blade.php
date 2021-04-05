@@ -21,23 +21,13 @@
  $CELULAR=isset( $usuario )? $usuario->CELULAR : "";
  $EMAIL=isset( $usuario )? $usuario->EMAIL : "";
  $NIVEL=isset( $usuario )? $usuario->NIVEL : "";
+ $ORDEN=isset( $usuario )? $usuario->ORDEN : "";
  @endphp
 
-
- <style>
-     .form-control {
-         background: white !important;
-         color: black !important;
-         height: 40px !important;
-     }
-
-     label {
-         font-size: 18px !important;
-         color: white;
-     }
- </style>
+ 
 
 
+@include("validations.formato_numerico")
 
  <input type="hidden" id="USUARIO-URL" value="{{url('usuario')}}">
  @if( $REGNRO != "")
@@ -123,10 +113,14 @@
                  <input required name="EMAIL" class="form-control" type="text" maxlength="100" value="{{$EMAIL}}" />
              </div>
 
-             <div class="col-12  ">
+             <div class="col-12 col-md-4  ">
 
                  <label> Cambiar contraseña <input onchange="$('#MYPASS').prop('disabled', !this.checked); " type="checkbox"> </label>
                  <input disabled name="PASS" class="form-control" type="text" id="MYPASS" />
+             </div>
+             <div class="col-12 col-md-4  ">
+             <label>ORDEN: </label>
+                 <input name="ORDEN" class="form-control entero" type="text" maxlength="2" value="{{$ORDEN}}" />
              </div>
 
              <div class="col-12 offset-md-4 col-md-4 mt-2 d-flex justify-content-center">
@@ -164,7 +158,7 @@
          show_loader();
 
          let req = await fetch(ev.target.action, {
-             "method": "POST",
+             "method":  $("input[name=_method]").val() ,
              headers: {
                  'Content-Type': 'application/x-www-form-urlencoded',
                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -185,5 +179,11 @@
          }
 
 
+     }
+
+
+
+     window.onload= function(){
+         formatoNumerico.formatearCamposNumericosDecimales();
      }
  </script>

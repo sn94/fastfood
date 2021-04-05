@@ -5,57 +5,21 @@ Usuarios
 @endsection
 @section("content")
 
-
-<style>
-    #search {
-        height: 25px !important;
-        padding: 1px !important;
-        margin: 0px !important;
-        background-color: white !important;
-        width: 100%;
-    }
-
-    #search:focus {
-        border-radius: 20px;
-        border: #cace82 1px solid;
-    }
-
-    #search::placeholder {
-
-        font-size: 14px;
-        font-weight: 600;
-        color: black;
-        font-family: mainfont;
-        text-align: center;
-    }
-</style>
+ 
 <input type="hidden" id="GRILL-URL" value="{{url('usuario')}}">
 <input type="hidden" id="GRILL-URL-CUSTOM" value="{{url('usuario/buscar')}}">
 
-
-
-
-
-
-<h2 class="text-center mt-2" style="font-family: titlefont;">Fichas de usuarios</h2>
-
-
-
+<div class="container-fluid col-12 col-md-10 bg-dark text-light">
+<h2 class="text-center mt-2" >Fichas de usuarios</h2>
 
 <div id="loaderplace"></div>
-
- 
-
  
 <x-search-report-downloader placeholder="BUSCAR POR NOMBRE DE USUARIO, O NOMBRE-APELLIDO" callback="buscarUsuarios()" >
 <a class="btn btn-sm btn-warning" href="<?= url("usuario/create") ?>"> NUEVO</a>
 
 </x-search-report-downloader>
-
- 
-
-<div id="grill"  style="min-height: 300px;">
-   
+<div id="grill"  style="min-height: 300px;"> 
+</div>
 </div>
 
 

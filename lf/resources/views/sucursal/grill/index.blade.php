@@ -6,39 +6,14 @@ table thead tr th,
 
     }
 
+
+thead{
+    font-family: mainfont;font-size: 18px;
+}
 </style>
 
-<table class="table bg-warning bg-gradient    text-dark">
 
-    <thead style="font-family: mainfont;font-size: 18px;">
-        <th></th>
-        <th></th> 
-        <th>DESCRIPCIÓN</th>  
-        <th></th>
-    </thead>
-
-    <tbody>
-
-    @foreach( $sucursales as $prov)
-        <tr>
-            <td>
-                <a onclick="event.preventDefault(); mostrar_form(this.href)" style="color: black;" href="{{url('sucursal/update').'/'.$prov->REGNRO}}"> <i class="fas fa-edit"></i></a>
-            </td>
-            <td>
-            <a onclick="delete_row(event)" style="color: black;" href="{{url('sucursal').'/'.$prov->REGNRO}}"> <i class="fa fa-trash"></i></a>
-            </td>
-
-            
-            <td>{{$prov->DESCRIPCION}}</td> 
-            <td>{{$prov->MATRIZ=='S' ? 'MATRIZ'  :  '' }}</td> 
-           
-            
-        </tr>
-    @endforeach
-    </tbody>
-
-</table> 
-
+@include("sucursal.grill.base")
 {{ $sucursales->links('vendor.pagination.default') }}
 
 

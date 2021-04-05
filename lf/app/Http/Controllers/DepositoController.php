@@ -435,7 +435,7 @@ class DepositoController extends Controller
     {
         if (request()->getMethod()  ==  "GET") {
             $cli =  Cargo::find($id);
-            return view('cargo.update',  ['cargo' =>  $cli]);
+            return view('cargo.create',  ['cargo' =>  $cli]);
         } else {
 
 

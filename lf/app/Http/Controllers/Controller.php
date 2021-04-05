@@ -30,7 +30,12 @@ use PDFGEN;
         //data
         //doc title
         
-       $pdf = PDFGEN::loadView("$viewName", ["datalist" =>  $data, "titulo" => "$title"]);
+        $viewParam=  [];
+        if( is_array( $data))
+        $viewParam=array_merge(  [   "titulo" => "$title"],  $data);
+        else  $viewParam=   [   "titulo" => "$title",  "datalist"=>  $data];
+
+       $pdf = PDFGEN::loadView("$viewName",   $viewParam     );
        return $pdf->download("$title.pdf"); 
  
     }

@@ -31,6 +31,7 @@
         <tr>
             <th>ID</th>
             <th>DESCRIPCIÓN</th>
+            <th>ORDEN</th>
         </tr>
     </thead>
 
@@ -41,6 +42,7 @@
 
             <td>{{$prov->REGNRO}}</td>
             <td>{{$prov->DESCRIPCION}}</td>
+            <td>{{$prov->ORDEN}}</td>
 
 
         </tr>

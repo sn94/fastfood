@@ -12,7 +12,7 @@ class Sucursal extends Model
     protected  $table= "sucursal";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'DESCRIPCION' ,  'MATRIZ'];
+    protected $fillable = [  'DESCRIPCION' ,  'MATRIZ',  'ORDEN'];
 
  
 }

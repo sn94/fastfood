@@ -87,61 +87,7 @@
         let normalizado3 = ev.target.value.split("").filter((ar, index) => index != ultimaComaPosicion).join("");
         ev.target.value = normalizado3;
       }
-      return;
-      let contextoThis = {
-
-        limpiarNumeroParaFloat: function(val) {
-          return val.replaceAll(new RegExp(/[.]*/g), "").replaceAll(new RegExp(/[,]{1}/g), ".");
-        },
-        darFormatoEnMillares: function(val_float, decimales) {
-
-
-
-          let decimales__ = decimales == undefined ? this.numeroDeDecimales : decimales;
-
-          return new Intl.NumberFormat("de-DE", {
-            minimumFractionDigits: decimales__,
-            maximumFractionDigits: decimales__
-          }).format(val_float);
-        }
-      };
-      if (ev.data != undefined) {
-        if (ev.data.charCodeAt() < 48 || ev.data.charCodeAt() > 57) {
-          let noEsComa = ev.data.charCodeAt() != 44;
-          let yaHayComa = ev.data.charCodeAt() == 44 && /(,){1}/.test(ev.target.value.substr(0, ev.target.value.length - 2));
-          let comaPrimerLugar = ev.data.charCodeAt() == 44 && ev.target.value.length == 1;
-          let comaDespuesDePunto = ev.data.charCodeAt() == 44 && /\.{1},{1}/.test(ev.target.value);
-          if (noEsComa || (yaHayComa || comaPrimerLugar || comaDespuesDePunto)) {
-            ev.target.value = ev.target.value.substr(0, ev.target.selectionStart - 1) + ev.target.value.substr(ev.target.selectionStart);
-            return;
-          } else return;
-        }
-      }
-
-      if (ev.data == undefined) {
-        let solo_decimal = contextoThis.limpiarNumeroParaFloat(ev.target.value);
-        let float__ = (parseFloat(solo_decimal)).toFixed(3);
-        float__ = parseFloat(float__);
-        let enpuntos = contextoThis.darFormatoEnMillares(float__, 3);
-        if (!(isNaN(enpuntos)))
-          $(ev.target).val(enpuntos);
-        return;
-      }
-
-      //convertir a decimal
-      //dejar solo la coma decimal pero como punto 
-      let solo_decimal = contextoThis.limpiarNumeroParaFloat(ev.target.value);
-      let noEsComaOpunto = ev.data.charCodeAt() != 44 && ev.data.charCodeAt() != 46;
-      if (noEsComaOpunto) {
-        let float__ = parseFloat(solo_decimal);
-        float__ = parseFloat(float__.toFixed(3));
-
-        //Formato de millares 
-        let enpuntos = contextoThis.darFormatoEnMillares(float__, 3);
-
-        if (!(isNaN(enpuntos)))
-          $(ev.target).val(enpuntos);
-      }
+      return;  
     },
     limpiarNumeros: function() {
       let nro_campos_a_limp = $(".decimal,.entero").length;

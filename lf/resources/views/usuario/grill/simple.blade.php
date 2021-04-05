@@ -36,6 +36,7 @@
                 <th>USUARIO</th>
                 <th>NOMBRE</th>
                 <th>SUCURSAL</th>
+                <th style="text-align: center;">ORDEN</th>
             </tr>
         </thead>
 
@@ -47,6 +48,7 @@
                 <td>{{$prov->USUARIO}}</td>
                 <td>{{$prov->NOMBRES}}</td>
                 <td>{{$prov->sucursal->DESCRIPCION}}</td>
+                <td style="text-align: center;">{{$prov->ORDEN}}</td>
             </tr>
             @endforeach
         </tbody>

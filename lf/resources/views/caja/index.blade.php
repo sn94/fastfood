@@ -16,13 +16,9 @@ Cajas
 
 
 
-<div class="container col-12 col-md-4  bg-dark">
-    <h3 class="text-center mt-2" style="font-family: titlefont;">Ficha de Cajas</h3>
-
-
-
+<div class="container col-12 col-md-4  bg-dark text-light">
+    <h3 class="text-center mt-2"  >Ficha de Cajas</h3>
     <div id="loaderplace"></div>
-
 
     <div id="form">
         @include("caja.create")
@@ -110,7 +106,8 @@ Cajas
 
     window.onload = function() {
         dataSearcher = new DataSearcher();
-        fill_grill();
+        buscarCajas();
+       // fill_grill();
     }
 </script>
 @endsection

@@ -22,7 +22,7 @@ class MedidasController extends Controller {
         $buscado= "";
         if(  request()->method() ==  "POST")  $buscado=  request()->input("buscado");
  
-        $medidas=  Medidas::orderBy("created_at");
+        $medidas=  Medidas::orderBy("ORDEN");
         if(  $buscado !=  ""){
             $medidas=  $medidas
             ->whereRaw("  DESCRIPCION LIKE '%$buscado%'  ")  ; 

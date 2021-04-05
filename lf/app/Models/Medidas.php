@@ -12,7 +12,7 @@ class Medidas extends Model
     protected  $table= "unimed";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [ 'UNIDAD', 'DESCRIPCION' ];
+    protected $fillable = [ 'UNIDAD', 'DESCRIPCION',  'ORDEN' ];
 
  
 }

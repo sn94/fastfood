@@ -22,7 +22,7 @@ class CajaController extends Controller {
         $buscado= "";
         if(  request()->method() ==  "POST")  $buscado=  request()->input("buscado");
  
-        $caja=  Caja::orderBy("created_at");
+        $caja=  Caja::orderBy("ORDEN");
         if(  $buscado !=  ""){
             $caja=  $caja
             ->whereRaw("  DESCRIPCION LIKE '%$buscado%'  ")  ; 

@@ -25,7 +25,7 @@ class CargosController extends Controller
         $buscado = "";
         if (request()->method() ==  "POST")  $buscado =  request()->input("buscado");
 
-        $cargos =  Cargo::orderBy("created_at");
+        $cargos =  Cargo::orderBy("ORDEN", "ASC");
         if ($buscado !=  "") {
             $cargos =  $cargos
                 ->whereRaw("  DESCRIPCION LIKE '%$buscado%'  ");
@@ -91,7 +91,7 @@ class CargosController extends Controller
     {
         if (request()->getMethod()  ==  "GET") {
             $cli =  Cargo::find($id);
-            return view('cargo.update',  ['cargo' =>  $cli]);
+            return view('cargo.create',  ['cargo' =>  $cli]);
         } else {
 
 

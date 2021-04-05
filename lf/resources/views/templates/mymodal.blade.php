@@ -31,7 +31,7 @@
     window.myModalCustomHandler = undefined;
 
     function cerrarMyModal() {
-        $('#mymodal content').html('');
+        $('#mymodal .content').html('');
         $('#mymodal').addClass('d-none');
         if (myModalCustomHandler != undefined && typeof myModalCustomHandler == "function")
             myModalCustomHandler();

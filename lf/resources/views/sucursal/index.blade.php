@@ -16,8 +16,8 @@ Sucursales
 
 
 
-<div class="container col-12 col-md-6 bg-dark">
-<h2 class="text-center mt-2" style="font-family: titlefont;">Ficha de Sucursales</h2>
+<div class="container col-12 col-md-6 bg-dark text-light">
+<h2 class="text-center mt-2"  >Ficha de Sucursales</h2>
 
  
 
@@ -127,7 +127,8 @@ Sucursales
 
     window.onload = function() {
         dataSearcher = new DataSearcher();
-        fill_grill();
+        buscarSucursales();
+       // fill_grill();
     }
 </script>
 @endsection

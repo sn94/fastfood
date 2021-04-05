@@ -22,6 +22,7 @@ table tbody tr td, table thead tr th{
         <th>USUARIO</th>  
         <th>NOMBRE</th>
         <th>SUCURSAL</th>
+        <th>ORDEN</th>
     </thead>
 
     <tbody>
@@ -39,6 +40,7 @@ table tbody tr td, table thead tr th{
             <td>{{$prov->USUARIO}}</td> 
             <td>{{$prov->NOMBRES}}</td>
             <td>{{$prov->sucursal->DESCRIPCION}}</td>
+            <td>{{$prov->ORDEN}}</td>
            
             
         </tr>

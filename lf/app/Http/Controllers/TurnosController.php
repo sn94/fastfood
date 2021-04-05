@@ -21,7 +21,7 @@ class TurnosController extends Controller {
         $buscado= "";
         if(  request()->method() ==  "POST")  $buscado=  request()->input("buscado");
  
-        $turnos=  Turno::orderBy("created_at");
+        $turnos=  Turno::orderBy("ORDEN");
         if(  $buscado !=  ""){
             $turnos=  $turnos
             ->whereRaw("  DESCRIPCION LIKE '%$buscado%'  ")  ; 
@@ -39,7 +39,7 @@ class TurnosController extends Controller {
           
          if ($formato == "pdf") {
             $turnos =  $turnos->get();
-            return $this->responsePdf("turno.grill.simple",  $turnos, "Turnos");
+            return $this->responsePdf("turno.grill.simple",   [ "turnos" => $turnos], "Turnos");
         }
 
 
@@ -89,14 +89,11 @@ class TurnosController extends Controller {
     {
         if (request()->getMethod()  ==  "GET") {
             $cli =  Turno::find($id); 
-            return view('turno.update',  ['turno' =>  $cli]);
+            return view('turno.create',  ['turno' =>  $cli]);
         }
         else {
 
-           
-//artisan
-Artisan::call('storage:link');
-/*** */
+        
             try{
                 $id_= request()->input("REGNRO");
                 DB::beginTransaction();

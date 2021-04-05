@@ -12,7 +12,7 @@ class Cargo extends Model
     protected  $table= "cargos";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'DESCRIPCION' ];
+    protected $fillable = [  'DESCRIPCION', 'ORDEN' ];
 
  
 }

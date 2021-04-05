@@ -25,28 +25,6 @@
     }
 </style>
 <h4 >{{$titulo}}</h4>
-<table class="table bg-warning bg-gradient    text-dark">
-
-    <thead style="font-family: mainfont;font-size: 18px;">
-        <tr>
-            <th>ID</th>
-            <th>DESCRIPCIÓN</th>
-            <th>MATRIZ</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach( $datalist as $prov)
-        <tr>
-
-            <td>{{$prov->REGNRO}}</td>
-            <td>{{$prov->DESCRIPCION}}</td>
-            <td>{{$prov->MATRIZ  ==  "S"  ? "SI" : "NO"}}</td>
 
 
-        </tr>
-        @endforeach
-    </tbody>
-
-</table>
+@include("sucursal.grill.base")

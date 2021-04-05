@@ -27,7 +27,7 @@ class UsuariosController extends Controller
         $buscado = "";
         if (request()->method() ==  "POST")  $buscado =  request()->input("buscado");
 
-        $usuarios =  Usuario::orderBy("created_at");
+        $usuarios =  Usuario::orderBy("ORDEN", "ASC");
         if ($buscado !=  "") {
             $usuarios =  $usuarios
                 ->whereRaw("  USUARIO LIKE '%$buscado%'  ")
@@ -97,7 +97,7 @@ class UsuariosController extends Controller
     {
         if (request()->getMethod()  ==  "GET") {
             $cli =  Usuario::find($id);
-            return view('usuario.update',  ['usuario' =>  $cli]);
+            return view('usuario.create',  ['usuario' =>  $cli]);
         } else {
 
 

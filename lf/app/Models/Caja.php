@@ -12,7 +12,7 @@ class Caja extends Model
     protected  $table= "cajas";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'DESCRIPCION' ];
+    protected $fillable = [  'DESCRIPCION' , 'ORDEN'];
 
  
 }

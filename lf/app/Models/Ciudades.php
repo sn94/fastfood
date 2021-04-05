@@ -12,7 +12,7 @@ class Ciudades extends Model
   
     protected $primaryKey = 'regnro';
     public $timestamps = false;
-    protected $fillable = [  'departa',   'ciudad' ];
+    protected $fillable = [  'departa',   'ciudad',  'ORDEN'];
 
 
     public function  departamento(){

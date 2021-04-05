@@ -16,8 +16,8 @@ Cargos
 
 
 
-<div class="container col-12 col-md-6 bg-dark">
-    <h3 class="text-center mt-2" style="font-family: titlefont;">Ficha de Cargos</h3>
+<div class="container col-12 col-md-6 bg-dark text-light">
+    <h3 class="text-center mt-2"  >Ficha de Cargos</h3>
 
 
 
@@ -111,7 +111,8 @@ Cargos
 
     window.onload = function() {
         dataSearcher = new DataSearcher();
-        fill_grill();
+        buscarCargos();
+      //  fill_grill();
     }
 </script>
 @endsection

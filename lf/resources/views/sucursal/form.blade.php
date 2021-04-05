@@ -6,47 +6,40 @@
  $REGNRO= isset( $sucursal )? $sucursal->REGNRO : "";
  $DESCRIPCION= isset( $sucursal )? $sucursal->DESCRIPCION : "";
  $MATRIZ= isset( $sucursal )? $sucursal->MATRIZ : "N";
+ $ORDEN= isset( $sucursal )? $sucursal->ORDEN : "0";
  @endphp
-
-
- <style>
-     .form-control {
-         background: white !important;
-         color: black !important;
-         height: 40px !important;
-     }
-
-     label {
-         font-size: 18px !important;
-         color: white;
-     }
- </style>
 
 
 
  <input type="hidden" id="SUCURSAL-URL" value="{{url('sucursales')}}">
- <div class="row"> 
-         @if( $REGNRO != "")
-         <input type="hidden" name="REGNRO" value="{{$REGNRO}}">
-         @endif
+ <div class="row">
+     @if( $REGNRO != "")
+     <input type="hidden" name="REGNRO" value="{{$REGNRO}}">
+     @endif
 
-         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
- 
+
 
      <div class="col-12 col-md-3">
 
-     <x-pretty-checkbox   name="MATRIZ" :value="$MATRIZ" onValue="S"  offValue="N"  label="MATRIZ" />
+         <x-pretty-checkbox name="MATRIZ" :value="$MATRIZ" onValue="S" offValue="N" label="MATRIZ" />
      </div>
-     
-     <div class="col-12 col-md-6  d-flex justify-content-center">
+
+     <div class="col-12 col-md-5">
 
          <label class="pr-2">DESCRIPCIÓN: </label>
          <input name="DESCRIPCION" class="form-control" type="text" maxlength="80" value="{{$DESCRIPCION}}" />
 
      </div>
+     <div class="col-12 col-md-2 ">
 
-     <div class="col-12  col-md-3 d-flex justify-content-center">
+         <label class="pr-2">ORDEN: </label>
+         <input name="ORDEN" class="form-control" type="text" maxlength="2" value="{{$ORDEN}}" />
+
+     </div>
+
+     <div class="col-12  col-md-2 d-flex align-items-end">
 
          <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
      </div>

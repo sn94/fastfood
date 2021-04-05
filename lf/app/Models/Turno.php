@@ -12,7 +12,7 @@ class Turno extends Model
     protected  $table= "turnos";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'DESCRIPCION' ];
+    protected $fillable = [  'DESCRIPCION',  'ORDEN'];
 
  
 }

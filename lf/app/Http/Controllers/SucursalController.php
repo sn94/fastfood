@@ -23,7 +23,7 @@ class SucursalController extends Controller
         $buscado = "";
         if (request()->method() ==  "POST")  $buscado =  request()->input("buscado");
 
-        $sucursales =  Sucursal::orderBy("created_at");
+        $sucursales =  Sucursal::orderBy("ORDEN");
         if ($buscado !=  "") {
             $sucursales =  $sucursales
                 ->whereRaw("  DESCRIPCION LIKE '%$buscado%'  ");
@@ -41,7 +41,7 @@ class SucursalController extends Controller
 
         if ($formato == "pdf") {
             $sucursales =  $sucursales->get();
-            return $this->responsePdf("sucursal.grill.simple",  $sucursales, "Sucursales");
+            return $this->responsePdf("sucursal.grill.simple", [ "sucursales"=> $sucursales], "Sucursales");
         }
 
         $sucursales =  $sucursales->paginate(10);

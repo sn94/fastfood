@@ -6,52 +6,18 @@ Turnos
 @section("content")
 
 
-<style>
-    #search {
-        height: 25px !important;
-        padding: 1px !important;
-        margin: 0px !important;
-        background-color: white !important;
-        width: 100%;
-    }
-
-    #search:focus {
-        border-radius: 20px;
-        border: #cace82 1px solid;
-    }
-
-    #search::placeholder {
-
-        font-size: 14px;
-        font-weight: 600;
-        color: black;
-        font-family: mainfont;
-        text-align: center;
-    }
-</style>
 
 <input type="hidden" id="GRILL-URL" value="{{url('turno')}}">
 <input type="hidden" id="GRILL-URL-CUSTOM" value="{{url('turno/buscar')}}">
 
-
-
-
-
-
-<div class="container col-12 col-md-4 bg-dark">
-    <h3 class="text-center mt-2" style="font-family: titlefont;">Fichas de Turnos</h3>
-
-
-
+<div class="container col-12 col-md-6 bg-dark text-light">
+    <h3 class="text-center mt-2">Fichas de Turnos</h3>
     <div id="loaderplace"></div>
-
-
     <div id="form">
         @include("turno.create")
     </div>
 
 
-    
     <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarTurnos()" />
 
     <div id="grill" style="min-height: 300px;">
@@ -135,7 +101,8 @@ Turnos
 
     window.onload = function() {
         dataSearcher = new DataSearcher();
-        fill_grill();
+        buscarTurnos();
+      //  fill_grill();
     }
 </script>
 @endsection

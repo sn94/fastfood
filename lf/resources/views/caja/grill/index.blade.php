@@ -13,6 +13,7 @@ padding-right: 2px;
             <th></th>
             <th>ID</th>
             <th>DESCRIPCIÓN</th>
+            <th>ORDEN</th>
         </tr>
     </thead>
 
@@ -30,6 +31,7 @@ padding-right: 2px;
 
             <td>{{$prov->REGNRO}}</td>
             <td>{{$prov->DESCRIPCION}}</td>
+            <td>{{$prov->ORDEN}}</td>
 
 
         </tr>

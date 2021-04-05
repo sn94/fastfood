@@ -12,7 +12,8 @@ class Usuario extends Model
     protected  $table = "usuarios";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = ['USUARIO', 'PASS', 'NIVEL', 'ESTADO', 'NOMBRES', 'CEDULA', 'SUCURSAL', 'CARGO', 'TURNO', 'CELULAR', 'EMAIL'];
+    protected $fillable = ['USUARIO', 'PASS', 'NIVEL', 'ESTADO', 'NOMBRES', 'CEDULA', 'SUCURSAL', 'CARGO', 'TURNO', 
+    'CELULAR', 'EMAIL', 'ORDEN'];
 
 
 

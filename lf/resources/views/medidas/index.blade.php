@@ -16,8 +16,8 @@ Unidades de medida
 
 
 
-<div class="container col-12 col-md-4 bg-dark">
-    <h3 class="text-center mt-2" style="font-family: titlefont;">Ficha de medidas</h3>
+<div class="container col-12 col-md-4 bg-dark text-light">
+    <h3 class="text-center mt-2" >Ficha de medidas</h3>
 
 
 
@@ -114,7 +114,8 @@ Unidades de medida
 
     window.onload = function() {
         dataSearcher = new DataSearcher();
-        fill_grill();
+        buscarMedidas();
+      //  fill_grill();
     }
 </script>
 @endsection
