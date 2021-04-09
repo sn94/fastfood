@@ -126,7 +126,7 @@ Unidades de medida
 
 <script src="<?= url("assets/xls_gen/xls.js") ?>"></script>
 <script src="<?= url("assets/xls_gen/xls_ini.js?v=" . rand(0.0, 100)) ?>"></script>
-<script src="<?= url("assets/clases/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
+<script src="<?= url("assets/js/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
 
 
 @endsection

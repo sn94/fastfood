@@ -7,10 +7,10 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
 @if( isset($datalist) )
 
 <style>
-table, h4{
-    font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-}
+    table,
+    h4 { 
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 <h4 style="text-align: center;">Productos más comprados</h4>
 @endif
@@ -23,11 +23,42 @@ table, h4{
         padding: 0px !important;
         padding-left: 2px !important;
         padding-right: 2px;
+        font-size: 12px;
     }
 
+    table thead tr th:nth-child(1),
+    table tbody tr td:nth-child(1),
+    table tfoot tr td:nth-child(1),
+    table thead tr th:nth-child(2),
+    table tbody tr td:nth-child(2),
+    table tfoot tr td:nth-child(2),
+    table thead tr th:nth-child(3),
+    table tbody tr td:nth-child(3),
+    table tfoot tr td:nth-child(3) {
+     width: 60px  !important;
+     text-align: center !important;
+    }
+
+    table thead tr th:nth-child(5),
+    table tbody tr td:nth-child(5),
+    table tfoot tr td:nth-child(5),
+    table thead tr th:nth-child(6),
+    table tbody tr td:nth-child(6),
+    table tfoot tr td:nth-child(6){
+        width: 80px  !important;
+     text-align: center !important;
+    }
+
+
+    table thead tr th:nth-child(7),
+    table tbody tr td:nth-child(7),
+    table tfoot tr td:nth-child(7){
+        width: 125px  !important; 
+    }
     .text-end {
         text-align: right;
     }
+
     .text-center {
         text-align: center;
     }
@@ -43,12 +74,15 @@ table, h4{
 <table class="table table-hover table-striped bg-warning">
     <thead class="thead-dark">
 
-        <th>CÓDIGO</th>
-        <th>BARCODE</th>
-        <th>DESCRIPCIÓN</th>
-        <th>TIPO</th>
-        <th class="text-center">N° COMPRAS</th>
-        <th>CANTIDAD</th>
+        <tr>
+            <th>SUCURSAL</th>
+            <th>CÓDIGO</th>
+            <th>BARCODE</th>
+            <th>DESCRIPCIÓN</th>
+            <th>TIPO</th>
+            <th class="text-center">N° COMPRAS</th>
+            <th class="text-end">CANTIDAD</th>
+        </tr>
     </thead>
 
     <tbody class="text-dark">
@@ -56,21 +90,26 @@ table, h4{
         @foreach( $COMPRAS as $ven)
 
         @php
-        $codigo=  $ven->CODIGO;
+        $codigo= $ven->CODIGO;
         $barcode= $ven->BARCODE;
         $tipoStock= $ven->TIPO_PRODUCTO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO_PRODUCTO == "PE" ? "ELABORADO" : ( $ven->TIPO_PRODUCTO == "PP" ? "PARA VENTA" : "MOBILIARIO") ) ;
 
         @endphp
         <tr>
 
+            <td> {{ $ven->SUCURSAL }}</td>
             <td>{{ $codigo}} </td>
             <td> {{ $barcode}} </td>
             <td> {{ is_null($ven)  ? '***' : $ven->DESCRIPCION}}</td>
             <td>{{ $tipoStock   }}</td>
             <td class="text-end fw-bold text-center">{{ $ven->NRO_COMPRAS}}</td>
-            <td style="display: flex;justify-content: space-around;"> 
-            {{ $ven->CANTIDAD}} 
-             <span class="badge bg-success" > {{ $ven->UNI_MEDIDA}}</span> </td>
+
+            <td class="text-end"  >
+ 
+               <b> {{ $ven->CANTIDAD}}</b>  {{ $ven->UNI_MEDIDA}}
+            
+
+            </td>
         </tr>
         @endforeach
 
@@ -80,4 +119,8 @@ table, h4{
 
 @if( method_exists($COMPRAS, "links"))
 {{ $COMPRAS->links('vendor.pagination.default') }}
+@if(  sizeof( $COMPRAS ) == 0)
+<p class="text-center p-2 bg-warning text-dark">Sin registros</p>
 @endif
+@endif
+

@@ -71,7 +71,7 @@ $FORMA_PAGO = isset($COMPRA) ? ($COMPRA->FORMA_PAGO) :  "";
     <div style="display: flex; flex-direction: row;">
         <label >PROVEEDOR:</label>
         <a href="#" onclick="crear_proveedor()"><i class="fa fa-plus"></i></a>
-        <a href="#" onclick="buscador_de_personas({KEY:'#PROVEEDOR-KEY',NAME:'#PROVEEDOR-NAME'})"><i class="fa fa-search"></i></a>
+        <a href="#" onclick="abrirBuscadorProveedor()"><i class="fa fa-search"></i></a>
     </div>
   <div style="display: flex; flex-direction: row;">
   <input value="{{$PROVEEDOR}}" disabled id="PROVEEDOR-KEY" style="width: 100px; flex-shrink: 2;" class="form-control form-control-sm" type="text" name="PROVEEDOR">
@@ -89,3 +89,28 @@ $FORMA_PAGO = isset($COMPRA) ? ($COMPRA->FORMA_PAGO) :  "";
         <input value="{{$CONCEPTO}}" name="CONCEPTO"   class="form-control form-control-sm form-compra " type="text" />
  
 </div>
+
+
+<script>
+
+/*
+
+buscador_de_personas({KEY:'#PROVEEDOR-KEY',NAME:'#PROVEEDOR-NAME'})
+
+*/
+
+function  abrirBuscadorProveedor(){
+    //KEY:'#PROVEEDOR-KEY',NAME:'#PROVEEDOR-NAME
+
+
+    Buscador.url= "<?=url("proveedores")?>";
+    Buscador.columnNames= ["REGNRO", "CEDULA_RUC", "NOMBRE"];
+    Buscador.columnLabels= ['ID', 'CÉDULA', 'NOMBRES'];
+    Buscador.callback= function(   seleccionado){
+
+        $('#PROVEEDOR-KEY').val( seleccionado.REGNRO);
+        $('#PROVEEDOR-NAME').val( seleccionado.NOMBRE);
+    };
+    Buscador.render();
+}
+</script>

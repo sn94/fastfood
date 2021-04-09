@@ -26,7 +26,14 @@ $cajaOptionsMenu = [
   ["label" => "SESIÓN",  "link" => $sesiones_links ],
   ["label" => "PEDIDOS",  "link" =>  url("pedidos")],
   ["label" => "COMPRAS",  "link" => url("compra/index?m=c")],
-  ["label" => "REPORTES",  "link" => url("compra/filtrar?m=c")],
+  [
+    "label" => "REPORTES", "link" =>
+    [
+      ["label" => "STOCK", "link" =>   url("stock/filtrar")  ],
+        ["label" => "COMPRAS", "link" => url("compra/filtrar?m=c")],
+        ["label" => "VENTAS", "link" => "#"]
+    ],
+],
   ["label"=> "SALIR",  "link"=>  url('usuario/sign-out')  ]
 
 

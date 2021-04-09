@@ -3,28 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utilidades;
-use App\Http\Controllers\Controller;
-use App\Models\Cargo;
+use App\Http\Controllers\Controller; 
 use App\Models\Compras;
-use App\Models\Compras_detalles;
-use App\Models\Ficha_produccion;
-use App\Models\Ficha_produccion_detalles;
-use App\Models\Materiaprima;
-use App\Models\Nota_pedido;
-use App\Models\Nota_pedido_detalles;
-use App\Models\Nota_residuos;
-use App\Models\Nota_residuos_detalle;
-use App\Models\Productos;
-use App\Models\Recepcion;
-use App\Models\Recepcion_detalles;
-use App\Models\Remision_de_terminados;
-use App\Models\Remision_de_terminados_detalle;
-use App\Models\Salidas;
-use App\Models\Salidas_detalles;
-use App\Models\Stock;
-use Exception;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
+use App\Models\Compras_detalles; 
+use App\Models\Nota_pedido;  
+use App\Models\Stock; 
+use Error;
+use Exception; 
+use Illuminate\Support\Facades\DB; 
+
 
 class CompraController extends Controller
 {
@@ -94,34 +81,37 @@ class CompraController extends Controller
 
 
 
-    public function filtrar($filterParam = NULL)
+    private function  filtro1()
     {
+        $FECHA_DESDE = "";
+        $FECHA_HASTA = "";
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
 
-        $filtro = is_null($filterParam) ?  (request()->has("FILTRO") ?  request()->input("FILTRO")  : "1")  : $filterParam;
+        $tipo =  request()->has("TIPO_STOCK") ?  request()->input("TIPO_STOCK") : "";
+        $proveedor =  request()->has("PROVEEDOR") ?  request()->input("PROVEEDOR") : "";
+        $sucursal =  request()->has("SUCURSAL") ?  request()->input("SUCURSAL") : session("SUCURSAL");
+        $forma_pago =  request()->has("FORMA_PAGO") ?  request()->input("FORMA_PAGO") : "";
 
-        if (request()->isMethod("GET")  &&  request()->ajax()) {
-            return view("compra.reportes.filters.filter$filtro");
-        }
-
-
-
-        $SUCURSAL = session("SUCURSAL");
         $COMPRAS =  [];
 
-        if ($filtro ==  "1") {
-            $tipo =  request()->has("TIPO_STOCK") ?  request()->input("TIPO_STOCK") : "";
-            $proveedor =  request()->has("PROVEEDOR") ?  request()->input("PROVEEDOR") : "";
-
+        try {
             //costos de producto por tipo y proveedor
             $COMPRAS =  Compras::join("compras_detalles", "compras_detalles.COMPRA_ID", "=", "compras.REGNRO")
                 ->leftJoin("proveedores", "proveedores.REGNRO",  "compras.PROVEEDOR")
                 ->join("stock", "stock.REGNRO", "=", "compras_detalles.ITEM")
-                ->where("SUCURSAL", $SUCURSAL)
+                ->where("SUCURSAL", $sucursal)
                 ->groupBy("ITEM")->groupBy("stock.REGNRO")->groupBy("PROVEEDOR")
                 ->groupBy("P_UNITARIO")
                 ->groupBy("PVENTA");
+
+            if ($FECHA_DESDE != ""   &&  $FECHA_HASTA !=  "")
+                $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
+
             if ($proveedor != "")
                 $COMPRAS = $COMPRAS->where("compras.PROVEEDOR", $proveedor);
+            if ($forma_pago != "")
+                $COMPRAS = $COMPRAS->where("compras.FORMA_PAGO", $forma_pago);
             if ($tipo != "")
                 $COMPRAS = $COMPRAS->where("stock.TIPO", $tipo);
             $COMPRAS = $COMPRAS->select(
@@ -137,81 +127,82 @@ class CompraController extends Controller
                 "PROVEEDOR",
                 "proveedores.NOMBRE as PROVEEDOR_NOM"
             );
-            //    dd(  $COMPRAS->get());
+            return $COMPRAS;
+        } catch (Error $e) {
+            throw $e;
         }
-        if ($filtro ==  "2") { //productos mas comprados
+    }
 
-            $FECHA_DESDE = "";
-            $FECHA_HASTA = "";
-            $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
-            $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
 
-            $COMPRAS = Compras::join("compras_detalles", "compras_detalles.COMPRA_ID", "=", "compras.REGNRO")
-                ->join("stock",  "stock.REGNRO", "=", "compras_detalles.ITEM")
-                ->join("unimed",  "stock.MEDIDA", "=", "unimed.REGNRO")
-                ->groupBy("ITEM");
-            if ($FECHA_DESDE != ""   &&  $FECHA_HASTA !=  "")
-                $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
+    private function  filtro2()
+    {
 
-            $COMPRAS = $COMPRAS->select(
-                "stock.*",
-                "unimed.DESCRIPCION as UNI_MEDIDA",
-                DB::raw("count(compras_detalles.REGNRO) AS NRO_COMPRAS"),
-                DB::raw("sum(compras_detalles.CANTIDAD) AS CANTIDAD")
-            );
-        }
-        if ($filtro ==  "3") {
-            /**Comparativos por sucursal */
-            $sucursal =   request()->has("SUCURSAL") ?   request()->input("SUCURSAL") :  "";
-            $FECHA_DESDE = "";
-            $FECHA_HASTA = "";
-            $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
-            $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
 
-            //costos de producto por tipo y proveedor
-            $COMPRAS =  Compras::join("compras_detalles", "compras_detalles.COMPRA_ID", "=", "compras.REGNRO")
-                ->leftJoin("proveedores", "proveedores.REGNRO",  "compras.PROVEEDOR");
-            if ($sucursal !=  "")
-                $COMPRAS = $COMPRAS->where("SUCURSAL", $SUCURSAL);
-
-            if ($FECHA_DESDE != ""   &&  $FECHA_HASTA !=  "")
-                $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
-
-            $COMPRAS = $COMPRAS->select("SUCURSAL", DB::raw("format(sum(P_UNITARIO*CANTIDAD),0,'de_DE') AS TOTAL_COMPRAS"),
-             DB::raw("count(compras.REGNRO) AS NRO_COMPRAS") )
-            ->groupBy("SUCURSAL");
-          //  dd(  $COMPRAS->with("sucursal")->get());
-        }
-        
-        /*
-        $SUCURSAL = session("SUCURSAL");
         $FECHA_DESDE = "";
         $FECHA_HASTA = "";
-        $PROVEEDOR = "";
-        $FORMA_PAGO = "";
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
+        $sucursal =  request()->has("SUCURSAL") ?  request()->input("SUCURSAL") : ""; // session("SUCURSAL");
+        $mas_comprado =  request()->has("MAS_COMPRADO") ?  request()->input("MAS_COMPRADO") : "CANTIDAD";
 
-        //parametros
-        if (request()->isMethod("POST")) {
+        $COMPRAS = [];
 
-            $SUCURSAL =  request()->has("SUCURSAL") ?   request()->input("SUCURSAL") :  $SUCURSAL;
-            $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  $FECHA_DESDE;
-            $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  $FECHA_HASTA;
-            $PROVEEDOR = request()->has("PROVEEDOR") ?   request()->input("PROVEEDOR") :  $PROVEEDOR;
-            $FORMA_PAGO = request()->has("FORMA_PAGO") ?   request()->input("FORMA_PAGO") :  $FORMA_PAGO;
+        $COMPRAS = Compras::join("compras_detalles", "compras_detalles.COMPRA_ID", "=", "compras.REGNRO")
+            ->join("stock",  "stock.REGNRO", "=", "compras_detalles.ITEM")
+            ->join("unimed",  "stock.MEDIDA", "=", "unimed.REGNRO");
+        if ($sucursal != "")
+            $COMPRAS = $COMPRAS->where("SUCURSAL",  $sucursal);
+
+        if ($FECHA_DESDE != ""   &&  $FECHA_HASTA !=  "")
+            $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
+
+        $COMPRAS = $COMPRAS->select(
+            "stock.*",
+            "unimed.DESCRIPCION as UNI_MEDIDA",
+            "SUCURSAL",
+            DB::raw("count(compras_detalles.REGNRO) AS NRO_COMPRAS"),
+            DB::raw("sum(compras_detalles.CANTIDAD) AS CANTIDAD")
+        );
+        //Agrupar y Ordenar
+        //Segun nro de compras o cantidad
+        $ordenamiento = "sum(compras_detalles.CANTIDAD)";
+        if ($mas_comprado == "COMPRAS") //Por numero de compras
+            $ordenamiento = "count(compras_detalles.REGNRO)";
+
+        $COMPRAS =  $COMPRAS->groupBy("ITEM")
+            ->groupBy("SUCURSAL")
+            ->orderByRaw("$ordenamiento   DESC");
+        return $COMPRAS;
+    }
+
+
+    public function filtrar($filterParam = NULL)
+    {
+
+        $filtro = is_null($filterParam) ?  (request()->has("FILTRO") ?  request()->input("FILTRO")  : "1")  : $filterParam;
+
+        if (request()->isMethod("GET")  &&  request()->ajax()) {
+            return view("compra.reportes.filters.filter$filtro");
         }
 
+        $COMPRAS =  [];
 
-        $COMPRAS = Compras::orderBy("created_at")
-            ->where("SUCURSAL", $SUCURSAL);
-        //OTROS FILTROS
+        if ($filtro ==  "1") {
+            try {
+                $COMPRAS =  $this->filtro1();
+            } catch (Error $x) {
+                return response()->json(['err' =>  $x->getMessage()]);
+            }
+        }
+        if ($filtro ==  "2") { //productos mas compra
 
-        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
-            $COMPRAS =  $COMPRAS->where("FECHA", ">=",  $FECHA_DESDE)->where("FECHA", "<=",  $FECHA_HASTA);
-        if ($PROVEEDOR != "")
-            $COMPRAS =  $COMPRAS->where("PROVEEDOR",  $PROVEEDOR);
-        if ($FORMA_PAGO != "")
-            $COMPRAS =  $COMPRAS->where("FORMA_PAGO",  $FORMA_PAGO);
-*/
+            try {
+                $COMPRAS = $this->filtro2();
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
+        }
+        
 
         //Content Type solicitado
         //El formato de los datos
@@ -219,17 +210,33 @@ class CompraController extends Controller
 
         //Si es JSON retornar
         if ($formato == "json") {
-            $COMPRAS =  $COMPRAS->get();
-            return response()->json($COMPRAS);
+
+            try {
+                $COMPRAS =  $COMPRAS->get();
+                return response()->json($COMPRAS);
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
         }
 
         if ($formato == "pdf") {
-            $COMPRAS =  $COMPRAS->get();
-            return $this->responsePdf("compra.reportes.views.filter$filtro",  $COMPRAS, "Compras");
+            try {
+                $COMPRAS =  $COMPRAS->get();
+                return $this->responsePdf("compra.reportes.views.filter$filtro",  $COMPRAS, "Compras");
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
         }
 
+
         //Formato html
-        $COMPRAS =  is_array($COMPRAS)  ?  $COMPRAS :  $COMPRAS->paginate(15);
+        try {
+            $COMPRAS =  is_array($COMPRAS)  ?  $COMPRAS :  $COMPRAS->paginate(15);
+        } catch (Exception  $e) {
+            return response()->json(['err' =>  $e->getMessage()]);
+        }
+
+
         if (request()->ajax())
             return view("compra.reportes.views.filter$filtro", ['FILTRO' => $filtro, 'COMPRAS' => $COMPRAS]);
         else
@@ -237,6 +244,34 @@ class CompraController extends Controller
     }
 
 
+
+
+
+    public  function proveedores_frecuentes(  )
+    {
+        $MES = request()->has("MES") ?   request()->input("MES") :  date("m");
+        $ANIO=  request()->has("ANIO") ?   request()->input("ANIO") :  date("Y");
+
+        $proveedores = Compras::join("proveedores", "proveedores.REGNRO", "=", "compras.PROVEEDOR")
+        ->groupBy("PROVEEDOR")
+        ->whereRaw('month(FECHA)',  $MES)
+        ->whereRaw('year(FECHA)',  $ANIO)
+        ->select(   "proveedores.NOMBRE as PROVEEDOR_NOMBRE",  DB::raw('count(compras.REGNRO) AS NUMERO_COMPRAS'))
+        ->orderByRaw('count(compras.REGNRO) DESC')->limit(5)->get();
+
+
+        $titulo="";
+        if( $MES  ==   date("m")   &&   $ANIO ==  date("Y") )
+        $titulo= "PROVEEDORES MÁS FRECUENTES EN ESTE MES";
+        else {
+            $descriMes= Utilidades::monthDescr(  $MES );
+            $titulo = "PROVEEDORES MÁS FRECUENTES EN $descriMes $ANIO";
+        }
+
+        return response()->json( [  "titulo"=> $titulo,  "data"=>    $proveedores]  );
+
+
+    }
 
 
 

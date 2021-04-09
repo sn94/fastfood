@@ -16,6 +16,7 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
         padding: 0px !important;
         padding-left: 2px !important;
         padding-right: 2px;
+        font-size: 12px;
         
     }
 
@@ -28,7 +29,6 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
 
 <style>
 table, h4{
-    font-size: 12px;
     font-family: Arial, Helvetica, sans-serif;
 }
 </style>
@@ -76,4 +76,8 @@ table, h4{
 
 @if( method_exists($COMPRAS, "links"))
 {{ $COMPRAS->links('vendor.pagination.default') }}
+@if(  sizeof( $COMPRAS ) == 0)
+<p class="text-center p-2 bg-warning text-dark">Sin registros</p>
 @endif
+@endif
+

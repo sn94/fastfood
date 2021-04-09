@@ -39,7 +39,7 @@ $SESION_INDEX_URL= $INDIVIDUAL ? url('sesiones/list'.$QUERY_FLAG)  :  url('sesio
 <input type="hidden" id="SESION-INDEX-URL" value="{{$SESION_INDEX_URL}}">
 
 
-<div class="container col-12 col-md-12 col-lg-10 bg-dark text-light">
+<div class="container col-12 col-md-12 col-lg-10 bg-dark text-light pb-2">
     <h3 class="text-center mt-2"  >Sesiones</h3>
 
 
@@ -128,7 +128,7 @@ $SESION_INDEX_URL= $INDIVIDUAL ? url('sesiones/list'.$QUERY_FLAG)  :  url('sesio
 
 <script src="<?= url("assets/xls_gen/xls.js") ?>"></script>
 <script src="<?= url("assets/xls_gen/xls_ini.js?v=" . rand(0.0, 100)) ?>"></script>
-<script src="<?= url("assets/clases/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
+<script src="<?= url("assets/js/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
 
 
 

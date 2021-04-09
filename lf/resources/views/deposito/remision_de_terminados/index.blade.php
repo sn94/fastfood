@@ -23,12 +23,12 @@
 
 
 
-<h2 class="text-center mt-2" style="font-family: titlefont;">Remisión de productos terminados</h2>
 
 
 <div id="loaderplace"></div>
-<div class="row m-5">
-    <div class="col-12 col-md-12">
+<div class="container-fluid bg-dark text-light col-12 col-md-11  mx-auto pb-5">
+<h2 class="text-center mt-2"  >Remisión de productos terminados</h2>
+ 
         <form action="<?= url("deposito/remision-productos-terminados") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardar(event)">
 
             @if( isset($PRODUCCION))
@@ -73,14 +73,8 @@
 
 
             </div>
-
-
-
-
-
         </form>
-
-    </div>
+ 
 </div>
 
 

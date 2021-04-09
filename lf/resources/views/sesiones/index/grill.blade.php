@@ -17,7 +17,7 @@
 
 $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
 ?>
-<table class="table table-hover table-striped text-dark">
+<table class="table table-hover table-striped text-dark bg-warning">
 
 
 
@@ -43,9 +43,9 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
         <tr>
             <td>
                 @if( $sesion->ESTADO == "A")
-                <a  href="{{url('sesiones/cerrar/'.$sesion->REGNRO)}}" class="btn btn-sm btn-warning">CERRAR</a>
+                <a  href="{{url('sesiones/cerrar/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">CERRAR</a>
                 @else 
-                <a onclick="descargarArqueo(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="btn btn-sm btn-warning">ARQUEO</a>
+                <a onclick="descargarArqueo(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">ARQUEO</a>
                 @endif
             </td>
             <td>{{$sesion->SUCURSAL}}</td>

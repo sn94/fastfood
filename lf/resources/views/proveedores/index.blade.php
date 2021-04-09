@@ -7,7 +7,7 @@ Proveedores
 @section("content")
 
 
- 
+
 
 <input type="hidden" id="GRILL-URL" value="{{url('proveedores')}}">
 <input type="hidden" id="GRILL-URL-CUSTOM" value="{{url('proveedores/buscar')}}">
@@ -16,7 +16,7 @@ Proveedores
 
 <div class="container-fluid bg-dark text-light col-12 col-md-12 col-lg-10 col-xl-8">
 
-    <h2 class="text-center mt-2"  >Ficha de Proveedores</h2>
+    <h2 class="text-center mt-2">Ficha de Proveedores</h2>
 
     <div id="loaderplace"></div>
     <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarProveedores()">
@@ -46,22 +46,24 @@ Proveedores
     }
 
 
-    function inicializarBuscador(){
-   //PARMETROS
-   let buscado = $("#search").val();
+    function inicializarBuscador() {
+      
+        dataSearcher.setDataLink = "#GRILL-URL-CUSTOM";
+        dataSearcher.setOutputTarget = "#grill";
+      
+        buscarProveedores();
+    }
+
+
+    function buscarProveedores() {
+        //PARMETROS
+        let buscado = $("#search").val();
         let ciudad_id = $("select[name=CIUDAD]").val();
         let parametros = {
             buscado: buscado,
             CIUDAD: ciudad_id
         };
-
-        dataSearcher.setDataLink = "#GRILL-URL-CUSTOM";
-        dataSearcher.setOutputTarget = "#grill";
         dataSearcher.setParametros = parametros;
-    }
-
-
-    function buscarProveedores() {
         dataSearcher.formatoHtml();
     }
 
@@ -98,7 +100,7 @@ Proveedores
 
 <script src="<?= url("assets/xls_gen/xls.js") ?>"></script>
 <script src="<?= url("assets/xls_gen/xls_ini.js?v=" . rand(0.0, 100)) ?>"></script>
-<script src="<?= url("assets/clases/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
+<script src="<?= url("assets/js/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
 
 
 
@@ -109,9 +111,8 @@ Proveedores
 
 
         dataSearcher = new DataSearcher();
-        inicializarBuscador();
-        buscarProveedores();
-     //   fill_grill();
+        inicializarBuscador(); 
+        //   fill_grill();
     }
 </script>
 @endsection

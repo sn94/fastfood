@@ -2,7 +2,7 @@
 
 
 <div class="row">
-    <div class="col-12 col-md-6 col-lg-4 " >
+    <div class="col-12 col-md-6 col-lg-5 " >
 
 
         <div style="display: flex; flex-direction: row;">
@@ -21,7 +21,7 @@
 
 
 
-    <div class="col-12  col-sm-4 col-md-2 col-lg-2">
+    <div class="col-12  col-sm-4 col-md-2 col-lg-2  ">
 
         <label style="width: 200px !important;" class="pr-1 ">PRECIO UNIT.: </label>
         <input onkeydown="if(event.keyCode==13) {event.preventDefault(); compraObj.cargar_tabla();}" id="COMPRA-PRECIO" class="form-control form-control-sm entero text-end" type="text" />
@@ -36,7 +36,9 @@
             <option value="5">5%</option>
         </select>
     </div>
-    <div class="col-12 col-sm-4  col-md-2 col-lg-3 mb-1">
+
+
+    <div class="col-12 col-sm-4  col-md-2 col-lg-4 mb-1">
         <div style="display: flex; flex-direction: row;">
 
             <div style="display: flex; flex-direction: column;">
@@ -51,6 +53,7 @@
             <a style="display: flex; flex-direction: row; align-items: flex-end;" href="#" onclick="compraObj.cargar_tabla()"><i class="fa fa-download"></i></a>
         </div>
     </div>
+
 
     <input type="hidden" id="COMPRA-TIPO">
 

@@ -84,22 +84,32 @@ Route::group(['prefix' => "clientes",   'middleware' => ['auth.Caja']], function
 });
 
  
-
+/**
+ * Proveedores
+ */
 Route::group(['prefix' => "proveedores",   'middleware' => ['auth.Admin']], function () { //Route::prefix('proveedores')
-    Route::get('/',   'ProveedoresController@index');
-    Route::post('/buscar',   'ProveedoresController@index');
     Route::get('/create',    'ProveedoresController@create');
     Route::post('/',    'ProveedoresController@create');
     Route::get('/update/{id}',    'ProveedoresController@update');
     Route::put('/',    'ProveedoresController@update');
     Route::delete('/{id}',    'ProveedoresController@delete');
 });
+Route::group(['prefix' => "proveedores",   'middleware' => ['auth.Caja']], function () {
+Route::get('/',   'ProveedoresController@index');
+Route::post('/buscar',   'ProveedoresController@index');
+} );
+
+
+
 
 
 Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function () {
     Route::get('/',   'StockController@index');
 
-    //Route::get('/productos/buscar',   'StockController@index' );
+    Route::get('/filtrar',   'StockController@filtrar');
+    Route::get('/filtrar/{filtro}',   'StockController@filtrar');
+    Route::post('/filtrar',   'StockController@filtrar');
+ 
     Route::get('/create',    'StockController@create');
     Route::post('/',    'StockController@create');
     Route::get('/update/{id}',    'StockController@update');
@@ -113,9 +123,7 @@ Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function ()
         $receta = Receta::where("REGNRO", $STOCKID)->get();
         return view('stock.form_receta',  ['RECETA' =>   $receta]);
     });
-
-    Route::get('/',   'StockController@index');
-
+ 
     Route::get('/buscar/{TIPO}',   'StockController@index');
     Route::get('/buscar',   'StockController@index');
     Route::post('/buscar',   'StockController@index');
@@ -257,6 +265,9 @@ Route::group(['prefix' => 'compra', 'middleware' => ['auth.Caja']],   function (
     Route::get('/filtrar',   'CompraController@filtrar');
     Route::get('/filtrar/{filtro}',   'CompraController@filtrar');
     Route::post('/filtrar',   'CompraController@filtrar');
+    //consultas especificas para graficos especialmente
+    Route::get('/estadis-proveedores-frecuentes',   'CompraController@proveedores_frecuentes');
+    Route::post('/estadis-proveedores-frecuentes',   'CompraController@proveedores_frecuentes');
 
     Route::get('/',   'CompraController@create');
     Route::post('/',   'CompraController@create');
@@ -282,6 +293,15 @@ Route::group(['prefix' => 'pedidos', 'middleware' => ['auth.Caja']],   function 
 });
 
 
+Route::prefix('ficha-produccion')->group(function () {
+    Route::get('/', 'DepositoController@ficha_produccion');
+    Route::post('/',   'DepositoController@ficha_produccion');
+    Route::put('/',   'DepositoController@ficha_produccion');
+    Route::get('/{IDPRODUCCION}', 'DepositoController@ficha_produccion');
+    Route::get('/fichas/{ESTADO}/{ACCION}', function ($ESTADO, $ACCION) {
+        return view("ficha_produccion.index.index", ['ESTADO' => $ESTADO, 'ACCION' => $ACCION]);
+    });
+});
 
 Route::prefix('deposito')->group(function () {
 
@@ -294,13 +314,8 @@ Route::prefix('deposito')->group(function () {
     Route::get('/salida',   'SalidaController@create');
     Route::post('/salida',   'SalidaController@create');
 
-    Route::get('/ficha-produccion', 'DepositoController@ficha_produccion');
-    Route::post('/ficha-produccion',   'DepositoController@ficha_produccion');
-    Route::put('/ficha-produccion',   'DepositoController@ficha_produccion');
-    Route::get('/ficha-produccion/{IDPRODUCCION}', 'DepositoController@ficha_produccion');
-    Route::get('/fichas-de-produccion/{ESTADO}/{ACCION}', function ($ESTADO, $ACCION) {
-        return view("deposito.ficha_produccion.index.index", ['ESTADO' => $ESTADO, 'ACCION' => $ACCION]);
-    });
+  
+    
 
     Route::get('/nota-residuos/{IDPRODUCCION}',   'DepositoController@nota_residuos');
     Route::post('/nota-residuos',   'DepositoController@nota_residuos');
@@ -311,6 +326,10 @@ Route::prefix('deposito')->group(function () {
 
 Route::prefix('ventas')->group(function () {
     Route::get('/index',   'VentasController@index');
+
+    Route::get('/estadis-mas-vendidos',   'VentasController@productos_mas_vendidos');
+    Route::post('/estadis-mas-vendidos',   'VentasController@productos_mas_vendidos');
+
     Route::get('/',   'VentasController@create');
     Route::post('/',   'VentasController@create');
     Route::get('/ticket/{id}',   'VentasController@ticket');

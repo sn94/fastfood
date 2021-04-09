@@ -16,19 +16,11 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 @include("salida.estilos")
 @include("salida.routes")
 
-
-
-
-
-<h2 class="text-center mt-2" style="font-family: titlefont;">Salidas de productos y materia prima</h2>
-
-
-
-
+<div class="container-fluid col-12 col-md-12 bg-dark text-light mt-2">
+<h2 class="text-center mt-2" >Salidas de productos y materia prima</h2>
 
 <div id="loaderplace"></div>
-<div class="row m-2">
-    <div class="col-12 col-md-12">
+
         <form id="SALIDAFORM" action="<?= url("deposito/salida") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardarSalida(event)">
 
             <div class="row">
@@ -41,11 +33,8 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
                     @include("salida.form.grill")
                 </div>
             </div>
-
-
         </form>
-
-    </div>
+ 
 </div>
 
 

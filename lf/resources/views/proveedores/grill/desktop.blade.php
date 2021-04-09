@@ -24,6 +24,7 @@ table tbody tr td, table thead tr th{
     <tbody>
 
     @foreach( $proveedores as $prov)
+ 
         <tr>
             <td>
                 <a style="color: black;" href="{{url('proveedores/update').'/'.$prov->REGNRO}}"> <i class="fas fa-edit"></i></a>
@@ -35,7 +36,7 @@ table tbody tr td, table thead tr th{
             <td>{{$prov->CEDULA_RUC}}</td>
             <td>{{$prov->NOMBRE}}</td>
             <td>{{$prov->DIRECCION}}</td>
-            <td>{{  is_null( $prov->ciudad_) ? "" :  $prov->ciudad_->ciudad}}</td>
+            <td>{{  is_null( $prov->ciudad) ? "" :  $prov->ciudad->ciudad}}</td>
             <td>{{$prov->TELEFONO}}</td>
             <td> {{$prov->CELULAR}}</td>
             

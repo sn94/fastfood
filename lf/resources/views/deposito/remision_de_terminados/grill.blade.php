@@ -34,9 +34,9 @@
         </div>
     </div>
 
-    <div class="col-12  col-md-4  mb-1 pl-0" style="display: grid;  grid-template-columns: 28% 72%;">
+    <div class="col-12  col-md-4  mb-1 pl-0 d-flex flex-row"  >
 
-        <label style="grid-column-start: 1;">CANTIDAD:&nbsp; </label>
+        <label  >CANTIDAD:&nbsp; </label>
         <div style="display: flex; flex-direction: column;">
             <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="grid-column-start: 2;width: 90px !important;" id="CANTIDAD" class="form-control decimal" type="text" />
             <label style="letter-spacing: 2px; font-weight: 600; color: yellow;grid-column-start: 3;" id="MEDIDA"></label>
@@ -49,8 +49,7 @@
 
 </div>
 
-<div class="row bg-dark mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
-    <div class="col-12 col-md-12 p-0">
+<div class="container bg-dark mt-2 p-0  "> 
         <table class="table table-striped table-secondary text-dark">
 
             <thead>
@@ -84,16 +83,12 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="3">
+                    <th colspan="5">
                     </th>
                     <th></th>
                 </tr>
             </tfoot>
         </table>
-    </div>
-
-
-
 </div>
 
 

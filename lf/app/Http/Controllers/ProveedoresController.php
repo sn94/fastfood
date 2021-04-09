@@ -72,9 +72,9 @@ class ProveedoresController extends Controller
     {
         if (request()->getMethod()  ==  "GET")
             if (request()->ajax())
-                return view("proveedores.create_ajax");
+                return view("proveedores.create.ajax");
             else
-                return view('proveedores.create');
+                return view('proveedores.create.index');
         else {
 
             if ($this->ruc_cedula_registrado(request()->input("CEDULA_RUC")))
@@ -97,7 +97,7 @@ class ProveedoresController extends Controller
     {
         if (request()->getMethod()  ==  "GET") {
             $cli =  Proveedores::find($id);
-            return view('proveedores.update',  ['cliente' =>  $cli]);
+            return view('proveedores.create.index',  ['proveedores' =>  $cli]);
         } else {
 
 
@@ -106,7 +106,8 @@ class ProveedoresController extends Controller
                 $nuevo_proveedor =  Proveedores::find($id_);
 
 
-                if ($nuevo_proveedor->CEDULA_RUC !=  request()->input("CEDULA_RUC")  &&  $this->ruc_cedula_registrado(request()->input("CEDULA_RUC")))
+                if ($nuevo_proveedor->CEDULA_RUC !=  request()->input("CEDULA_RUC")  && 
+                 $this->ruc_cedula_registrado(request()->input("CEDULA_RUC")))
                     return response()->json(['err' =>  "CÉDULA/RUC ya existe"]);
 
 

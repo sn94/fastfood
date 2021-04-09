@@ -21,7 +21,7 @@ Arqueo de caja {{date('d-m-Y')}}
 
 <div id="loaderplace">
 </div>
-<div class="container col-12 col-md-10 col-lg-7 bg-dark mt-0 mb-0  mt-md-0 mb-md-0 mt-lg-3 mb-lg-3">
+<div class="container col-12 col-md-10 col-lg-7 bg-dark mt-0 mb-0  mt-md-0 mb-md-0 mt-lg-3 mb-lg-3 pb-2">
 
 <input type="hidden" value="<?= url("sesiones/informe-arqueo/" . session("SESION")) ?>"  id="INFORME-LINK">
     <button onclick="guardar()" id="BOTON-GUARDAR" class="btn btn-danger btn-sm" type="button">CERRAR SESIÓN</button>
@@ -53,7 +53,7 @@ Arqueo de caja {{date('d-m-Y')}}
             $("#BOTON-ARQUEO").removeClass("d-none");
             $("#BOTON-GUARDAR").addClass("d-none");
 
-            window.location = "<?= url("sesiones-list") ?>";
+            window.location = "<?= url("sesiones/list") ?>";
         } else {
             $("#BOTON-GUARDAR").removeClass("d-none");
             $("#BOTON-GUARDAR").prop("disabled", false);
@@ -93,5 +93,5 @@ Arqueo de caja {{date('d-m-Y')}}
 @section("jsScripts")
 <script src="<?= url("assets/xls_gen/xls.js") ?>"></script>
 <script src="<?= url("assets/xls_gen/xls_ini.js?v=" . rand(0.0, 100)) ?>"></script>
-<script src="<?= url("assets/clases/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
+<script src="<?= url("assets/js/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
 @endsection

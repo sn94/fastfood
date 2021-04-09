@@ -36,25 +36,27 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
     text-align: right;
   }
 
-  table.header th {
-    font-size: 10px;
+  table.header th { 
     text-align: left;
   }
 </style>
-<h4 class="text-center">Arqueo de caja</h4>
+<h4 class="text-center text-light">Arqueo de caja</h4>
 
-<table class="table bg-warning bg-gradient   table-bordered header">
-  <tr>
+<table id="tabla0" class="table bg-warning bg-gradient   table-bordered header">
+<tr>
+    <th>Fecha de impresión:</th>
+    <td>{{date('d/m/Y')}}</td>
     <th>Ventas de la Sesión N°:</th>
     <td>{{$SESION->REGNRO}}</td>
   </tr>
+ 
   <tr>
     <th>Cajero/a:</th>
     <td>{{$SESION->cajero->NOMBRES}}</td>
   </tr>
 </table>
 
-<table class="table bg-warning bg-gradient   table-bordered">
+<table id="tabla1"   class="table bg-warning bg-gradient   table-bordered">
   <thead>
     <tr>
       <th>Venta ID°</th>
@@ -95,7 +97,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
   </tfoot>
 </table>
 
-<table class="table bg-warning bg-gradient   table-bordered">
+<table id="tabla2" class="table bg-warning bg-gradient   table-bordered">
   <thead>
     <tr>
       <th colspan="5">VENTAS ANULADAS EN ESTA SESIÓN</th>
@@ -130,7 +132,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
 
 
 
-<table class="table bg-warning bg-gradient   table-bordered">
+<table id="tabla3" class="table bg-warning bg-gradient   table-bordered">
   <thead>
     <tr>
       <th colspan="4">SUMATORIA DE PRODUCTOS VENDIDOS</th>
@@ -138,7 +140,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
     <tr>
       <th>Producto</th>
       <th>Ítem</th>
-      <th>Cantidad</th>
+      <th class="text-center">Cantidad</th>
       <th>Imp. Venta</th>
     </tr>
   </thead>
@@ -154,7 +156,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
     <tr>
       <td>{{$detalle->ITEM}}</td>
       <td>{{$detalle->producto->DESCRIPCION}}</td>
-      <td>{{$detalle->CANTIDAD}}</td>
+      <td class="text-center">{{$detalle->CANTIDAD}}</td>
       <td class="text-end">{{ Utilidades::number_f($detalle->IMPORTE)  }}</td>
     </tr>
     @php

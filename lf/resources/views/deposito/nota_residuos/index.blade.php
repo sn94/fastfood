@@ -23,12 +23,14 @@
 
 
 
-<h2 class="text-center mt-2" style="font-family: titlefont;">Nota de residuos</h2>
 
 
+
+<div class="container-fluid bg-dark text-light col-12 col-md-11 px-2">
+
+<h2 class="text-center mt-2"  >Nota de residuos</h2>
 <div id="loaderplace"></div>
-<div class="row m-5">
-    <div class="col-12 col-md-12">
+ 
         <form action="<?= url("deposito/nota-residuos") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardar(event)">
 
             @if( isset($PRODUCCION))
@@ -37,14 +39,8 @@
             <input type="hidden" name="REGISTRADO_POR" value="<?= session("ID") ?>">
             <input type="hidden" name="SUCURSAL" value="<?= session("SUCURSAL") ?>">
             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-
-
-
-            <div class="row bg-dark mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
-
-
-
-
+<div class="container-fluid">
+<div class="row  mt-2 pt-1 pb-2">
                 <div class="col-12 col-md-6">
                     @includeIf('deposito.nota_residuos.ficha_produccion_view', ['PRODUCCION' => $PRODUCCION])
 
@@ -52,35 +48,23 @@
                         <div class="col-12 col-md-3  mb-1">
                             <label class="mt-1" for="element_7">FECHA: </label>
                             <input value="{{date('Y-m-d')}}" name="FECHA" class="form-control mt-1" type="date" />
-
                         </div>
-
                         <div class="col-12 col-md-9  mb-1">
                             <label  class="mt-1" for="element_7">OBSERVACIÓN: </label>
                             <input name="CONCEPTO"  class="form-control mt-1" type="text" />
-
                         </div>
                         <div class="col-12 col-md-2  mb-1">
                             <button type="submit" class="btn btn-danger"> GUARDAR</button>
                         </div>
                     </div>
                 </div>
-
-
                 <div class="col-12 col-md-6">
                     @include("deposito.nota_residuos.grill")
                 </div>
-
-
-            </div>
-
-
-
-
-
+            </div> 
+</div>
         </form>
-
-    </div>
+ 
 </div>
 
 

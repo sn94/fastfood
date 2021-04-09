@@ -192,12 +192,12 @@ class DepositoController extends Controller
         if (request()->getMethod()  ==  "GET") {
 
             if (is_null($PRODUCCIONID))
-                return view('deposito.ficha_produccion.create');
+                return view('ficha_produccion.create');
             else {
                 $FORMATO =  request()->header("formato", "html");
                 if ($FORMATO  == "html") {
                     $PRODUCCION = Ficha_produccion::find($PRODUCCIONID);
-                    return view('deposito.ficha_produccion.create',  ['PRODUCCION' => $PRODUCCION, 'PRODUCCION_ID' =>   $PRODUCCIONID]);
+                    return view('ficha_produccion.create',  ['PRODUCCION' => $PRODUCCION, 'PRODUCCION_ID' =>   $PRODUCCIONID]);
                 } elseif ($FORMATO ==  "json") {
                     return $this->get_ficha_produccion($PRODUCCIONID);
                 }

@@ -116,7 +116,7 @@
              <div class="col-12 col-md-4  ">
 
                  <label> Cambiar contraseña <input onchange="$('#MYPASS').prop('disabled', !this.checked); " type="checkbox"> </label>
-                 <input disabled name="PASS" class="form-control" type="text" id="MYPASS" />
+                 <input disabled name="PASS" class="form-control" type="password" id="MYPASS" />
              </div>
              <div class="col-12 col-md-4  ">
              <label>ORDEN: </label>

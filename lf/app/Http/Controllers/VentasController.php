@@ -8,6 +8,7 @@ use App\Models\Clientes;
 use App\Models\Parametros;
 use App\Models\Sesiones;
 use App\Models\Stock;
+use App\Models\Sucursal;
 use App\Models\Ventas;
 use App\Models\Ventas_det;
 use Exception;
@@ -71,6 +72,67 @@ class VentasController extends Controller
         else
             return view("ventas.index.index", ['VENTAS' =>  $ventas]);
     }
+
+
+
+
+    /**
+     * 
+     * Funciones especificas
+     */
+
+
+
+    public function productos_mas_vendidos()
+    {
+
+
+
+        $todo =   request()->has("TODO") ? request()->input("TODO") : "N";
+        $sucursal = "";
+        if ($todo == "N")
+            $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
+
+        $mes =   request()->has("MES") ? request()->input("MES") : date("m");
+        $anio = request()->has("ANIO") ? request()->input("ANIO") : date("Y");
+
+
+        $loMasVendido =  Ventas_det::join("ventas", "ventas.REGNRO", "=", "ventas_det.VENTA_ID")
+            ->join("stock", "stock.REGNRO", "=",  "ventas_det.ITEM")
+            ->join("sucursal", "ventas.SUCURSAL", "=",  "sucursal.REGNRO");
+        if ($sucursal != "")
+            $loMasVendido = $loMasVendido->where("ventas.SUCURSAL", $sucursal);
+
+        $loMasVendido = $loMasVendido->whereRaw(" month(ventas.FECHA)", $mes)
+            ->whereRaw(" year(ventas.FECHA)", $anio)
+            ->groupBy("ventas_det.ITEM")
+            ->select("sucursal.DESCRIPCION",  "stock.DESCRIPCION", DB::raw('count(ventas_det.REGNRO) AS NUMERO_VENTAS'))->get();
+
+        $sucursalModel = Sucursal::find($sucursal);
+        $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+        $titulo = "LO MÁS VENDIDO EN $descripcionSucursal";
+        return response()->json(['titulo' => $titulo,  "data" =>   $loMasVendido]);
+    }
+
+    public function medios_pagos_preferidos()
+    {
+        //Cuanto se vendio, por tarjeta, giro, efectivo
+    }
+
+    public function categoria_productos_populares()
+    {
+        //cuanto se vende de pizzas, hamburguesas ...
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -175,8 +237,8 @@ class VentasController extends Controller
             if ($email ==  "")
                 return response()->json(['err' =>  "No se registra un email para este cliente"]);
             else {
-               var_dump( Mail::to(  $email )->send(new TicketSender($venta)));
-                return response()->json(['ok' =>  "enviado"] );
+                var_dump(Mail::to($email)->send(new TicketSender($venta)));
+                return response()->json(['ok' =>  "enviado"]);
             }
         } else    return view("ventas.proceso.ticket.print.index", ["VENTA" => $venta, "DETALLE" => $detalle]);
     }
@@ -204,12 +266,13 @@ class VentasController extends Controller
 
 
 
-    public  function view(  $VENTAID= NULL){
-        if( ! is_null($VENTAID) ){
+    public  function view($VENTAID = NULL)
+    {
+        if (!is_null($VENTAID)) {
 
-            $header=  Ventas::find(  $VENTAID );
-            $detalles= $header->detalle;
-            return view("ventas.view.index", ['HEADER'=>  $header, 'DETALLE'=> $detalles ]  );
+            $header =  Ventas::find($VENTAID);
+            $detalles = $header->detalle;
+            return view("ventas.view.index", ['HEADER' =>  $header, 'DETALLE' => $detalles]);
         }
     }
 }

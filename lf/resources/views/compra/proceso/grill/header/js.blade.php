@@ -6,9 +6,21 @@
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
+
         let resp = await req.text();
 
+
         $("#mymodal .content").html(resp);
+
+        window.myModalCustomHandler = function() {
+            if ("ULTIMO_STOCK" in window && ULTIMO_STOCK != undefined) {
+                $("#COMPRA-ITEM-ID").val(ULTIMO_STOCK.REGNRO);
+                $("#COMPRA-ITEM-DESC").val(ULTIMO_STOCK.DESCRIPCION);
+                window.buscador_items_modelo = Object.assign(ULTIMO_STOCK);
+                delete window.ULTIMO_STOCK;
+            }
+
+        };
 
         //dar formato a campos decimales y numericos 
         formatoNumerico.formatearCamposNumericosDecimales("STOCKFORM");
@@ -154,9 +166,9 @@
 
             let regnro = buscador_items_modelo.REGNRO;
             let descri = buscador_items_modelo.DESCRIPCION;
-            let precio =parseInt(formValidator.limpiarNumero($("#COMPRA-PRECIO").val()));
+            let precio = parseInt(formValidator.limpiarNumero($("#COMPRA-PRECIO").val()));
             let canti = parseFloat(formValidator.limpiarNumero($("#COMPRA-CANTIDAD").val()));
-            let medida = buscador_items_modelo.MEDIDA;
+            let medida = buscador_items_modelo.unidad_medida.DESCRIPCION;
             let iva = parseInt($("#COMPRA-IVA").val());
             let tipostock = buscador_items_modelo.TIPO;
             let subtotal = Math.round(parseFloat(precio) * (canti));
@@ -165,7 +177,10 @@
             let i5 = iva == 5 ? subtotal : 0;
             let i10 = iva == 10 ? subtotal : 0;
 
-            if (regnro == "" || (precio == "" || precio == "0") || canti == "") alert("Seleccione un item antes de cargar, o complete todos los datos");
+            if (regnro == "" || (precio == "" || precio == "0") || canti == "") {
+                alert("Seleccione un item antes de cargar, o complete todos los datos");
+                return;
+            }
             //agregar al modelo
             let objc = {
                 CODIGO: buscador_items_modelo.CODIGO,
@@ -211,18 +226,19 @@
 
     async function buscarItemParaCompra() {
 
+        //Handler
         window.buscar_items_target = function({
             REGNRO,
             DESCRIPCION,
-            MEDIDA,
+            unidad_medida,
             PCOSTO
         }) {
 
             $("#COMPRA-ITEM-ID").val(REGNRO);
             $("#COMPRA-ITEM-DESC").val(DESCRIPCION);
-            $("#COMPRA-MEDIDA").text(MEDIDA);
-            $("#COMPRA-PRECIO").val(  formatoNumerico.darFormatoEnMillares(PCOSTO, 0));
-        };
+            $("#COMPRA-MEDIDA").text( unidad_medida.DESCRIPCION);
+            $("#COMPRA-PRECIO").val(formatoNumerico.darFormatoEnMillares(PCOSTO, 0));
+        }; /**End handler */
 
         if ("buscar_items__" in window) {
 

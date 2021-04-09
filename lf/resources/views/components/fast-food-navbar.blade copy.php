@@ -9,7 +9,7 @@
         color: wheat;
     }
 
-    /* En línea #20 | http://192.168.0.14/fastfood/deposito/ficha-produccion */
+    /* En línea #20 | http://192.168.0.14/fastfood/ficha-produccion */
 
     @media (min-width: 992px) {
         .dropdown-menu li {

@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Utilidades;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockRequest;
 use App\Models\Compras;
+use App\Models\Nota_pedido_detalles;
 use App\Models\Nota_residuos;
+use App\Models\Nota_residuos_detalle;
 use App\Models\PreciosVenta;
 use App\Models\Receta;
 use App\Models\Remision_de_terminados;
 use App\Models\Salidas;
 use App\Models\Stock;
+use App\Models\Sucursal;
 use App\Models\Ventas;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
- 
+use PhpParser\Node\Expr\FuncCall;
 
 class StockController extends Controller
 {
@@ -28,35 +32,39 @@ class StockController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function index($TIPO = "PE")
+    public function index($TIPO = "ALL") //PE
     {
         Artisan::call('storage:link'); //crea enlaces simbolicos si falta 
 
-        $stock =  $this->buscar_productos(request(), $TIPO);
-
-
+        $stock =  $this->buscar_productos(request(), $TIPO)->with("precios")->with("unidad_medida");
         //El formato de los datos
         $formato =  request()->header("formato");
         //Si es JSON retornar
         if ($formato == "json") {
-            $stock =  $stock->with("precios")->get();
+            $stock =  $stock->get();
             return response()->json($stock);
         }
 
         if ($formato ==  "pdf") {
-            $stock =  $stock->with("precios")->get();
+            $stock =  $stock->get();
             return $this->responsePdf("stock.grill.simple",  $stock,  "Stock");
         }
 
         //Formato Html
         $stock =  $stock->paginate(20);
         if (request()->ajax())
-            return view('stock.grill.grill',  ['TIPO' => $TIPO,  'stock' =>   $stock]);
+            return view('stock.grill.index',  ['TIPO' => $TIPO,  'stock' =>   $stock]);
         else
             return view('stock.index',  ['TIPO' => $TIPO]);
     }
 
 
+
+
+    public function index_light()
+    {
+        return response()->json(Stock::findAll());
+    }
 
 
 
@@ -73,6 +81,7 @@ class StockController extends Controller
      */
     public function buscar_productos(Request $request, $TIPO)
     {
+
 
         /**
          * Parametros
@@ -98,19 +107,18 @@ class StockController extends Controller
          * Ordenamiento
          */
 
-         $columnaOrdena= "created_at";
-         $valorOrdena= "DESC";
+        $columnaOrdena = "created_at";
+        $valorOrdena = "DESC";
 
-         if(  $descripcion_orden != "")  $columnaOrdena = "DESCRIPCION";
-         elseif( $pventa_orden != "") $columnaOrdena= "PVENTA";
-         else $columnaOrdena= "created_at";
+        if ($descripcion_orden != "")  $columnaOrdena = "DESCRIPCION";
+        elseif ($pventa_orden != "") $columnaOrdena = "PVENTA";
+        else $columnaOrdena = "created_at";
 
-         if(  $descripcion_orden != "")  $valorOrdena = $descripcion_orden;
-         elseif( $pventa_orden != "") $valorOrdena= $pventa_orden;
-         else $valorOrdena= "DESC";
+        if ($descripcion_orden != "")  $valorOrdena = $descripcion_orden;
+        elseif ($pventa_orden != "") $valorOrdena = $pventa_orden;
+        else $valorOrdena = "DESC";
 
-        $stock =  Stock::
-        orderBy(  $columnaOrdena  ,  $valorOrdena)  
+        $stock =  Stock::orderBy($columnaOrdena,  $valorOrdena)
             ->select(
                 "stock.*",
                 DB::raw("if( CODIGO is NULL or CODIGO='' , stock.REGNRO, stock.CODIGO) AS CODIGO"),
@@ -124,9 +132,14 @@ class StockController extends Controller
 
         //Filtrar por preventa o preparados
         if ($tipo !=  "") {
-            //Solicitud de datos para venta? Si no es por venta, permitir filtrar por un solo tipo de item
-            if ($tipo == "VENTA")   $stock =  $stock->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP");
-            else   $stock =  $stock->where("TIPO", "=",  $tipo);
+            //Solicitud de datos para venta? Si no es por venta, permitir filtrar por un
+            // solo tipo de item
+            if ($tipo == "VENTA")
+                $stock =  $stock->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP");
+            elseif ($tipo == "ALL") {
+                $stock = $stock->orderBy("TIPO");
+                return $stock;
+            } else $stock =  $stock->where("TIPO", "=",  $tipo);
         }
         //Filtrar por familia 
         if ($familia !=  "")  $stock = $stock->where("FAMILIA", $familia);
@@ -168,6 +181,195 @@ class StockController extends Controller
         ]);
         return $stock;
     }
+
+
+
+
+
+
+
+    public function filtrar($filterParam = NULL)
+    {
+
+        $filtro = is_null($filterParam) ?  (request()->has("FILTRO") ?  request()->input("FILTRO")  : "1")  : $filterParam;
+
+        if (request()->isMethod("GET")  &&  request()->ajax()) {
+            return view("stock.reportes.filters.filter$filtro");
+        }
+
+        $STOCK =  [];
+        $TITULO = "";
+
+        // PRODUCTOS MÁS PEDIDOS POR SUCURSALES
+        if ($filtro ==  "1") {
+            try {
+
+                $resultado =  $this->filtro1();
+                $TITULO =  $resultado['titulo'];
+                $STOCK =  $resultado['data'];
+            } catch (Exception $x) {
+                return response()->json(['err' =>  $x->getMessage()]);
+            }
+        }
+        if ($filtro ==  "2") { //productos mas compra
+
+            try {
+                $resultado =  $this->filtro2();
+                $TITULO =  $resultado['titulo'];
+                $STOCK =  $resultado['data'];
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
+        }
+
+
+        //Content Type solicitado
+        //El formato de los datos
+        $formato =  request()->header("formato");
+
+        //Si es JSON retornar
+        if ($formato == "json") {
+
+            try {
+                $STOCK =  $STOCK->get();
+                //Solicitan datos json incluido un titulo descriptivo
+                $DESCRIPTIVO = request()->has("DESCRIPTIVO") ? request()->input("DESCRIPTIVO") : "N";
+                if ($DESCRIPTIVO ==  "N")
+                    return response()->json($STOCK);
+                else
+                    return response()->json(["titulo" =>  $TITULO, "data" => $STOCK]);
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
+        }
+
+        if ($formato == "pdf") {
+            try {
+                $STOCK =  $STOCK->get();
+                return $this->responsePdf("stock.reportes.views.filter$filtro",  $STOCK, $TITULO);
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
+        }
+
+
+        //Formato html
+        try {
+            $STOCK =  is_array($STOCK)  ?  $STOCK :  $STOCK->paginate(15);
+        } catch (Exception  $e) {
+            return response()->json(['err' =>  $e->getMessage()]);
+        }
+
+
+        if (request()->ajax())
+            return view("stock.reportes.views.filter$filtro", ['FILTRO' => $filtro, 'STOCK' => $STOCK]);
+        else
+            return view('stock.reportes.index', ['FILTRO' => $filtro, 'STOCK' => $STOCK]);
+    }
+
+
+    /**
+     * 
+     * 
+     * 
+     * Busquedas especificas
+     */
+
+    //PRODUCTOS MÁS PEDIDOS POR SUCURSALES
+    /*
+    params:  SUCURSAL_n_1   SUCURSAL  MES   ANIO
+
+    */
+    public function filtro1()
+    {
+
+        //Filtro sucursal
+        $sucursal =   $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : "";
+        //Filtro mes y anio
+        $mes =   request()->has("MES") ? request()->input("MES") : date("m");
+        $anio = request()->has("ANIO") ? request()->input("ANIO") : date("Y");
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  "";
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
+        $TIPO_PRODUCTO =   request()->has("TIPO_STOCK") ? request()->input("TIPO_STOCK") :  ""; //TIPO DE PRODUCTO
+
+        $loMasPedido = Nota_pedido_detalles::join("nota_pedido_matriz",  "nota_pedido_matriz.REGNRO", "=", "nota_pedido_detalles.NPEDIDO_ID")
+            ->join("stock", "stock.REGNRO", "=", "nota_pedido_detalles.ITEM")
+            ->join("sucursal", "sucursal.REGNRO", "=", "nota_pedido_matriz.SUCURSAL");
+        //Solo filtrar por sucursal, si este parametro no se definio
+        if ($sucursal != "")
+            $loMasPedido = $loMasPedido->where("nota_pedido_matriz.SUCURSAL", $sucursal);
+
+        //Filtrar por mes y anio
+        if ($FECHA_DESDE == ""  &&  $FECHA_HASTA == "")
+            $loMasPedido = $loMasPedido->whereRaw("month(nota_pedido_matriz.FECHA)", $mes)
+                ->whereRaw("year(nota_pedido_matriz.FECHA)", $anio);
+        else
+            $loMasPedido = $loMasPedido->where("nota_pedido_matriz.FECHA", $FECHA_DESDE)
+                ->whereRaw("nota_pedido_matriz.FECHA", $FECHA_HASTA);
+
+        //Filtrar por tipo PRODUCTO
+        if ($TIPO_PRODUCTO !=  "")
+            $loMasPedido = $loMasPedido->where("stock.TIPO", $TIPO_PRODUCTO);
+
+        //Agrupar por uno o mas productos para cada sucursal 
+        //Mostrar todos los productos pedidos por sucursal
+        $loMasPedido = $loMasPedido->groupBy("nota_pedido_detalles.ITEM")
+            ->groupBy("nota_pedido_matriz.SUCURSAL");
+
+
+        $loMasPedido = $loMasPedido->select(
+            "sucursal.REGNRO AS SUCURSAL_ID",
+            "sucursal.DESCRIPCION AS SUCURSAL",
+            "stock.DESCRIPCION",
+            DB::raw("count(nota_pedido_detalles.REGNRO) AS NUMERO_PEDIDOS")
+        );
+
+        //Redaccion de titulo
+        $sucursalModel = Sucursal::find($sucursal);
+        $descripcionSucursal = "";
+        if (is_null($sucursalModel))  $descripcionSucursal = "LAS SUCURSALES";
+        else   $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+
+        //Mes y Anio
+        $mesDescripcion = Utilidades::monthDescr($mes);
+        //Response
+        $titulo = "LOS PRODUCTOS MÁS PEDIDOS EN $descripcionSucursal EN $mesDescripcion $anio ";
+        return  ['titulo' => $titulo, "data" =>  $loMasPedido];
+    }
+
+
+    //Los que dejan mas residuos
+    public function filtro2()
+    {
+
+        //Filtro sucursal
+        $sucursal =   $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
+        //Filtro mes y anio
+        $mes =   request()->has("MES") ? request()->input("MES") : date("m");
+        $anio = request()->has("ANIO") ? request()->input("ANIO") : date("Y");
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  "";
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
+
+        $residuos = Nota_residuos_detalle::join("nota_residuos", "nota_residuos.REGNRO", "=", "nota_residuos_detalle.NRESIDUO_ID")
+            ->join("stock", "stock.REGNRO", "=", "nota_residuos_detalle.ITEM")
+            ->where("SUCURSAL", $sucursal);
+
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
+            $residuos =  $residuos->where("FECHA", ">=", $FECHA_DESDE)->where("FECHA", "<=", $FECHA_HASTA);
+        else
+            $residuos = $residuos->whereRaw("month(nota_residuos.FECHA)", $mes)
+                ->whereRaw("year(nota_residuos.FECHA)", $anio);
+
+        $residuos = $residuos->groupBy("nota_residuos_detalle.ITEM")
+        ->select("nota_residuos.SUCURSAL", "stock.DESCRIPCION", "stock.TIPO", DB::raw("count(nota_residuos.REGNRO) AS NUMERO_RESIDUOS"));
+        //Mes y Anio
+        $mesDescripcion = Utilidades::monthDescr($mes);
+        //Response
+        $titulo = "SUCURSAL: $sucursal, RESIDUOS DE INGREDIENTES, $mesDescripcion $anio ";
+
+        return ['titulo' => $titulo, 'data' => $residuos];
+    }
+
 
 
 
@@ -278,9 +480,9 @@ class StockController extends Controller
         if ($request->getMethod()  ==  "GET") {
 
             if (request()->ajax())
-                return view('stock.create_ajax');
+                return view('stock.create.index');
             else
-                return view('stock.create');
+                return view('stock.create.index');
         } else {
 
 
@@ -325,7 +527,7 @@ class StockController extends Controller
                 //Detalle precios
                 $this->create_prices($request, $stock_id);
                 DB::commit();
-                return response()->json(['ok' =>  "Stock registrado"]);
+                return response()->json(['ok' =>  $nuevo_stock]);
             } catch (Exception  $ex) {
                 DB::rollBack();
                 return response()->json(['err' =>   $ex->getMessage()]);
@@ -345,7 +547,7 @@ class StockController extends Controller
             //Precios Venta
             $PRECIOS = $Stock__->precios;
 
-            return view('stock.update',  ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS]);
+            return view('stock.create',  ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS]);
         } else {
 
 

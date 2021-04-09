@@ -193,8 +193,11 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
         
          formValidator.init(ev.target);
          show_loader();
+         //Metodo 
+         let metodo=   $("input[name=_method]").val(); 
+
          let req = await fetch(ev.target.action, {
-             "method": "POST",
+             "method":  metodo,
              headers: {
                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
              },
@@ -203,12 +206,23 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
          let resp = await req.json();
          hide_loader();
          if ("ok" in resp) {
-             alert(resp.ok);
+             alert( "Guardado");
 
+             //lIMPIAR IMAGEN
              $("#STOCKIMG").attr("src", "");
+
+             
+             let stockObject=   Object.assign(  resp.ok );
+             window.ULTIMO_STOCK=  stockObject;
+
+             //TIpo de item para listado
              let tipo_item = $("select[name=TIPO]").val();
              if ($("#REDIRECCIONAR").val() == "SI")
                  window.location = "<?= url('stock/buscar') ?>/" + tipo_item+"<?=$QUERY_FLAG?>";
+            else{
+                //Cerrar modal si hubiere
+                if( "cerrarMyModal" in window)   cerrarMyModal();
+            }
          } else {
              alert(resp.err);
          }

@@ -106,10 +106,15 @@ class UsuariosController extends Controller
             /*** */
             try {
                 $id_ = request()->input("REGNRO");
+                $data =  request()->input();
+
+                if (array_key_exists("PASS",  $data))
+                    $data['PASS'] =  password_hash($data['PASS'], PASSWORD_BCRYPT);
+
+
                 DB::beginTransaction();
                 $nuevo_producto =  Usuario::find($id_);
-                $nuevo_producto->fill(request()->input());
-
+                $nuevo_producto->fill($data);
                 $nuevo_producto->save();
                 DB::commit();
                 return response()->json(['ok' =>  "Actualizado"]);
@@ -165,14 +170,14 @@ class UsuariosController extends Controller
 
 
             $PaginaDeInicio = "";
- 
+
             //El cajero tiene sesion abierta?
-            if (! is_null( (new SesionesController())->tieneSesionAbierta()))     $PaginaDeInicio = url("sesiones/create");
-            else{
+            if (!is_null((new SesionesController())->tieneSesionAbierta()))     $PaginaDeInicio = url("sesiones/create");
+            else {
                 if ($usua->NIVEL ==  "SUPER")   $PaginaDeInicio =  url("modulo-administrativo");
                 if ($usua->NIVEL ==  "CAJA")   $PaginaDeInicio =  url("modulo-caja");
             }
-          
+
 
             return response()->json(['ok' =>  $PaginaDeInicio]);
         }

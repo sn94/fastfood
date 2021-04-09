@@ -11,7 +11,7 @@ $adminOptionsMenu = [
         "label" => "DEPOSITO", "link" =>
         [
 
-            ["label" => "SALIDAS DE PRODUCTOS Y MATERIA PRIMA", "link" =>  url('deposito/fichas-de-produccion/PENDIENTE/SALIDAS')],
+            ["label" => "SALIDAS DE PRODUCTOS Y MATERIA PRIMA", "link" =>  url('ficha-produccion/fichas/PENDIENTE/SALIDAS')],
             ["label" => "COMPRAS", "link" =>  url('compra/index')],
             ["label" => "STOCK",  "link" =>  url('stock')]
 
@@ -21,9 +21,9 @@ $adminOptionsMenu = [
     [
         "label" => "COCINA", "link" =>
         [
-            ["label" => "FICHA DE PRODUCCIÓN", "link" => url('deposito/ficha-produccion')],
-            ["label" => "REMISIÓN DE PRODUCTOS TERMINADOS", "link" => url('deposito/fichas-de-produccion/DESPACHADO/TERMINADOS')],
-            ["label" => "NOTA DE RESIDUOS",  "link" => url('deposito/fichas-de-produccion/DESPACHADO/RESIDUOS')]
+            ["label" => "FICHA DE PRODUCCIÓN", "link" => url('ficha-produccion')],
+            ["label" => "REMISIÓN DE PRODUCTOS TERMINADOS", "link" => url('ficha-produccion/fichas/DESPACHADO/TERMINADOS')],
+            ["label" => "NOTA DE RESIDUOS",  "link" => url('ficha-produccion/fichas/DESPACHADO/RESIDUOS')]
 
         ],
     ],
@@ -50,20 +50,9 @@ $adminOptionsMenu = [
     [
         "label" => "REPORTES", "link" =>
         [
-            ["label" => "STOCK", "link" =>  "#",
-            /*[
-                ["label" => "LISTA DE PRECIOS",  "link" => "#"],
-                ["label" => "RANKING DE PRODUCTOS MÁS VENDIDOS",  "link" => "#"],
-                ["label" => "COMPARATIVO DE VENTAS POR PRODUCTOS ",  "link" => "#"],
-                ["label" => "LISTADO DE STOCK VALORADO REAL ",  "link" => "#"],
-                ["label" => "LISTADO DE STOCK BAJO EL MINIMO ",  "link" => "#"]
-                ]* */
-            ],
+            ["label" => "STOCK", "link" =>   url("stock/filtrar")  ],
             ["label" => "COMPRAS", "link" => url("compra/filtrar")],
-            ["label" => "TOTALES POR SESIÓN Y SUCURSALES", "link" => "#"],
-            ["label" => "STOCK TOTAL POR SUCURSALES",  "link" => "#"],
-            ["label" => "PEDIDOS POR FECHAS Y POR SUCURSALES",  "link" => "#"],
-            ["label" => "CONSUMO DEL PERSONAL POR MES",  "link" =>  "#"]
+            ["label" => "VENTAS", "link" => "#"]
         ],
     ],
 

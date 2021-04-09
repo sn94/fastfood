@@ -22,7 +22,7 @@
   
         
         <input type="hidden" name="_method"  value="PUT">
-        @include("proveedores.form")
+        @include("proveedores.create.form")
      
 
 </form>

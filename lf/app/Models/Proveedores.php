@@ -21,7 +21,7 @@ class Proveedores extends Model
 
     public function ciudad()
     {
-        return $this->belongsTo(Ciudades::class,      'CIUDAD', 'regnro');
+        return $this->hasOne(Ciudades::class,     'regnro',  'CIUDAD');
     }
 
 

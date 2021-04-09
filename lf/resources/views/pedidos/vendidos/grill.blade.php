@@ -47,7 +47,7 @@ use App\Models\Nota_pedido_detalles;
 
 
 
-<table id="PEDIDOS-TABLE" class="table table-hover table-striped">
+<table id="PEDIDOS-TABLE" class="table table-hover table-striped bg-warning">
     <thead class="thead-dark">
         <tr>
             <th>ID</th>

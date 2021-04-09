@@ -115,6 +115,7 @@ $REGISTRADO_POR= isset($COMPRA) ? $COMPRA->REGISTRADO_POR : session("ID") ;
 
 @include("validations.form_validate")
 @include("validations.formato_numerico")
+@include("buscador.Buscador")
 
 
 <script>
