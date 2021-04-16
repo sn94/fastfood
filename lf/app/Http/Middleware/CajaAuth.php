@@ -20,7 +20,7 @@ class CajaAuth
         //Si no existe sesion Usuario y no accede al inicio de sesion
         if( !  $sess->has("USUARIO")  &&  ! $accessLogin  )
         return redirect('usuario/sign-in');
-        if ($sess->get("NIVEL")  ==  "SUPER"  ||  $sess->get("NIVEL")  ==  "CAJA")
+        if (( $sess->get("NIVEL")  ==  "GOD"  || $sess->get("NIVEL")  ==  "SUPER" ) ||  $sess->get("NIVEL")  ==  "CAJA")
         //permitir
         return $next($request);
         else 

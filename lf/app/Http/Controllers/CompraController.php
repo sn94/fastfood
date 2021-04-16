@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utilidades;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\Models\Compras;
-use App\Models\Compras_detalles; 
-use App\Models\Nota_pedido;  
-use App\Models\Stock; 
+use App\Models\Compras_detalles;
+use App\Models\Nota_pedido;
+use App\Models\Stock;
+use App\Models\Stock_existencias;
 use Error;
-use Exception; 
-use Illuminate\Support\Facades\DB; 
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 
 class CompraController extends Controller
@@ -180,6 +181,7 @@ class CompraController extends Controller
     {
 
         $filtro = is_null($filterParam) ?  (request()->has("FILTRO") ?  request()->input("FILTRO")  : "1")  : $filterParam;
+        $nombreFiltro = "filtro$filtro";
 
         if (request()->isMethod("GET")  &&  request()->ajax()) {
             return view("compra.reportes.filters.filter$filtro");
@@ -187,22 +189,11 @@ class CompraController extends Controller
 
         $COMPRAS =  [];
 
-        if ($filtro ==  "1") {
-            try {
-                $COMPRAS =  $this->filtro1();
-            } catch (Error $x) {
-                return response()->json(['err' =>  $x->getMessage()]);
-            }
+        try {
+            $COMPRAS =  $this->{$nombreFiltro}();
+        } catch (Error $x) {
+            return response()->json(['err' =>  $x->getMessage()]);
         }
-        if ($filtro ==  "2") { //productos mas compra
-
-            try {
-                $COMPRAS = $this->filtro2();
-            } catch (Exception $e) {
-                return response()->json(['err' =>  $e->getMessage()]);
-            }
-        }
-        
 
         //Content Type solicitado
         //El formato de los datos
@@ -247,30 +238,28 @@ class CompraController extends Controller
 
 
 
-    public  function proveedores_frecuentes(  )
+    public  function proveedores_frecuentes()
     {
         $MES = request()->has("MES") ?   request()->input("MES") :  date("m");
-        $ANIO=  request()->has("ANIO") ?   request()->input("ANIO") :  date("Y");
+        $ANIO =  request()->has("ANIO") ?   request()->input("ANIO") :  date("Y");
 
         $proveedores = Compras::join("proveedores", "proveedores.REGNRO", "=", "compras.PROVEEDOR")
-        ->groupBy("PROVEEDOR")
-        ->whereRaw('month(FECHA)',  $MES)
-        ->whereRaw('year(FECHA)',  $ANIO)
-        ->select(   "proveedores.NOMBRE as PROVEEDOR_NOMBRE",  DB::raw('count(compras.REGNRO) AS NUMERO_COMPRAS'))
-        ->orderByRaw('count(compras.REGNRO) DESC')->limit(5)->get();
+            ->groupBy("PROVEEDOR")
+            ->whereRaw('month(FECHA)',  $MES)
+            ->whereRaw('year(FECHA)',  $ANIO)
+            ->select("proveedores.NOMBRE as PROVEEDOR_NOMBRE",  DB::raw('count(compras.REGNRO) AS NUMERO_COMPRAS'))
+            ->orderByRaw('count(compras.REGNRO) DESC')->limit(5)->get();
 
 
-        $titulo="";
-        if( $MES  ==   date("m")   &&   $ANIO ==  date("Y") )
-        $titulo= "PROVEEDORES MÁS FRECUENTES EN ESTE MES";
+        $titulo = "";
+        if ($MES  ==   date("m")   &&   $ANIO ==  date("Y"))
+            $titulo = "PROVEEDORES MÁS FRECUENTES EN ESTE MES";
         else {
-            $descriMes= Utilidades::monthDescr(  $MES );
+            $descriMes = Utilidades::monthDescr($MES);
             $titulo = "PROVEEDORES MÁS FRECUENTES EN $descriMes $ANIO";
         }
 
-        return response()->json( [  "titulo"=> $titulo,  "data"=>    $proveedores]  );
-
-
+        return response()->json(["titulo" => $titulo,  "data" =>    $proveedores]);
     }
 
 
@@ -351,6 +340,13 @@ class CompraController extends Controller
                     $d_compra =  new Compras_detalles();
                     $d_compra->fill($datarow);
                     $d_compra->save();
+
+                    //Actualizar existencia
+                    $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
+                        ->where("STOCK_ID",  $datarow['ITEM'])->first();
+                    $existencia->CANTIDAD =  $existencia->CANTIDAD + $datarow['CANTIDAD'];
+                    $existencia->save(); //disminuir
+
                 endforeach;
 
 

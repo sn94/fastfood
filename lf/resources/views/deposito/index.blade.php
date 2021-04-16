@@ -51,11 +51,11 @@
 </select>
 
 <a class="btn btn-danger" id="ENTRADA1" href="{{url('deposito/compra/M')}}">REGISTRAR COMPRAS</a>
-<a class="btn btn-danger" id="SALIDA1" href="{{url('deposito/salida/M')}}">REGISTRAR SALIDAS</a>
+<a class="btn btn-danger" id="SALIDA1" href="{{url('salida/M')}}">REGISTRAR SALIDAS</a>
 
 <a class="btn btn-danger d-none" id="ENTRADA2" href="{{url('deposito/compra/P')}}">REGISTRAR COMPRAS</a>
  
-<a class="btn btn-danger d-none" id="SALIDA2" href="{{url('deposito/salida/P')}}">REGISTRAR SALIDAS</a>
+<a class="btn btn-danger d-none" id="SALIDA2" href="{{url('salida/P')}}">REGISTRAR SALIDAS</a>
 
 
 <div id="loaderplace"></div>

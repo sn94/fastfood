@@ -126,8 +126,6 @@ class DataSearcher {
             requestSetting.body = params;
 
         let req = await fetch(grill_url, requestSetting);
-
-        console.log( req); 
         hide_loader();
         return req;
     }

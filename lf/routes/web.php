@@ -27,7 +27,7 @@ Route::get('/', function () {
 
     if (session("NIVEL") == "CAJA")
         return view('welcome_caja');
-    if (session("NIVEL") == "SUPER")
+    if (session("NIVEL") == "SUPER" ||  session("NIVEL") == "GOD")
         return view('welcome_admin');
 })->middleware("auth.Caja");
 
@@ -113,8 +113,8 @@ Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function ()
     Route::get('/create',    'StockController@create');
     Route::post('/',    'StockController@create');
     Route::get('/update/{id}',    'StockController@update');
-    Route::get('/get/{id}',    'StockController@get');
     Route::put('/',    'StockController@update');
+    Route::get('/get/{id}',    'StockController@get');
     Route::delete('/{id}',    'StockController@delete');
     Route::get('/receta', function () {
         return view('stock.form_receta');
@@ -127,6 +127,10 @@ Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function ()
     Route::get('/buscar/{TIPO}',   'StockController@index');
     Route::get('/buscar',   'StockController@index');
     Route::post('/buscar',   'StockController@index');
+
+    Route::get('/restaurar-registros',   'StockController@restaurar_stock');
+
+
 });
 
 
@@ -153,7 +157,7 @@ Route::group(['prefix' => "sucursal",   'middleware' => ['auth.Admin']], functio
 
 
 Route::group(['prefix' => "usuario",   'middleware' => ['auth.Admin']],  function () {
-    Route::get('/',   'UsuariosController@index');
+  
     Route::post('/buscar',   'UsuariosController@index');
     Route::get('/buscar',   'UsuariosController@index');
     Route::get('/create',    'UsuariosController@create');
@@ -163,6 +167,9 @@ Route::group(['prefix' => "usuario",   'middleware' => ['auth.Admin']],  functio
     Route::delete('/{id}',    'UsuariosController@delete');
 });
 
+Route::group(['prefix' => "usuario",   'middleware' => ['auth.Caja']],  function () {
+    Route::get('/',   'UsuariosController@index');
+});
 
 
 Route::prefix("usuario")->group(function () {
@@ -170,6 +177,7 @@ Route::prefix("usuario")->group(function () {
     Route::post('/sign-in',   'UsuariosController@sign_in');
     Route::get('/sign-out',   'UsuariosController@sign_out');
 });
+
 Route::group(['prefix' => 'caja', 'middleware' => ['auth.Admin']], function () {
     Route::get('/',   'CajaController@index');
     Route::post('/buscar',   'CajaController@index');
@@ -294,42 +302,41 @@ Route::group(['prefix' => 'pedidos', 'middleware' => ['auth.Caja']],   function 
 
 
 Route::prefix('ficha-produccion')->group(function () {
-    Route::get('/', 'DepositoController@ficha_produccion');
-    Route::post('/',   'DepositoController@ficha_produccion');
-    Route::put('/',   'DepositoController@ficha_produccion');
-    Route::get('/{IDPRODUCCION}', 'DepositoController@ficha_produccion');
+    Route::get('/', 'FichaProduccionController@ficha_produccion');
+    Route::post('/',   'FichaProduccionController@ficha_produccion');
+    Route::put('/',   'FichaProduccionController@ficha_produccion');
+    Route::get('/{IDPRODUCCION}', 'FichaProduccionController@ficha_produccion');
     Route::get('/fichas/{ESTADO}/{ACCION}', function ($ESTADO, $ACCION) {
         return view("ficha_produccion.index.index", ['ESTADO' => $ESTADO, 'ACCION' => $ACCION]);
     });
 });
 
-Route::prefix('deposito')->group(function () {
-
-
-    Route::get('/recepcion',   'DepositoController@recepcion');
-    Route::post('/recepcion',   'DepositoController@recepcion');
-    //  Route::get('/pedido-a-deposito',   'DepositoController@pedido_a_deposito');
-    //Route::post('/pedido-a-deposito',   'DepositoController@pedido_a_deposito');
-    Route::get('/salida/{IDPRODUCCION}',   'SalidaController@create');
-    Route::get('/salida',   'SalidaController@create');
-    Route::post('/salida',   'SalidaController@create');
-
-  
-    
-
-    Route::get('/nota-residuos/{IDPRODUCCION}',   'DepositoController@nota_residuos');
-    Route::post('/nota-residuos',   'DepositoController@nota_residuos');
-    Route::get('/remision-productos-terminados/{IDPRODUCCION}',   'DepositoController@remision_de_terminados');
-    Route::post('/remision-productos-terminados',   'DepositoController@remision_de_terminados');
+Route::prefix('salida')->group(function () {
+    Route::get('/{IDPRODUCCION}',   'SalidaController@create');
+    Route::get('/',   'SalidaController@create');
+    Route::post('/',   'SalidaController@create');
 });
+
+
+Route::prefix('nota-residuos')->group(function () {
+    Route::get('/{IDPRODUCCION}',   'NotaResiduosController@create');
+    Route::post('/',   'NotaResiduosController@create');
+}); 
+
+Route::prefix('remision-prod-terminados')->group(function () {
+    Route::get('/{IDPRODUCCION}',   'RemProdTerminadosController@create');
+    Route::post('/',   'RemProdTerminadosController@create');
+});
+
+
+ 
 
 
 Route::prefix('ventas')->group(function () {
     Route::get('/index',   'VentasController@index');
-
-    Route::get('/estadis-mas-vendidos',   'VentasController@productos_mas_vendidos');
-    Route::post('/estadis-mas-vendidos',   'VentasController@productos_mas_vendidos');
-
+    Route::get('/filtrar',   'VentasController@filtrar');
+    Route::get('/filtrar/{filtro}',   'VentasController@filtrar');
+    Route::post('/filtrar',   'VentasController@filtrar');
     Route::get('/',   'VentasController@create');
     Route::post('/',   'VentasController@create');
     Route::get('/ticket/{id}',   'VentasController@ticket');

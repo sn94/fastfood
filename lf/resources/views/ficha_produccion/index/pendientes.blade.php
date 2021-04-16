@@ -15,7 +15,7 @@
         @foreach( $ficha_produc as $ficha)
         <tr>
             <td>
-                <a class="btn btn-sm  btn-success" href="{{url('deposito/salida/'.$ficha->REGNRO)}}"> APROBAR</a>
+                <a class="btn btn-sm  btn-success" href="{{url('salida/'.$ficha->REGNRO)}}"> APROBAR</a>
             </td>
 
            

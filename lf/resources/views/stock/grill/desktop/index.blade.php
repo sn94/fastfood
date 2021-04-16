@@ -1,4 +1,4 @@
-@if( session("NIVEL") == "SUPER")
+@if( session("NIVEL") == "SUPER"  ||  session("NIVEL") == "GOD" )
 <style>
     table thead tr th:nth-child(1),
     table tbody tr td:nth-child(1) {
@@ -28,7 +28,7 @@
 
     <thead style="font-family: mainfont;">
         <tr>
-            @if( session("NIVEL") == "SUPER")
+            @if( session("NIVEL") == "SUPER" ||  session("NIVEL") == "GOD" )
             <th></th>
             <th></th>
             @endif

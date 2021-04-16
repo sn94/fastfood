@@ -17,8 +17,9 @@ class FamiliaStockChooser extends Component
     public $id="";
     public $callback= "";
     public $style="";
+    public $class="";
 
-    public function __construct($name, $value,  $id, $callback, $style)
+    public function __construct($name, $value,  $id, $callback, $style, $class="")
     {
 
         $this->name =  $name;
@@ -26,6 +27,7 @@ class FamiliaStockChooser extends Component
         $this->id=  $id;
         $this->callback= $callback;
         $this->style= $style;
+        $this->class= $class;
         
     }
 

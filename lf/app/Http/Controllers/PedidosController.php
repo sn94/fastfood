@@ -9,6 +9,7 @@ use App\Models\Nota_pedido_detalles;
 use App\Models\Salidas;
 use App\Models\Salidas_detalles;
 use App\Models\Stock;
+use App\Models\Stock_existencias;
 use App\Models\Ventas;
 use App\Models\Ventas_det;
 use Exception;
@@ -54,7 +55,7 @@ class PedidosController extends Controller
             ->where("ESTADO", "<>", "F")
             ->where("ITEM", $stock->REGNRO)
             ->select("nota_pedido_matriz.*", "nota_pedido_detalles.*");
-             
+
 
         if (request()->ajax())
             return view("pedidos.index.grill",  ['PEDIDOS' => $pedido->paginate(20)]);
@@ -99,8 +100,35 @@ class PedidosController extends Controller
 
     public function recibir($PEDIDOID = NULL)
     {
-        $pedido = Nota_pedido::find($PEDIDOID)->nota_pedido_detalles;
-        return view("pedidos.forms.recibido",  ['PEDIDO' =>  $pedido]);
+        if (request()->isMethod("GET")) {
+            $pedido = Nota_pedido::find($PEDIDOID)->nota_pedido_detalles;
+            return view("pedidos.forms.recibido",  ['PEDIDO' =>  $pedido]);
+        } else {
+            $datos = request()->input();
+            $cantidad = $datos['CANTIDAD'];
+            $item = $datos['ITEM'];
+            $npedido =  $datos['NPEDIDO_ID'];
+            try {
+
+                DB::transaction();
+
+                $pedido = Nota_pedido::find($npedido);
+                $pedido->ESTADO = "F"; //FINALIZADO
+                $pedido->save();
+
+                //Actualizar existencia
+                $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
+                    ->where("STOCK_ID", $item)->first();
+                $existencia->CANTIDAD =  $existencia->CANTIDAD +  $cantidad;
+                $existencia->save(); //disminuir
+
+                DB::commit();
+                return response()->json(['ok' => "Pedido finalizado exitosamente"]);
+            } catch (Exception $ex) {
+                DB::rollBack();
+                return response()->json(['err' => $ex->getMessage()]);
+            }
+        }
     }
 
     public function  recibidos()
@@ -128,13 +156,13 @@ class PedidosController extends Controller
 
         if (request()->isMethod("GET"))
             return view("pedidos.recibidos.aprobacion",   ['PEDIDO_ID' =>  $IDPEDIDO]);
+
         $IDPEDIDO = request()->input("PEDIDO_ID");
         //vERIFICAR TIPO DE ACCION
         //NO HAY EXISTENCIA
         //CANTIDAD DIFERENTE
         //100% APROBADO  
         $tipoDeAccion = request()->input("opcion_aprobacion");
-
 
 
         try {
@@ -189,6 +217,13 @@ class PedidosController extends Controller
             $d_salida = new Salidas_detalles();
             $d_salida->fill($salida_detalle);
             $d_salida->save();
+
+            //Actualizar existencia
+            $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
+                ->where("STOCK_ID",  $ITEM)->first();
+            $existencia->CANTIDAD =  $existencia->CANTIDAD -  $CANTIDAD;
+            $existencia->save(); //disminuir
+
 
             DB::commit();
             return   response()->json(['ok' => "El pedido fue aprobado exitosamente"]);

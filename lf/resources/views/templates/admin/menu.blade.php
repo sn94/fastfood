@@ -52,7 +52,7 @@ $adminOptionsMenu = [
         [
             ["label" => "STOCK", "link" =>   url("stock/filtrar")  ],
             ["label" => "COMPRAS", "link" => url("compra/filtrar")],
-            ["label" => "VENTAS", "link" => "#"]
+            ["label" => "VENTAS", "link" =>  url("ventas/filtrar") ]
         ],
     ],
 

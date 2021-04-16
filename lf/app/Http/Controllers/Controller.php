@@ -25,15 +25,16 @@ use PDFGEN;
      */
     public function responsePdf( $viewName,  $data,  $title)
     {
-
         //Nombre de vista
         //data
         //doc title
         
         $viewParam=  [];
+
         if( is_array( $data))
-        $viewParam=array_merge(  [   "titulo" => "$title"],  $data);
-        else  $viewParam=   [   "titulo" => "$title",  "datalist"=>  $data];
+        $viewParam=array_merge(  [   "titulo" => "$title", "print_mode"=>true ],  $data);
+
+        else  $viewParam=   [   "titulo" => "$title",  "print_mode"=>true ,  "datalist"=>  $data];
 
        $pdf = PDFGEN::loadView("$viewName",   $viewParam     );
        return $pdf->download("$title.pdf"); 

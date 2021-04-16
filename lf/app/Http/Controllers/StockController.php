@@ -6,6 +6,7 @@ use App\Helpers\Utilidades;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockRequest;
 use App\Models\Compras;
+use App\Models\Ficha_produccion_detalles;
 use App\Models\Nota_pedido_detalles;
 use App\Models\Nota_residuos;
 use App\Models\Nota_residuos_detalle;
@@ -13,15 +14,17 @@ use App\Models\PreciosVenta;
 use App\Models\Receta;
 use App\Models\Remision_de_terminados;
 use App\Models\Salidas;
+use App\Models\Salidas_detalles;
 use App\Models\Stock;
+use App\Models\Stock_existencias;
 use App\Models\Sucursal;
 use App\Models\Ventas;
 use Exception;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\FuncCall;
+use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
@@ -98,6 +101,7 @@ class StockController extends Controller
             $buscado =  $request->input("buscado");
             $tipo = $request->has("tipo") ?   $request->input("tipo") :   $tipo;
             $familia = $request->has("familia") ?   $request->input("familia") :   $familia;
+
             $sucursal = $request->has("sucursal") ?   $request->input("sucursal")  :  $sucursal;
             $descripcion_orden = $request->has("orden.DESCRIPCION") ?   $request->input("orden.DESCRIPCION")  :  $descripcion_orden;
             $pventa_orden = $request->has("orden.PVENTA") ?   $request->input("orden.PVENTA")  :  $pventa_orden;
@@ -138,11 +142,15 @@ class StockController extends Controller
                 $stock =  $stock->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP");
             elseif ($tipo == "ALL") {
                 $stock = $stock->orderBy("TIPO");
+                if ($familia !=  "") {
+                    $stock = $stock->where("FAMILIA", $familia);
+                }
                 return $stock;
             } else $stock =  $stock->where("TIPO", "=",  $tipo);
+        }elseif ($familia !=  "") { //Filtrar por familia 
+
+            $stock = $stock->where("FAMILIA", $familia);
         }
-        //Filtrar por familia 
-        if ($familia !=  "")  $stock = $stock->where("FAMILIA", $familia);
 
         //Recoger entradas y salidas de la sucursal actual
         //En compras y salidas
@@ -190,38 +198,38 @@ class StockController extends Controller
 
     public function filtrar($filterParam = NULL)
     {
+        //Setear el numero de pagina
+        $numeroPagina =   request()->has("page") ? request()->input("page") : "1";
+        $_GET['page'] = $numeroPagina;
 
+        //Determinar el filtro elegido
         $filtro = is_null($filterParam) ?  (request()->has("FILTRO") ?  request()->input("FILTRO")  : "1")  : $filterParam;
 
+        //Enviar el formulario del filtro elegido
+        //personaliza la consulta
         if (request()->isMethod("GET")  &&  request()->ajax()) {
             return view("stock.reportes.filters.filter$filtro");
         }
 
+        //***
+        //*****
+        //En Post
+
         $STOCK =  [];
         $TITULO = "";
 
-        // PRODUCTOS MÁS PEDIDOS POR SUCURSALES
-        if ($filtro ==  "1") {
-            try {
 
-                $resultado =  $this->filtro1();
-                $TITULO =  $resultado['titulo'];
-                $STOCK =  $resultado['data'];
-            } catch (Exception $x) {
-                return response()->json(['err' =>  $x->getMessage()]);
-            }
+        if (preg_match("/^3/", $filtro)) $filtro = 3;
+        $nombreFuncionFiltro = "filtro$filtro";
+
+        try {
+
+            $resultado =  $this->{$nombreFuncionFiltro}();
+            $TITULO =  $resultado['titulo'];
+            $STOCK =  $resultado['data'];
+        } catch (Exception $x) {
+            return response()->json(['err' =>  $x->getMessage()]);
         }
-        if ($filtro ==  "2") { //productos mas compra
-
-            try {
-                $resultado =  $this->filtro2();
-                $TITULO =  $resultado['titulo'];
-                $STOCK =  $resultado['data'];
-            } catch (Exception $e) {
-                return response()->json(['err' =>  $e->getMessage()]);
-            }
-        }
-
 
         //Content Type solicitado
         //El formato de los datos
@@ -246,6 +254,7 @@ class StockController extends Controller
         if ($formato == "pdf") {
             try {
                 $STOCK =  $STOCK->get();
+
                 return $this->responsePdf("stock.reportes.views.filter$filtro",  $STOCK, $TITULO);
             } catch (Exception $e) {
                 return response()->json(['err' =>  $e->getMessage()]);
@@ -255,6 +264,7 @@ class StockController extends Controller
 
         //Formato html
         try {
+
             $STOCK =  is_array($STOCK)  ?  $STOCK :  $STOCK->paginate(15);
         } catch (Exception  $e) {
             return response()->json(['err' =>  $e->getMessage()]);
@@ -284,7 +294,7 @@ class StockController extends Controller
     {
 
         //Filtro sucursal
-        $sucursal =   $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : "";
+        $sucursal  =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : "";
         //Filtro mes y anio
         $mes =   request()->has("MES") ? request()->input("MES") : date("m");
         $anio = request()->has("ANIO") ? request()->input("ANIO") : date("Y");
@@ -299,13 +309,13 @@ class StockController extends Controller
         if ($sucursal != "")
             $loMasPedido = $loMasPedido->where("nota_pedido_matriz.SUCURSAL", $sucursal);
 
-        //Filtrar por mes y anio
-        if ($FECHA_DESDE == ""  &&  $FECHA_HASTA == "")
+        //Filtrar por mes y anio1
+        if ($FECHA_DESDE == ""  &&  $FECHA_HASTA  ==  "")
             $loMasPedido = $loMasPedido->whereRaw("month(nota_pedido_matriz.FECHA)", $mes)
                 ->whereRaw("year(nota_pedido_matriz.FECHA)", $anio);
         else
-            $loMasPedido = $loMasPedido->where("nota_pedido_matriz.FECHA", $FECHA_DESDE)
-                ->whereRaw("nota_pedido_matriz.FECHA", $FECHA_HASTA);
+            $loMasPedido = $loMasPedido->where("nota_pedido_matriz.FECHA", ">=", $FECHA_DESDE)
+                ->where("nota_pedido_matriz.FECHA", "<=", $FECHA_HASTA);
 
         //Filtrar por tipo PRODUCTO
         if ($TIPO_PRODUCTO !=  "")
@@ -314,12 +324,12 @@ class StockController extends Controller
         //Agrupar por uno o mas productos para cada sucursal 
         //Mostrar todos los productos pedidos por sucursal
         $loMasPedido = $loMasPedido->groupBy("nota_pedido_detalles.ITEM")
-            ->groupBy("nota_pedido_matriz.SUCURSAL");
+            ->groupBy("nota_pedido_matriz.SUCURSAL")->orderByRaw('count(nota_pedido_detalles.REGNRO) DESC');
 
 
         $loMasPedido = $loMasPedido->select(
             "sucursal.REGNRO AS SUCURSAL_ID",
-            "sucursal.DESCRIPCION AS SUCURSAL",
+            DB::raw(" IF(sucursal.MATRIZ='S', CONCAT( sucursal.DESCRIPCION, ' (MATRIZ)') ,  sucursal.DESCRIPCION )   AS SUCURSAL_NOMBRE"),
             "stock.DESCRIPCION",
             DB::raw("count(nota_pedido_detalles.REGNRO) AS NUMERO_PEDIDOS")
         );
@@ -343,7 +353,7 @@ class StockController extends Controller
     {
 
         //Filtro sucursal
-        $sucursal =   $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
+        $sucursal  =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
         //Filtro mes y anio
         $mes =   request()->has("MES") ? request()->input("MES") : date("m");
         $anio = request()->has("ANIO") ? request()->input("ANIO") : date("Y");
@@ -352,6 +362,8 @@ class StockController extends Controller
 
         $residuos = Nota_residuos_detalle::join("nota_residuos", "nota_residuos.REGNRO", "=", "nota_residuos_detalle.NRESIDUO_ID")
             ->join("stock", "stock.REGNRO", "=", "nota_residuos_detalle.ITEM")
+            ->join("sucursal", "sucursal.REGNRO", "=", "nota_residuos.SUCURSAL")
+            ->join("unimed", "stock.MEDIDA", "=", "unimed.REGNRO")
             ->where("SUCURSAL", $sucursal);
 
         if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
@@ -360,16 +372,142 @@ class StockController extends Controller
             $residuos = $residuos->whereRaw("month(nota_residuos.FECHA)", $mes)
                 ->whereRaw("year(nota_residuos.FECHA)", $anio);
 
-        $residuos = $residuos->groupBy("nota_residuos_detalle.ITEM")
-        ->select("nota_residuos.SUCURSAL", "stock.DESCRIPCION", "stock.TIPO", DB::raw("count(nota_residuos.REGNRO) AS NUMERO_RESIDUOS"));
+        $residuos = $residuos->groupBy("nota_residuos_detalle.ITEM")->groupBy("nota_residuos.SUCURSAL")
+            ->orderByRaw("sum(nota_residuos_detalle.CANTIDAD)   DESC")
+            ->select(
+                "nota_residuos.SUCURSAL",
+                DB::raw(" IF(sucursal.MATRIZ='S', CONCAT( sucursal.DESCRIPCION, ' (MATRIZ)') ,  sucursal.DESCRIPCION )   AS SUCURSAL_NOMBRE"),
+                "stock.DESCRIPCION",
+                "stock.TIPO",
+                "unimed.UNIDAD AS MEDIDA",
+                DB::raw('count(nota_residuos_detalle.ITEM) AS  NUMERO_RESIDUOS'),
+                DB::raw('sum(nota_residuos_detalle.CANTIDAD) AS TOTAL_RESIDUOS')
+            );
+        //Elaborar la respuesta
         //Mes y Anio
         $mesDescripcion = Utilidades::monthDescr($mes);
         //Response
-        $titulo = "SUCURSAL: $sucursal, RESIDUOS DE INGREDIENTES, $mesDescripcion $anio ";
+        $sucursalModel =  Sucursal::find($sucursal);
+        $sucursalDescrip =  $sucursalModel->MATRIZ == "S"  ? "CASA CENTRAL: " : "SUCURSAL: ";
+        $titulo = "$sucursalDescrip $sucursal, RESIDUOS DE INGREDIENTES, $mesDescripcion $anio ";
 
         return ['titulo' => $titulo, 'data' => $residuos];
     }
 
+
+
+
+    //Ingredientes mas utilizados   TIPO_STOCK=  MP
+    //Los productos (menu) que son frecuentemente preparados TIPO_STOCK = PE
+    public function filtro3()
+    {
+
+        //Filtro sucursal
+        $sucursal  =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
+        //Filtro mes y anio
+        $mes =   request()->has("MES") ? request()->input("MES") : date("m");
+        $anio = request()->has("ANIO") ? request()->input("ANIO") : date("Y");
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  "";
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
+        $tipo_stock =   request()->has("TIPO_STOCK") ? request()->input("TIPO_STOCK") : "MP";
+
+
+        $residuos = Ficha_produccion_detalles::join("ficha_produccion", "ficha_produccion_detalles.PRODUCCION_ID", "=", "ficha_produccion.REGNRO")
+            ->join("stock", "stock.REGNRO", "=", "ficha_produccion_detalles.ITEM")
+            ->join("sucursal", "sucursal.REGNRO", "=", "ficha_produccion.SUCURSAL")
+            ->join("unimed", "stock.MEDIDA", "=", "unimed.REGNRO")
+            ->where("SUCURSAL", $sucursal)
+            ->where("stock.TIPO", "=", $tipo_stock);
+
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
+            $residuos =  $residuos->where("FECHA", ">=", $FECHA_DESDE)->where("FECHA", "<=", $FECHA_HASTA);
+        else
+            $residuos = $residuos->whereRaw("month(ficha_produccion.FECHA)", $mes)
+                ->whereRaw("year(ficha_produccion.FECHA)", $anio);
+
+        $residuos = $residuos->groupBy("ficha_produccion_detalles.ITEM")->groupBy("ficha_produccion.SUCURSAL")
+            ->orderByRaw("sum(ficha_produccion_detalles.CANTIDAD)   DESC")
+            ->select(
+                "ficha_produccion.SUCURSAL",
+                DB::raw(" IF(sucursal.MATRIZ='S', CONCAT( sucursal.DESCRIPCION, ' (MATRIZ)') ,  sucursal.DESCRIPCION )   AS SUCURSAL_NOMBRE"),
+                "stock.DESCRIPCION",
+                "stock.TIPO",
+                "unimed.UNIDAD AS MEDIDA",
+                DB::raw('count(ficha_produccion_detalles.ITEM) AS  NUMERO_PEDIDOS'),
+                DB::raw('sum(ficha_produccion_detalles.CANTIDAD) AS CANTIDAD')
+            );
+        //Mes y Anio
+        $mesDescripcion = Utilidades::monthDescr($mes);
+        //Response
+        //Tipo de informe
+        $nombreInforme = $tipo_stock == "MP" ? " INGREDIENTES MÁS SOLICITADOS " : " LO MÁS PREPARADO ";
+        $titulo = "SUCURSAL: $sucursal, $nombreInforme, $mesDescripcion $anio ";
+
+        return ['titulo' => $titulo, 'data' => $residuos];
+    }
+
+
+
+    /**
+     * Existencias
+     */
+    private function filtro4()
+    {
+
+        $sucursal  =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
+        $sucursalModel =  Sucursal::find($sucursal);
+        $sucursalDescrip =  $sucursalModel->MATRIZ == "S"  ? "CASA CENTRAL: " : "SUCURSAL: ";
+
+        $stock = Stock::join("stock_existencias", "stock_existencias.STOCK_ID", "=", "stock.REGNRO")
+            ->join("sucursal", "sucursal.REGNRO", "=", "stock_existencias.SUCURSAL")
+            ->join("unimed", "unimed.REGNRO", "=", "stock.MEDIDA")
+            ->join("familia", "familia.REGNRO", "=", "stock.FAMILIA")
+            ->where("stock_existencias.SUCURSAL", $sucursal)
+            ->select(
+                "stock_existencias.SUCURSAL",
+                "sucursal.DESCRIPCION AS SUCURSAL_NOMBRE",
+                "stock.DESCRIPCION",
+                "stock.TIPO",
+                "familia.DESCRIPCION as FAMILIA",
+                "stock_existencias.CANTIDAD",
+                "unimed.DESCRIPCION AS MEDIDA"
+            );
+        return  ['titulo' => "Existencias en $sucursalDescrip ", "data" =>  $stock];
+    }
+
+
+
+    /**
+     * Salidas de productos segun destino
+     */
+    private function filtro5()
+    {
+
+        $sucursal  =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
+        $sucursalModel =  Sucursal::find($sucursal);
+        $sucursalDescrip =  $sucursalModel->MATRIZ == "S"  ? "CASA CENTRAL: " : "SUCURSAL: ";
+        $destino  =   request()->has("DESTINO") ? request()->input("DESTINO") : "";
+
+        $stock = Salidas_detalles::join("salidas", "salidas.REGNRO", "=", "salidas_detalles.SALIDA_ID")
+            ->join("stock", "stock.REGNRO", "=", "stock.REGNRO")
+            ->join("sucursal", "sucursal.REGNRO", "=", "salidas.SUCURSAL")
+            ->join("unimed", "unimed.REGNRO", "=", "stock.MEDIDA")
+
+            ->where("salidas.SUCURSAL", $sucursal)
+            ->select(
+                "salidas.SUCURSAL",
+                "salidas.REGNRO AS SALIDA_ID",
+                DB::raw("date_format(salidas.FECHA, '%d/%m/%Y') as FECHA "),
+                "sucursal.DESCRIPCION AS SUCURSAL_NOMBRE",
+                "stock.DESCRIPCION",
+                "stock.TIPO",
+
+                "salidas_detalles.CANTIDAD",
+                "unimed.DESCRIPCION AS MEDIDA",
+                "salidas.DESTINO"
+            );
+        return  ['titulo' => "Salidas de productos - $sucursalDescrip ", "data" =>  $stock];
+    }
 
 
 
@@ -509,24 +647,37 @@ class StockController extends Controller
 
                 $nuevo_stock->fill($data);
                 $nuevo_stock->save();
+
+                //Si codigo y barcode estan vacios  
                 if ($nuevo_stock->CODIGO == "")  $nuevo_stock->CODIGO =  $nuevo_stock->REGNRO;
                 if ($nuevo_stock->BARCODE == "")  $nuevo_stock->BARCODE =  $nuevo_stock->REGNRO;
+
                 $nuevo_stock->save();
+
                 $stock_id =  $nuevo_stock->REGNRO;
-                //Detalle receta
+                //Guardar detalle receta
                 if ($request->has(["MPRIMA_ID", "CANTIDAD", "MEDIDA"])) {
                     //Procesar detalle
-
                     $this->create_recipe($request, $stock_id);
                 }
-                //foto
+                //Guardar foto
                 $path =    $this->save_photo($request, $stock_id);
                 $nuevo_stock->IMG = "lf/public/images/$path"; //lf/public/
                 $nuevo_stock->save();
 
-                //Detalle precios
+                //Guardar precios multiples
                 $this->create_prices($request, $stock_id);
+
+                //Crear registro de existencias
+                $nueva_existencia = new Stock_existencias();
+                $nueva_existencia->fill([
+                    'STOCK_ID' => $stock_id, 'SUCURSAL' => session("SUCURSAL"),
+                    'CANTIDAD' => '0'
+                ]);
+                $nueva_existencia->save();
+
                 DB::commit();
+
                 return response()->json(['ok' =>  $nuevo_stock]);
             } catch (Exception  $ex) {
                 DB::rollBack();
@@ -540,15 +691,21 @@ class StockController extends Controller
     public function update(StockRequest $request, $id = NULL)
     {
 
-        if ($request->getMethod()  ==  "GET") {
+        if (request()->getMethod()  ==  "GET") {
             $Stock__ =  Stock::find($id);
+
             //Obtener receta
             $RECETA =   $Stock__->receta;
             //Precios Venta
             $PRECIOS = $Stock__->precios;
 
-            return view('stock.create',  ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS]);
+            return view(
+                'stock.create.index',
+                ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS]
+            );
         } else {
+
+
 
 
             $data = $request->input();
@@ -618,7 +775,7 @@ class StockController extends Controller
                 $reg->delete();
                 Receta::where("STOCK_ID",  $id)->delete();
                 PreciosVenta::where("STOCK_ID",  $id)->delete();
-
+                Stock_existencias::where("STOCK_ID",  $id)->delete();
                 DB::commit();
             } catch (Exception $ex) {
                 DB::rollBack();
@@ -640,5 +797,31 @@ class StockController extends Controller
         } else {
             return response()->json(['err' =>  "ID inexistente"]);
         }
+    }
+
+
+
+    public function  restaurar_stock()
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        $registros = $this->buscar_productos(request(),  "ALL")->get();
+        foreach ($registros as $stock) :
+            $sucursales = Sucursal::select("REGNRO")->get();
+            $valorStock = $stock->ENTRADAS + $stock->ENTRADA_PE + $stock->ENTRADA_RESIDUO - ($stock->SALIDAS +
+                $stock->SALIDA_VENTA);
+
+            foreach ($sucursales as $suc) :
+
+                var_dump(['SUCURSAL' => $suc->REGNRO, 'STOCK_ID' => $stock->REGNRO]);
+
+                Stock_existencias::updateOrCreate(
+                    ['SUCURSAL' => $suc->REGNRO, 'STOCK_ID' => $stock->REGNRO],
+                    ['CANTIDAD' => $valorStock]
+                );
+
+            endforeach;
+
+        endforeach;
     }
 }

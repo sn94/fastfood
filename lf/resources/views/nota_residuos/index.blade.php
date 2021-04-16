@@ -31,7 +31,7 @@
 <h2 class="text-center mt-2"  >Nota de residuos</h2>
 <div id="loaderplace"></div>
  
-        <form action="<?= url("deposito/nota-residuos") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardar(event)">
+        <form action="<?= url("nota-residuos/create") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardar(event)">
 
             @if( isset($PRODUCCION))
             <input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION->REGNRO}}">

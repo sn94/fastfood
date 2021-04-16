@@ -21,7 +21,7 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 
 <div id="loaderplace"></div>
 
-        <form id="SALIDAFORM" action="<?= url("deposito/salida") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardarSalida(event)">
+        <form id="SALIDAFORM" action="<?= url("salida") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardarSalida(event)">
 
             <div class="row">
 
@@ -84,7 +84,7 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
             $("input[name=FECHA]").val((new Date()).getFecha());
             limpiar_tabla();
             alert(resp.ok);
-            window.location = "<?= url('deposito/salida') ?>";
+            window.location = "<?= url('salida') ?>";
         } else {
             alert(resp.err);
         }

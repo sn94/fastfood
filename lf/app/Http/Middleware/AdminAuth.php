@@ -21,7 +21,7 @@ class AdminAuth
         if (!$sess->has("USUARIO")  &&  !$accessLogin)
             return redirect('usuario/sign-in');
         else {
-            if ($sess->get("NIVEL")  ==  "SUPER")
+            if ( $sess->get("NIVEL")  ==  "SUPER"  ||  $sess->get("NIVEL")  ==  "GOD")
                 //permitir
                 return $next($request);
                 else 

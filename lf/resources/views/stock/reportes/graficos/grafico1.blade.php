@@ -45,7 +45,7 @@
  
             }
         );
-        console.log("filtrado", filtrados);
+     
         //cORTAR
         let titulo= responseData.titulo;
         let datos = filtrados;

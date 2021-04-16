@@ -39,6 +39,8 @@ $iconSize= "width: {$size}px;height: {$size}px;";
             $("#<?= $idDinamico ?>-on").addClass("d-none");
             $("#<?= $idDinamico ?>-off").removeClass("d-none");
         }
+
+       
     }
 
     function <?= $idDinamico ?>prettyRadioButtonAction(whatToDo) {

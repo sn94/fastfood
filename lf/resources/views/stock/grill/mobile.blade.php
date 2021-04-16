@@ -39,7 +39,7 @@ $STOCK_ACTUAL= $prov->ENTRADAS + $prov->ENTRADA_PE + $prov->ENTRADA_RESIDUO -($p
 
                 </p>
 
-                @if( session("NIVEL") == "SUPER")
+                @if( session("NIVEL") == "SUPER"  ||  session("NIVEL") == "GOD" )
                 <a class="btn btn-sm btn-warning p-0" style="color: black;" href="{{url('stock/update').'/'.$prov->REGNRO}}">
                     <i class="fas fa-edit"></i>EDITAR</a>
                 <a class="btn btn-sm btn-warning p-0" onclick="delete_row(event)" style="color: black;" href="{{url('stock').'/'.$prov->REGNRO}}">

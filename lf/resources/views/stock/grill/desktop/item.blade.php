@@ -13,7 +13,7 @@ $STOCK_ACTUAL= $prov->ENTRADAS + $prov->ENTRADA_PE + $prov->ENTRADA_RESIDUO -($p
 
 if( $STOCK_ACTUAL <= 0): $ESTADO_STOCK="table-danger" ; $MENSAJE_STOCK="(Sin stock)" ; endif; @endphp <tr class="{{$ESTADO_STOCK}}">
 
-    @if( session("NIVEL") == "SUPER")
+    @if( session("NIVEL") == "SUPER"  ||  session("NIVEL") == "GOD" )
     <td>
         <a style="color: black;" href="{{url('stock/update').'/'.$prov->REGNRO}}"> <i class="fas fa-edit"></i></a>
     </td>

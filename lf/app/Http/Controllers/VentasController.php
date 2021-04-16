@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Utilidades;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketSender;
 use App\Models\Clientes;
 use App\Models\Parametros;
 use App\Models\Sesiones;
 use App\Models\Stock;
+use App\Models\Stock_existencias;
 use App\Models\Sucursal;
 use App\Models\Ventas;
 use App\Models\Ventas_det;
@@ -83,49 +85,253 @@ class VentasController extends Controller
 
 
 
-    public function productos_mas_vendidos()
+
+    public function filtrar($filterParam = NULL)
     {
+        //Setear el numero de pagina
+        $numeroPagina =   request()->has("page") ? request()->input("page") : "1";
+        $_GET['page'] = $numeroPagina;
+
+        //Determinar el filtro elegido
+        $filtro = is_null($filterParam) ?  (request()->has("FILTRO") ?  request()->input("FILTRO")  : "1")  : $filterParam;
+
+        //Enviar el formulario del filtro elegido
+        //personaliza la consulta
+        if (request()->isMethod("GET")  &&  request()->ajax()) {
+            return view("ventas.reportes.filters.filter$filtro");
+        }
+
+        //***
+        //*****
+        //En Post
+
+        $VENTAS =  [];
+        $TITULO = "";
+
+
+        if (preg_match("/^3/", $filtro)) $filtro = 3;
+        $nombreFuncionFiltro = "filtro$filtro";
+
+        try {
+
+            $resultado =  $this->{$nombreFuncionFiltro}();
+            $TITULO =  $resultado['titulo'];
+            $VENTAS =  $resultado['data'];
+        } catch (Exception $x) {
+            return response()->json(['err' =>  $x->getMessage()]);
+        }
+
+        //Content Type solicitado
+        //El formato de los datos
+        $formato =  request()->header("formato");
+
+        //Si es JSON retornar
+        if ($formato == "json") {
+
+            try {
+                $VENTAS =  $VENTAS->get();
+                //Solicitan datos json incluido un titulo descriptivo
+                $DESCRIPTIVO = request()->has("DESCRIPTIVO") ? request()->input("DESCRIPTIVO") : "N";
+                if ($DESCRIPTIVO ==  "N")
+                    return response()->json($VENTAS);
+                else
+                    return response()->json(["titulo" =>  $TITULO, "data" => $VENTAS]);
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
+        }
+
+        if ($formato == "pdf") {
+            try {
+                $VENTAS =  $VENTAS->get();
+
+                return $this->responsePdf("ventas.reportes.views.filter$filtro",  $VENTAS, $TITULO);
+            } catch (Exception $e) {
+                return response()->json(['err' =>  $e->getMessage()]);
+            }
+        }
+
+
+        //Formato html
+        try {
+
+            $VENTAS =  is_array($VENTAS)  ?  $VENTAS :  $VENTAS->paginate(15);
+        } catch (Exception  $e) {
+            return response()->json(['err' =>  $e->getMessage()]);
+        }
+
+        if (request()->ajax())
+            return view("ventas.reportes.views.filter$filtro", ['FILTRO' => $filtro, 'VENTAS' => $VENTAS]);
+        else
+            return view('ventas.reportes.index', ['FILTRO' => $filtro, 'VENTAS' => $VENTAS]);
+    }
 
 
 
-        $todo =   request()->has("TODO") ? request()->input("TODO") : "N";
-        $sucursal = "";
-        if ($todo == "N")
-            $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
 
+
+    /**lO MAS VENDIDO EN LAS SUCURSALES */
+    public function filtro1()
+    {
+        $tipo_stock = "";
+        $familia_stock = "";
+
+        $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : "";
+        $tipo_stock =   request()->has("TIPO_STOCK") ? request()->input("TIPO_STOCK") : "";
+        $familia_stock =   request()->has("FAMILIA_STOCK") ? request()->input("FAMILIA_STOCK") : "";
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  "";
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
         $mes =   request()->has("MES") ? request()->input("MES") : date("m");
         $anio = request()->has("ANIO") ? request()->input("ANIO") : date("Y");
 
 
         $loMasVendido =  Ventas_det::join("ventas", "ventas.REGNRO", "=", "ventas_det.VENTA_ID")
             ->join("stock", "stock.REGNRO", "=",  "ventas_det.ITEM")
+            ->join("familia", "familia.REGNRO", "=",  "stock.FAMILIA")
             ->join("sucursal", "ventas.SUCURSAL", "=",  "sucursal.REGNRO");
         if ($sucursal != "")
             $loMasVendido = $loMasVendido->where("ventas.SUCURSAL", $sucursal);
+        if ($tipo_stock != "")
+            $loMasVendido = $loMasVendido->where("stock.TIPO", $tipo_stock);
+        if ($familia_stock != "")
+            $loMasVendido = $loMasVendido->where("stock.FAMILIA", $familia_stock);
 
-        $loMasVendido = $loMasVendido->whereRaw(" month(ventas.FECHA)", $mes)
-            ->whereRaw(" year(ventas.FECHA)", $anio)
-            ->groupBy("ventas_det.ITEM")
-            ->select("sucursal.DESCRIPCION",  "stock.DESCRIPCION", DB::raw('count(ventas_det.REGNRO) AS NUMERO_VENTAS'))->get();
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
+            $loMasVendido = $loMasVendido->where("ventas.FECHA", ">=", $FECHA_DESDE)
+                ->where("ventas.FECHA", "<=", $FECHA_HASTA);
+
+        $loMasVendido = $loMasVendido->groupBy("ventas_det.ITEM")->groupBy("ventas.SUCURSAL")
+            ->select(
+                "sucursal.REGNRO AS SUCURSAL_ID",
+                "familia.DESCRIPCION AS FAMILIA",
+                "sucursal.DESCRIPCION AS SUCURSAL_NOMBRE",
+                "stock.DESCRIPCION",
+                "stock.DESCR_CORTA",
+
+                DB::raw('count(ventas_det.REGNRO) AS NUMERO_VENTAS')
+            )
+            ->orderByRaw("count(ventas_det.REGNRO)  DESC");
+
 
         $sucursalModel = Sucursal::find($sucursal);
-        $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+        $descripcionSucursal = "";
+        if (is_null($sucursalModel))
+            $descripcionSucursal = " LOS LOCALES";
+        else
+            $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
         $titulo = "LO MÁS VENDIDO EN $descripcionSucursal";
-        return response()->json(['titulo' => $titulo,  "data" =>   $loMasVendido]);
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "") {
+            $desde = Utilidades::fecha_f($FECHA_DESDE);
+            $hasta = Utilidades::fecha_f($FECHA_HASTA);
+            $titulo .= " Del " . $desde . " hasta el " . $hasta;
+        }
+        return  ['titulo' => $titulo,  "data" =>   $loMasVendido];
     }
 
-    public function medios_pagos_preferidos()
+
+    /**las ventas discriminadas por forma de pago, y total de venta , cajero*/
+    public function filtro2()
+    {
+
+        $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : "";
+        $medio_pago =   request()->has("FORMA_PAGO") ? request()->input("FORMA_PAGO") : "";
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  "";
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
+        $estado =   request()->has("ESTADO") ? request()->input("ESTADO") : "";
+        $cajero =   request()->has("CAJERO") ? request()->input("CAJERO") : "";
+
+
+        $loMasVendido =  Ventas::join("sucursal", "ventas.SUCURSAL", "=",  "sucursal.REGNRO")
+            ->join("clientes", "clientes.REGNRO", "=",  "ventas.CLIENTE");;
+        if ($sucursal != "")
+            $loMasVendido = $loMasVendido->where("ventas.SUCURSAL", $sucursal);
+
+        if ($medio_pago != "")
+            $loMasVendido = $loMasVendido->where("ventas.FORMA", $medio_pago);
+        if ($estado != "")
+            $loMasVendido = $loMasVendido->where("ventas.ESTADO", $estado);
+        if ($cajero != "")
+            $loMasVendido = $loMasVendido->where("ventas.CAJERO", $cajero);
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
+            $loMasVendido = $loMasVendido->where("ventas.FECHA", ">=", $FECHA_DESDE)
+                ->where("ventas.FECHA", "<=", $FECHA_HASTA);
+
+        $loMasVendido = $loMasVendido->select(
+            "sucursal.REGNRO AS SUCURSAL_ID",
+            "sucursal.DESCRIPCION AS SUCURSAL_NOMBRE",
+            "clientes.NOMBRE AS cliente_nom",
+            "ventas.REGNRO AS FACTURA",
+            DB::raw("IF( ESTADO= 'A', 'ACTIVA', 'ANULADA') AS ESTADO"),
+            "FECHA",
+            DB::raw(" format(TOTAL, 0, 'de_DE') as TOTAL "),
+            "ventas.FORMA AS FORMA_PAGO"
+        );
+
+        //Formular titulo
+        $sucursalModel = Sucursal::find($sucursal);
+        $descripcionSucursal = "";
+        if (is_null($sucursalModel))
+            $descripcionSucursal = " EN CADA LOCAL";
+        else
+            $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+        $titulo = "VENTAS - $descripcionSucursal";
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "") {
+            $desde = Utilidades::fecha_f($FECHA_DESDE);
+            $hasta = Utilidades::fecha_f($FECHA_HASTA);
+            $titulo .= " Del " . $desde . " hasta el " . $hasta;
+        }
+        return  ['titulo' => $titulo,  "data" =>   $loMasVendido];
+    }
+
+
+
+
+    //medios de pago preferidos
+    private function filtro3()
     {
         //Cuanto se vendio, por tarjeta, giro, efectivo
+        $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
+
+        $medio_pago =   Ventas::where("SUCURSAL", $sucursal)->select(  DB::raw("count(REGNRO) AS NUMERO_VENTAS"),  "FORMA")->groupBy("FORMA")
+            ->orderByRaw(" count(REGNRO) DESC ");
+
+            $sucursalModel = Sucursal::find($sucursal);
+            $descripcionSucursal = "";
+            if ( ! is_null($sucursalModel)) 
+                $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+
+                $titulo ="MEDIOS DE PAGO PREFERIDOS - $descripcionSucursal";
+        return  ['titulo' =>  $titulo, "data" =>   $medio_pago];
     }
 
-    public function categoria_productos_populares()
-    {
-        //cuanto se vende de pizzas, hamburguesas ...
-    }
+     
 
+ //La mayor recaudacion de los ultimos 6 meses
+ private function filtro4()
+ {
+   
+     $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
 
+     $mes=  request()->has("MES") ? request()->input("MES") : date("m");
+     $anio=  request()->has("ANIO") ? request()->input("ANIO") : date("Y");
 
+     $medio_pago =   Ventas::where("SUCURSAL", $sucursal)->
+    
+     select(  DB::raw("sum(TOTAL) AS TOTAL_RECAUDADO"),  DB::raw("concat(MONTH(FECHA) , concat('/',year(FECHA)) ) AS MES") )
+     ->groupByRaw("MONTH(FECHA)")
+     ->groupByRaw("YEAR(FECHA)")
+         ->orderByRaw(" MONTH(FECHA) DESC ")
+         ->orderByRaw("YEAR(FECHA) DESC")
+         ->limit(6);
+
+         $sucursalModel = Sucursal::find($sucursal);
+         $descripcionSucursal = "";
+         if ( ! is_null($sucursalModel)) 
+             $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+
+             $titulo ="RECAUDACIÓN Gs. - $descripcionSucursal";
+     return  ['titulo' =>  $titulo, "data" =>   $medio_pago];
+ }
 
 
 
@@ -202,6 +408,15 @@ class VentasController extends Controller
                     }
                     $sql =
                         ['VENTA_ID' => $nventa->REGNRO, 'ITEM' => $r1, 'CANTIDAD' => $r2, 'P_UNITARIO' => $r3, 'EXENTA' => $p_exe, 'TOT5' => $p_5,  'TOT10' => $p_10];
+
+
+
+                    //Actualizar existencia
+                    $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
+                        ->where("STOCK_ID",  $r1)->first();
+                    $existencia->CANTIDAD =  $existencia->CANTIDAD - $r2;
+                    $existencia->save(); //disminuir
+
                     (new Ventas_det())->fill($sql)->save();
                 endfor;
 

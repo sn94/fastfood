@@ -9,12 +9,9 @@ $index = "";
 if ($MODULO_FLAG !=  "c") :
   $templateName = "templates.admin.index";
 
-
 elseif ($MODULO_FLAG  ==  "c") :
   $templateName = "templates.caja.index";
-
 endif;
-
 
 $index = url("stock/filtrar");
 ?>
@@ -23,42 +20,38 @@ $index = url("stock/filtrar");
 
 @extends( $templateName)
 
-
 @section("PageTitle")
 Stock
 @endsection
 
 @section("content")
 
- 
+
 <div id="loaderplace"></div>
 <div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light ">
 
   <h3 class="text-center">Stock</h3>
-
   <div class="row">
-
     @include("stock.reportes.graficos.grafico1")
-
     @include("stock.reportes.graficos.grafico2")
-
+    @include("stock.reportes.graficos.grafico3")
   </div>
 
-  
   <div class=" col-12 col-md-5 pb-0">
     <label> Filtro: </label>
     <select class="form-control form-control-sm" id="FILTRO" onchange="formularioDeFiltro(event)">
       <option value="1">PRODUCTOS MÁS PEDIDOS POR SUCURSALES</option>
       <option value="2">PRODUCTOS CON MÁS RESIDUOS</option>
-      <option value="3">INGREDIENTES MÁS UTILIZADOS POR COCINA</option>
-      <option value="4">PRODUCTOS QUE MÁS SE PREPARAN</option> 
+      <option value="3_1">INGREDIENTES MÁS UTILIZADOS POR COCINA</option>
+      <option value="3_2">PRODUCTOS QUE MÁS SE PREPARAN</option>
+      <option value="4">EXISTENCIAS</option>
+      <option value="5">SALIDAS SEGÚN DESTINO</option>
     </select>
   </div>
 
   <x-search-report-downloader showSearcherInput="N" placeholder="" callback="buscarStock()">
     <x-slot name="top_panel">
       @include("stock.reportes.filters.filter".$FILTRO)
-
     </x-slot>
   </x-search-report-downloader>
 
@@ -81,25 +74,20 @@ Stock
 
 
   async function buscarStock(params) {
-
     let parametros = params;
     let grill_url = "<?= $index ?>" + "<?= $QUERY_FLAG ?>";
-
     dataSearcher.setUrl = grill_url;
     dataSearcher.setOutputTarget = "#grill";
     dataSearcher.setParametros = parametros;
-
     show_loader();
     dataSearcher.formatoHtml();
-
-
   }
 
 
 
   async function formularioDeFiltro(ev) {
     let nroFiltro = ev.target.value;
-    let req = await fetch("<?=$index?>/" + nroFiltro, {
+    let req = await fetch("<?= $index ?>/" + nroFiltro, {
 
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
@@ -133,6 +121,7 @@ Stock
     inicializar();
     grafProductosMasPedidos();
     grafProductosMasPedidosLocalmente();
+    grafResiduosDeIngredientes();
   }
 </script>
 

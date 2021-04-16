@@ -43,7 +43,7 @@ $ficha_produc->get();
         font-weight: 600;
     }
 
-    /* En línea #20 | http://localhost/fastfood/deposito/salida */
+    /* En línea #20 | http://localhost/fastfood/salida */
 
     .form-control {
         /* height: 40px !important; */
@@ -63,7 +63,7 @@ $ficha_produc->get();
 <div id="loaderplace"></div>
     <!--BOTONES DE ACCIONES PERSONALIZADAS  -->
     @if( $ESTADO == "PENDIENTE")
-    <a class="btn btn-danger mb-1" href="{{url('deposito/salida')}}">NUEVA SALIDA</a>
+    <a class="btn btn-danger mb-1" href="{{url('salida')}}">NUEVA SALIDA</a>
     @endif
 
 

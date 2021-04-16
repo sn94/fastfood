@@ -18,6 +18,9 @@ class Salidas extends Model
 
 
 
+    protected $dates = [
+        "FECHA"
+    ];
 
 
     public function salidas_detalle()

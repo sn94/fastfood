@@ -4,6 +4,8 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
+use function PHPUnit\Framework\callback;
+
 class PrettyRadioButton extends Component
 {
 
@@ -17,19 +19,21 @@ class PrettyRadioButton extends Component
 
     public $size= "32";//tamanio de los iconos
 
+ 
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name, $value, $label, $checked= "no", $size="32")
+    public function __construct($name, $value, $label, $checked= "no", $size="32" )
     {
         $this->name = $name;
         $this->value = $value;
         $this->label = $label;
         $this->checked = $checked == "si" ? "true" : "false";
         $this->size = $size;
+      
     }
 
     /**

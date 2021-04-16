@@ -12,12 +12,11 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
  $REGNRO= isset( $stock )? $stock->REGNRO : "";
  $CODIGO= isset( $stock )? $stock->CODIGO : "";
- $BARCODE= isset( $stock )? $stock->BARCODE : "";
- $BOTON= isset( $stock )? $stock->BOTON : "";
-
+ $BARCODE= isset( $stock )? $stock->BARCODE : ""; 
  $DESCRIPCION= isset( $stock )? $stock->DESCRIPCION : "";
  $DESCR_CORTA= isset( $stock )? $stock->DESCR_CORTA : "";
  $IVA= isset( $stock )? $stock->TRIBUTO : "10";
+
  $FAMILIA= isset( $stock )? $stock->FAMILIA : "";
  $FAMILIA_NOM= isset( $stock )? ( is_null($stock->familia ) ? '' : $stock->familia->DESCRIPCION ): "";
  $PVENTA= isset( $stock )? Utilidades::number_f( $stock->PVENTA ) : "0";
@@ -108,9 +107,6 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
  <input type="hidden" id="FAMILIA-URL" value="{{url('familia')}}">
 
- @if( $REGNRO != "")
- <input type="hidden" name="REGNRO" value="{{$REGNRO}}">
- @endif
  
 
  <input type="hidden" name="SUCURSAL" value="{{$SUCURSAL}}">
@@ -130,7 +126,7 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
 
      <div class="col-12 col-sm-6 col-md-6 pb-2">
-     @include("stock.forms.form_basico")
+     @include("stock.forms.form_basico" )
      </div>
      <div class="col-12 col-sm-6 col-md-6 pb-2 ">
      @include("stock.forms.form_stock")
@@ -197,9 +193,10 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
          let metodo=   $("input[name=_method]").val(); 
 
          let req = await fetch(ev.target.action, {
-             "method":  metodo,
+             "method":  "POST",
              headers: {
                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                 
              },
              body: new FormData(ev.target)
          });

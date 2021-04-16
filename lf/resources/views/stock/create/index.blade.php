@@ -7,6 +7,7 @@ $templateName = "";
 $create = "";
 $index = "";
 
+ 
 if ($MODULO_FLAG !=  "c") :
   $templateName = "templates.admin.index";
 
@@ -20,7 +21,15 @@ endif;
 
 @if( (request()->ajax()))
   
+  @if( isset($stock) )
+   <?=view("stock.create.ajax",  ['stock'=> $stock ])?>
+   @else 
    <?=view("stock.create.ajax")?>
+   @endif
 @else
-  <?=view("stock.create.no_ajax")?>
+@if( isset($stock) )
+  <?=view("stock.create.no_ajax",   ['stock'=> $stock ])?>
+  @else 
+  <?=view("stock.create.no_ajax" )?>
+  @endif
 @endif

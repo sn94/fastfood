@@ -9,6 +9,7 @@ use App\View\Components\FastFoodModal;
 use App\View\Components\FastFoodNavbar;
 use App\View\Components\FormaPagoChooser;
 use App\View\Components\PrettyCheckbox;
+use App\View\Components\PrettyPaginator;
 use App\View\Components\PrettyRadioButton;
 use App\View\Components\ProveedorChooser; 
 use App\View\Components\SearchReportDownloader;
@@ -58,5 +59,6 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('proveedor-chooser', ProveedorChooser::class);
         Blade::component('forma-pago-chooser', FormaPagoChooser::class);
         Blade::component('user-info-box', UserInfoBox::class);
+        Blade::component('pretty-paginator', PrettyPaginator::class);
     }
 }

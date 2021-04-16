@@ -29,7 +29,7 @@
 <div class="container-fluid bg-dark text-light col-12 col-md-11  mx-auto pb-5">
 <h2 class="text-center mt-2"  >Remisión de productos terminados</h2>
  
-        <form action="<?= url("deposito/remision-productos-terminados") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardar(event)">
+        <form action="<?= url("remision-prod-terminados") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardar(event)">
 
             @if( isset($PRODUCCION))
             <input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION->REGNRO}}">

@@ -16,12 +16,7 @@ Nueva venta
 @include("ventas.proceso.modales.resumen_venta")
 
 
-
-
-
-@include("buscador.personas", ['TIPO'=>'CLIENTE'] )
-
-
+ 
 
 <div id="loaderplace"></div>
 
@@ -46,7 +41,7 @@ Nueva venta
             @include("ventas.proceso.detalle.food_gallery.index" )
         </div>
 
-        <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0 " style="background-color: black !important;">
+        <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0  bg-light"  >
             <div class="col-12 pl-0 pr-0 ">
 
                 @include("ventas.proceso.header" )

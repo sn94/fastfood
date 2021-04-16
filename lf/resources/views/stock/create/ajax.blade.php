@@ -12,7 +12,9 @@
 
 
 @if( isset($stock) )
-<input type="hidden" name="_method" value="PUT">
+<input type="hidden" name="REGNRO"  value="{{$stock->REGNRO}}">
+ 
+@method("PUT")
 @else 
 <input type="hidden" name="_method" value="POST">
 @endif

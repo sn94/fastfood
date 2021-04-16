@@ -17,10 +17,10 @@
         <tr>
             <td>
                 @if( $ACCION == "TERMINADOS")
-                <a class="btn btn-sm  btn-success" href="{{url('deposito/remision-productos-terminados/'.$ficha->REGNRO)}}"> REM. DE PROD. TERMINADOS</a>
+                <a class="btn btn-sm  btn-success" href="{{url('remision-prod-terminados/'.$ficha->REGNRO)}}"> REM. DE PROD. TERMINADOS</a>
 
                 @elseif( $ACCION == "RESIDUOS")
-                <a class="btn btn-sm  btn-danger" href="{{url('deposito/nota-residuos/'.$ficha->REGNRO)}}"> REGISTRAR RESIDUOS</a>
+                <a class="btn btn-sm  btn-danger" href="{{url('nota-residuos/create/'.$ficha->REGNRO)}}"> REGISTRAR RESIDUOS</a>
                 @endif
             </td>
 

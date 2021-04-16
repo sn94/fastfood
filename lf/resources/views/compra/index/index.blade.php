@@ -63,7 +63,7 @@ Compras
           <input class="form-control form-control-sm" type="date" id="FECHA_HASTA" onchange="buscarCompras('FECHA_HASTA')">
         </div>
 
-        @if( session('NIVEL') == 'SUPER' )
+        @if( session('NIVEL') == 'SUPER' ||  session("NIVEL") == "GOD" )
         <div class="col-6 col-md pb-0">
           <label>
             Sucursal:

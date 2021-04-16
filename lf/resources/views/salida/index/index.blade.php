@@ -46,7 +46,7 @@
 
      <div id="loaderplace"></div>
 
-     <a class="btn btn-warning mb-1" href="{{url('deposito/salida')}}">NUEVA SALIDA</a>
+     <a class="btn btn-warning mb-1" href="{{url('salida')}}">NUEVA SALIDA</a>
 
      @include("salida.search_params")
      <div class="mt-2" id="grill" style="min-height: 300px;">

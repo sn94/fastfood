@@ -1,3 +1,4 @@
+@include("buscador.Buscador")
 <style>
    
 
@@ -106,7 +107,7 @@
             <input readonly id="CLIENTE-NAME" class="fs-5 form-control bg-secondary" type="text" />
             </div>
             <div class="col-1 d-flex align-items-center">
-            <a href="#" onclick="buscador_de_personas({KEY:'#CLIENTE-KEY',NAME:'#CLIENTE-NAME'})"><i class="fa fa-search"></i></a>
+            <a href="#" onclick="abrirBuscadorCliente()"><i class="fa fa-search"></i></a>
             </div>
 
         </div>
@@ -147,6 +148,23 @@
         $("#mymodal .content").html(resp);
         $("#mymodal").removeClass("d-none");
     }
+
+
+
+    function  abrirBuscadorCliente(){
+    //KEY:'#PROVEEDOR-KEY',NAME:'#PROVEEDOR-NAME
+
+
+    Buscador.url= "<?=url("clientes")?>";
+    Buscador.columnNames= ["REGNRO", "CEDULA_RUC", "NOMBRE"];
+    Buscador.columnLabels= ['ID', 'CÉDULA', 'NOMBRES'];
+    Buscador.callback= function(   seleccionado){
+
+        $('#CLIENTE-KEY').val( seleccionado.REGNRO);
+        $('#CLIENTE-NAME').val( seleccionado.NOMBRE);
+    };
+    Buscador.render();
+}
 
 
 

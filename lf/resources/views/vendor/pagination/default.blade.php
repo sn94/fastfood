@@ -8,6 +8,9 @@ ul.pagination li a,  ul.pagination li span{
     color: black !important;
 }
 </style>
+@php 
+$customCallbackName=  isset(  $customCallbackName ) ?  $customCallbackName :  "fill_grill";
+@endphp 
 
 @if ($paginator->hasPages())
     
@@ -20,7 +23,7 @@ ul.pagination li a,  ul.pagination li span{
                 </li>
             @else
                 <li class="bg-warning text-dark ">
-                    <a onclick='fill_grill(event)' href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
+                    <a onclick='{{$customCallbackName}}(event)' href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
                 </li>
             @endif
 
@@ -37,7 +40,7 @@ ul.pagination li a,  ul.pagination li span{
                         @if ($page == $paginator->currentPage())
                             <li class="active bg-warning text-dark " aria-current="page"><span>{{ $page }}</span></li>
                         @else
-                            <li class="bg-warning text-dark "><a onclick='fill_grill(event)' href="{{ $url }}">{{ $page }}</a></li>
+                            <li class="bg-warning text-dark "><a onclick='{{$customCallbackName}}(event)' href="{{ $url }}">{{ $page }}</a></li>
                         @endif
                     @endforeach
                 @endif
@@ -46,7 +49,7 @@ ul.pagination li a,  ul.pagination li span{
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <li class="bg-warning text-dark ">
-                    <a onclick='fill_grill(event)' href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                    <a onclick='{{$customCallbackName}}(event)' href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
                 </li>
             @else
                 <li class="disabled bg-warning text-dark " aria-disabled="true" aria-label="@lang('pagination.next')">
