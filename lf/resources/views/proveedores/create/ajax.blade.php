@@ -1,4 +1,4 @@
-<div class="container-fluid text-light bg-dark">
+<div class="container-fluid text-light">
 
         @if(! request()->ajax())
         <a class="btn btn-sm btn-warning" href="<?= url("proveedores") ?>"> Lista de proveedores</a>

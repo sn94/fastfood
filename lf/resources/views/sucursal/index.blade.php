@@ -21,7 +21,7 @@ Sucursales
 
  
 
-<div id="form-panel" class="bg-dark p-2">
+<div id="form-panel" class=" p-2">
     @include("sucursal.create")
 </div>
 

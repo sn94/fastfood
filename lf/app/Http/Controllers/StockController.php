@@ -699,6 +699,7 @@ class StockController extends Controller
             //Precios Venta
             $PRECIOS = $Stock__->precios;
 
+          
             return view(
                 'stock.create.index',
                 ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS]

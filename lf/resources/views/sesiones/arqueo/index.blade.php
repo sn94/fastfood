@@ -53,7 +53,9 @@ Arqueo de caja {{date('d-m-Y')}}
             $("#BOTON-ARQUEO").removeClass("d-none");
             $("#BOTON-GUARDAR").addClass("d-none");
 
+            //Index sesiones limitada a listar solo las propias
             window.location = "<?= url("sesiones/list") ?>";
+
         } else {
             $("#BOTON-GUARDAR").removeClass("d-none");
             $("#BOTON-GUARDAR").prop("disabled", false);

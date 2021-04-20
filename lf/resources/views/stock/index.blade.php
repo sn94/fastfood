@@ -24,8 +24,6 @@ endif;
 
 @extends( $templateName)
 
-
-
 @section("PageTitle")
 Stock
 @endsection

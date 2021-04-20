@@ -8,7 +8,7 @@ $BASE_ASSETS= url('assets');
     
 </div>
 
-<div class="row no-gutters d-flex bg-light">
+<div class="row g-0 d-flex ml-2"   style="background-color: black !important;" >
  
 @foreach( $Stock as $item)
 

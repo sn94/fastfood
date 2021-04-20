@@ -106,22 +106,15 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
 
  <input type="hidden" id="FAMILIA-URL" value="{{url('familia')}}">
-
- 
-
  <input type="hidden" name="SUCURSAL" value="{{$SUCURSAL}}">
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
 
  <div class="row">
      <div class="col-12">
-         <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
- 
-  
+
          <x-pretty-checkbox   name="VENDIDOXMITAD" :value="$VENDIDOXMITAD" onValue="S"  offValue="N"  label="VENDIDO POR MITAD:" />
-  
-  
-  
+
      </div>
 
 

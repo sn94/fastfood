@@ -29,6 +29,7 @@ Route::get('/', function () {
         return view('welcome_caja');
     if (session("NIVEL") == "SUPER" ||  session("NIVEL") == "GOD")
         return view('welcome_admin');
+        
 })->middleware("auth.Caja");
 
 

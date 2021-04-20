@@ -16,11 +16,18 @@ Nueva venta
 @include("ventas.proceso.modales.resumen_venta")
 
 
+<style>
+body{
+    background-color: black !important;
+}
+</style>
+
  
 
 <div id="loaderplace"></div>
 
 
+<div class="container-fluid p-0 p-md-2" style="background-color: black !important;">
 <form class="d-none" action="{{url('ventas')}}" method="POST" id="VENTA-FORM">
 
 
@@ -41,17 +48,17 @@ Nueva venta
             @include("ventas.proceso.detalle.food_gallery.index" )
         </div>
 
-        <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0  bg-light"  >
+        <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0 "    style="background-color: black !important;" >
             <div class="col-12 pl-0 pr-0 ">
 
                 @include("ventas.proceso.header" )
                 @include("ventas.proceso.botons")
 
             </div>
-            <div class="col-12  pl-0 pr-0  ">
-                <div id="VENTA_PROCESO_TOTAL" class=" d-flex flex-row bg-light"  >
-                    <label class="MONTO fs-4 w-100">TOTAL A PAGAR:</label>
-                    <input readonly value="0" type="text" id="TOTAL-VENTA" name="TOTAL" class="entero MONTO form-control" />
+            <div class="col-12  pl-0 pr-0 bg-light  ">
+                <div id="VENTA_PROCESO_TOTAL" class=" d-flex flex-row"   >
+                    <label class="MONTO fs-2 w-100">TOTAL A PAGAR:</label>
+                    <input readonly value="0" type="text" id="TOTAL-VENTA" name="TOTAL" class="entero MONTO form-control fs-2 p-0" />
                 </div>
                 @include("ventas.proceso.detalle.grill")
             </div>
@@ -59,6 +66,7 @@ Nueva venta
     </div>
 
 </form>
+</div>
 
 
 <!--  END  CARGA DE TABLA, SELECCION DE MNU -->
@@ -96,6 +104,7 @@ Nueva venta
 
     function initFormVenta() {
         formatoNumerico.formatearCamposNumericosDecimales();
+
         document.querySelector("input[name=IMPORTE_PAGO]").oninput = function(ev) {
             formatoNumerico.formatearEntero(ev);
             calcularTotalesVuelto(ev);
@@ -202,6 +211,7 @@ Nueva venta
             }
         });
         listaDeProductosJSON = await req.json();
+        $("#VENTA-FORM").removeClass("d-none");
     }
 
 
@@ -221,7 +231,7 @@ Nueva venta
         //descargar datos de PRODUCTOS
         descargarProductos();
 
-        $("#VENTA-FORM").removeClass("d-none");
+      
     }
 </script>
 

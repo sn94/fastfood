@@ -17,7 +17,7 @@ Ciudades
 
 
 <div class="container col-12 col-md-5 bg-dark">
-    <h3 class="text-center mt-2" style="font-family: titlefont;">Ficha de Ciudades</h3>
+    <h3 class="text-center mt-2 text-light" >Ficha de Ciudades</h3>
 
 
 

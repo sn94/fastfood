@@ -28,8 +28,8 @@ $TOTAL_IVA10=0;
 
             <thead>
                 <tr style="font-family: mainfont;font-size: 18px;">
-                    <th class='text-end'>CÓDIGO</th>
-                    <th class='text-end'>DESCRIPCIÓN</th>
+                    <th class='text-center'>CÓDIGO</th>
+                    <th class='text-center'>DESCRIPCIÓN</th>
                     <th class='text-end'>UNI.MED.</th>
                     <th class='text-end'>PRECIO</th>
                     <th class='text-end'> CANTIDAD</th>
@@ -45,8 +45,8 @@ $TOTAL_IVA10=0;
 
                 @foreach( $DETALLE as $detail)
                 <tr id="{{$detail->ITEM}}" class="{{$detail->stock->TIPO.'-class'}}">
-                    <td class='text-end'>{{$detail->stock->CODIGO}}</td>
-                    <td class='text-end'>{{$detail->stock->DESCRIPCION}}</td>
+                    <td class='text-center'>{{$detail->stock->CODIGO}}</td>
+                    <td class='text-center'>{{$detail->stock->DESCRIPCION}}</td>
                     <td class='text-end' >{{$detail->stock->MEDIDA}}</td>
                     <td class='text-end'>{{ Utilidades::number_f($detail->P_UNITARIO) }}</td>
                     <td class='text-end'>{{ Utilidades::number_f($detail->CANTIDAD) }}</td>

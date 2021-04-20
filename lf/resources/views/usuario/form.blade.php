@@ -40,7 +40,7 @@
  <div class="row">
 
      <div class="col-12 offset-md-2 col-md-8">
-         <div class="row bg-dark pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
+         <div class="row  pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
 
              <div class="col-12  col-md-4">
                  <label>USUARIO(*): </label>

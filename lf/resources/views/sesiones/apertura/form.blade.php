@@ -17,7 +17,7 @@
     $CAJA =  isset($SESION) ? $SESION->CAJA : "";
     /**Sesion id */
     $REGNRO =   isset($SESION) ? $SESION->REGNRO : (new Sesiones())->PROXIMO_ID();
-    $FECHA_APE =   isset($SESION) ? $SESION->FECHA_APE :  date("Y-m-d");
+    $FECHA_APE =   isset($SESION) ? $SESION->FECHA_APE->format('Y-m-d') :  date("Y-m-d");
     $HORA_APE = isset($SESION) ? $SESION->HORA_APE :  date("H:i");
     $CAJERO =   isset($SESION) ? $SESION->CAJERO :  session("ID");
     $CAJERO_NOM =   isset($SESION) ? $SESION->cajero->NOMBRES : (Usuario::find(session("ID"))->NOMBRES);

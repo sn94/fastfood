@@ -62,10 +62,7 @@
         color: black;
     }
 
-    .awesomplete {
-        width: 100% !important;
-    }
-
+  
 
     a i.fa-edit,
     a i.fa-plus,
@@ -83,7 +80,7 @@
 
 
 
-<div id="VENTA-HEADER" class="row bg-dark  pt-1 m-0 m-md-0   mb-lg-0">
+<div id="VENTA-HEADER" class="row bg-dark   m-0 m-md-0   mb-lg-0">
 
     <div id="VENTA-HEADER-SESION" class="col-12 p-1  ">
  
@@ -128,7 +125,7 @@
 
 <script>
     async function crear_cliente() {
-        let url_ = "<?= url('clientela/create') ?>";
+        let url_ = "<?= url('clientes/create') ?>";
         let req = await fetch(url_, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'

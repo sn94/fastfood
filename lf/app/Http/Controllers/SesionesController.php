@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Caja;
 use App\Models\Sesiones;
-use App\Models\Sucursal;
 use App\Models\Ventas;
 use App\Models\Ventas_det;
 use Exception;
@@ -23,12 +21,24 @@ class SesionesController extends Controller
     public function index()
     {
 
+        // Determinar como filtrar las sesiones segun el nivel de usuario
+        // Listar sesiones
+        //Determinar formato solicitado de datos 
+        //Retornar datos
+        //   Si (formato es HTML  y REQUEST NO es AJAX)
+        //      Determinar plantilla Html a usar
+        //      Si (NivelUsuario es SUPERVISOR) usar plantilla templates.admin.index
+        //      Sino usar plantilla templates.caja.index
+
+
         $listadoPorUsuarioFlag = FALSE;
 
+        //Si se solicita esta ruta, mostrar solo sesiones propias
         if (preg_match("/sesiones\/list/", request()->path()))  $listadoPorUsuarioFlag = TRUE;
 
         $SUCURSAL = session("SUCURSAL");
-        $ESTADO = "A"; //Abiertas
+        $USERID =   session("ID");
+        $ESTADO = "A"; //Abiertas, mostradas por defecto
 
         if (request()->isMethod("POST")) {
             $SUCURSAL =   request()->has("SUCURSAL") ?  request()->input("SUCURSAL") :  $SUCURSAL;
@@ -36,15 +46,18 @@ class SesionesController extends Controller
         }
         $sesiones = Sesiones::where("SUCURSAL",  $SUCURSAL)
             ->where("ESTADO", $ESTADO);
+
+        //Filtrar por Id de usuario
         if ($listadoPorUsuarioFlag)
-            $sesiones =  $sesiones->where("CAJERO", session("ID"));
+            $sesiones =  $sesiones->where("CAJERO", $USERID);
 
         $sesiones =  $sesiones->select(
             "sesiones.*",
             DB::raw("FORMAT(EFECTIVO_INI,0,'de_DE') AS EFECTIVO_INI"),
             DB::raw("FORMAT(TOTAL_EFE,0,'de_DE') AS TOTAL_EFE"),
             DB::raw("FORMAT(TOTAL_TAR,0,'de_DE') AS TOTAL_TAR"),
-            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIRO")
+            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIRO"),
+            DB::raw("IF( CAJERO = $USERID , 'S', 'N') AS MOSTRAR_CERRAR ")
         )
             ->orderBy("FECHA_APE", "DESC");
         $formato =  request()->header("formato");
@@ -65,8 +78,12 @@ class SesionesController extends Controller
 
             if (request()->ajax())
                 return view("sesiones.index.grill",  $params);
-            else
+            else {
+                //Plantilla
+                $nombrePlantilla= session("NIVEL") == "SUPER" ? "templates.admin.index" : "templates.caja.index";
+                $params['PLANTILLA'] = $nombrePlantilla;
                 return view("sesiones.index.index", $params);
+            }
         }
     }
 
@@ -90,7 +107,6 @@ class SesionesController extends Controller
         if (!is_null($nueva_sesion))
             request()->session()->put('SESION', $nueva_sesion->REGNRO);
     }
-
 
     public function create()
     {
@@ -141,7 +157,8 @@ class SesionesController extends Controller
         //Todos los ticket expedidos (no anulados)
         $tickets_expedidos = Ventas::where("SESION",  $sesion->REGNRO)
             ->where("CAJERO", $sesion->CAJERO)
-            ->where("ESTADO", "A")->get();
+            ->where("ESTADO", "A")
+            ->get();
         //Tickets anulados
         $tickets_anulados = Ventas::where("SESION",  $sesion->REGNRO)
             ->where("CAJERO", $sesion->CAJERO)
@@ -204,14 +221,21 @@ class SesionesController extends Controller
 
 
 
-    public function cerrar(  $SESIONID=  NULL)
+    public function cerrar($SESIONID =  NULL)
     {
+        /*  if( is_null($this->esMiSesion($SESIONID) )   )
+        return response()->json(['err' =>  ""]);*/
+
         if (is_null($this->tieneSesionAbierta()))
             return redirect("sesiones/create");
+
+
+
+
         //Obtener datos de la sesion 
         $sesion =  Sesiones::find(session("SESION"));
-        $SesionId=  is_null( $SESIONID) ? session("SESION")  :  $SESIONID ;
-        $parametros = $this->totalesArqueo(   $SesionId , TRUE);
+        $SesionId =  is_null($SESIONID) ? session("SESION")  :  $SESIONID;
+        $parametros = $this->totalesArqueo($SesionId, TRUE);
 
         if (request()->getMethod() == "GET") {
             return view("sesiones.arqueo.index", $parametros);

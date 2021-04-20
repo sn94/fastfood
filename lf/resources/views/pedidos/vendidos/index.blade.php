@@ -15,7 +15,7 @@
  <x-fast-food-modal id="PEDIDO-MODAL" title="NUEVO PEDIDO" />
 
 
- <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light">
+ <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1">
 
    <h3 class="text-center">Pedidos </h3>
 

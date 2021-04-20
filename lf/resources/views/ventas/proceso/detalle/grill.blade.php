@@ -13,7 +13,7 @@
 
 
 
-<div style="height: 300px;overflow-y: scroll;">
+<div style="height: 300px;overflow-y: scroll;background-color: black !important;">
     <table id="VENTATABLE" class="table table-stripped table-light">
         <thead class="thead-dark">
             <tr>

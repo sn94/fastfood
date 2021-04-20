@@ -19,59 +19,16 @@
 
      <!--Carga temprana de jquery -->
      <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script>
+     <script src="{{$BASE_ASSETS}}/bootstrap5/bootstrap.bundle.min.js"> </script>
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/bootstrap5/bootstrap.min.css">
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/fontawesome.min.css">
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/solid.min.css">
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/brands.min.css">
-     <script src="{{$BASE_ASSETS}}/bootstrap5/bootstrap.bundle.min.js"> </script>
-     <link rel="stylesheet" href="{{$BASE_ASSETS}}/awesomplete.css">
+     
+     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}">
+      
 
 
-
-     <style>
-        
-        html{
-            height: 100%;
-        }
-
-        :root{
-            --bs-warning:  #ffb74d !important;
-        }
-        .bg-warning{
-            background-color: var(--bs-warning)  !important;
-        }
-        .btn-warning{
-            background-color: var(--bs-warning)  !important;
-        }
-
-
-
-
-         @import url("<?= url('assets/fonts/Marvel-Regular.ttf') ?>");
-         @import url("<?= url('assets/fonts/HARLOWSI.ttf') ?>");
-         @import url("<?= url('assets/fonts/Michroma.ttf') ?>");
-
-         @font-face {
-             font-family: "mainfont";
-             src: url("<?= url('assets/fonts/Marvel-Regular.ttf') ?>");
-
-         }
-
-         @font-face {
-             font-family: titlefont;
-             src: url("<?= url('assets/fonts/Michroma.ttf') ?>");
-         }
- 
-          
-
-         .ftco-footer {
-             /* padding: 7em 0; */
-             padding: 3px;
-             height: 50px !important;
-         }
-
-
-     </style>
 
 
      <script>
@@ -110,24 +67,7 @@
 
          @yield("content") 
 
-
-
-
-
-
-
-
-     @yield("Footer" )
-
-
-
-
-     <script src="{{$BASE_ASSETS}}/awesomplete.min.js"></script>
-
-
-
-
-     @yield("jsScripts")
+ @yield('jsScripts')
  </body>
 
  </html>

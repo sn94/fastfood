@@ -2,7 +2,8 @@
      window.Buscador = {
 
          url: "<?= url("clientes") ?>",
-
+         httpMethod: "get",
+         httpHeaders: {},
          columnNames: [],
          columnLabels: [],
 
@@ -24,8 +25,14 @@
              hoja.innerHTML = this.styles;
              document.head.appendChild(hoja);
 
-             document.querySelector("html").innerHTML = this.modalHtml.concat(document.querySelector("html").innerHTML);
-             this.consulta();
+             $("body").prepend(this.modalHtml);
+             /* document.querySelector("html").innerHTML = 
+              this.modalHtml.concat(document.querySelector("html").innerHTML);*/
+             //Mostrar formulario de parametros si esta definido
+             if (this.htmlFormForParams != undefined) {
+                 $("#BuscadorModal .form").prepend(this.htmlFormForParams);
+             }
+             this.consultar();
          },
 
 
@@ -48,6 +55,9 @@
         <div class="BuscadorModal-close">
             <button onclick="Buscador.cerrarModal()" type="button" style=" border-radius: 20px;background-color: red;color: white;padding: 5 px;" >X</button>
         </div>
+        
+        <div class="form"></div> 
+
         <input class="buscador-input-search" type="text" placeholder="BUSCAR POR DESCRIPCIÓN" oninput="Buscador.filtrar( this)">
         <div class="container-fluid content m-0" style="background: white;">
             <p>Cargando...</p>
@@ -169,23 +179,42 @@
 
              let html = tableTag;
              document.querySelector("#BuscadorModal .content table")?.remove(); //limpiar
-             //Mostrar formulario de parametros si esta definido
-             if (this.htmlFormForParams != undefined) {
-                 $("#BuscadorModal .content").append(this.htmlFormForParams);
-             }
+
              document.querySelector("#BuscadorModal .content").appendChild(tableTag);
 
          },
 
-         consulta: async function() {
+         consultar: async function() {
+
+             /**Determinar filtrado */
+             let postBody = {};
+             if (Buscador.htmlFormFieldNames != undefined && Buscador.htmlFormFieldNames.length > 0) {
+                 Buscador.htmlFormFieldNames.forEach(
+                     (arg) => {
+                         let paramX = $("#BuscadorModal form [name=" + arg + "]").val();
+                         postBody[arg] = paramX;
+                     }
+                 );
+                 console.log(postBody);
+             }
 
 
-             let req = await fetch(this.url, {
-                 headers: {
-                     'X-Requested-With': 'XMLHttpRequest',
-                     'formato': 'json'
-                 }
-             });
+             //Request 
+             let request_header = {
+                 'X-Requested-With': 'XMLHttpRequest',
+                 'formato': 'json'
+             };
+             Object.assign(request_header, this.httpHeaders);
+
+             let request_setting = {
+                 method: this.httpMethod,
+                 headers: request_header
+             };
+             if (this.httpMethod.toLowerCase() == "post") {
+                 request_setting.headers['Content-Type'] = "application/json";
+                 request_setting.body = JSON.stringify(postBody);
+             }
+             let req = await fetch(this.url, request_setting);
 
              let resp = await req.json();
 
@@ -195,21 +224,22 @@
 
              this.makeTable(this.dataSource);
          },
+
          filtrar: function(input) {
 
-             if (input == undefined) {
-                 let filtradoPorParametros = Buscador.dataSource.slice();
-                 Buscador.htmlFormFieldNames.forEach(
-                     (arg) => {
-                         let paramX = $("#BuscadorModal form [name=" + arg + "]").val();
-                         console.log("Parm aprma", paramX);
-                         filtradoPorParametros = filtradoPorParametros.filter(ar => ar[arg] == paramX);
-                     }
-                 );
-             
-                 this.makeTable(  filtradoPorParametros );
-                 return;
-             }
+             /* if (input == undefined) {
+                  let filtradoPorParametros = Buscador.dataSource.slice();
+                  Buscador.htmlFormFieldNames.forEach(
+                      (arg) => {
+                          let paramX = $("#BuscadorModal form [name=" + arg + "]").val();
+                          console.log("Parm aprma", paramX);
+                          filtradoPorParametros = filtradoPorParametros.filter(ar => ar[arg] == paramX);
+                      }
+                  );
+
+                  this.makeTable(filtradoPorParametros);
+                  return;
+              }*/
 
 
              if (input.value != "") {

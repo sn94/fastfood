@@ -71,13 +71,14 @@
         </div>
 
 
-        <div style="display: flex;flex-direction: row;">
-            <label for="">TICKET N°:</label>
-            <input readonly value="0" type="text" id="VENTA-TOTAL-TICKET">
-        </div>
+      
         <div style="display: flex;flex-direction: row;">
             <label for="">TOTAL:</label>
             <input readonly value="0" type="text" id="VENTA-TOTAL-RESUMEN">
+        </div>
+        <div style="display: flex;flex-direction: row;">
+            <label for="">TICKET N°:</label>
+            <input readonly value="0" type="text" id="VENTA-TOTAL-TICKET">
         </div>
         <div style="display: flex;flex-direction: row;">
             <label for="">ENTREGA:</label>
@@ -130,7 +131,7 @@
         </div>
         <button onclick="imprimirTicket()" class="btn btn-danger">IMPRIMIR</button>
         <button onclick="enviarTicketPorEmail()" class="btn btn-success">ENVIAR</button>
-        <button onclick="$('#RESUMEN').addClass('d-none');nuevaVenta();" class="btn btn-warning">VOLVER A POS</button>
+        <button onclick="$('#RESUMEN').addClass('d-none');nuevaVenta();" class="btn btn-warning">CONTINUAR</button>
     </div>
 </div>
 

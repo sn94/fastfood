@@ -1,8 +1,4 @@
-<style>
-    .awesomplete {
-        width: 100% !important;
-    }
-</style>
+ 
 
 <div class="row mb-0   pt-1 pb-0  pr-1 pl-1">
 

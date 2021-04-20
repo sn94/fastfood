@@ -20,7 +20,7 @@ $WEB= isset( $proveedores )? $proveedores->WEB : "";
 
 <div class="row">
  
-        <div class="row bg-dark pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
+        <div class="row pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
             <div class="col-12 col-md-6">
 
 

@@ -16,7 +16,7 @@ Unidades de medida
 
 
 
-<div class="container col-12 col-md-4 bg-dark text-light">
+<div class="container col-12 col-md-5 bg-dark text-light">
     <h3 class="text-center mt-2" >Ficha de medidas</h3>
 
 

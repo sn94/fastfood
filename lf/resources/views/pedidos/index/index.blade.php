@@ -4,7 +4,7 @@
 
 
 
- <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light">
+ <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1">
 
 
    @include("validations.formato_numerico")

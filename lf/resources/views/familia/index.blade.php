@@ -20,7 +20,7 @@ Familias
 
 
 <div class="container col-12 col-sm-12 col-md-8 col-lg-8  bg-dark ">
-    <h3 class="text-center mt-2 p-0" style="font-family: titlefont;">Ficha de Familia de productos</h3>
+    <h3 class="text-center mt-2 p-0 text-light"  >Ficha de Familia de productos</h3>
 
 
 

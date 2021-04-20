@@ -3,9 +3,9 @@
 use App\Helpers\Utilidades;
 ?>
 
+@include("buscador.Buscador")
 
-
-<div class="row m-0 bg-dark mt-1   ">
+<div class="row m-0  mt-1   ">
 
     <div class="col-12 col-md-8 col-lg-8 p-0 m-0">
         <div class="p-0 m-0" style="display:  flex; flex-direction: row;">
@@ -36,7 +36,7 @@ use App\Helpers\Utilidades;
 
 </div>
 
-<div class="row  bg-dark  p-0  m-0 ">
+<div class="row  p-0  m-0 ">
     <div class="col-12 col-md-12 ">
         <table id="STOCKRECETA" class="table table-striped table-secondary text-dark">
 
@@ -50,12 +50,13 @@ use App\Helpers\Utilidades;
                 </tr>
             </thead>
             <tbody id="RECETA-DETALLE">
-
+         
                 @if( isset($RECETA))
 
                 @foreach( $RECETA as $receta_)
 
-                <tr id="{{$receta_->MPRIMA_ID}}" class="{{$receta_->materia_prima->TIPO}}-class">
+
+                <tr id="{{$receta_->STOCK_ID}}" class="MP-class">
                     <td class="text-center">
                         {{$receta_->CODIGO != "" ?  $receta_->CODIGO  : ($receta_->BARCODE !="" ? $receta_->BARCODE :  $receta_->REGNRO)  }}
                     </td>
@@ -77,7 +78,7 @@ use App\Helpers\Utilidades;
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="3">
+                    <th colspan="4">
                     </th>
                     <th></th>
                 </tr>
@@ -243,26 +244,33 @@ use App\Helpers\Utilidades;
     //ver
 
     async function buscarItemParaReceta() {
-        window.buscar_items_target = function(  {
-            REGNRO,
-            DESCRIPCION,
-            MEDIDA
-        }  ) {
+         //**** */
+//Parametros de formulario
+let tipos_de_item= { "MP" : "MATERIA PRIMA", "PP": "PROD. VENTA", "PE":"PRODUCTO ELABORADO" , "AF": "MOBILIARIO Y OTROS"};
+        let htmlParams= Object.entries(tipos_de_item).map( ([key, val])=>{
+            return `<option value='${key}'>${val}</option>`;
+        });
+        htmlParams= `<form><input type='hidden' value='MP' name='tipo' /></form>`;
 
-            $("#FORM-STOCK-ITEM-ID").val(REGNRO);
-            $("#FORM-STOCK-ITEM-DESC").val(DESCRIPCION);
-            $("#FORM-STOCK-MEDIDA").text(MEDIDA);
+        Buscador.url = "<?= url("stock/buscar") ?>";
+        Buscador.httpMethod= "post";
+        Buscador.httpHeaders= { formato: "json" };
+        Buscador.columnNames = ["REGNRO", "DESCRIPCION" ];
+        Buscador.columnLabels = ['ID', 'DESCRIPCIÓN'];
+        Buscador.htmlFormForParams=  htmlParams; 
+        Buscador.htmlFormFieldNames= ['tipo'];
+
+
+        Buscador.callback = function(seleccionado) {
+
+            window.buscador_items_modelo= seleccionado;
+            $('#FORM-STOCK-ITEM-ID').val(seleccionado.REGNRO);
+            $('#FORM-STOCK-ITEM-DESC').val(seleccionado.DESCRIPCION);
+            $("#FORM-STOCK-MEDIDA").text( seleccionado.unidad_medida.DESCRIPCION);
+           
         };
-
-        if ("buscar_items__" in window) {
-
-            await buscar_items__();
-        } else {
-            let req = await fetch("<?= url('buscador-items') ?>/MP");
-            let resp = await req.text();
-            $("body").append(resp);
-            await buscar_items__();
-        }
+        Buscador.render();
+     
     }
 
 

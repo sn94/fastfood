@@ -7,12 +7,11 @@ $templateName = "";
  
 
 if (  $MODULO_FLAG !=  "c") :
-  $templateName = "templates.admin.index";
+  $templateName = $PLANTILLA;
  
 
 elseif ( $MODULO_FLAG  ==  "c") :
   $templateName = "templates.caja.index";
- 
 endif;
  
 ?>

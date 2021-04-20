@@ -109,8 +109,8 @@
             }
 
             //Preparar campos 
-            let codigo = "<td> " + NuevoObjeto.CODIGO + "</td>";
-            let des = "<td> " + NuevoObjeto.DESCRIPCION + "</td>";
+            let codigo = "<td  class='text-center'> " + NuevoObjeto.CODIGO + "</td>";
+            let des = "<td   class='text-center'>  " + NuevoObjeto.DESCRIPCION + "</td>";
 
             let med = "<td class='text-end'>     " + NuevoObjeto.MEDIDA + "</td>";
             let prec = "<td class='text-end' >    " + formatoNumerico.darFormatoEnMillares(NuevoObjeto.P_UNITARIO, 0) + "</td>";
@@ -226,30 +226,33 @@
 
     async function buscarItemParaCompra() {
 
-        //Handler
-        window.buscar_items_target = function({
-            REGNRO,
-            DESCRIPCION,
-            unidad_medida,
-            PCOSTO
-        }) {
+        //**** */
+//Parametros de formulario
+        let tipos_de_item= { "MP" : "MATERIA PRIMA", "PP": "PROD. VENTA", "PE":"PRODUCTO ELABORADO" , "AF": "MOBILIARIO Y OTROS"};
+        let htmlParams= Object.entries(tipos_de_item).map( ([key, val])=>{
+            return `<option value='${key}'>${val}</option>`;
+        });
+        htmlParams= `<form><select onchange='Buscador.consultar()' name='tipo' class='form-control'>${htmlParams}</select></form>`;
 
-            $("#COMPRA-ITEM-ID").val(REGNRO);
-            $("#COMPRA-ITEM-DESC").val(DESCRIPCION);
-            $("#COMPRA-MEDIDA").text( unidad_medida.DESCRIPCION);
-            $("#COMPRA-PRECIO").val(formatoNumerico.darFormatoEnMillares(PCOSTO, 0));
-        }; /**End handler */
+        Buscador.url = "<?= url("stock/buscar") ?>";
+        Buscador.httpMethod= "post";
+        Buscador.httpHeaders= { formato: "json" };
+        Buscador.columnNames = ["REGNRO", "DESCRIPCION" ];
+        Buscador.columnLabels = ['ID', 'DESCRIPCIÓN'];
+        Buscador.htmlFormForParams=  htmlParams; 
+        Buscador.htmlFormFieldNames= ['tipo'];
 
-        if ("buscar_items__" in window) {
 
-            await buscar_items__();
-        } else {
-            let req = await fetch("<?= url('buscador-items') ?>");
-            let resp = await req.text();
-            $("body").append(resp);
-            await buscar_items__();
-        }
+        Buscador.callback = function(seleccionado) {
 
+            window.buscador_items_modelo= seleccionado;
+            $('#COMPRA-ITEM-ID').val(seleccionado.REGNRO);
+            $('#COMPRA-ITEM-DESC').val(seleccionado.DESCRIPCION);
+            $("#COMPRA-MEDIDA").text( seleccionado.unidad_medida.DESCRIPCION);
+            $("#COMPRA-PRECIO").val(formatoNumerico.darFormatoEnMillares( seleccionado.PCOSTO, 0));
+        };
+        Buscador.render();
+        /*** */ 
     }
 
 

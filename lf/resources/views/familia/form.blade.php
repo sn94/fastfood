@@ -20,7 +20,7 @@
 
                                             echo csrf_token(); ?>">
 
- <div class="row bg-dark   pt-2 ">
+ <div class="row    pt-2 ">
      <div class="col-12 col-md-8 " style="display: flex;flex-direction: row;">
          <label style="color: white !important;" class="pr-1">DESCRIPCIÓN: </label>
          <input style="color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="DESCRIPCION" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />

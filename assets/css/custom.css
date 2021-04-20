@@ -1,0 +1,90 @@
+ html {
+     height: 100%;
+ }
+ 
+ :root {
+     --bs-warning: #ffb74d !important;
+ }
+ 
+ @import url(../../assets/fonts/Michroma.ttf);
+ @font-face {
+     font-family: "mainfont";
+     src: url(../../assets/fonts/Marvel-Regular.ttf);
+ }
+ 
+ @font-face {
+     font-family: titlefont;
+     src: url(../../assets/fonts/Michroma.ttf);
+ }
+ 
+ .ftco-footer {
+     /* padding: 7em 0; */
+     padding: 3px;
+     height: 50px !important;
+ }
+ 
+ .bg-warning {
+     background-color: var(--bs-warning) !important;
+ }
+ 
+ .btn-warning {
+     background-color: var(--bs-warning) !important;
+ }
+ 
+ .bg-orange-100 {
+     background-color: #ffe5d0;
+ }
+ 
+ .bg-orange-200 {
+     background-color: #fecba1;
+ }
+ 
+ .bg-orange-300 {
+     background-color: #feb272;
+ }
+ 
+ .bg-orange-400 {
+     background-color: #fd9843;
+ }
+ 
+ .bg-orange-500 {
+     background-color: #fd7e14;
+ }
+ 
+ .bg-orange-600 {
+     background-color: #ca6510;
+ }
+ 
+ .bg-orange-800 {
+     background-color: #653208;
+ }
+ 
+ .bg-orange-900 {
+     background-color: #331904;
+ }
+ /**Rojo**/
+ 
+ .bg-red-500 {
+     background-color: #dc3545;
+ }
+ 
+ .bd-red-700 {
+     background-color: #842029;
+ }
+ 
+ .bg-red-900 {
+     background-color: #2c0b0e;
+ }
+ /**Sobre escribir **/
+ 
+ .bg-dark {
+     background-color: #653208 !important;
+     background-image: url(../../assets/images/background.jpg);
+     background-repeat: no-repeat;
+     background-size: cover;
+ }
+ /***Para todas las ventanas **/
+ 
+ .view-header {
+     background-color: #842029;
+ }

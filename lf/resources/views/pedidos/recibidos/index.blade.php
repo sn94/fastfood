@@ -11,7 +11,7 @@
  <!--Modal -->
  <x-fast-food-modal id="APROBACION-SALIDA-MODAL"  title="APROBACIÓN DE PEDIDO" callback="aprobar()"/>
 
- <div class="container-fluid col-12 col-md-12 col-lg-8  bg-dark  text-light pb-2">
+ <div class="container-fluid col-12 col-md-12 col-lg-8  bg-dark  text-light pb-2 mt-1">
  
  <h3 class="text-center">Pedidos Recibidos</h3>
    <div class="container-fluid" id="grill">

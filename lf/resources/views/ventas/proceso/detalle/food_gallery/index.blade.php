@@ -42,18 +42,6 @@
 
 
  
-.FOOD-CELL {
-  background-color: white  !important;
-  padding: 0px !important;
-}
-
-
-/* Elemento | http://localhost/fastfood/ventas */
-
-#PIZZAs > div:nth-child(2) {
-  background-color: white !important;
-}
-
 
 
  </style>

@@ -22,7 +22,7 @@
 
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
- <div class="row bg-dark   p-2 ">
+ <div class="row  p-2 ">
      <div class="col-12 col-md-6 " style="display: flex;flex-direction: row;">
          <label style="color: white !important;"  class="pr-1">DEPART.: </label>
          <select style="font-size: 12.5px ; color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="departa" class="form-control"   >

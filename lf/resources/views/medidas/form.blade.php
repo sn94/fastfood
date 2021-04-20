@@ -17,7 +17,7 @@
 
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
- <div class="row bg-dark   pt-2 pb-2 ">
+ <div class="row  pt-2 pb-2 ">
      <div class="col-12 col-md-6 "  >
          <label  class="pr-1">DESCRIPCIÓN: </label>
          <input   name="DESCRIPCION" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />

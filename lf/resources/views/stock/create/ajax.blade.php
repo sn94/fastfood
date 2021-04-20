@@ -1,5 +1,3 @@
-
-
 <div id="loaderplace"></div>
 
 @if( request()->ajax())
@@ -11,26 +9,43 @@
 <form class="bg-dark text-light" id="STOCKFORM" action="{{url('stock')}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarStock(event)" enctype="multipart/form-data">
 
 
-@if( isset($stock) )
-<input type="hidden" name="REGNRO"  value="{{$stock->REGNRO}}">
- 
-@method("PUT")
-@else 
-<input type="hidden" name="_method" value="POST">
-@endif
+    @if( isset($stock) )
+    <input type="hidden" name="REGNRO" value="{{$stock->REGNRO}}">
+
+    @method("PUT")
+    @else
+    <input type="hidden" name="_method" value="POST">
+    @endif
 
 
     <div class="row">
         @if( ! request()->ajax())
-        <div class="col-12 col-md-4">
-            @include("stock.botones")
+        <!--Botones -->
+        <div class="col-12 col-md-4 ">
+            <div class="row mb-0   pt-1 pb-0  pr-1 pl-1">
+                <div class="col-12  col-md-4 pb-1">
+                    <div class="btn-group">
+                        <a class="btn btn-sm  btn-secondary mr-2" href="<?= url("stock") ?>"> VOLVER </a>
+                        <a class="btn btn-secondary btn-sm" href="{{url('stock/create')}}">NUEVO</a>
+                        <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
+
+                    </div>
+                </div>
+                <div class="col-12 offset-md-7 col-md-1 pb-1"></div>
+            </div>
         </div>
+        <!--End Botones -->
         @endif
         <div class="col-12 col-md-4">
-            <h3 class="text-center " style="font-family: titlefont;">Ficha de Stock</h3>
+            <h3 class="text-center ">Ficha de Stock</h3>
         </div>
     </div>
+
+
+
     @include("stock.forms.index")
+
+
 </form>
 
 

@@ -42,9 +42,13 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
         @foreach( $SESIONES as $sesion)
         <tr>
             <td>
-                @if( $sesion->ESTADO == "A")
-                <a  href="{{url('sesiones/cerrar/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">CERRAR</a>
-                @else 
+                @if( $sesion->MOSTRAR_CERRAR == 'S')
+                    @if( $sesion->ESTADO == "A")
+                    <a href="{{url('sesiones/cerrar/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">CERRAR</a>
+                    @else
+                    <a onclick="descargarArqueo(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">ARQUEO</a>
+                    @endif
+                @else
                 <a onclick="descargarArqueo(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">ARQUEO</a>
                 @endif
             </td>
