@@ -70,4 +70,5 @@
      </tbody>
  </table>
 
- {{ $PEDIDOS->links('vendor.pagination.default') }}
+ 
+<x-pretty-paginator   :datos="$PEDIDOS"  callback="fill_grill"/>

@@ -11,7 +11,7 @@
  
 <a class="btn btn-sm btn-warning" href="<?= url("proveedores")?>"> Lista de proveedores</a>
 
-<h2 class="text-center mt-2" style="font-family: titlefont;">Ficha de proveedor</h2>
+<h2 class="text-center mt-2" >Ficha de proveedor</h2>
 
 
 <div id="loaderplace"></div>

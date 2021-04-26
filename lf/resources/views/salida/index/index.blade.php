@@ -42,7 +42,7 @@
 
 
  <div class="container-fluid col-12 col-md-12 col-lg-10 col-xl-8">
-     <h2 class="text-center mt-2" style="font-family: titlefont;">Salidas de productos y materia prima</h2>
+     <h2 class="text-center mt-2" >Salidas de productos y materia prima</h2>
 
      <div id="loaderplace"></div>
 

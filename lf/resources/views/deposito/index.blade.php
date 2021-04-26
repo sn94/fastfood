@@ -41,7 +41,7 @@
 
 
 
-<h2 class="text-center mt-2" style="font-family: titlefont;">Gestión del Depósito (productos y materia prima) </h2>
+<h2 class="text-center mt-2" >Gestión del Depósito (productos y materia prima) </h2>
 
 
 <label for="" style="font-weight: 600; color: white; "> FILTRAR POR: </label>

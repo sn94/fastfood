@@ -20,7 +20,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
 <style>
     input:disabled {
-        background-color: #7d7d7d !important;
+        background-color: var(--color-14) !important;
     }
 
     .MEDIDA {
@@ -30,7 +30,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
     a i.fa-search,
     a i.fa-download {
-        background-color: #f7fb55;
+        background-color: var( --color-4);
         border-radius: 30px;
         padding: 5px;
         border: 1px solid black;
@@ -38,8 +38,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
     }
 
     .form-control {
-        background: white !important;
-        color: black !important;
+    
         height: 25px !important;
         font-size: 14px;
     }
@@ -81,15 +80,16 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
     fieldset {
         padding: 2px !important;
-        background-color: #b9b9b9;
+        background-color: var(--color-14);
+        border-radius: 8px 8px ;
     }
 
 
     legend {
         font-size: 1rem;
         color: #222;
-        background-color: azure;
-        border-radius: 20px 20px 0px 0px;
+        background-color: var(--color-4);
+        border-radius: 8px 8px 0px 0px;
         text-align: center;
         font-weight: 600;
     }
@@ -115,54 +115,53 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
 
 
-<div class="container-fluid col-12 col-md-12 bg-dark text-light pb-2 mt-0">
-    <div id="loaderplace"></div>
+<div class="container-fluid pb-5 ">
+    <div class="container col-12 col-md-12 bg-dark text-light pb-5 ">
+        <div id="loaderplace"></div>
+        <h2 class="text-center mt-2">Ficha de producción</h2>
 
 
 
-    <h2 class="text-center mt-2">Ficha de producción</h2>
+        @if( $PRODUCCION_ID != '' )
+        <form id="PRODUCCIONFORM" action="<?= url("ficha-produccion") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
+            <input type="hidden" name="_method" value="PUT">
+            @else
+            <form action="<?= url("ficha-produccion") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
+                @endif
 
 
-
-    @if( $PRODUCCION_ID != '' )
-    <form id="PRODUCCIONFORM" action="<?= url("ficha-produccion") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
-        <input type="hidden" name="_method" value="PUT">
-        @else
-        <form action="<?= url("ficha-produccion") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
-            @endif
+                <input type="hidden" name="SUCURSAL" value="<?= $SUCURSAL_REG ?>">
+                <input type="hidden" name="REGISTRADO_POR" value="<?= $REGISTRADO_POR ?>">
+                <input type="hidden" name="RECIBIDO_POR" value="<?= $RECIBIDO_POR ?>">
+                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
 
-            <input type="hidden" name="SUCURSAL" value="<?= $SUCURSAL_REG ?>">
-            <input type="hidden" name="REGISTRADO_POR" value="<?= $REGISTRADO_POR ?>">
-            <input type="hidden" name="RECIBIDO_POR" value="<?= $RECIBIDO_POR ?>">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                @if( $PRODUCCION_ID != '' )
+                <input type="hidden" id="PRODUCCION_ID" name="REGNRO" value="{{$PRODUCCION_ID}}">
+                @endif
 
 
-            @if( $PRODUCCION_ID != '' )
-            <input type="hidden" id="PRODUCCION_ID" name="REGNRO" value="{{$PRODUCCION_ID}}">
-            @endif
-
-
-            <div class="col-12 col-md-2  mb-1">
-                <button type="submit" class="btn btn-danger"> GUARDAR FICHA</button>
-            </div>
-            @include("ficha_produccion.header")
-
-            <div class="row bg-dark">
-                <div class="col-12 col-md-6">
-                    @include("ficha_produccion.grill_productos")
+                <div class="col-12 col-md-2  mb-1">
+                    <button type="submit" class="btn btn-danger"> GUARDAR FICHA</button>
                 </div>
-                <div class="col-12 col-md-6">
-                    @include("ficha_produccion.grill_ingredientes")
+                @include("ficha_produccion.header")
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        @include("ficha_produccion.grill_productos")
+                    </div>
+                    <div class="col-12 col-md-6">
+                        @include("ficha_produccion.grill_ingredientes")
+                    </div>
+
+                    <div class="col-12 col-md-6 mt-1">
+                        @include("ficha_produccion.grill_insumos")
+                    </div>
                 </div>
 
-                <div class="col-12 col-md-6 mt-1">
-                    @include("ficha_produccion.grill_insumos")
-                </div>
-            </div>
+            </form>
 
-        </form>
-
+    </div>
 </div>
 
 

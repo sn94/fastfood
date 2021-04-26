@@ -15,34 +15,33 @@ $ELABORADO_POR= isset( $PRODUCCION) ? $PRODUCCION->ELABORADO_POR: "";
 
 
 
-<div class="row  bg-dark mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
+<div class="row  mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2 g-1">
 
-    <div class="col-12 col-md-2   mb-1"  style="display: grid;  grid-template-columns: 45%  55%;">
+    <div class="col-12 col-sm-4 col-md-2 col-lg-2   mb-1 f-flex  flex-column"   >
  
-            <label style=" color:white;" class="mt-1" for="element_7">ORDEN N°: </label>
+            <label   class="mt-1 text-light" for="element_7">ORDEN N°: </label>
             <input  readonly  value="{{$NUMERO_ORDEN}}"  class="form-control mt-1" type="text" />
     
     </div>
 
 
-    <div class="col-12 col-md-4   mb-1">
-        <div style="display: grid;  grid-template-columns: 40%  60%;">
-            <label style="grid-column-start: 1;color:white;" class="mt-1" for="element_7">ELABORADO POR: </label>
-            <input maxlength="100" name="ELABORADO_POR" value="{{$ELABORADO_POR}}" style="grid-column-start: 2;" class="form-control mt-1" type="text" />
-        </div>
+    <div class="col-12 col-sm-8 col-md-4 col-lg-4   mb-1">
+        
+            <label   class="mt-1 text-light" for="element_7">ELABORADO POR: </label>
+            <input maxlength="100" name="ELABORADO_POR" value="{{$ELABORADO_POR}}"   class="form-control mt-1" type="text" />
+        
     </div>
-    <div class="col-12 col-md-2  mb-1 pl-0" style="display: grid;  grid-template-columns: 25%  75%;">
+    <div class="col-12 col-sm-3 col-md-2 col-lg-2  mb-1 pl-0 d-flex flex-column">
 
-        <label style="grid-column-start: 1;color:white;" class="mt-1" for="element_7">FECHA: </label>
-        <input value="{{$FECHA}}" name="FECHA" style="grid-column-start: 2;" class="form-control mt-1" type="date" />
+        <label   class="mt-1 text-light" for="element_7">FECHA: </label>
+        <input value="{{$FECHA}}" name="FECHA"   class="form-control mt-1" type="date" />
 
     </div>
 
-    <div class="col-12 col-md-6  mb-1">
-        <div style="display: grid;  grid-template-columns: 20%  80%;">
-            <label style="grid-column-start: 1;color:white;" class="mt-1" for="element_7">OBSERVACIÓN: </label>
-            <input value="{{$CONCEPTO}}" name="CONCEPTO" style="grid-column-start: 2;" class="form-control mt-1" type="text" />
-        </div>
+    <div class="col-12 col-sm-9 col-md-4 col-lg-4  mb-1 d-flex flex-column"> 
+            <label  class="mt-1 text-light" for="element_7">OBSERVACIÓN: </label>
+            <input value="{{$CONCEPTO}}" name="CONCEPTO"   class="form-control mt-1" type="text" />
+    
     </div>
     <!--     end     CABECERA  --->
 </div>

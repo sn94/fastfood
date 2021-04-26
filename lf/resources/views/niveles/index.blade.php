@@ -41,7 +41,7 @@
 
 
 <div class="container col-12 col-md-4">
-    <h3 class="text-center mt-2" style="font-family: titlefont;">Ficha de Niveles de usuario</h3>
+    <h3 class="text-center mt-2" >Ficha de Niveles de usuario</h3>
 
 
 

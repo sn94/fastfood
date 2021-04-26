@@ -10,8 +10,6 @@ use App\Models\Salidas;
 use App\Models\Salidas_detalles;
 use App\Models\Stock;
 use App\Models\Stock_existencias;
-use App\Models\Ventas;
-use App\Models\Ventas_det;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +39,7 @@ class PedidosController extends Controller
 
 
 
-
+//Lista los pedidos asociados a un producto del stock
     public function  list($STOCKID)
     {
 

@@ -33,68 +33,64 @@
 
  <input type="hidden" name="SUCURSAL" value="{{$SUCURSAL}}">
 
- <div class="container col-12 col-sm-7 col-md-7" style="display: flex; flex-direction: row;">
-     <label style="width: 200px !important; font-size: 1em;">SESIÓN N°: </label>
-     <input style=" font-weight: 600;   padding: 0px !important; font-size: 2em;" readonly value="{{$REGNRO}}" name="REGNRO" class="form-control text-center" type="text" />
+ <div class="container col-12 col-md-12 " style="display: flex; flex-direction: row;">
+     <label class=" fs-4 w-100"  >SESIÓN N°: </label>
+     <input style=" font-weight: 600; " readonly value="{{$REGNRO}}" name="REGNRO" class="form-control text-center w-100 fs-4 p-0 " type="text" />
  </div>
- <div class="row bg-dark   pt-2 ">
-     <div class="col-12 col-sm-6 col-md-6 ">
 
-         <label>FECHA DE APERTURA: </label>
-         <input readonly value="{{$FECHA_APE}}" name="FECHA_APE" class="form-control" type="date" />
+ <div class="container-fluid ">
 
-         <label>HORA DE APERTURA: </label>
-         <input readonly value="{{$HORA_APE}}" name="HORA_APE" class="form-control" type="text" />
+     <label>FECHA DE APERTURA: </label>
+     <input readonly value="{{$FECHA_APE}}" name="FECHA_APE" class="form-control" type="date" />
 
-         <label>TURNO: </label>
+     <label>HORA DE APERTURA: </label>
+     <input readonly value="{{$HORA_APE}}" name="HORA_APE" class="form-control" type="text" />
 
-         <select class="form-control" name="TURNO"   {{ isset($SESION)? 'disabled' : '' }} >
-             @foreach( $TURNOS as $caja)
-             @if( $TURNO == $caja->REGNRO)
-             <option selected value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
-             @else
-             <option value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
-             @endif
-             @endforeach
-         </select>
+     <label>TURNO: </label>
 
+     <select class="form-control" name="TURNO" {{ isset($SESION)? 'disabled' : '' }}>
+         @foreach( $TURNOS as $caja)
+         @if( $TURNO == $caja->REGNRO)
+         <option selected value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
+         @else
+         <option value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
+         @endif
+         @endforeach
+     </select>
+     <label>CAJA N°: </label>
+     <select class="form-control" name="CAJA" {{ isset($SESION)? 'disabled' : '' }}>
+         @foreach( $CAJAS as $caja)
+         @if( $CAJA == $caja->REGNRO)
+         <option selected value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
+         @else
+         <option value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
+         @endif
+
+         @endforeach
+     </select>
+
+
+     <label>CAJERO: </label>
+     <div style="display: flex;">
+         <input style="width: 80px !important;" readonly name="CAJERO" class="form-control" type="text" value="{{$CAJERO}}" />
+         <input readonly class="form-control" type="text" value="{{$CAJERO_NOM}}" />
      </div>
 
-     <div class="col-12  col-sm-6 col-md-6 ">
-         <label>CAJA N°: </label>
-         <select class="form-control" name="CAJA"  {{ isset($SESION)? 'disabled' : '' }} >
-             @foreach( $CAJAS as $caja)
-             @if( $CAJA == $caja->REGNRO)
-             <option selected value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
-             @else
-             <option value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
-             @endif
+     <label>EFECTIVO INICIAL: </label>
+     <input {{ isset($SESION)? 'disabled' : '' }} value="{{$EFECTIVO_INI}}" onblur="if(this.value=='')this.value='0';" onfocus="if(this.value=='0')this.value='';" name="EFECTIVO_INI" class="form-control entero" type="text" />
 
-             @endforeach
-         </select>
-
-
-         <label>CAJERO: </label>
-         <div style="display: flex;">
-             <input style="width: 80px !important;" readonly name="CAJERO" class="form-control" type="text" value="{{$CAJERO}}" />
-             <input readonly class="form-control" type="text" value="{{$CAJERO_NOM}}" />
-         </div>
-
-         <label>EFECTIVO INICIAL: </label>
-         <input {{ isset($SESION)? 'disabled' : '' }}   value="{{$EFECTIVO_INI}}" onblur="if(this.value=='')this.value='0';" onfocus="if(this.value=='0')this.value='';" name="EFECTIVO_INI" class="form-control entero" type="text" />
-     </div>
+ </div>
 
 
 
-     <div class="col-12">
-     @if(  isset($SESION) )
-     <a  class="btn btn-danger mt-2 " href="<?=url('sesiones/cerrar')?>">CERRAR</a>
-     @else 
+ <div class="col-12 d-flex justify-content-center">
+     @if( isset($SESION) )
+     <a class="btn btn-danger mt-2 " href="<?= url('sesiones/cerrar') ?>">CERRAR</a>
+     @else
      <button type="submit" class="btn btn-success mt-2 ">ABRIR</button>
-     @endif 
-          
-       
-     </div>
+     @endif
+
+
  </div>
 
  @include("validations.form_validate")

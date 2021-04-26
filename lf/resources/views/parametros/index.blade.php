@@ -41,7 +41,7 @@
 
 
 <div class="container col-12 col-md-5">
-    <h3 class="text-center mt-2" style="font-family: titlefont;">Parámetros</h3>
+    <h3 class="text-center mt-2" >Parámetros</h3>
 
 
 

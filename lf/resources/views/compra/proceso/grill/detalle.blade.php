@@ -22,7 +22,7 @@ $TOTAL_IVA10=0;
 @endphp
 
 
-<div class="row bg-dark mt-2 pt-1 pb-2  ">
+<div class="row mt-2 pt-1 pb-2  ">
     <div class="col-12 col-md-12 ">
         <table id="COMPRAS-TABLE" class="table table-striped table-secondary text-dark">
 

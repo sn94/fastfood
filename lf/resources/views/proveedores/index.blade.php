@@ -14,7 +14,7 @@ Proveedores
 
 
 
-<div class="container-fluid bg-dark text-light col-12 col-md-12 col-lg-10 col-xl-8">
+<div class="container-fluid bg-dark text-light col-12 col-md-12 col-lg-10 col-xl-8 pb-5 mb-5">
 
     <h2 class="text-center mt-2">Ficha de Proveedores</h2>
 

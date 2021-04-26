@@ -34,7 +34,7 @@ Compras
 
 
 <div id="loaderplace"></div>
-<div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light ">
+<div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light  mb-5 pb-5 ">
 
   <h3 class="text-center">Compras</h3>
 

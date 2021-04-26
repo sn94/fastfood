@@ -17,8 +17,8 @@ $BASE_ASSETS= url('assets');
 
 
     @php
-     $BASE_ASSETS= url('assets');
-     @endphp
+    $BASE_ASSETS= url('assets');
+    @endphp
     <!--Carga temprana de jquery -->
     <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script>
 
@@ -35,11 +35,13 @@ $BASE_ASSETS= url('assets');
 
 
     <style>
-        #FORM-PANEL {
+        body {
 
-            background-image: url(<?= url("assets/images/login_wallpaper.jpg") ?>);
-            background-size: contain;
-
+            background-color: black !important;
+            background-image: url(<?= url("assets/images/bg-fastfood-login.png") ?>);
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 100vh;
         }
 
 
@@ -105,49 +107,32 @@ $BASE_ASSETS= url('assets');
     </script>
 </head>
 
-<body>
+<body class="d-flex flex-row justify-content-center"> 
 
 
+       <div class="container-fluid d-flex "  style="background-color: #6a3d13a8;">
+       <div class="container pt-5 pt-md-3 pb-5 pb-md-3 col-12 col-md-6 col-lg-4 align-self-center rounded" id="FORM-PANEL"  style="background-color: black;">
+            <form  class="text-light m-0 p-0 p-md-2 " onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="login(event)" action="{{url('usuario/sign-in')}}" method="POST" style=" display: flex; flex-direction: column;">
 
-    <!-- END nav -->
-
-    <!--  style="background-image: url( $BASE_ASSETS /images/bg_1.jpg);" -->
-    <section class="ftco-intro">
-
-
-
-
-
-        <div class=" mt-2 container col-12 col-sm-9 col-md-6 col-lg-4 p-0" id="FORM-PANEL">
-            <form onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="login(event)" action="{{url('usuario/sign-in')}}" method="POST" class="text-light pl-5 pr-5 pl-md-2 pr-md-2 pb-5  p-md-5" style="background-color: #000000b3;display: flex; flex-direction: column;">
-
+            <div class="container">
+            <img  class="img-fluid" src="{{url('assets/images/logo.png')}}" alt="">
                 @csrf
-                <h1 class="text-center">Acceso</h1>
-
 
 
 
                 <label class="text-center" style="font-size: 18px;">NICK: </label>
-                <input name="USUARIO" class="form-control" type="text" />
+                <input name="USUARIO" class="form-control text-light" type="text" />
                 <label class="text-center" style="font-size: 18px;">PASSWORD: </label>
-                <input name="PASS" class="form-control" type="password" />
+                <input name="PASS" class="form-control text-light" type="password" />
 
-                <button class="btn btn-warning mt-2">INGRESAR</button>
+                <button class="btn btn-warning mt-2 w-100">INGRESAR</button>
+            </div>
             </form>
         </div>
+       </div>
 
 
-
-    </section>
-
-
-
-
-
-
-
-
-
+ 
 
     <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script>
 

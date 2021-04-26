@@ -21,18 +21,23 @@
 
         <div class="row  ">
 
-            <div class="col-12 col-md-8 pr-0  mb-1"  style="display: flex;  flex-direction: row;"  >
-                <label >ITEM:</label>
-                <a  data-toggle="tooltip" title="Click aquí para buscar un ítem"    href="#" onclick="productos_controller.buscador_de_items('PE')"><i class="fa fa-search"></i></a>
+            <div class="col-12 col-md-8 pr-0  mb-1 d-flex flex-row">
+                <label>ITEM:</label>
+                <a data-toggle="tooltip" title="Click aquí para buscar un ítem" href="#" onclick="productos_controller.buscador_de_items('PE')"><i class="fa fa-search"></i></a>
                 <input style="width:60px; font-weight: 600; color: black; " class="form-control ITEM-ID" type="text" disabled>
-                <input disabled  class="form-control ITEM" style="width: 100% !important; height: 40px;" autocomplete="off" type="text"   >
+                <input disabled class="form-control ITEM" style="width: 100% !important; height: 40px;" autocomplete="off" type="text">
             </div>
 
-            <div class="col-12 col-md-4 pl-1 mb-1" style="display: flex;  flex-direction: row;">
-                <label  >CANT.: </label>
-                <input onkeydown="if(event.keyCode==13) {event.preventDefault(); productos_controller.cargar_tabla();}"   class="form-control decimal CANTIDAD" type="text" />
-                <label class="MEDIDA" ></label>
-                <a   href="#" onclick="productos_controller.cargar_tabla()"><i class="fa fa-download"></i></a>
+            <div class="col-12 col-md-4 pl-1 mb-1 d-flex flex-column">
+                <div class=" d-flex flex-row">
+                    <label>CANT.: </label>
+                    <input onkeydown="if(event.keyCode==13) {event.preventDefault(); productos_controller.cargar_tabla();}" class="form-control decimal CANTIDAD" type="text" />
+
+                    <a href="#" onclick="productos_controller.cargar_tabla()"><i class="fa fa-download"></i></a>
+                </div>
+                <div class="d-flex">
+                <label class="MEDIDA text-light" ></label>
+                </div>
             </div>
         </div>
 
@@ -42,7 +47,7 @@
 
                     <thead>
                         <tr style="font-size: 14px;">
-                        <th>CÓDIGO</th>
+                            <th>CÓDIGO</th>
                             <th>DESCRIPCIÓN</th>
                             <th>UNI.MED.</th>
                             <th> CANTIDAD</th>
@@ -86,23 +91,23 @@
         productos_controller.name = "products";
 
         let panel = productos_controller.panel_name;
-        
-        productos_controller.callbackPostModal= function( seleccionado){
+
+        productos_controller.callbackPostModal = function(seleccionado) {
             let regnro = seleccionado.REGNRO;
             let descri = seleccionado.DESCRIPCION;
             let medida = seleccionado.unidad_medida.DESCRIPCION;
             productos_controller.buscador_items_modelo = seleccionado;
-            window.buscador_items_modelo= seleccionado;
+            window.buscador_items_modelo = seleccionado;
 
             $(panel + " .ITEM-ID").val(regnro);
             $(panel + " .ITEM").val(descri);
             $(panel + " .MEDIDA").text(medida);
 
-           // $(productos_controller.modal_name + " .modal-body").html("");
+            // $(productos_controller.modal_name + " .modal-body").html("");
 
         };
 
-        
+
         /*
         Backup 
         $(productos_controller.modal_name).on('hidden.bs.modal', function(e) {

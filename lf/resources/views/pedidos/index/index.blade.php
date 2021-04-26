@@ -4,7 +4,7 @@
 
 
 
- <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1">
+ <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1 pb-lg-5 ">
 
 
    @include("validations.formato_numerico")
@@ -35,7 +35,7 @@
 
    <h4 class="text-center">Pedidos de {{ strtolower( $STOCK->DESCRIPCION)}}</h4>
 
-   <div class="container-fluid" id="grill">
+   <div class="container-fluid mb-5 pb-5" id="grill">
 
      @include("pedidos.index.grill")
    </div>
@@ -43,10 +43,17 @@
  </div>
 
  <script>
-   async function fill_grill() {
+   async function fill_grill( ev) {
+    let page_index = 1;
 
+//prevenir propagacion
+if (ev != undefined && typeof ev == "object") {
+  ev.preventDefault();
+  let url_parts = ev.target.href.split("?");
+  if (url_parts.length > 1) page_index = url_parts[1].split("=")[1];
+}
 
-     let grill_url = "<?= url('pedidos/list/'.$STOCK->REGNRO) ?>";
+     let grill_url = "<?= url('pedidos/list/'.$STOCK->REGNRO) ?>?page="+page_index;
 
 
      let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";

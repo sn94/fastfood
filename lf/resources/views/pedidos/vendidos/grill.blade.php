@@ -107,4 +107,7 @@ use App\Models\Nota_pedido_detalles;
     </tbody>
 </table>
 
-{{ $PRODUCTOS->links('vendor.pagination.default') }}
+
+<x-pretty-paginator   :datos="$PRODUCTOS"  callback="fill_grill"/>
+
+ 

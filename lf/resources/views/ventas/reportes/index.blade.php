@@ -28,7 +28,7 @@ Ventas
 
 
 <div id="loaderplace"></div>
-<div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light ">
+<div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light pb-5  mb-5 ">
 
   <h3 class="text-center">Ventas</h3>
   <div class="row">

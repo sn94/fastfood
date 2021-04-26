@@ -35,7 +35,7 @@
 
 
 
-<h2 class="text-center mt-2" style="font-family: titlefont;">Recepción de productos y materia prima</h2>
+<h2 class="text-center mt-2" >Recepción de productos y materia prima</h2>
 
 
 

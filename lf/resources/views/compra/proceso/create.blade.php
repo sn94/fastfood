@@ -76,14 +76,13 @@ $REGISTRADO_POR= isset($COMPRA) ? $COMPRA->REGISTRADO_POR : session("ID") ;
 
 @include("buscador.personas", ['TIPO'=>'PROVEEDOR'] )
 
-
 <div id="loaderplace"></div>
-<div class="container-fluid col-12 col-lg-10 bg-dark text-light">
+<div class="container-fluid col-12 col-lg-10 bg-dark text-light pb-5">
 
 
     <h2 class="text-center mt-2">Compras</h2>
 
-    <form id="COMPRASFORM" action="{{$create}}" method="{{isset($EDICION)?'PUT':'POST'}}" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarCompra(event)">
+    <form class="mb-5" id="COMPRASFORM" action="{{$create}}" method="{{isset($EDICION)?'PUT':'POST'}}" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarCompra(event)">
 
 
         @if( isset( $EDICION) )

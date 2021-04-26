@@ -26,7 +26,7 @@
 
 <table class="table bg-warning bg-gradient    text-dark">
 
-    <thead style="font-family: mainfont;">
+    <thead  >
         <tr>
             @if( session("NIVEL") == "SUPER" ||  session("NIVEL") == "GOD" )
             <th></th>

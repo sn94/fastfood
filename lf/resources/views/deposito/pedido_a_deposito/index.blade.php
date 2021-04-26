@@ -39,7 +39,7 @@ $SUCURSAL= session("SUCURSAL");
 
 
 
-<h2 class="text-center mt-2" style="font-family: titlefont;">Nota de pedido a depósito</h2>
+<h2 class="text-center mt-2" >Nota de pedido a depósito</h2>
 
 
 

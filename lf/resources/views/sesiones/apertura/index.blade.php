@@ -19,7 +19,6 @@
   #SESION-FORM label {
     font-weight: 500;
     color: white;
-    font-family: titlefont;
     font-size: 12px;
   }
 
@@ -41,19 +40,16 @@
 @include("buscador.generico", ['TIPO'=>'TURNO'])
 
 
-<div class="container col-12 col-md-10 col-lg-7 bg-dark mt-0 mb-0  mt-md-0 mb-md-0 mt-lg-3 mb-lg-3">
-  
-  
-@if(  isset($SESION) )
-<div class="alert alert-warning p-0">
-<h5 class="text-dark">Tienes una sesión abierta <img src="<?=url('assets/icons/atencion.png')?>"  ></h5>
-
-</div>
-@endif 
+<div class="container-fluid  col-12  col-sm-8 col-md-5 col-lg-5   d-flex flex-column">
 
 
-  <form id="SESION-FORM" action="{{url('sesiones/create')}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
-    @include("sesiones.apertura.form",  ['SESION_ABIERTA' => "NO"])
+  @if( isset($SESION) )
+  <span class="badge bg-danger ml-3 p-0  align-self-end">Sesión abierta <img src="<?= url('assets/icons/atencion.png') ?>"></span>
+  @endif
+
+
+  <form class="bg-dark  p-2 p-sm-3 p-md-4 p-lg-5" id="SESION-FORM" action="{{url('sesiones/create')}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
+    @include("sesiones.apertura.form", ['SESION_ABIERTA' => "NO"])
   </form>
 
 </div>
