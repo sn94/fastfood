@@ -22,7 +22,7 @@
              //Crear estilos
              var hoja = document.createElement('style')
              hoja.id = "BuscadorStyles";
-             hoja.innerHTML = this.styles;
+             hoja.innerHTML = this.styles();
              document.head.appendChild(hoja);
 
              $("body").prepend(this.modalHtml);
@@ -51,9 +51,9 @@
          modalHtml: `
     <div id="BuscadorModal" class="container-fluid p-1 p-md-5 m-0">
 
-    <div class="BuscadorModal-cuerpo container bg-light col-12 col-md-5">
+    <div class="BuscadorModal-cuerpo container bg-warning col-12 col-md-5">
         <div class="BuscadorModal-close">
-            <button onclick="Buscador.cerrarModal()" type="button" style=" border-radius: 20px;background-color: red;color: white;padding: 5 px;" >X</button>
+            <button onclick="Buscador.cerrarModal()" type="button" style=" border-radius: 50px;background-color: black;color: white;padding: 2px 10px;" >X</button>
         </div>
         
         <div class="form"></div> 
@@ -81,7 +81,8 @@
          },
 
          tipoFondo: "translucido", //translucido - opaco - ninguno
-         styles: `
+         styles: function() {
+             return `
             #BuscadorModal{
                 position: absolute;
                 z-index: 1000;
@@ -126,7 +127,8 @@
             #BuscadorModal table thead th:nth-child(1), #BuscadorModal table tbody td:nth-child(1){
                 width: 80px;
             }
-                `,
+                `;
+         },
          makeTable: function(data) {
 
              if (data == undefined && !(Array.isArray(data))) return;

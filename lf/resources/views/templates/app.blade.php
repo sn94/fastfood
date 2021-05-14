@@ -17,21 +17,38 @@
      $BASE_ASSETS= url('assets');
      @endphp
 
+
      <!--Carga temprana de jquery -->
      <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script>
      <script src="{{$BASE_ASSETS}}/bootstrap5/bootstrap.bundle.min.js"> </script>
+
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/bootstrap5/bootstrap.min.css">
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/fontawesome.min.css">
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/solid.min.css">
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/brands.min.css">
-     
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}">
-      
-
-
-
 
      <script>
+         navigator.sayswho = (function() {
+             var ua = navigator.userAgent,
+                 tem,
+                 M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+
+
+             if (/trident/i.test(M[1])) {
+                 tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                 return 'IE ' + (tem[1] || '');
+             }
+             if (M[1] === 'Chrome') {
+                 tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+                 if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+             }
+             M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+             if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+             return M.join(' ');
+         })();
+
+
          Date.prototype.getFecha = function() {
              let elmes = parseInt(this.getMonth()) + 1;
              elmes = elmes < 10 ? "0" + elmes : elmes;
@@ -49,6 +66,22 @@
              }
          }
          replaceAll_compat();
+
+
+         function show_loader() {
+
+             let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
+             $("#loaderplace").html(loader);
+         }
+
+         function hide_loader() {
+             $("#loaderplace").html("");
+         }
+
+
+         function get_fast_food_identification_for_module_context() {
+             return document.getElementById("fast-food-identification-for-module-context").value;
+         }
      </script>
  </head>
 
@@ -63,11 +96,11 @@
      <!--  style="background-image: url( $BASE_ASSETS /images/bg_1.jpg);" -->
 
 
-   
 
-         @yield("content") 
 
- @yield('jsScripts')
+     @yield("content")
+
+     @yield('jsScripts')
  </body>
 
  </html>

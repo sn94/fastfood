@@ -1,3 +1,8 @@
+<?php 
+$MODULO_FLAG =    isset($_GET['m']) ? $_GET['m'] :  "";
+$QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  ""; 
+?>
+
 <div id="loaderplace"></div>
 
 @if( request()->ajax())
@@ -6,7 +11,9 @@
 <input type="hidden" id="REDIRECCIONAR" value="SI">
 @endif
 
-<form class="bg-dark text-light  border border-success border-1 rounded" id="STOCKFORM" action="{{url('stock')}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarStock(event)" enctype="multipart/form-data">
+
+
+<form class=" text-light    bg-dark  p-1 rounded" id="STOCKFORM" action="{{url('stock')}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarStock(event)" enctype="multipart/form-data">
 
 
     @if( isset($stock) )
@@ -27,8 +34,8 @@
                 <div class="col-12  col-md-4 pb-1">
                     <div class="btn-group">
                         @if( ! request()->ajax())
-                        <a class="btn btn-sm  btn-secondary mr-2" href="<?= url("stock") ?>"> VOLVER </a>
-                        <a class="btn btn-secondary btn-sm" href="{{url('stock/create')}}">NUEVO</a>
+                        <a class="btn btn-sm  btn-secondary mr-2" href="<?= url("stock$QUERY_FLAG") ?>"> VOLVER </a>
+                        <a class="btn btn-secondary btn-sm" href="{{url('stock/create'.$QUERY_FLAG)}}">NUEVO</a>
                         @endif
                         <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
 
@@ -53,13 +60,4 @@
 
 
 
-<script>
-    function show_loader() {
-        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
-        $("#loaderplace").html(loader);
-    }
-
-    function hide_loader() {
-        $("#loaderplace").html("");
-    }
-</script>
+ 

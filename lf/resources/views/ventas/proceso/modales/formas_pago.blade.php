@@ -59,7 +59,7 @@
                                     <label class="fs-3">ENTREGA:</label>
                                 </div>
                                 <div class="col col-md-8">
-                                    <input value="0" type="text" id="IMPORTE_PAGO" name="IMPORTE_PAGO" class="form-control fs-3 entero MONTO" />
+                                    <input onfocus="this.value='';" onblur="this.value='0';" value="0" type="text" id="IMPORTE_PAGO" name="IMPORTE_PAGO" class="form-control fs-3 entero MONTO" />
                                 </div>
                             </div>
 
@@ -81,29 +81,31 @@
                     <div class="col-12 col-md-6 mr-0">
                         <fieldset style="display: flex; flex-direction: column;">
                             <legend class="fs-5">Tarjeta</legend>
-                            <label  class=" fs-5" for="">N° CUENTA:</label>
+                            <label  class=" fs-5" for="">N° Cuenta:</label>
                             <input class="form-control fs-5" type="text" name="TAR_CUENTA">
-                            <label  class=" fs-5"  for="">BANCO:</label>
+                            <label  class=" fs-5"  for="">Banco:</label>
                             <input class="form-control  fs-5" type="text" name="TAR_BANCO">
-                            <label   class=" fs-5" for="">CÉDULA:</label>
+                            <label   class=" fs-5" for="">Cédula:</label>
                             <input class="form-control   fs-5" type="text" name="TAR_CEDULA">
-                            <label  class=" fs-5" for="">N° BOLETA:</label>
+                            <label  class=" fs-5" for="">N° Boleta:</label>
                             <input class="form-control  fs-5" type="text" name="TAR_BOLETA">
                         </fieldset>
                     </div>
 
 
                     <div class="col-12 col-md-6 ml-0" id="VENTAS_DATOS_GIRO">
-                        <fieldset style="display: flex; flex-direction: column;">
+                        <fieldset >
                             <legend  class="fs-5">Giros tigo</legend>
-                            <label class=" fs-5" for="">N° TELÉFONO:</label>
+                           <div class="d-flex flex-column">
+                           <label class=" fs-5" for="">N° Teléfono:</label>
                             <input class="form-control  fs-5" type="text" name="GIRO_TELEFONO">
-                            <label  class=" fs-5" for="">CÉDULA:</label>
+                            <label  class=" fs-5" for="">Cédula:</label>
                             <input class="form-control  fs-5" type="text" name="GIRO_CEDULA">
-                            <label  class=" fs-5"  for="">TITULAR:</label>
+                            <label  class=" fs-5"  for="">Titular:</label>
                             <input class="form-control  fs-5" type="text" name="GIRO_TITULAR">
-                            <label  class=" fs-5" for="">FECHA/HORA DE TRANS.:</label>
+                            <label  class=" fs-5" for="">Fecha/Hora de Trans.:</label>
                             <input class="form-control  fs-5" type="text" name="GIRO_FECHA">
+                           </div>
                         </fieldset>
                     </div>
 

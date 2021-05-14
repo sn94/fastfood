@@ -28,7 +28,7 @@
     }
 </style>
 
-<div id="search-report-downloader" style="display: flex;flex-direction: column;">
+<div id="search-report-downloader" class="d-flex flex-column mb-1"  >
 
     @if( isset( $top_panel))
     <div id="search-report-downloader-top-panel">
@@ -37,9 +37,9 @@
     </div>
 
     @endif
-    <div style="display: flex;flex-direction: row;">
+    <div  class="d-flex flex-row" >
 
-        <div id="search-report-downloader-center-panel" style="display: flex;flex-direction: row;width: 100%;justify-content: flex-start;">
+        <div id="search-report-downloader-center-panel" class="d-flex flex-row flex-wrap w-100 justify-content-start" >
             {{$slot}}
         </div>
         <div style="display: flex;flex-direction: row;  justify-content: flex-end;align-items: flex-end;">

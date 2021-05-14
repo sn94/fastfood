@@ -53,7 +53,7 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
             <td>{{$ven->SUCURSAL_ID}} </td>
             <td>{{$ven->SUCURSAL_NOMBRE}} </td> 
             <td>{{$ven->DESCRIPCION}} </td>
-            <td>{{ $ven->TIPO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO == "PE" ? "ELABORADO"  :  ( $ven->TIPO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO")   )    }}</td>
+            <td>{{ $ven->TIPO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO == "PE" ? "ELABORADO"  :  ( $ven->TIPO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO Y OTROS")   )    }}</td>
             <td>{{$ven->FAMILIA}} </td>
             <td class="text-center"> {{$ven->NUMERO_VENTAS}}</td>
         </tr>

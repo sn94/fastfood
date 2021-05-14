@@ -1,3 +1,9 @@
+<?php 
+$MODULO_FLAG=    isset($_GET['m']) ? $_GET['m'] :  "";
+$QUERY_FLAG=  $MODULO_FLAG!= "c"  ? ""  :    "?m=$MODULO_FLAG";
+
+ 
+?>
 <style>
 
 
@@ -25,10 +31,10 @@ table tbody tr td, table thead tr th{
          @foreach( $clientes as $cli)
          <tr>
              <td>
-                 <a style="color: black;" href="{{url('clientes/update').'/'.$cli->REGNRO}}"> <i class="fas fa-edit"></i></a>
+                 <a style="color: black;" href="{{url('clientes/update').'/'.$cli->REGNRO.$QUERY_FLAG}}"> <i class="fas fa-edit"></i></a>
              </td>
              <td>
-                 <a onclick="delete_row(event)" style="color: black;" href="{{url('clientes').'/'.$cli->REGNRO}}"> <i class="fa fa-trash"></i></a>
+                 <a onclick="delete_row(event)" style="color: black;" href="{{url('clientes').'/'.$cli->REGNRO.$QUERY_FLAG}}"> <i class="fa fa-trash"></i></a>
              </td>
 
              <td>{{$cli->CEDULA_RUC}}</td>

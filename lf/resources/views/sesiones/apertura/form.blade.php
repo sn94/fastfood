@@ -40,15 +40,15 @@
 
  <div class="container-fluid ">
 
-     <label>FECHA DE APERTURA: </label>
-     <input readonly value="{{$FECHA_APE}}" name="FECHA_APE" class="form-control" type="date" />
+     <label class="fs-6">Fecha de apertura: </label>
+     <input readonly value="{{$FECHA_APE}}" name="FECHA_APE" class="form-control fs-6 p-1" type="date" />
 
-     <label>HORA DE APERTURA: </label>
-     <input readonly value="{{$HORA_APE}}" name="HORA_APE" class="form-control" type="text" />
+     <label class="fs-6">Hora de apertura: </label>
+     <input readonly value="{{$HORA_APE}}" name="HORA_APE" class="form-control fs-6 p-1" type="text" />
 
-     <label>TURNO: </label>
+     <label class="fs-6">Turno: </label>
 
-     <select class="form-control" name="TURNO" {{ isset($SESION)? 'disabled' : '' }}>
+     <select class="form-control fs-6" name="TURNO" {{ isset($SESION)? 'disabled' : '' }}>
          @foreach( $TURNOS as $caja)
          @if( $TURNO == $caja->REGNRO)
          <option selected value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
@@ -57,8 +57,8 @@
          @endif
          @endforeach
      </select>
-     <label>CAJA N°: </label>
-     <select class="form-control" name="CAJA" {{ isset($SESION)? 'disabled' : '' }}>
+     <label class="fs-6">Caja N°: </label>
+     <select class="form-control fs-6" name="CAJA" {{ isset($SESION)? 'disabled' : '' }}>
          @foreach( $CAJAS as $caja)
          @if( $CAJA == $caja->REGNRO)
          <option selected value="{{$caja->REGNRO}}"> {{$caja->DESCRIPCION}} </option>
@@ -70,14 +70,14 @@
      </select>
 
 
-     <label>CAJERO: </label>
+     <label class="fs-6">Cajero: </label>
      <div style="display: flex;">
-         <input style="width: 80px !important;" readonly name="CAJERO" class="form-control" type="text" value="{{$CAJERO}}" />
-         <input readonly class="form-control" type="text" value="{{$CAJERO_NOM}}" />
+         <input style="width: 80px !important;" readonly name="CAJERO" class="form-control fs-6 p-1" type="text" value="{{$CAJERO}}" />
+         <input readonly class="form-control fs-6 p-1" type="text" value="{{$CAJERO_NOM}}" />
      </div>
 
-     <label>EFECTIVO INICIAL: </label>
-     <input {{ isset($SESION)? 'disabled' : '' }} value="{{$EFECTIVO_INI}}" onblur="if(this.value=='')this.value='0';" onfocus="if(this.value=='0')this.value='';" name="EFECTIVO_INI" class="form-control entero" type="text" />
+     <label class="fs-6">Efectivo inicial: </label>
+     <input <?= isset($SESION)? 'disabled' : ''?> value="{{$EFECTIVO_INI}}" onblur="if(this.value=='')this.value='0';" onfocus="if(this.value=='0')this.value='';" name="EFECTIVO_INI" class="form-control entero fs-6 p-1" type="text" />
 
  </div>
 
@@ -86,6 +86,7 @@
  <div class="col-12 d-flex justify-content-center">
      @if( isset($SESION) )
      <a class="btn btn-danger mt-2 " href="<?= url('sesiones/cerrar') ?>">CERRAR</a>
+     <a class="btn btn-success mt-2 " href="<?= url('modulo-caja') ?>">CONTINUAR</a>
      @else
      <button type="submit" class="btn btn-success mt-2 ">ABRIR</button>
      @endif
@@ -168,16 +169,7 @@
 
 
 
-     function show_loader() {
-         let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
-         $("#loaderplace").html(loader);
-     }
-
-     function hide_loader() {
-         $("#loaderplace").html("");
-     }
-
-
+   
 
 
      window.onload = function() {

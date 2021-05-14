@@ -40,8 +40,9 @@
 
 
 
-<div class="container col-12 col-md-5">
-    <h3 class="text-center mt-2" >Parámetros</h3>
+<div class="container col-12 col-md-5 bg-dark pb-5">
+
+    <h3 class="text-center text-light mt-2" >Parámetros</h3>
 
 
 
@@ -54,20 +55,5 @@
  
 </div>
 
-
-<script>
-    function show_loader() {
-        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
-        $("#loaderplace").html(loader);
-    }
-
-    function hide_loader() {
-        $("#loaderplace").html("");
-    }
-
-
-
-
-     
-</script>
+ 
 @endsection

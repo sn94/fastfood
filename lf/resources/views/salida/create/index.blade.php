@@ -5,8 +5,10 @@
 
 @php
 use App\Models\Sucursal;
+
 //FUENTES
 $SUCURSALES= Sucursal::get();
+
 $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 @endphp
 
@@ -15,26 +17,25 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 
 @include("salida.estilos")
 @include("salida.routes")
+@include("buscador.Buscador")
 
-<div class="container-fluid col-12 col-md-12 bg-dark text-light mt-2">
-<h2 class="text-center mt-2" >Salidas de productos y materia prima</h2>
+<div class="container-fluid col-12 col-sm-11 col-md-8 col-lg-7 bg-dark text-light mt-2 pb-5 px-2">
 
-<div id="loaderplace"></div>
+    <h2 class="text-center mt-2">Salidas de productos y materia prima</h2>
 
-        <form id="SALIDAFORM" action="<?= url("salida") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardarSalida(event)">
+    <div id="loaderplace"></div>
 
-            <div class="row">
-
-                <div class="col-12 col-md-6 bg-dark">
-                    @include("salida.form.hidden")
-                    @include("salida.form.header")
-                </div>
-                <div class="col-12   col-md-6 bg-dark pt-2">
-                    @include("salida.form.grill")
-                </div>
+    <form id="SALIDAFORM" action="<?= url("salida") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarSalida(event)">
+        <div class="row ">
+            <div class="col-12 col-md-2  mb-1">
+                <button type="submit" class="btn btn-danger"> GUARDAR</button>
             </div>
-        </form>
- 
+        </div>
+
+        @include("salida.create.header")
+        @include("salida.create.grill")
+    </form>
+
 </div>
 
 
@@ -47,14 +48,35 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 
 
 
+    function buscarItem() {
+        let TIPOITEM = $("select[name=TIPO_SALIDA]").val();
+        Buscador.url = "<?= url("stock/buscar") ?>/" + TIPOITEM;
+        Buscador.htmlFormForParams = `<form> <input name='TIPO' type='hidden' value='${TIPOITEM}'> </form>`;
 
+        Buscador.htmlFormFieldNames = ['TIPO'];
+        Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
+        Buscador.columnLabels = ['ID', 'DESCRIPCION'];
+        Buscador.callback = function(respuesta) {
+           
+            const {
+                REGNRO,
+                DESCRIPCION,
+                unidad_medida
+            } = respuesta;
+            window.buscador_items_modelo = respuesta;
+            $("#SALIDA-ITEM-ID").val(REGNRO);
+            $("#SALIDA-ITEM-DESC").val(DESCRIPCION);
+            $("#SALIDA-MEDIDA").text(unidad_medida.UNIDAD);
+        };
+        Buscador.render();
+    }
 
 
     async function guardarSalida(ev) {
         //config_.processData= false; config_.contentType= false;
-         ev.preventDefault();
-         
-        
+        ev.preventDefault();
+
+
         formValidator.init(ev.target);
         if ($("#SALIDA-DETALLE").children().length == 0) {
             alert("Cargue al menos un item");
@@ -94,19 +116,6 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 
 
 
-    function show_loader() {
-        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif ") ?>'   />";
-        $("#loaderplace").html(loader);
-    }
-
-    function hide_loader() {
-        $("#loaderplace").html("");
-    }
-
-
-
-
-
     async function restaurar_modelo_salida() {
         //item cantidad tipo medida
         let row = document.querySelectorAll("#SALIDA-TABLE tbody tr");
@@ -115,12 +124,12 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
         let modelo = Array.prototype.map.call(row, function(domtr) {
 
             let ITEM = domtr.id;
-            let CODIGO=  domtr.children[0].textContent;
+            let CODIGO = domtr.children[0].textContent;
             let CANTIDAD = domtr.children[3].textContent;
             let MEDIDA = domtr.children[2].textContent;
             let TIPO = domtr.className.split("-")[0];
             return {
-                CODIGO:  CODIGO,
+                CODIGO: CODIGO,
                 ITEM: ITEM,
                 CANTIDAD: CANTIDAD,
                 MEDIDA: MEDIDA,
@@ -135,8 +144,8 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
     window.onload = async function() {
         //   autocompletado_items();
         restaurar_modelo_salida();
-        formatoNumerico.formatearCamposNumericosDecimales( "SALIDAFORM");
-  
+        formatoNumerico.formatearCamposNumericosDecimales("SALIDAFORM");
+
 
     };
 </script>

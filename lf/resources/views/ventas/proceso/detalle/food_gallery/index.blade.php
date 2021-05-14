@@ -13,7 +13,7 @@
 
 
 .nav-tabs {
-  background-color: #c60f0f !important;
+  background-color:  var(--color-3) !important;
 }
 
    .nav-tabs .nav-item.show .nav-link,
@@ -24,7 +24,7 @@
 
    .nav-tabs .nav-link {
      color: white !important;
-     background-color: #c60f0f !important;
+     background-color:  var(--color-3) !important;
      border: 1px solid #f90000c7 !important;
    }
 

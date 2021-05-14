@@ -33,7 +33,7 @@ Stock
 
 
 <input type="hidden" id="GRILL-URL" value="{{url('stock')}}">
-<input type="hidden" id="GRILL-URL-CUSTOM" value="{{url('stock/buscar')}}">
+<input type="hidden" id="GRILL-URL-CUSTOM" value="{{url('stock/buscar').$QUERY_FLAG}}">
 
 
 
@@ -45,7 +45,7 @@ Stock
 
 <div id="loaderplace"></div>
 
-<div class="container col-12 col-md-12 col-lg-9 bg-dark text-light">
+<div class="container col-12 col-md-12 col-lg-9 bg-dark text-light pb-5">
 
     <h2 class="text-center mt-2"> Fichas de Stock</h2>
 
@@ -86,16 +86,7 @@ Stock
 </div>
 
 
-<script>
-    function show_loader() {
-        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
-        $("#loaderplace").html(loader);
-    }
-
-    function hide_loader() {
-        $("#loaderplace").html("");
-    }
-
+<script> 
 
 
 

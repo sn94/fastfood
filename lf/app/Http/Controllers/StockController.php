@@ -302,7 +302,8 @@ class StockController extends Controller
         $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
         $TIPO_PRODUCTO =   request()->has("TIPO_STOCK") ? request()->input("TIPO_STOCK") :  ""; //TIPO DE PRODUCTO
 
-        $loMasPedido = Nota_pedido_detalles::join("nota_pedido_matriz",  "nota_pedido_matriz.REGNRO", "=", "nota_pedido_detalles.NPEDIDO_ID")
+        $loMasPedido = Nota_pedido_detalles::
+        join("nota_pedido_matriz",  "nota_pedido_matriz.REGNRO", "=", "nota_pedido_detalles.NPEDIDO_ID")
             ->join("stock", "stock.REGNRO", "=", "nota_pedido_detalles.ITEM")
             ->join("sucursal", "sucursal.REGNRO", "=", "nota_pedido_matriz.SUCURSAL");
         //Solo filtrar por sucursal, si este parametro no se definio
@@ -329,8 +330,9 @@ class StockController extends Controller
 
         $loMasPedido = $loMasPedido->select(
             "sucursal.REGNRO AS SUCURSAL_ID",
+
             DB::raw(" IF(sucursal.MATRIZ='S', CONCAT( sucursal.DESCRIPCION, ' (MATRIZ)') ,  sucursal.DESCRIPCION )   AS SUCURSAL_NOMBRE"),
-            "stock.DESCRIPCION",
+            "stock.DESCRIPCION", "stock.TIPO",
             DB::raw("count(nota_pedido_detalles.REGNRO) AS NUMERO_PEDIDOS")
         );
 
@@ -550,6 +552,7 @@ class StockController extends Controller
     private function create_recipe(StockRequest  $request, $stock_id)
     {
         Receta::where("STOCK_ID", $stock_id)->delete();
+        
         if (!$request->has(["MPRIMA_ID", "CANTIDAD", "MEDIDA"]))  return;
 
         $mp_id = $request->input("MPRIMA_ID");
@@ -560,11 +563,12 @@ class StockController extends Controller
 
         for ($m = 0; $m <  sizeof($mp_id); $m++) {
             $Receta_det =  new Receta();
+            $cantidad_limpia= preg_replace("/(,)+/",  ".",  $cantidad[$m] );
             $Receta_det->fill(
                 [
                     'STOCK_ID' => $stock_id,
                     'MPRIMA_ID' => $mp_id[$m],
-                    'CANTIDAD' => $cantidad[$m],
+                    'CANTIDAD' => $cantidad_limpia,
                     'MEDIDA_' =>  $medida[$m]
                 ]
             );
@@ -637,13 +641,13 @@ class StockController extends Controller
 
                 if ($this->nombre_redundante($data['DESCRIPCION']))
                     return response()->json(['err' => 'EL NOMBRE DE PRODUCTO YA EXISTE']);
-                //    var_dump(  $data ); 
+               
                 //  return;
 
                 DB::beginTransaction();
 
                 $nuevo_stock =  new Stock();
-                // var_dump($data); return;
+                
 
                 $nuevo_stock->fill($data);
                 $nuevo_stock->save();
@@ -814,7 +818,7 @@ class StockController extends Controller
 
             foreach ($sucursales as $suc) :
 
-                var_dump(['SUCURSAL' => $suc->REGNRO, 'STOCK_ID' => $stock->REGNRO]);
+               
 
                 Stock_existencias::updateOrCreate(
                     ['SUCURSAL' => $suc->REGNRO, 'STOCK_ID' => $stock->REGNRO],

@@ -6,7 +6,7 @@
         
              <label class="mt-1" for="element_7">TIPO: </label>
              @php
-             $tipos_item= [ "PE"=>"PRODUCTO ELABORADO" , "MP" => "MATERIA PRIMA", "PP"=> "PROD. VENTA", "AF"=> "MOBILIARIO Y OTROS"];
+             $tipos_item= [ "PE"=>"PRODUCTO ELABORADO" , "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "AF"=> "MOBILIARIO Y OTROS"];
              @endphp
              <select class="form-control" name="TIPO">
                  @foreach( $tipos_item as $tkey=> $tval)

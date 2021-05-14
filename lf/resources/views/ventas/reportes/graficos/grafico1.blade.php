@@ -44,11 +44,12 @@
 
          //cORTAR
          let titulo = responseData.titulo;
+         let subData=  responseData.data.slice(0, 5);
           
 
-         let labels = responseData.data.map(ar => `${ar.DESCR_CORTA}`);
+         let labels = subData.map(ar => `${ar.DESCR_CORTA}`);
 
-         let cantidades = responseData.data.map(ar => {
+         let cantidades = subData.map(ar => {
              return ar.NUMERO_VENTAS;
          });
 

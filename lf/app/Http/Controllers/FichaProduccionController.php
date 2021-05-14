@@ -118,11 +118,11 @@ class FichaProduccionController extends Controller
         if (request()->getMethod()  ==  "GET") {
 
 
-            if (is_null($PRODUCCIONID))  return view('salida.create');
+            if (is_null($PRODUCCIONID))  return view('salida.create.index');
 
             $PROD = Ficha_produccion::find($PRODUCCIONID);
             return view(
-                'salida.create',
+                'salida.create.index',
                 [
                     'PRODUCCION_ID' =>   $PRODUCCIONID,
                     'PRODUCCION_DETALLE' =>   $PROD->detalle_produccion

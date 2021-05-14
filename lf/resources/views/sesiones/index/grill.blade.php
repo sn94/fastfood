@@ -14,7 +14,7 @@
 
 
 <?php
-
+ 
 $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
 ?>
 <table class="table table-hover table-striped text-dark bg-warning">
@@ -39,17 +39,15 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
 
     <tbody>
 
-        @foreach( $SESIONES as $sesion)
+    @foreach( $SESIONES as $sesion)
         <tr>
             <td>
-                @if( $sesion->MOSTRAR_CERRAR == 'S')
+                @if(  $sesion->CAJERO == session("ID")  ||  (  session("NIVEL") == "SUPER"  )  )
                     @if( $sesion->ESTADO == "A")
                     <a href="{{url('sesiones/cerrar/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">CERRAR</a>
                     @else
                     <a onclick="descargarArqueo(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">ARQUEO</a>
                     @endif
-                @else
-                <a onclick="descargarArqueo(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="btn btn-sm btn-danger">ARQUEO</a>
                 @endif
             </td>
             <td>{{$sesion->SUCURSAL}}</td>
@@ -58,7 +56,7 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
             <td>{{is_null( $sesion->FECHA_APE) ? "-"  :  $sesion->FECHA_APE->format('d/m/Y')}}</td>
             <td>{{ is_null($sesion->FECHA_CIE) ?  "-" : $sesion->FECHA_CIE->format('d/m/Y')}}</td>
             <td>{{$sesion->CAJA}}</td>
-            <td>{{$sesion->cajero->NOMBRES}}</td>
+            <td>{{ is_null($sesion->cajero ) ? '***' : $sesion->cajero->NOMBRES}} </td>
             <td class="text-end">{{$sesion->EFECTIVO_INI}}</td>
             <td class="text-end">{{$sesion->TOTAL_EFE}}</td>
             <td class="text-end">{{$sesion->TOTAL_TAR}}</td>

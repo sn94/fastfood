@@ -1,7 +1,7 @@
 <input type="hidden" id="buscador_stock_url" value="{{url('stock/buscar')}}">
 
 @php
-$tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PROD. VENTA", "PE"=>"PRODUCTO ELABORADO" , "AF"=> "MOBILIARIO Y OTROS"];
+$tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "PE"=>"PRODUCTO ELABORADO" , "AF"=> "MOBILIARIO Y OTROS"];
  
 @endphp
 
@@ -176,7 +176,7 @@ $tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PROD. VENTA", "PE"=>"PRODUCTO EL
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             'formato': 'json'
         };
-        /**Si se busca un producto, filtrar solo los de tipo PROD. VENTA */
+        /**Si se busca un producto, filtrar solo los de tipo PARA VENTA */
         let body_req = "buscado=" + termino + "&tipo=" + tipo_Stock;
         // if( modoBusqueda == "P")   body_req= body_req+"&tipo=P";
         /**Sending request */

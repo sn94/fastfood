@@ -1,3 +1,12 @@
+<?php
+
+$MODULO_FLAG =    isset($_GET['m']) ? $_GET['m'] :  "";
+ 
+$QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  ""; 
+
+
+?>
+
 @if( session("NIVEL") == "SUPER"  ||  session("NIVEL") == "GOD" )
 <style>
     table thead tr th:nth-child(1),
@@ -26,8 +35,11 @@
 
 <table class="table bg-warning bg-gradient    text-dark">
 
-    <thead  >
+    <thead>
         <tr>
+ 
+
+
             @if( session("NIVEL") == "SUPER" ||  session("NIVEL") == "GOD" )
             <th></th>
             <th></th>
@@ -41,6 +53,11 @@
             <th class="text-end"><a href="#" onclick="ordenarPventa('ASC')"> <img src="<?= url('assets/icons/up_icon.png') ?>" alt="Asc"></a> VENTA
                 <a href="#" onclick="ordenarPventa('DESC')"><img src="<?= url('assets/icons/down_icon.png') ?>"></a>
             </th>
+
+            @if( $MODULO_FLAG == "c")
+            <th class="text-end">PRECIO MITAD</th>
+            <th class="text-center">VENTA MITAD</th>
+            @endif
         </tr>
     </thead>
 

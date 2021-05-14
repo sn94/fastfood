@@ -1,13 +1,12 @@
  @extends("templates.app")
+
+ <input type="hidden"  id="fast-food-identification-for-module-context"  value="SUPER">
+ 
+ 
  @section("menu")
-
- 
  @include("templates.admin.menu")
- 
- 
-
- 
  @endsection
+
  @section("content")
  @yield("content")
  @endsection

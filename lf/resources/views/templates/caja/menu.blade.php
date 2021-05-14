@@ -6,9 +6,9 @@
 $sesiones_links = [];
 //Existe una sesion de usuario
 if (session()->has("SESION"))
-  $sesiones_links = [["label" => "CERRAR", "link" => url("sesiones/cerrar")],  ["label" => "MIS SESIONES", "link" => url("sesiones/list?m=c")]];
+  $sesiones_links = [["label" => "CERRAR", "link" => url("sesiones/cerrar")],  ["label" => "MIS SESIONES", "link" => url("sesiones?m=c")]];
 else
-  $sesiones_links = [["label" => "CREAR", "link" => url("sesiones/create")],  ["label" => "MIS SESIONES", "link" => url("sesiones/list?m=c")]]; //mandar a crear una
+  $sesiones_links = [["label" => "CREAR", "link" => url("sesiones/create")],  ["label" => "MIS SESIONES", "link" => url("sesiones?m=c")]]; //mandar a crear una
 
 
 $cajaOptionsMenu = [

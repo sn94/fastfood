@@ -1,5 +1,10 @@
  <?php
+ 
 
+$MODULO_FLAG =    isset($_GET['m']) ? $_GET['m'] :  "";
+$QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  ""; 
+
+ 
 use App\Helpers\Utilidades;
 
 ?>
@@ -28,7 +33,15 @@ if( $STOCK_ACTUAL <= 0): $ESTADO_STOCK="table-danger" ; $MENSAJE_STOCK="(Sin sto
 
 
 
-    <td class="text-end"> {{ $STOCK_ACTUAL}}  {{$prov->unidad_medida->DESCRIPCION}} </td>
+    <td class="text-end"> {{ $STOCK_ACTUAL}} 
+    @if($MODULO_FLAG !=  "c")
+     {{$prov->unidad_medida->DESCRIPCION}}
+     @endif
+      </td>
     <td class="text-end">{{ Utilidades::number_f( $prov->PVENTA) }}</td>
+    @if( $MODULO_FLAG==  "c")
+    <td class="text-end">{{ Utilidades::number_f( $prov->PVENTA_MITAD) }}</td>
+    <td class="text-center">  {{$prov->VENDIDOXMITAD=="S" ? "SI" : "NO"}} </td>
+    @endif
 
     </tr>

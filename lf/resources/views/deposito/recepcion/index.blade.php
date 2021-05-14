@@ -152,17 +152,7 @@
     }
 
 
-
-    function show_loader() {
-        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif ") ?>'   />";
-        $("#loaderplace").html(loader);
-    }
-
-    function hide_loader() {
-        $("#loaderplace").html("");
-    }
-
-
+ 
 
     //Autocomplete
     async function autocompletado_proveedores() {

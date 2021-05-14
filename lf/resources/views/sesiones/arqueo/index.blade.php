@@ -38,7 +38,7 @@ Arqueo de caja {{date('d-m-Y')}}
         
         $("#BOTON-GUARDAR").prop("disabled", true);
         show_loader();
-        let req = await fetch(  "<?=url("sesiones/cerrar")?>" , {
+        let req = await fetch(  "<?=url("sesiones/cerrar/".$SESION->REGNRO)?>" , {
             method: "POST",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -54,7 +54,7 @@ Arqueo de caja {{date('d-m-Y')}}
             $("#BOTON-GUARDAR").addClass("d-none");
 
             //Index sesiones limitada a listar solo las propias
-            window.location = "<?= url("sesiones/list") ?>";
+            window.location = "<?= url("sesiones?m=c") ?>";
 
         } else {
             $("#BOTON-GUARDAR").removeClass("d-none");
@@ -65,17 +65,7 @@ Arqueo de caja {{date('d-m-Y')}}
     }
 
 
-
-
-    function show_loader() {
-        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
-        $("#loaderplace").html(loader);
-    }
-
-    function hide_loader() {
-        $("#loaderplace").html("");
-    }
-
+ 
 
     // Imprimir informe de arqueo
     function imprimirArqueo() {

@@ -21,7 +21,7 @@ endif;
 @if( ! request()->ajax())
   @extends( $templateName)
   @section("content")
-  <div class="container col-12 col-md-12 pb-1 bg-dark">
+  <div class="container col-12 col-md-12 pb-1 mt-1">
     @include("stock.create.ajax")
   </div>
 @endsection

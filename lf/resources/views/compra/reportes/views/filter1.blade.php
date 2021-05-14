@@ -62,7 +62,7 @@ table, h4{
             <td>{{$ven->COMPRA_ID}} </td>
             <td>{{$ven->FECHA->format('d/m/Y')}}</td>
             <td> {{$ven->DESCRIPCION}}</td>
-            <td>{{ $ven->TIPO_PRODUCTO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO_PRODUCTO == "PE" ? "ELABORADO"  :  ( $ven->TIPO_PRODUCTO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO")   )    }}</td>
+            <td>{{ $ven->TIPO_PRODUCTO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO_PRODUCTO == "PE" ? "ELABORADO"  :  ( $ven->TIPO_PRODUCTO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO Y OTROS")   )    }}</td>
             <td class="text-end fw-bold">{{ $ven->PVENTA == "" ? "****" :  $ven->PVENTA}}</td>
             <td class="text-end fw-bold">{{ $ven->P_UNITARIO}}</td>
 

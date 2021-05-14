@@ -228,7 +228,7 @@
 
         //**** */
 //Parametros de formulario
-        let tipos_de_item= { "MP" : "MATERIA PRIMA", "PP": "PROD. VENTA", "PE":"PRODUCTO ELABORADO" , "AF": "MOBILIARIO Y OTROS"};
+        let tipos_de_item= { "MP" : "MATERIA PRIMA", "PP": "PARA VENTA", "PE":"PRODUCTO ELABORADO" , "AF": "MOBILIARIO Y OTROS"};
         let htmlParams= Object.entries(tipos_de_item).map( ([key, val])=>{
             return `<option value='${key}'>${val}</option>`;
         });

@@ -36,7 +36,7 @@ Compras
 
 
 
-<div class="container-fluid  col-12 col-md-12 col-lg-12 col-xl-10 bg-dark  mt-lg-2 mt-md-0 text-light ">
+<div class="container-fluid  col-12 col-md-12 col-lg-12 col-xl-10 bg-dark  mt-lg-2 mt-md-0 text-light pb-5 ">
 
   <h3 class="text-center">Compras</h3>
   <div class="container-fluid mb-1">
@@ -101,16 +101,6 @@ Compras
 
 </div>
 <script>
-  function show_loader() {
-    let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
-    $("#loaderplace").html(loader);
-  }
-
-  function hide_loader() {
-    $("#loaderplace").html("");
-  }
-
-
 
   async function buscarCompras(FILTRO) {
 

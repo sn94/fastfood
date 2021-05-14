@@ -12,14 +12,14 @@
 </style>
 
 
-@include("salida.form.grill_header")
+@include("salida.create.grill_header")
 
-<div class="row bg-dark  pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
-    <div class="col-12 col-md-12 p-0">
+<div class="row ">
+    <div class="col-12 col-md-12 ">
         @if( isset($PRODUCCION_DETALLE) )
         Productos, materia prima y otros; solicitados en la ficha de producción
         @endif
-        <table id="SALIDA-TABLE" class="table table-striped table-secondary text-dark">
+        <table id="SALIDA-TABLE" class="table table-striped table-hover table-secondary text-dark">
 
             <thead>
                 <tr>

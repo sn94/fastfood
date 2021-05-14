@@ -10,15 +10,17 @@ class FastFoodModal extends Component
 
     public $id = "";
     public $title = ""; 
+    public $size= "";
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(  $id, $title)
+    public function __construct(  $id, $title, $size="")
     {
        $this->id =  $id;
         $this->title = $title; 
+        $this->size=  $size;
     }
 
     /**

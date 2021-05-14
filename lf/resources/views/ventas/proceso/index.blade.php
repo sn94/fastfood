@@ -17,55 +17,55 @@ Nueva venta
 
 
 <style>
-body{
-    background-color: black !important;
-}
+    body {
+        background-color: var(--color-6) !important;
+    }
 </style>
 
- 
+
 
 <div id="loaderplace"></div>
 
 
-<div class="container-fluid p-0 p-md-2" style="background-color: black !important;">
-<form class="d-none" action="{{url('ventas')}}" method="POST" id="VENTA-FORM">
+<div class="container-fluid p-0 p-md-2"  >
+    <form class="d-none" action="{{url('ventas')}}" method="POST" id="VENTA-FORM">
 
 
 
-    @include("ventas.proceso.modales.formas_pago")
+        @include("ventas.proceso.modales.formas_pago")
 
-    @csrf
-    <input type="hidden" name="FECHA" value="{{date('Y-m-d')}}">
-    <input type="hidden" name="SUCURSAL" value="{{session('SUCURSAL')}}">
-    <input type="hidden" name="CAJERO" value="{{session('ID')}}">
-    <!--HEADER -->
+        @csrf
+        <input type="hidden" name="FECHA" value="{{date('Y-m-d')}}">
+        <input type="hidden" name="SUCURSAL" value="{{session('SUCURSAL')}}">
+        <input type="hidden" name="CAJERO" value="{{session('ID')}}">
+        <!--HEADER -->
 
 
-    <!--  CARGA DE TABLA, SELECCION DE MNU -->
-    <div class="row   m-0 g-0   p-0">
+        <!--  CARGA DE TABLA, SELECCION DE MNU -->
+        <div class="row   m-0 g-0   p-0">
 
-        <div class="col-12 col-md-6  col-lg-6 p-0 pt-1 m-0 ">
-            @include("ventas.proceso.detalle.food_gallery.index" )
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0 "    style="background-color: black !important;" >
-            <div class="col-12 pl-0 pr-0 ">
-
-                @include("ventas.proceso.header" )
-                @include("ventas.proceso.botons")
-
+            <div class="col-12 col-md-6  col-lg-6 p-0 pt-1 m-0 ">
+                @include("ventas.proceso.detalle.food_gallery.index" )
             </div>
-            <div class="col-12  pl-0 pr-0 bg-light  ">
-                <div id="VENTA_PROCESO_TOTAL" class=" d-flex flex-row"   >
-                    <label class="MONTO fs-2 w-100">TOTAL A PAGAR:</label>
-                    <input readonly value="0" type="text" id="TOTAL-VENTA" name="TOTAL" class="entero MONTO form-control fs-2 p-0" />
+
+            <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0 "  >
+                <div class="col-12 pl-0 pr-0 ">
+
+                    @include("ventas.proceso.header" )
+                    @include("ventas.proceso.botons")
+
                 </div>
-                @include("ventas.proceso.detalle.grill")
+                <div class="col-12  pl-0 pr-0 bg-light  ">
+                    <div id="VENTA_PROCESO_TOTAL" class=" d-flex flex-row">
+                        <label class="MONTO fs-2 w-100">TOTAL A PAGAR:</label>
+                        <input readonly value="0" type="text" id="TOTAL-VENTA" name="TOTAL" class="entero MONTO form-control fs-2 p-0" />
+                    </div>
+                    @include("ventas.proceso.detalle.grill")
+                </div>
             </div>
         </div>
-    </div>
 
-</form>
+    </form>
 </div>
 
 
@@ -84,22 +84,22 @@ body{
 
 
 
-    function show_loader(MENSAJE_ADICIONAL) {
+
+    function show_ini_loader(MENSAJE_ADICIONAL) {
 
         let mensaje_adicional = MENSAJE_ADICIONAL == undefined ? "" :
-            `<div  style='margin: auto;width: 50%; display: flex;flex-direction: column;justify-content: center;'>
-            <h3 style='text-align: center;font-family: Arial;color: yellow;' >${MENSAJE_ADICIONAL}</h3>
-            <img style='width: 25%;align-self: center;'  src='<?= url("assets/images/loader.gif") ?>'   />
-            </div>`;
-
-        let loader = MENSAJE_ADICIONAL == undefined ? "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />" : mensaje_adicional;
-        $("#loaderplace").html(loader);
+            `<div id='ini-loader' class="rounded-circle w-50  h-50  d-flex flex-column justify-content-center mx-auto mt-2 pt-5 pb-5"   '>
+    <h3 style='text-align: center;color: #b61909;' >${MENSAJE_ADICIONAL}</h3>
+    <img style='width: 100px;align-self: center;'  src='<?= url("assets/images/loader.gif") ?>'   />
+    </div>`;
+        $("body").append(mensaje_adicional);
     }
 
-    function hide_loader() {
-        $("#loaderplace").html("");
+    function hide_ini_loader() {
+        $("#ini-loader").remove();
     }
 
+    
 
 
     function initFormVenta() {
@@ -215,24 +215,16 @@ body{
     }
 
 
+    show_ini_loader("DESCARGANDO DATOS");
+    
+        window.onload = function() {
 
-
-
-
-
-
-    show_loader("DESCARGANDO DATOS");
-
-    window.onload = function() {
-
-        hide_loader();
-        initFormVenta(); //setear formato numerico para campos
-        // evento para modal de resumen de pago
-        //descargar datos de PRODUCTOS
-        descargarProductos();
-
-      
-    }
+           hide_ini_loader();
+            initFormVenta(); //setear formato numerico para campos
+            // evento para modal de resumen de pago
+            //descargar datos de PRODUCTOS
+            descargarProductos();
+        }
 </script>
 
 

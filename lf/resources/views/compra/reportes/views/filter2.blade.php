@@ -92,7 +92,7 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
         @php
         $codigo= $ven->CODIGO;
         $barcode= $ven->BARCODE;
-        $tipoStock= $ven->TIPO_PRODUCTO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO_PRODUCTO == "PE" ? "ELABORADO" : ( $ven->TIPO_PRODUCTO == "PP" ? "PARA VENTA" : "MOBILIARIO") ) ;
+        $tipoStock= $ven->TIPO_PRODUCTO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO_PRODUCTO == "PE" ? "ELABORADO" : ( $ven->TIPO_PRODUCTO == "PP" ? "PARA VENTA" : "MOBILIARIO Y OTROS") ) ;
 
         @endphp
         <tr>

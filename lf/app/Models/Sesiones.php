@@ -39,11 +39,7 @@ class Sesiones extends Model
         return  $CORRELATIVO_ID;
     }
 
-    public function FECHA_APE()
-    {
-        $millisec =   date("Y-m-d",  strtotime($this->FECHA_APE));
-        return  $millisec;
-    }
+   
 
     public function HORA_APE()
     {

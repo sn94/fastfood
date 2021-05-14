@@ -117,7 +117,7 @@ class ClientesController extends Controller
     {
         if (request()->getMethod()  ==  "GET") {
             $cli =  Clientes::find($id);
-            return view('clientes.update',  ['cliente' =>  $cli]);
+            return view('clientes.create',  ['cliente' =>  $cli]);
         } else {
 
 

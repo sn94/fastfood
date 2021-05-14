@@ -47,10 +47,10 @@ $SESIONES=  isset($datalist) ? $datalist :  $SESIONES;
         <tr> 
         <td>{{$sesion->SUCURSAL}}</td>
             <td>{{$sesion->REGNRO}}</td>
-            <td>{{$sesion->FECHA_APE->format('d/m/Y')}}</td>
-            <td>{{$sesion->FECHA_CIE->format('d/m/Y')}}</td>
+            <td>{{ is_null($sesion->FECHA_APE) ? '***': $sesion->FECHA_APE->format('d/m/Y')}}</td>
+            <td>{{ is_null($sesion->FECHA_CIE) ? '***': $sesion->FECHA_CIE->format('d/m/Y')}}</td>
             <td>{{$sesion->CAJA}}</td>
-            <td>{{$sesion->cajero->NOMBRES}}</td>
+            <td>{{ is_null( $sesion->cajero) ?  '***' :  $sesion->cajero->NOMBRES}}</td>
             <td class="text-end">{{$sesion->EFECTIVO_INI}}</td>
             <td class="text-end">{{$sesion->TOTAL_EFE}}</td>
             <td class="text-end" >{{$sesion->TOTAL_TAR}}</td>

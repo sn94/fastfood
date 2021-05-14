@@ -1,2 +1,5 @@
 pizza-gh-pages/*
 lf/vendor/*
+node_modules/*
+assets_dev/*
+dist/*

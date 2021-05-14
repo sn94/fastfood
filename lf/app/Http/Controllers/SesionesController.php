@@ -20,35 +20,21 @@ class SesionesController extends Controller
      */
     public function index()
     {
+         
+        //Modulo de origen
+        $MODULO_FLAG =    isset($_GET['m']) ? $_GET['m'] :  "";
 
-        // Determinar como filtrar las sesiones segun el nivel de usuario
-        // Listar sesiones
-        //Determinar formato solicitado de datos 
-        //Retornar datos
-        //   Si (formato es HTML  y REQUEST NO es AJAX)
-        //      Determinar plantilla Html a usar
-        //      Si (NivelUsuario es SUPERVISOR) usar plantilla templates.admin.index
-        //      Sino usar plantilla templates.caja.index
+       
 
+        $SUCURSAL =   request()->has("SUCURSAL") ?  request()->input("SUCURSAL") :   session("SUCURSAL");
+        $USERID =  request()->has("USUARIO") ?  request()->input("USUARIO") : ($MODULO_FLAG == "c" ? session("ID") : null);
+        $ESTADO =   request()->has("ESTADO") ?  request()->input("ESTADO") :  "A"; //Abiertas, mostradas por defecto
 
-        $listadoPorUsuarioFlag = FALSE;
-
-        //Si se solicita esta ruta, mostrar solo sesiones propias
-        if (preg_match("/sesiones\/list/", request()->path()))  $listadoPorUsuarioFlag = TRUE;
-
-        $SUCURSAL = session("SUCURSAL");
-        $USERID =   session("ID");
-        $ESTADO = "A"; //Abiertas, mostradas por defecto
-
-        if (request()->isMethod("POST")) {
-            $SUCURSAL =   request()->has("SUCURSAL") ?  request()->input("SUCURSAL") :  $SUCURSAL;
-            $ESTADO =   request()->has("ESTADO") ?  request()->input("ESTADO") :  $ESTADO;
-        }
         $sesiones = Sesiones::where("SUCURSAL",  $SUCURSAL)
             ->where("ESTADO", $ESTADO);
 
         //Filtrar por Id de usuario
-        if ($listadoPorUsuarioFlag)
+        if (!is_null($USERID))
             $sesiones =  $sesiones->where("CAJERO", $USERID);
 
         $sesiones =  $sesiones->select(
@@ -56,10 +42,11 @@ class SesionesController extends Controller
             DB::raw("FORMAT(EFECTIVO_INI,0,'de_DE') AS EFECTIVO_INI"),
             DB::raw("FORMAT(TOTAL_EFE,0,'de_DE') AS TOTAL_EFE"),
             DB::raw("FORMAT(TOTAL_TAR,0,'de_DE') AS TOTAL_TAR"),
-            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIRO"),
-            DB::raw("IF( CAJERO = $USERID , 'S', 'N') AS MOSTRAR_CERRAR ")
-        )
-            ->orderBy("FECHA_APE", "DESC");
+            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIRO")
+           
+        );
+         
+        $sesiones =   $sesiones->orderBy("REGNRO", "DESC");
         $formato =  request()->header("formato");
 
         $formato =  is_null($formato) ?  "html"  :   $formato;
@@ -74,13 +61,14 @@ class SesionesController extends Controller
             return $this->responsePdf("sesiones.index.simple",  $sesiones->get(), "Sesiones");
 
         if ($formato ==  "html") {
-            $params =    ['SESIONES' => $sesiones->paginate(20),  "INDIVIDUAL" => $listadoPorUsuarioFlag];
+
+            $params =    ['SESIONES' => $sesiones->paginate(20), 'SUCURSAL' => $SUCURSAL, 'USUARIO' => $USERID, 'ESTADO' => $ESTADO];
 
             if (request()->ajax())
                 return view("sesiones.index.grill",  $params);
             else {
                 //Plantilla
-                $nombrePlantilla= session("NIVEL") == "SUPER" ? "templates.admin.index" : "templates.caja.index";
+                $nombrePlantilla = session("NIVEL") == "SUPER" ? "templates.admin.index" : "templates.caja.index";
                 $params['PLANTILLA'] = $nombrePlantilla;
                 return view("sesiones.index.index", $params);
             }
@@ -90,9 +78,10 @@ class SesionesController extends Controller
 
 
 
-    public function tieneSesionAbierta()
+    public function tieneSesionAbierta( $SESIONID= NULL)
     {
-        $sesionAbierta =  Sesiones::where("CAJERO", session("ID"))
+        $ses_id= is_null(  $SESIONID) ? session("ID"):  $SESIONID;
+        $sesionAbierta =  Sesiones::where("CAJERO",   $ses_id)
             ->where("SUCURSAL", session("SUCURSAL"))
             ->where("ESTADO", "A")
             ->first();
@@ -152,6 +141,16 @@ class SesionesController extends Controller
 
     public function  totalesArqueo($SESION,  $ARRAY_RETURN = FALSE)
     {
+
+        //Definir formato de retorno 
+        $formato =  request()->header("formato");
+        $formato =  is_null($formato) ?  "html"  :   $formato;
+
+
+
+        if ($formato ==   "json")
+            return  response()->json(Sesiones::where("CAJERO", session("ID"))->get());
+
         //Obtener datos de la sesion 
         $sesion =  Sesiones::find($SESION);
         //Todos los ticket expedidos (no anulados)
@@ -206,15 +205,10 @@ class SesionesController extends Controller
             return $parametros;
         else {
 
-            $formato =  request()->header("formato");
-
-            $formato =  is_null($formato) ?  "html"  :   $formato;
-
-            if ($formato ==   "json")
-                return  response()->json($parametros);
-
             if ($formato ==   "pdf")
                 return $this->responsePdf("sesiones.arqueo.simple", $parametros, "INFORME DE ARQUEO");
+            if ($formato ==  "html")
+                return view("sesiones.arqueo.form", $parametros);
         }
     }
 
@@ -225,17 +219,15 @@ class SesionesController extends Controller
     {
         /*  if( is_null($this->esMiSesion($SESIONID) )   )
         return response()->json(['err' =>  ""]);*/
-
-        if (is_null($this->tieneSesionAbierta()))
-            return redirect("sesiones/create");
-
-
-
-
+/*
+        
+        if (is_null($this->tieneSesionAbierta( $SESIONID)))
+            return redirect("sesiones/create");*/
         //Obtener datos de la sesion 
-        $sesion =  Sesiones::find(session("SESION"));
+       
         $SesionId =  is_null($SESIONID) ? session("SESION")  :  $SESIONID;
-        $parametros = $this->totalesArqueo($SesionId, TRUE);
+        $sesion =  Sesiones::find( $SesionId);
+        $parametros =  $this->totalesArqueo($SesionId, TRUE);
 
         if (request()->getMethod() == "GET") {
             return view("sesiones.arqueo.index", $parametros);

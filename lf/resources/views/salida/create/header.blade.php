@@ -1,4 +1,11 @@
-<div class="row bg-dark   pt-1  pr-0 pl-0">
+<input type="hidden" name="REGISTRADO_POR" value="<?= session("ID") ?>">
+<input type="hidden" name="SUCURSAL" value="<?= session("SUCURSAL") ?>">
+<input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION_ID}}">
+<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+
+
+
+<div class="row   pt-1  pr-0 pl-0">
 
 
 
@@ -16,7 +23,7 @@
 
         <label style="grid-column-start: 1;" class="mt-1" for="element_7">SALIDA: </label>
         @php
-        $tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PROD. VENTA", "PE"=>"PRODUCTO ELABORADO", "AF"=> "MOBILIARIO Y OTROS" ];
+        $tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "PE"=>"PRODUCTO ELABORADO", "AF"=> "MOBILIARIO Y OTROS" ];
         @endphp
         <select class="form-control" name="TIPO_SALIDA" onchange="cambiar_tipo_salida(event);  ">
             @foreach( $tipos_item as $tkey=> $tval)

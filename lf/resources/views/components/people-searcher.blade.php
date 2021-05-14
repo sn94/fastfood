@@ -72,7 +72,7 @@ if (modelo.length > 0) {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 'formato': 'json'
             };
-            /**Si se busca un producto, filtrar solo los de tipo PROD. VENTA */
+            /**Si se busca un producto, filtrar solo los de tipo PARA VENTA */
             let body_req = "buscado=" + termino + "";
             // if( modoBusqueda == "P")   body_req= body_req+"&tipo=P";
             /**Sending request */
@@ -143,7 +143,7 @@ if (modelo.length > 0) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             'formato': 'json'
         };
-        /**Si se busca un producto, filtrar solo los de tipo PROD. VENTA */
+        /**Si se busca un producto, filtrar solo los de tipo PARA VENTA */
         let body_req = "buscado=" + termino + "";
         // if( modoBusqueda == "P")   body_req= body_req+"&tipo=P";
         /**Sending request */

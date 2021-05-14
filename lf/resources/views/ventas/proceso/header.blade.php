@@ -5,7 +5,7 @@
     #VENTA-HEADER-SESION {
         display: grid;
         grid-template-columns: 40% 10% 40% 10%;
-        background: #ab0000;
+        background: var(--color-3) !important;
         margin: 0px;
         padding-top: 2px;
         align-items: baseline !important;

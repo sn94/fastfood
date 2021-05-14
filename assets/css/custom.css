@@ -1,6 +1,8 @@
 @font-face {
     font-family: "mainfont";
-    src: url(../../assets/fonts/Marvel-Regular.ttf);
+    /*  font-family: 'Dosis', sans-serif;*/
+    src: url(../../assets/fonts/Dosis.ttf);
+    /*src: url('https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap');*/
 }
 
 html {

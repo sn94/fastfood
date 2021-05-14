@@ -25,7 +25,7 @@ class PrettyCheckbox extends Component
      *
      * @return void
      */
-    public function __construct( $name, $value, $label, $onValue, $offValue, $id="",  $callback ="")
+    public function __construct( $name, $value, $label, $onValue, $offValue, $classstyle="", $id="",  $callback ="")
     {
         $this->name= $name;
         $this->value= $value;

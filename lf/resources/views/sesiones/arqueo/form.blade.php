@@ -40,19 +40,24 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
     text-align: left;
   }
 </style>
+
+@if( ! request()->ajax())
 <h4 class="text-center text-light">Arqueo de caja</h4>
+@endif 
 
 <table id="tabla0" class="table bg-warning bg-gradient   table-bordered header">
-<tr>
+<tr >
     <th>Fecha de impresión:</th>
     <td>{{date('d/m/Y')}}</td>
+    <th>Monto inicial:</th> 
+    <td class="text-end">{{ Utilidades::number_f( $SESION->EFECTIVO_INI ) }} </td>
     <th>Ventas de la Sesión N°:</th>
     <td>{{$SESION->REGNRO}}</td>
   </tr>
  
   <tr>
     <th>Cajero/a:</th>
-    <td>{{$SESION->cajero->NOMBRES}}</td>
+    <td>{{is_null($SESION->cajero) ?  '***' :   $SESION->cajero->NOMBRES}}</td>
   </tr>
 </table>
 
@@ -71,8 +76,8 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
     <tr>
       <td>{{$ticket->REGNRO}}</td>
       <td>{{$ticket->REGNRO}}</td>
-      <td>{{$ticket->FECHA->format('d/m/Y')}}</td>
-      <td>{{$ticket->cliente->NOMBRE}}</td>
+      <td>{{ is_null($ticket->FECHA) ? '***':  $ticket->FECHA->format('d/m/Y')}}</td>
+      <td>{{ is_null($ticket->cliente) ?  '***' : $ticket->cliente->NOMBRE}}</td>
       <td class="text-end">{{ Utilidades::number_f( $ticket->TOTAL )}}</td>
     </tr>
     @endforeach
@@ -117,7 +122,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
       <td>{{$ticket->REGNRO}}</td>
       <td>{{$ticket->REGNRO}}</td>
       <td>{{$ticket->FECHA->format('d/m/Y')}}</td>
-      <td>{{$ticket->cliente->NOMBRE}}</td>
+      <td>{{ is_null($ticket->cliente) ? '***' :  $ticket->cliente->NOMBRE}}</td>
       <td class="text-end">{{ Utilidades::number_f( $ticket->TOTAL )}}</td>
     </tr>
     @endforeach

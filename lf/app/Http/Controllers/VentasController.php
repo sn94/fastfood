@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\TicketSender;
 use App\Models\Clientes;
 use App\Models\Parametros;
+use App\Models\Salidas;
+use App\Models\Salidas_detalles;
 use App\Models\Sesiones;
 use App\Models\Stock;
 use App\Models\Stock_existencias;
@@ -46,7 +48,8 @@ class VentasController extends Controller
         $CAJERO = request()->has("CAJERO") ? request()->input("CAJERO") : $CAJERO;
 
         $ventas = Ventas::where("SUCURSAL", $SUCURSAL)
-            ->where("CAJERO", $CAJERO);
+            ->where("CAJERO", $CAJERO)
+            ->where("FECHA",date("Y-m-d"));
         //Filtrar por sesion
         if (!$SESION)
             $ventas =  $ventas->where("SESION", $SESION);
@@ -207,6 +210,7 @@ class VentasController extends Controller
                 "sucursal.DESCRIPCION AS SUCURSAL_NOMBRE",
                 "stock.DESCRIPCION",
                 "stock.DESCR_CORTA",
+                "stock.TIPO",
 
                 DB::raw('count(ventas_det.REGNRO) AS NUMERO_VENTAS')
             )
@@ -261,6 +265,7 @@ class VentasController extends Controller
             "sucursal.DESCRIPCION AS SUCURSAL_NOMBRE",
             "clientes.NOMBRE AS cliente_nom",
             "ventas.REGNRO AS FACTURA",
+
             DB::raw("IF( ESTADO= 'A', 'ACTIVA', 'ANULADA') AS ESTADO"),
             "FECHA",
             DB::raw(" format(TOTAL, 0, 'de_DE') as TOTAL "),
@@ -292,46 +297,44 @@ class VentasController extends Controller
         //Cuanto se vendio, por tarjeta, giro, efectivo
         $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
 
-        $medio_pago =   Ventas::where("SUCURSAL", $sucursal)->select(  DB::raw("count(REGNRO) AS NUMERO_VENTAS"),  "FORMA")->groupBy("FORMA")
+        $medio_pago =   Ventas::where("SUCURSAL", $sucursal)->select(DB::raw("count(REGNRO) AS NUMERO_VENTAS"),  "FORMA")->groupBy("FORMA")
             ->orderByRaw(" count(REGNRO) DESC ");
 
-            $sucursalModel = Sucursal::find($sucursal);
-            $descripcionSucursal = "";
-            if ( ! is_null($sucursalModel)) 
-                $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+        $sucursalModel = Sucursal::find($sucursal);
+        $descripcionSucursal = "";
+        if (!is_null($sucursalModel))
+            $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
 
-                $titulo ="MEDIOS DE PAGO PREFERIDOS - $descripcionSucursal";
+        $titulo = "MEDIOS DE PAGO PREFERIDOS - $descripcionSucursal";
         return  ['titulo' =>  $titulo, "data" =>   $medio_pago];
     }
 
-     
 
- //La mayor recaudacion de los ultimos 6 meses
- private function filtro4()
- {
-   
-     $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
 
-     $mes=  request()->has("MES") ? request()->input("MES") : date("m");
-     $anio=  request()->has("ANIO") ? request()->input("ANIO") : date("Y");
+    //La mayor recaudacion de los ultimos 6 meses
+    private function filtro4()
+    {
 
-     $medio_pago =   Ventas::where("SUCURSAL", $sucursal)->
-    
-     select(  DB::raw("sum(TOTAL) AS TOTAL_RECAUDADO"),  DB::raw("concat(MONTH(FECHA) , concat('/',year(FECHA)) ) AS MES") )
-     ->groupByRaw("MONTH(FECHA)")
-     ->groupByRaw("YEAR(FECHA)")
-         ->orderByRaw(" MONTH(FECHA) DESC ")
-         ->orderByRaw("YEAR(FECHA) DESC")
-         ->limit(6);
+        $sucursal =   request()->has("SUCURSAL") ? request()->input("SUCURSAL") : session("SUCURSAL");
 
-         $sucursalModel = Sucursal::find($sucursal);
-         $descripcionSucursal = "";
-         if ( ! is_null($sucursalModel)) 
-             $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+        $mes =  request()->has("MES") ? request()->input("MES") : date("m");
+        $anio =  request()->has("ANIO") ? request()->input("ANIO") : date("Y");
 
-             $titulo ="RECAUDACIÓN Gs. - $descripcionSucursal";
-     return  ['titulo' =>  $titulo, "data" =>   $medio_pago];
- }
+        $medio_pago =   Ventas::where("SUCURSAL", $sucursal)->select(DB::raw("sum(TOTAL) AS TOTAL_RECAUDADO"),  DB::raw("concat(MONTH(FECHA) , concat('/',year(FECHA)) ) AS MES"))
+            ->groupByRaw("MONTH(FECHA)")
+            ->groupByRaw("YEAR(FECHA)")
+            ->orderByRaw(" MONTH(FECHA) DESC ")
+            ->orderByRaw("YEAR(FECHA) DESC")
+            ->limit(6);
+
+        $sucursalModel = Sucursal::find($sucursal);
+        $descripcionSucursal = "";
+        if (!is_null($sucursalModel))
+            $descripcionSucursal = $sucursalModel->MATRIZ == "S" ? "CASA CENTRAL" : "SUC. $sucursalModel->DESCRIPCION";
+
+        $titulo = "RECAUDACIÓN Gs. - $descripcionSucursal";
+        return  ['titulo' =>  $titulo, "data" =>   $medio_pago];
+    }
 
 
 
@@ -417,8 +420,41 @@ class VentasController extends Controller
                     $existencia->CANTIDAD =  $existencia->CANTIDAD - $r2;
                     $existencia->save(); //disminuir
 
+                    //Actualizar EXISTENCIA de ingredientes
+                    if (Parametros::first()->DESCONTAR_MP_EN_VENTA == "S") {
+                        $receta = Stock::find($r1)->receta;
+                        if (sizeof($receta)) {
+                            foreach ($receta as $item) {
+                                $salida = (new Salidas());
+                                $salida->SUCURSAL = session("SUCURSAL");
+                                $salida->FECHA =  date("Y-m-d");
+                                $salida->TIPO_SALIDA = "MP";
+                                $salida->REGISTRADO_POR = session("ID");
+                                $salida->CONCEPTO = "DISMINUCIÓN DE MATERIA PR. P/ VENTA DE PROD. ELABORADO";
+                                $salida->save();
+                                $det_salida = (new Salidas_detalles());
+                                $det_salida->SALIDA_ID =  $salida->REGNRO;
+                                $det_salida->ITEM =  $item->MPRIMA_ID;
+                                $det_salida->CANTIDAD = $item->CANTIDAD;
+                                $det_salida->TIPO = "MP";
+                                $det_salida->save();
+                                //reflejar en existencia
+                                $existencia_mp = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
+                                    ->where("STOCK_ID",  $item->MPRIMA_ID)->first();
+                                $existencia_mp->CANTIDAD =  $existencia_mp->CANTIDAD - $item->CANTIDAD;
+                                $existencia_mp->save(); //disminuir
+                            }
+                        }
+                        /** Receta definida? */
+                    }
+                    /** Actualizacion de stock de ingrediente segun parametro */
+
+
+
                     (new Ventas_det())->fill($sql)->save();
                 endfor;
+
+
 
 
                 DB::commit();

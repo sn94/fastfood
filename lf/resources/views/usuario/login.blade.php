@@ -19,20 +19,41 @@ $BASE_ASSETS= url('assets');
     @php
     $BASE_ASSETS= url('assets');
     @endphp
+
+
+
     <!--Carga temprana de jquery -->
-    <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script>
-
-
-
+    <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script> 
     <link rel="stylesheet" href="{{$BASE_ASSETS}}/bootstrap5/bootstrap.min.css">
+    <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}">
 
 
-    <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/fontawesome.min.css">
-    <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/solid.min.css">
-    <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/brands.min.css">
+    <script>
+        navigator.sayswho = (function() {
+            var ua = navigator.userAgent,
+                tem,
+                M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
 
-    <script src="{{$BASE_ASSETS}}/bootstrap5/bootstrap.bundle.min.js"> </script>
 
+            if (/trident/i.test(M[1])) {
+                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                return 'IE ' + (tem[1] || '');
+            }
+            if (M[1] === 'Chrome') {
+                tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+                if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+            }
+            M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+            if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+            return M.join(' ');
+        })();
+        var filtrarBrowser= /safari/i;
+        if(  filtrarBrowser.test(navigator.sayswho)  )
+        alert( "El navegador utilizado no es compatible con las funcionalidades que requiere el sistema. (Navegadores compatibles: Firefox, Edge, Chrome y Opera)");
+
+    </script>
+
+  
 
     <style>
         body {
@@ -52,45 +73,23 @@ $BASE_ASSETS= url('assets');
 
         }
 
+      
 
+#login-button{
+background: var(--color-3) !important;
+border: 0.5px solid white;
+padding:  10px !important;
+color: white;
+font-size: 1em;
+}
 
-        @import url("<?= url('assets/fonts/Marvel-Regular.ttf') ?>");
-        @import url("<?= url('assets/fonts/HARLOWSI.ttf') ?>");
+#login-button:hover,  #login-button:active{  
+border: 5px solid var(--color-3); 
+color: white;
+text-shadow: 0 0 5px white;
+box-shadow: 0 0 10px   var(--color-3);
+}
 
-        @font-face {
-            font-family: "mainfont";
-            src: url("<?= url('assets/fonts/Marvel-Regular.ttf') ?>");
-
-        }
-
-        @font-face {
-            font-family: "titlefont";
-
-            src: url("<?= url('assets/fonts/HARLOWSI.TTF') ?>");
-
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h4,
-        h5,
-        h6 {
-            font-family: titlefont;
-        }
-
-        label {
-            font-family: mainfont;
-        }
-
-
-        /* auto com */
-        .autocomplete-suggestion {
-            background-color: #d1d78e;
-            color: black;
-            font-weight: 600;
-        }
     </style>
 
 
@@ -107,35 +106,36 @@ $BASE_ASSETS= url('assets');
     </script>
 </head>
 
-<body class="d-flex flex-row justify-content-center"> 
+<body class="d-flex flex-row justify-content-center">
 
 
-       <div class="container-fluid d-flex "  style="background-color: #6a3d13a8;">
-       <div class="container pt-5 pt-md-3 pb-5 pb-md-3 col-12 col-md-6 col-lg-4 align-self-center rounded" id="FORM-PANEL"  style="background-color: black;">
-            <form  class="text-light m-0 p-0 p-md-2 " onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="login(event)" action="{{url('usuario/sign-in')}}" method="POST" style=" display: flex; flex-direction: column;">
+    <div class="container-fluid d-flex " style="background-color: #6a3d13a8;">
+        <div class="container pt-5 pt-md-3 pb-5 pb-md-3 col-12 col-md-6 col-lg-4 align-self-center rounded" id="FORM-PANEL" style="background-color: black;">
+            <form class="text-light m-0 p-0 p-md-2 " onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="login(event)" action="{{url('usuario/sign-in')}}" method="POST" style=" display: flex; flex-direction: column;">
 
-            <div class="container">
-            <img  class="img-fluid" src="{{url('assets/images/logo.png')}}" alt="">
-                @csrf
+                <div class="container d-flex flex-column justify-content-center">
+                    <img class="img-fluid" src="{{url('assets/images/logo.png')}}" alt="">
+                    @csrf
 
 
 
-                <label class="text-center" style="font-size: 18px;">NICK: </label>
-                <input name="USUARIO" class="form-control text-light" type="text" />
-                <label class="text-center" style="font-size: 18px;">PASSWORD: </label>
-                <input name="PASS" class="form-control text-light" type="password" />
+                    <label class="text-center" style="font-size: 18px;">NICK: </label>
+                    <input name="USUARIO" class="form-control text-light" type="text" />
+                    <label class="text-center" style="font-size: 18px;">PASSWORD: </label>
+                    <input name="PASS" class="form-control text-light" type="password" />
 
-                <button class="btn btn-warning mt-2 w-100">INGRESAR</button>
-            </div>
+                    <div class=" mt-2   mx-auto">
+                    <button id="login-button"  >INGRESAR</button>
+                    </div>
+                </div>
             </form>
         </div>
-       </div>
+    </div>
 
 
- 
 
-    <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script>
 
+  
 
 
     <script>

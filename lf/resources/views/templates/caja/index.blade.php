@@ -1,10 +1,12 @@
  @extends("templates.app")
- @section("menu")
 
- @include("templates.caja.menu")
+ <input type="hidden"  id="fast-food-identification-for-module-context"  value="CAJA">
+
  
-
+ @section("menu")
+ @include("templates.caja.menu")
  @endsection
+
  @section("content")
  @yield("content")
  @endsection

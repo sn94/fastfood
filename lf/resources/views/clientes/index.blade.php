@@ -38,7 +38,7 @@ Clientes
 
 
 
-<div class="container-fluid bg-dark text-light col-12 col-md-12 col-lg-10 col-xl-8">
+<div class="container-fluid bg-dark text-light col-12 col-md-12 col-lg-10 col-xl-8 pb-5">
     <h2 class="text-center mt-2" >Ficha de Clientes</h2>
 
     <div id="loaderplace"></div>
@@ -58,17 +58,6 @@ Clientes
 
 
 <script>
-    function show_loader() {
-        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
-        $("#loaderplace").html(loader);
-    }
-
-    function hide_loader() {
-        $("#loaderplace").html("");
-    }
-
-
-
 
 
      
@@ -76,7 +65,7 @@ Clientes
     async function fill_grill(url_optional) {
 
 
-        let grill_url = $("#GRILL-URL").val();
+        let grill_url = $("#GRILL-URL-CUSTOM").val();
         if (url_optional != undefined) {
             url_optional.preventDefault();
             grill_url = url_optional.currentTarget.href;
@@ -125,7 +114,8 @@ Clientes
 
     window.onload = function() {
         dataSearcher = new DataSearcher();
-        fill_grill();
+        buscarClientes();
+       // fill_grill();
     }
 </script>
 @stop

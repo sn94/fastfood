@@ -6,6 +6,7 @@
  $REGNRO= isset( $parametros )? $parametros->REGNRO : "";
  $CLIENTE_PORDEFECTO= isset( $parametros )? $parametros->CLIENTE_PORDEFECTO : "";
  $MENSAJE_TICKET= isset( $parametros )? $parametros->MENSAJE_TICKET : "";
+ $DESCONTAR_MP_EN_VENTA=    isset( $parametros )? $parametros->DESCONTAR_MP_EN_VENTA : "N";
 
  @endphp
 
@@ -18,10 +19,18 @@
 
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
- <div class="row bg-dark   pt-2 ">
+ <div class="row  pt-2 ">
      <div class="col-12  " style="display: flex;flex-direction: row;">
          <label style="color: white !important;width: 100%;" class="pr-1">MENSAJE PARA TICKET: </label>
          <input style="color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="MENSAJE_TICKET" class="form-control" type="text" maxlength="30" value="{{$MENSAJE_TICKET}}" />
+     </div>
+
+
+     <div class="col-12 text-light d-flex flex-row align-items-center justify-content-between "  >
+          
+         <x-pretty-checkbox name="DESCONTAR_MP_EN_VENTA" :value="$DESCONTAR_MP_EN_VENTA" label="DESCONTAR MATERIA PRIMA EN LA VENTA" onValue="S" offValue="N"   />
+
+        
      </div>
 
 

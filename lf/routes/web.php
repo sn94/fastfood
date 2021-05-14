@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
     return view("buscador/Buscador");
-}  );
+});
 
 
 Route::get('/', function () {
@@ -29,7 +29,6 @@ Route::get('/', function () {
         return view('welcome_caja');
     if (session("NIVEL") == "SUPER" ||  session("NIVEL") == "GOD")
         return view('welcome_admin');
-        
 })->middleware("auth.Caja");
 
 
@@ -76,6 +75,7 @@ Route::get('/ciudades', function () {
 /**administradores*/
 Route::group(['prefix' => "clientes",   'middleware' => ['auth.Caja']], function () { //Route::prefix('clientes')
     Route::get('/',   'ClientesController@index');
+    Route::get('/buscar',   'ClientesController@index');
     Route::post('/buscar',   'ClientesController@index');
     Route::get('/create',    'ClientesController@create');
     Route::post('/',    'ClientesController@create');
@@ -84,21 +84,24 @@ Route::group(['prefix' => "clientes",   'middleware' => ['auth.Caja']], function
     Route::delete('/{id}',    'ClientesController@delete');
 });
 
- 
+
 /**
  * Proveedores
  */
 Route::group(['prefix' => "proveedores",   'middleware' => ['auth.Admin']], function () { //Route::prefix('proveedores')
-    Route::get('/create',    'ProveedoresController@create');
-    Route::post('/',    'ProveedoresController@create');
+
     Route::get('/update/{id}',    'ProveedoresController@update');
     Route::put('/',    'ProveedoresController@update');
     Route::delete('/{id}',    'ProveedoresController@delete');
 });
 Route::group(['prefix' => "proveedores",   'middleware' => ['auth.Caja']], function () {
-Route::get('/',   'ProveedoresController@index');
-Route::post('/buscar',   'ProveedoresController@index');
-} );
+    //listado
+    Route::get('/',   'ProveedoresController@index');
+    Route::post('/buscar',   'ProveedoresController@index');
+    //altas
+    Route::get('/create',    'ProveedoresController@create');
+    Route::post('/',    'ProveedoresController@create');
+});
 
 
 
@@ -110,7 +113,7 @@ Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function ()
     Route::get('/filtrar',   'StockController@filtrar');
     Route::get('/filtrar/{filtro}',   'StockController@filtrar');
     Route::post('/filtrar',   'StockController@filtrar');
- 
+
     Route::get('/create',    'StockController@create');
     Route::post('/',    'StockController@create');
     Route::get('/update/{id}',    'StockController@update');
@@ -124,14 +127,12 @@ Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function ()
         $receta = Receta::where("REGNRO", $STOCKID)->get();
         return view('stock.form_receta',  ['RECETA' =>   $receta]);
     });
- 
+
     Route::get('/buscar/{TIPO}',   'StockController@index');
     Route::get('/buscar',   'StockController@index');
     Route::post('/buscar',   'StockController@index');
 
     Route::get('/restaurar-registros',   'StockController@restaurar_stock');
-
-
 });
 
 
@@ -158,7 +159,7 @@ Route::group(['prefix' => "sucursal",   'middleware' => ['auth.Admin']], functio
 
 
 Route::group(['prefix' => "usuario",   'middleware' => ['auth.Admin']],  function () {
-  
+
     Route::post('/buscar',   'UsuariosController@index');
     Route::get('/buscar',   'UsuariosController@index');
     Route::get('/create',    'UsuariosController@create');
@@ -322,7 +323,7 @@ Route::prefix('salida')->group(function () {
 Route::prefix('nota-residuos')->group(function () {
     Route::get('/{IDPRODUCCION}',   'NotaResiduosController@create');
     Route::post('/',   'NotaResiduosController@create');
-}); 
+});
 
 Route::prefix('remision-prod-terminados')->group(function () {
     Route::get('/{IDPRODUCCION}',   'RemProdTerminadosController@create');
@@ -330,7 +331,7 @@ Route::prefix('remision-prod-terminados')->group(function () {
 });
 
 
- 
+
 
 
 Route::prefix('ventas')->group(function () {
@@ -347,15 +348,12 @@ Route::prefix('ventas')->group(function () {
 
 
 
-Route::group(['prefix' => 'sesiones', 'middleware' => ['auth.Admin']], function () {
-    Route::get('/',   'SesionesController@index');
-    Route::post('/',   'SesionesController@index');
-});
+ 
 
 Route::group(['prefix' => 'sesiones', 'middleware' => ['auth.Caja']], function () {
 
-    Route::get('/list',   'SesionesController@index'); //Solo vera sesiones propias
-    Route::post('/list',   'SesionesController@index'); //Solo vera sesiones propias
+    Route::get('/',   'SesionesController@index'); //Solo vera sesiones propias
+    Route::post('/',   'SesionesController@index'); //Solo vera sesiones propias
 
     //  Route::post('/buscar',   'SesionesController@index');
     Route::get('/create',    'SesionesController@create');
@@ -363,6 +361,7 @@ Route::group(['prefix' => 'sesiones', 'middleware' => ['auth.Caja']], function (
 
     Route::get('/cerrar',    'SesionesController@cerrar');
     Route::get('/cerrar/{SESIONID}',    'SesionesController@cerrar');
+    Route::post('/cerrar/{SESIONID}',    'SesionesController@cerrar');
     Route::post('/cerrar',    'SesionesController@cerrar');
 
     Route::get('/informe-arqueo/{SESIONID}',    'SesionesController@totalesArqueo');

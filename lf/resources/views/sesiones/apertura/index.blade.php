@@ -5,6 +5,7 @@
 
 
 <style>
+  /*
   #SESION-FORM .form-control {
     height: 30px !important;
     background: white !important;
@@ -20,7 +21,7 @@
     font-weight: 500;
     color: white;
     font-size: 12px;
-  }
+  }*/
 
   #SESION-FORM input.form-control[readonly] {
     background-color: #9b9a9a !important;
@@ -40,7 +41,7 @@
 @include("buscador.generico", ['TIPO'=>'TURNO'])
 
 
-<div class="container-fluid  col-12  col-sm-8 col-md-5 col-lg-5   d-flex flex-column">
+<div class="container-fluid  col-12  col-sm-8 col-md-5 col-lg-5   d-flex flex-column text-light mt-2 pt-1">
 
 
   @if( isset($SESION) )

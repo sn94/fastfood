@@ -104,7 +104,7 @@ $STOCK =   isset($datalist) ? $datalist : $STOCK;
             <td class="text-center"> {{ $ven->SUCURSAL }}</td>
             <td> {{ $ven->SUCURSAL_NOMBRE }}</td>
             <td>{{ $ven->DESCRIPCION}} </td>
-            <td>{{ $ven->TIPO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO == "PE" ? "ELABORADO"  :  ( $ven->TIPO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO")   )    }}</td>
+            <td>{{ $ven->TIPO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO == "PE" ? "ELABORADO"  :  ( $ven->TIPO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO Y OTROS")   )    }}</td>
             <td class="text-center"> {{ $ven->NUMERO_RESIDUOS }}</td>
             <td class="text-end"> {{ Utilidades::number_f($ven->TOTAL_RESIDUOS)}}</td>
             <td class="text-center"> {{$ven->MEDIDA}} </td>
