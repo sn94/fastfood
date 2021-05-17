@@ -21,6 +21,8 @@ label {
     --color-1: #bc7a41;
     --color-2: #6a3d13;
     --color-3: #b61909;
+    --color-3-trans: #b6190970;
+    --color-3-dark: #a01809;
     --color-4: #ebcc8c;
     --color-5: #070707;
     --color-6: #1b1b1c;
@@ -126,5 +128,5 @@ div>a i.fa:hover {
 }
 
 .form-control:focus {
-    box-shadow: 0 0 10px 5px var(--color-3) !important;
+    box-shadow: 0 0 0px 7px var(--color-3-trans) !important;
 }

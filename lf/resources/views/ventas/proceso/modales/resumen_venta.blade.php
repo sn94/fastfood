@@ -39,6 +39,8 @@
     #RESUMEN button.cierra {
         background-color: black;
         color: yellow;
+        border-radius: 50px;
+        padding: 5px 10px !important;
     }
 
 
@@ -149,8 +151,7 @@
         $("#VENTA-TOTAL-RESUMEN").val($("#TOTAL-VENTA").val());
         //Si es efectivo
         if (modalidadDePago == "EFECTIVO") {
-
-
+ 
             $("#VENTA-ENTREGA-RESUMEN").val($("input[name=IMPORTE_PAGO]").val());
             $("#VENTA-VUELTO-RESUMEN").val($("input[name=VUELTO]").val());
         }

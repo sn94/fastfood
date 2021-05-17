@@ -33,7 +33,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
         <label>CANTIDAD: </label>
         <div style="display: flex; flex-direction: column;">
             <input oninput="formatoNumerico.formatearDecimal(event)" onkeydown="if(event.keyCode==13) {event.preventDefault(); tableDetalleComboModel.cargar_tabla();}" id="FORM-COMBO-CANTIDAD" class="form-control decimal" type="text" />
-            <label style="color: black;font-size: 12px; font-weight: 600;" id="FORM-COMBO-MEDIDA"></label>
+          
         </div>
         <a href="#" onclick="tableDetalleComboModel.cargar_tabla()"><i class="fa fa-download"></i></a>
 
@@ -53,7 +53,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
                 <tr>
                     <th class="text-center">CÓDIGO</th>
                     <th>DESCRIPCIÓN</th>
-                    <th>UNI.MED.</th>
+                    
                     <th> CANTIDAD</th>
                     <th></th>
                 </tr>
@@ -73,7 +73,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
                         <input type="hidden" name="COMBO_STOCK_ID[]" value="{{$combo_->STOCK_ID}}">
                         {{$combo_->stock->DESCRIPCION}}
                     </td>
-                    <td><input type='hidden' name='COMBO_MEDIDA[]' value="{{$combo_->MEDIDA}}"> {{$combo_->MEDIDA}}</td>
+                   
                     <td> <input type='hidden' name='COMBO_CANTIDAD[]' value="{{$combo_->CANTIDAD}}"> {{ Utilidades::number_f($combo_->CANTIDAD) }}</td>
                     <td> <a style='color:black;' href='#' onclick='tableDetalleComboModel.deleteme( this )'> <i class='fa fa-trash'></i> </a> </td>
                 </tr>
@@ -87,7 +87,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="4">
+                    <th colspan="3">
                     </th>
                     <th></th>
                 </tr>
@@ -113,7 +113,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
             $("#FORM-COMBO-ITEM-ID").val("");
             $("#FORM-COMBO-ITEM-DESC").val("");
             $("#FORM-COMBO-CANTIDAD").val("");
-            $("#FORM-COMBO-MEDIDA").text("");
+           
         },
         limpiar_tabla: function() {
             $("#COMBO-DETALLE").html("");
@@ -176,7 +176,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
             let regnro = $("#FORM-COMBO-ITEM-ID").val();
             let descri = $("#FORM-COMBO-ITEM-DESC").val();
             let cantidad = $("#FORM-COMBO-CANTIDAD").val();
-            let medida = $("#FORM-COMBO-MEDIDA").text();
+             
 
 
             /**Lista de elementos coincidentes en el modelo */
@@ -194,7 +194,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
 
             let coditem = "<td>" + codigo_item + "</td>";
             let des = "<td><input type='hidden' name='COMBO_STOCK_ID[]' value='" + regnro + "'>" + descri + "</td>";
-            let med = "<td><input type='hidden' name='COMBO_MEDIDA[]' value='" + medida + "'> " + medida + "</td>";
+          
             let cant = "<td><input type='hidden' name='COMBO_CANTIDAD[]' value='" + cantidad + "'>" + cantidad + "</td>";
             let del = "<td> <a style='color:black;' href='#' onclick='tableDetalleComboModel.deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>";
 
@@ -209,7 +209,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
 
             let classIdentTipoItem = tipoStock + "-class";
 
-            let nueva_tr = "<tr  class='" + classIdentTipoItem + "' id='" + regnro + "' >" + coditem + des + med + cant + del + "</tr>";
+            let nueva_tr = "<tr  class='" + classIdentTipoItem + "' id='" + regnro + "' >" + coditem + des  + cant + del + "</tr>";
 
             //Actualizar modelo de datos
             this.actualiza_modelo_de_datos(objc);
@@ -225,22 +225,22 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
             buscador_items_modelo = {};
         },
         restaurar_modelo_combo: async function() {
-            //item cantidad tipo medida
+            //item cantidad  
             let row = document.querySelectorAll("#COMBO-DETALLE tr");
             if (row.length == 0) return;
 
             let modelo = Array.prototype.map.call(row, function(domtr) {
 
                 let ITEM = domtr.id;
-                let CANTIDAD = domtr.children[3].textContent;
-                let MEDIDA = domtr.children[2].textContent;
+                let CANTIDAD = domtr.children[2].textContent.trim();
+               
+               
                 let TIPO = domtr.className.split("-")[0];
-                let CODIGO = domtr.children[0].textContent;
+                let CODIGO = domtr.children[0].textContent.trim();
                 return {
                     CODIGO: CODIGO,
                     ITEM: ITEM,
-                    CANTIDAD: CANTIDAD,
-                    MEDIDA: MEDIDA,
+                    CANTIDAD: CANTIDAD, 
                     TIPO: TIPO
                 };
             });
@@ -283,7 +283,7 @@ border-bottom: 1px solid var(--color-1);">Combo</p>
             window.buscador_items_modelo = seleccionado;
             $('#FORM-COMBO-ITEM-ID').val(seleccionado.REGNRO);
             $('#FORM-COMBO-ITEM-DESC').val(seleccionado.DESCRIPCION);
-            $("#FORM-COMBO-MEDIDA").text(seleccionado.unidad_medida.DESCRIPCION);
+     
 
         };
         Buscador.render();

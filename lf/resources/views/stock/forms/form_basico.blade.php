@@ -5,7 +5,7 @@
      <div class="col-12 col-md-6 col-lg-6">
         
              <label class="mt-1" for="element_7">TIPO: </label>
-            <x-tipo-stock-chooser id="" name="TIPO" :value="$TIPO" callback="opcionTipoStock(event);"  class="form-control" />
+            <x-tipo-stock-chooser id="" name="TIPO" :value="$TIPO" callback="opcionTipoStock(event);"  class="form-select" />
            
     
              <label>CÓDIGO:</label>
@@ -26,7 +26,7 @@
  
         
              <label>IVA: </label>
-             <select name="TRIBUTO" class="form-control">
+             <select name="TRIBUTO" class="form-select">
                  @php
                  // 0=> "EXENTA",
                  $option_iva= [ 10=> "10 %", 5=> "5 %" ];

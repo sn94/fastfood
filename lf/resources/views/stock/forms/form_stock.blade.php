@@ -9,7 +9,7 @@ $MEDIDAS =  Medidas::get();
     <div class="col-12 col-md-6">
 
         <label style="grid-column-start: 1;" class="mt-1" for="element_7">FAMILIA: </label>
-        <select class="form-control" name="FAMILIA">
+        <select class="form-select" name="FAMILIA">
             @foreach($FAMILIAS as $FAMILY)
             @if( $FAMILIA == $FAMILY->REGNRO)
             <option selected value="{{$FAMILY->REGNRO}}"> {{$FAMILY->DESCRIPCION }} </option>
@@ -39,7 +39,7 @@ $MEDIDAS =  Medidas::get();
 
 
         <label>UNIDAD DE MEDIDA: </label>
-        <select name="MEDIDA" class="form-control">
+        <select name="MEDIDA" class="form-select">
 
 
             @foreach( $MEDIDAS as $val)

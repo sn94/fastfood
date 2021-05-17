@@ -8,12 +8,11 @@ $BASE_ASSETS= url('assets');
     
 </div>
 
-<div class="row g-0 d-flex ml-2"     >
+<div class="row g-0 d-flex ml-2 pt-2"     >
  
 @foreach( $Stock as $item)
-
-@if(     ($item->TIPO == "PE" || $item->TIPO == "PP") )
+ @if( $item->TIPO != "MP")
 @include("ventas.proceso.MostradorProductos.CuadriculaProductos.item.index")
-@endif
+ @endif
 @endforeach
     </div>

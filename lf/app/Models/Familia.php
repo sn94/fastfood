@@ -12,7 +12,7 @@ class Familia extends Model
     protected  $table= "familia";
     protected $primaryKey = 'REGNRO';
     public $timestamps = true;
-    protected $fillable = [  'DESCRIPCION',  'NRO_PESTANA' ];
+    protected $fillable = [  'DESCRIPCION',  'NRO_PESTANA' , 'MOSTRAR_EN_VENTA'];
 
  
 

@@ -4,7 +4,7 @@
 
 
  $REGNRO= isset( $familia )? $familia->REGNRO : "";
- $DESCRIPCION= isset( $familia )? $familia->DESCRIPCION : ""; 
+ $DESCRIPCION= isset( $familia )? $familia->DESCRIPCION : "";
  @endphp
 
 
@@ -14,29 +14,27 @@
  <input type="hidden" name="REGNRO" value="{{$REGNRO}}">
  @endif
 
- <input type="hidden" name="_token" value="<?php
-
-                                            use App\Models\Familia;
-
-                                            echo csrf_token(); ?>">
+ <input type="hidden" name="_token" value="{{csrf_token()}}">
 
  <div class="row    pt-2 ">
      <div class="col-12 col-md-8 " style="display: flex;flex-direction: row;">
          <label style="color: white !important;" class="pr-1">DESCRIPCIÓN: </label>
          <input style="color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="DESCRIPCION" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />
      </div>
-  
 
 
-     <div class="col-12  col-md-4  d-flex justify-content-center ">
-         <button style="height: 30px !important;" type="submit" class="btn btn-warning ">GUARDAR</button>
+
+     <div class="col-12  col-md-4  d-flex justify-content-center text-light ">
+        <x-pretty-checkbox name="MOSTRAR_EN_VENTA"  value="S" label="Mostrar en venta"  onValue="S" offValue="N"  />
      </div>
-
+     <div class="col-12 ">
+     <button style="height: 30px !important;" type="submit" class="btn btn-warning ">GUARDAR</button>
+     </div>
 
  </div>
 
 
- 
+
 
  @include("validations.form_validate")
  @include("validations.formato_numerico")

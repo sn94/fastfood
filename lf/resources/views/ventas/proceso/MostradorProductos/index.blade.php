@@ -3,7 +3,7 @@
   use App\Models\Familia;
 
   //AGRUPAR PRODUCTOS POR FAMILIA
-  $familiasDeProd = Familia::orderBy("NRO_PESTANA")->get();
+  $familiasDeProd = Familia::orderBy("NRO_PESTANA")->where("MOSTRAR_EN_VENTA", "S")->get();
 
   ?>
 

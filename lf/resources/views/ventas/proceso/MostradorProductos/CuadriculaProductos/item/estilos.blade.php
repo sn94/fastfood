@@ -1,15 +1,20 @@
 <style>
+  
     .FOOD-CELL {
         display: flex;
-        width: 100px;
+        width: 125px;
         flex-direction: column;
         background-color:  var(--color-6) !important ;
+       
     }
 
-    .FOOD-CELL:hover { 
-        background-color: var(--color-1) !important;
-        border: 2px solid var(--color-1);
-        box-shadow: 0 0 5px var(--color-1),  0 0 10px var(--color-1);
+    .FOOD-CELL:hover,  .FOOD-CELL:active  { 
+        transform: scale(1.3) translateX(10px);
+        position: relative;
+        z-index: 10000000;
+        background-color: var(--color-3) !important;
+        border: 2px solid var(--color-3);
+        box-shadow: 0 0 0px 10px var(--color-3),  0 0 10px var(--color-3);
     }
     .FOOD-CELL img.img-thumbnail {
         width: 95px;
@@ -17,10 +22,12 @@
     }
 
     .FOOD-CELL .descripcion {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11.5px !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 11.3px !important;
         font-weight: 600;
         text-transform: uppercase;
+        text-align: center;
+        word-break: keep-all;
     }
 
     .FOOD-CELL .btn-normal-price {

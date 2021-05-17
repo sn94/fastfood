@@ -6,6 +6,7 @@ use App\Helpers\Utilidades;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketSender;
 use App\Models\Clientes;
+use App\Models\Combos;
 use App\Models\Parametros;
 use App\Models\Salidas;
 use App\Models\Salidas_detalles;
@@ -49,7 +50,7 @@ class VentasController extends Controller
 
         $ventas = Ventas::where("SUCURSAL", $SUCURSAL)
             ->where("CAJERO", $CAJERO)
-            ->where("FECHA",date("Y-m-d"));
+            ->where("FECHA", date("Y-m-d"));
         //Filtrar por sesion
         if (!$SESION)
             $ventas =  $ventas->where("SESION", $SESION);
@@ -413,41 +414,64 @@ class VentasController extends Controller
                         ['VENTA_ID' => $nventa->REGNRO, 'ITEM' => $r1, 'CANTIDAD' => $r2, 'P_UNITARIO' => $r3, 'EXENTA' => $p_exe, 'TOT5' => $p_5,  'TOT10' => $p_10];
 
 
+                    // Tratamiento del Stock
 
-                    //Actualizar existencia
-                    $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
-                        ->where("STOCK_ID",  $r1)->first();
-                    $existencia->CANTIDAD =  $existencia->CANTIDAD - $r2;
-                    $existencia->save(); //disminuir
+                    //Lambdas
 
-                    //Actualizar EXISTENCIA de ingredientes
+                    $descontarStock = function ($StockId, $Cantidad) {
+                        $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
+                            ->where("STOCK_ID",  $StockId)->first();
+                        $existencia->CANTIDAD =  $existencia->CANTIDAD - $Cantidad;
+                        $existencia->save(); //disminuir
+                    };
+
+                    $registrarSalidaIngrediente = function ($item, $cantidad) {
+                        $salida = (new Salidas());
+                        $salida->SUCURSAL = session("SUCURSAL");
+                        $salida->FECHA =  date("Y-m-d");
+                        $salida->TIPO_SALIDA = "MP";
+                        $salida->REGISTRADO_POR = session("ID");
+                        $salida->CONCEPTO = "DISMINUCIÓN DE MATERIA PR. P/ VENTA DE PROD. ELABORADO";
+                        $salida->save();
+                        $det_salida = (new Salidas_detalles());
+                        $det_salida->SALIDA_ID =  $salida->REGNRO;
+                        $det_salida->ITEM =  $item;
+                        $det_salida->CANTIDAD = $cantidad;
+                        $det_salida->TIPO = "MP";
+                        $det_salida->save();
+                    };
+                    //Detalle Venta Item
+                    $DetalleVentaItemModel =  Stock::find($r1);
+
+                    //Actualizar existencia Si no es un Combo
+                    if ($DetalleVentaItemModel->TIPO != "COMBO") {
+                        $descontarStock($r1, $r2);
+                        $registrarSalidaIngrediente( $r1, $r2 );
+                    } 
+                    
+
+                    //Actualizar EXISTENCIA de ingredientes Si es producto elaborado
                     if (Parametros::first()->DESCONTAR_MP_EN_VENTA == "S") {
+
                         $receta = Stock::find($r1)->receta;
                         if (sizeof($receta)) {
                             foreach ($receta as $item) {
-                                $salida = (new Salidas());
-                                $salida->SUCURSAL = session("SUCURSAL");
-                                $salida->FECHA =  date("Y-m-d");
-                                $salida->TIPO_SALIDA = "MP";
-                                $salida->REGISTRADO_POR = session("ID");
-                                $salida->CONCEPTO = "DISMINUCIÓN DE MATERIA PR. P/ VENTA DE PROD. ELABORADO";
-                                $salida->save();
-                                $det_salida = (new Salidas_detalles());
-                                $det_salida->SALIDA_ID =  $salida->REGNRO;
-                                $det_salida->ITEM =  $item->MPRIMA_ID;
-                                $det_salida->CANTIDAD = $item->CANTIDAD;
-                                $det_salida->TIPO = "MP";
-                                $det_salida->save();
-                                //reflejar en existencia
-                                $existencia_mp = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
-                                    ->where("STOCK_ID",  $item->MPRIMA_ID)->first();
-                                $existencia_mp->CANTIDAD =  $existencia_mp->CANTIDAD - $item->CANTIDAD;
-                                $existencia_mp->save(); //disminuir
+                                $descontarStock($item->MPRIMA_ID, $item->CANTIDAD);
+                                $registrarSalidaIngrediente($item->MPRIMA_ID, $item->CANTIDAD);
                             }
                         }
                         /** Receta definida? */
+
+                        if ($DetalleVentaItemModel->TIPO == "COMBO")  {
+                            //Descontar productos del combo
+                            $comboModel = Combos::where("COMBO_ID", $r1)->get();
+                            foreach ($comboModel as $comboItem)
+                                $descontarStock($comboItem->STOCK_ID,  $comboItem->CANTIDAD);
+                                $registrarSalidaIngrediente( $comboItem->STOCK_ID,  $comboItem->CANTIDAD );
+                        }
+                        
                     }
-                    /** Actualizacion de stock de ingrediente segun parametro */
+                    /** EnD Actualizacion de stock de ingrediente segun parametro */
 
 
 

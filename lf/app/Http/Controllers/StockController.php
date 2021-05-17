@@ -140,7 +140,7 @@ class StockController extends Controller
             //Solicitud de datos para venta? Si no es por venta, permitir filtrar por un
             // solo tipo de item
             if ($tipo == "VENTA")
-                $stock =  $stock->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP");
+                $stock =  $stock->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP")->orWhere("TIPO", "=", "COMBO");
             elseif ($tipo == "ALL") {
                 $stock = $stock->orderBy("TIPO");
                 if ($familia !=  "") {
