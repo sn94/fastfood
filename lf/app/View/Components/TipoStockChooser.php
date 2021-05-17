@@ -9,22 +9,28 @@ class TipoStockChooser extends Component
 
 
     public  $id = "";
+    public $name="";
     public $value = "";
     public  $callback = "";
     public $style= "";
+    public $readonly= "N";
+    public $atributos= "";
     public $class="";
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($id="",  $value="",  $callback="", $style="", $class="")
+    public function __construct($id="", $name="",  $value="",  $callback="", $style="", $readonly= "N", $atributos="", $class="")
     {
         
         $this->id= $id;
+        $this->name= $name;
         $this->value= $value;
         $this->callback= $callback;
         $this->style=  $style;
+        $this->readonly=  $readonly;
+        $this->atributos= $atributos;
         $this->class= $class;
         
     }

@@ -7,7 +7,7 @@
 @section("content")
 
 
-@include("ventas.proceso.res.impresion")
+@include("ventas.proceso.impresion")
 
 
 <div class="container-fluid bg-dark text-light col-12 col-lg-10  pb-2 mt-2 ">

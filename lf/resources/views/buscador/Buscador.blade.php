@@ -51,9 +51,9 @@
          modalHtml: `
     <div id="BuscadorModal" class="container-fluid p-1 p-md-5 m-0">
 
-    <div class="BuscadorModal-cuerpo container bg-warning col-12 col-md-5">
+    <div class="BuscadorModal-cuerpo container  col-12 col-md-5">
         <div class="BuscadorModal-close">
-            <button onclick="Buscador.cerrarModal()" type="button" style=" border-radius: 50px;background-color: black;color: white;padding: 2px 10px;" >X</button>
+            <button onclick="Buscador.cerrarModal()" type="button"  >X</button>
         </div>
         
         <div class="form"></div> 
@@ -90,12 +90,25 @@
                 height: 100%;width: 100%;
             }
             .BuscadorModal-cuerpo{
-                
+                border-radius: 8px;
+                background-color: var(--color-1);
             }
             #BuscadorModal .content table tbody tr:hover {
                 background-color: #fdeb6f !important;
             } 
 
+            .BuscadorModal-close button{
+                border-radius: 50px;
+                background-color: black;
+                color: white;
+                padding: 2px 10px;
+                transition: all 1s easy;
+            }
+            .BuscadorModal-close button:hover{
+                border: 1px solid black; 
+                font-weight: bold;
+                box-shadow: 0 0 10px black;
+            }
             .buscador-input-search {
                 border-radius: 20px;
                 color: black;
@@ -127,6 +140,8 @@
             #BuscadorModal table thead th:nth-child(1), #BuscadorModal table tbody td:nth-child(1){
                 width: 80px;
             }
+
+            
                 `;
          },
          makeTable: function(data) {
@@ -176,13 +191,17 @@
                 ${body}
                 
                 `);
+                let tableContainerTag = document.createElement("div");
+                tableContainerTag.style.height= "250px";
+                tableContainerTag.style.overflow= "scroll";
+                tableContainerTag.appendChild(  tableTag);
              //  tableTag.innerHTML =  `    ${header}  ${body}   `;
              $("#BuscadorModal .content").html("");
 
              let html = tableTag;
              document.querySelector("#BuscadorModal .content table")?.remove(); //limpiar
 
-             document.querySelector("#BuscadorModal .content").appendChild(tableTag);
+             document.querySelector("#BuscadorModal .content").appendChild( tableContainerTag);
 
          },
 
@@ -244,7 +263,8 @@
               }*/
 
 
-             if (input.value != "") {
+             if (input != undefined && input.value != "") {
+
                  let filtrado = Buscador.dataSource.filter(arg => {
                      let entrada = input.value;
                      let crearExpr = function(word) {
@@ -253,7 +273,11 @@
                      };
                      //Tomar dos campos para filtrar 
                      let claves = Object.keys(arg);
-                     let filtroResult = claves.reduce((ini, val) => (ini || crearExpr(entrada).test(arg[val])), false);
+                     console.log("Tarrget", entrada, " Claves: ", claves);
+                     let filtroResult = claves.reduce((ini, val) => {
+                         console.log( "Bool ini",  ini, entrada, " compare ", arg[val]  );
+                         return (ini || crearExpr(entrada).test(arg[val]));
+                     }, false);
                      return filtroResult;
                      /* return (crearExpr(entrada).test(arg.CEDULA_RUC) ||
                           crearExpr(entrada).test(arg.NOMBRE ));*/
@@ -262,7 +286,8 @@
                  Buscador.makeTable(filtrado);
              } else Buscador.makeTable(Buscador.dataSource);
 
-             input.value = input.value;
+             if (input != undefined)
+                 input.value = input.value;
          },
 
          seleccionar_registro: function(ev) {

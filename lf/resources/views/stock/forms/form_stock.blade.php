@@ -26,6 +26,8 @@ $MEDIDAS =  Medidas::get();
 
         <label>VENDIDO POR MITAD: </label>
         <input name="PVENTA_MITAD" class="form-control text-end entero" type="text" maxlength="10" value="{{$PVENTA_MITAD}}" />
+        <label>PRECIO EXTRA: </label>
+        <input name="PVENTA_EXTRA" class="form-control text-end entero" type="text" maxlength="10" value="{{$PVENTA_EXTRA}}" />
 
 
 

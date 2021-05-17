@@ -54,15 +54,7 @@ $REGISTRADO_POR= isset($COMPRA) ? $COMPRA->REGISTRADO_POR : session("ID") ;
         font-weight: 600;
     }
 
-    a i.fa-search,
-    a i.fa-download,
-    a i.fa-plus {
-        background-color: #f7fb55;
-        border-radius: 30px;
-        padding: 3px;
-        border: 1px solid black;
-        color: black;
-    } 
+    
 
 </style>
 

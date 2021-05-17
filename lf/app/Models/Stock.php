@@ -14,9 +14,9 @@ class Stock extends Model
     public $timestamps = true;
     protected $fillable = [
         'CODIGO','BARCODE','BOTON','FAMILIA',
-        'PVENTA' , 'PVENTA_MITAD'  ,'DESCRIPCION'  ,  'DESCR_CORTA','PCOSTO',
+        'PVENTA' , 'PVENTA_MITAD' , 'PVENTA_EXTRA' ,'DESCRIPCION'  ,  'DESCR_CORTA','PCOSTO',
         'STOCK_MAX','STOCK_MIN', 'IMG',  'TRIBUTO',  'TIPO',  'MEDIDA',  'PRESENTACION',
-        'VENDIDOXMITAD'
+        'PRECIOS_VARIOS'
     ];
 
 
@@ -28,6 +28,9 @@ class Stock extends Model
 
     public function receta(){
         return $this->hasMany( Receta::class, "STOCK_ID", "REGNRO");
+    }
+    public function combos(){
+        return $this->hasMany( Combos::class, "COMBO_ID", "REGNRO");
     }
 
     public function compras_detalle()

@@ -38,15 +38,15 @@ class StockRequest extends FormRequest
           
             'PVENTA' =>   Utilidades::limpiar_numero($this->PVENTA), // Utilidades::limpiar_numero()
             'PVENTA_MITAD' =>   Utilidades::limpiar_numero($this->PVENTA_MITAD),
+            'PVENTA_EXTRA' =>   Utilidades::limpiar_numero($this->PVENTA_EXTRA),
             'PCOSTO' =>   Utilidades::limpiar_numero($this->PCOSTO),
             'STOCK_MAX' =>   Utilidades::limpiar_numero($this->STOCK_MAX),
             'STOCK_MIN' =>   Utilidades::limpiar_numero($this->STOCK_MIN),
             //Cantidad por ingrediente
             'CANTIDAD' => Utilidades::limpiar_numero($this->CANTIDAD),
-            //Variedad de precios
-            'PRECIO_ENTERO' => Utilidades::limpiar_numero($this->PRECIO_ENTERO),
-            'PRECIO_MITAD' => Utilidades::limpiar_numero($this->PRECIO_MITAD),
-            'PRECIO_PORCION' => Utilidades::limpiar_numero($this->PRECIO_PORCION)
+            //combo
+            'COMBO_CANTIDAD' => Utilidades::limpiar_numero($this->COMBO_CANTIDAD)
+            
         ]);
     }
 }

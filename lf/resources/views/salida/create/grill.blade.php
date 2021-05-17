@@ -77,66 +77,8 @@
 
     //ver
 
-    async function buscarItemParaSalida() {
-        window.buscar_items_target = function(  {
-            REGNRO,
-            DESCRIPCION,
-            MEDIDA
-        }  ) {
-
-            $("#SALIDA-ITEM-ID").val(REGNRO);
-            $("#SALIDA-ITEM-DESC").val(DESCRIPCION);
-            $("#SALIDA-MEDIDA").text(MEDIDA);
-        };
-
-        if ("buscar_items__" in window) {
-
-            await buscar_items__();
-        } else {
-            let req = await fetch("<?= url('buscador-items') ?>");
-            let resp = await req.text();
-            $("body").append(resp);
-            await buscar_items__();
-        }
-    }
-
-    //Autocomplete
-    async function autocompletado_items() {
-        let url_ = $("#RESOURCE-URL").val();
-        let req = await fetch(url_, {
-            method: "POST",
-
-            headers: {
-                formato: "json",
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            body: "tipo=P" /** preventa parametro solo valido para buscar productos */
-        });
-        let resp = await req.json();
-
-        var dataArray = resp.map(function(value) {
-            return {
-                label: value.DESCRIPCION,
-                value: value.REGNRO
-            };
-        });
-
-        let elementosTARGET = document.getElementById("ITEM");
-
-        new Awesomplete(elementosTARGET, {
-            list: dataArray,
-            // insert label instead of value into the input.
-            replace: function(suggestion) {
-                this.input.value = suggestion.label;
-                $("#SALIDA-ITEM-ID").val(suggestion.value);
-                mostrar_item(suggestion.value);
-            }
-        });
-
-    }
-
-
+ 
+ 
 
 
 

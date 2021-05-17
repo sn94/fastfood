@@ -4,6 +4,8 @@ use App\Helpers\Utilidades;
 
 $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
 ?>
+
+
 @if( isset($datalist) )
 
 <style>
@@ -11,7 +13,13 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
     h4 { 
         font-family: Arial, Helvetica, sans-serif;
     }
+    table{
+        font-size: 12px;
+    }
 </style>
+
+
+
 <h4 style="text-align: center;">Productos más comprados</h4>
 @endif
 
@@ -23,7 +31,6 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
         padding: 0px !important;
         padding-left: 2px !important;
         padding-right: 2px;
-        font-size: 12px;
     }
 
     table thead tr th:nth-child(1),
@@ -36,6 +43,13 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
     table tbody tr td:nth-child(3),
     table tfoot tr td:nth-child(3) {
      width: 60px  !important;
+     text-align: center !important;
+    }
+
+    table thead tr th:nth-child(4),
+    table tbody tr td:nth-child(4),
+    table tfoot tr td:nth-child(4) {
+     width: 150px  !important;
      text-align: center !important;
     }
 
@@ -53,7 +67,7 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
     table thead tr th:nth-child(7),
     table tbody tr td:nth-child(7),
     table tfoot tr td:nth-child(7){
-        width: 125px  !important; 
+        width: 60px  !important; 
     }
     .text-end {
         text-align: right;
@@ -92,8 +106,8 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
         @php
         $codigo= $ven->CODIGO;
         $barcode= $ven->BARCODE;
-        $tipoStock= $ven->TIPO_PRODUCTO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO_PRODUCTO == "PE" ? "ELABORADO" : ( $ven->TIPO_PRODUCTO == "PP" ? "PARA VENTA" : "MOBILIARIO Y OTROS") ) ;
 
+       
         @endphp
         <tr>
 
@@ -101,7 +115,15 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
             <td>{{ $codigo}} </td>
             <td> {{ $barcode}} </td>
             <td> {{ is_null($ven)  ? '***' : $ven->DESCRIPCION}}</td>
-            <td>{{ $tipoStock   }}</td>
+            
+            <td>
+            @php 
+            $TipoStock=$ven->TIPO_PRODUCTO;
+            @endphp
+            <x-tipo-stock-chooser :value="$TipoStock" style="border: none;" readonly="S" atributos="disabled" />
+            </td>
+
+
             <td class="text-end fw-bold text-center">{{ $ven->NRO_COMPRAS}}</td>
 
             <td class="text-end"  >

@@ -65,7 +65,7 @@ $QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
         @foreach( $stock as $prov)
 
-        @include("stock.grill.desktop.item")
+        @include("stock.index.grill.desktop.item")
         @endforeach
     </tbody>
 

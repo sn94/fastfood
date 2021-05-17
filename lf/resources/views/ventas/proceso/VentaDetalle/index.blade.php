@@ -47,6 +47,8 @@
         }).reduce((previos, current) => previos + current, 0);
     }
 
+
+    
     function editar_cantidad_item(Esto) {
 
         let btnType = $(Esto).hasClass("plusbtn") ? "plusbtn" : "minusbtn";

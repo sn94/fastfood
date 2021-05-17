@@ -41,7 +41,7 @@ if( $STOCK_ACTUAL <= 0): $ESTADO_STOCK="table-danger" ; $MENSAJE_STOCK="(Sin sto
     <td class="text-end">{{ Utilidades::number_f( $prov->PVENTA) }}</td>
     @if( $MODULO_FLAG==  "c")
     <td class="text-end">{{ Utilidades::number_f( $prov->PVENTA_MITAD) }}</td>
-    <td class="text-center">  {{$prov->VENDIDOXMITAD=="S" ? "SI" : "NO"}} </td>
+    <td class="text-center">  {{$prov->PRECIOS_VARIOS=="S" ? "SI" : "NO"}} </td>
     @endif
 
     </tr>

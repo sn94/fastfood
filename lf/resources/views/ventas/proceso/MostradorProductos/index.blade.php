@@ -47,9 +47,9 @@
  </style>
 
 
- @include("ventas.proceso.detalle.food_gallery.filtrar_productos")
+ @include("ventas.proceso.MostradorProductos.filtrar_productos")
 
- @include("ventas.proceso.detalle.food_gallery.grid_items.item.estilos")
+ @include("ventas.proceso.MostradorProductos.CuadriculaProductos.item.estilos")
 
 
 
@@ -105,7 +105,7 @@
 
    <div class="tab-pane fade {{$activo}}" id="{{$familyDescription}}" role="tabpanel" aria-labelledby="{{$family->REGNRO}}-tab">
 
-     @include( "ventas.proceso.detalle.food_gallery.grid_items.index", ['Stock'=> $family->productos])
+     @include( "ventas.proceso.MostradorProductos.CuadriculaProductos.index", ['Stock'=> $family->productos])
 
    </div>
 
@@ -115,4 +115,4 @@
 
 
  <!-- Funciones para elegir precios, y cargarlos en la tabla -->
- @include("ventas.proceso.detalle.food_gallery.precios.index")
+ @include("ventas.proceso.MostradorProductos.precios.index")

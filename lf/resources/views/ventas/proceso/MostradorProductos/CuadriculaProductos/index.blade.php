@@ -13,7 +13,7 @@ $BASE_ASSETS= url('assets');
 @foreach( $Stock as $item)
 
 @if(     ($item->TIPO == "PE" || $item->TIPO == "PP") )
-@include("ventas.proceso.detalle.food_gallery.grid_items.item.index")
+@include("ventas.proceso.MostradorProductos.CuadriculaProductos.item.index")
 @endif
 @endforeach
     </div>

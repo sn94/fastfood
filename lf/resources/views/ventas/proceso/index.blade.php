@@ -12,7 +12,7 @@ Nueva venta
 
 
 
-@include("ventas.proceso.res.impresion")
+@include("ventas.proceso.impresion")
 @include("ventas.proceso.modales.resumen_venta")
 
 
@@ -45,14 +45,14 @@ Nueva venta
         <div class="row   m-0 g-0   p-0">
 
             <div class="col-12 col-md-6  col-lg-6 p-0 pt-1 m-0 ">
-                @include("ventas.proceso.detalle.food_gallery.index" )
+                @include("ventas.proceso.MostradorProductos.index" )
             </div>
 
             <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0 "  >
                 <div class="col-12 pl-0 pr-0 ">
 
-                    @include("ventas.proceso.header" )
-                    @include("ventas.proceso.botons")
+                    @include("ventas.proceso.VentaCabecera.index" )
+                    @include("ventas.proceso.VentaCabecera.Botones")
 
                 </div>
                 <div class="col-12  pl-0 pr-0 bg-light  ">
@@ -60,7 +60,7 @@ Nueva venta
                         <label class="MONTO fs-2 w-100">TOTAL A PAGAR:</label>
                         <input readonly value="0" type="text" id="TOTAL-VENTA" name="TOTAL" class="entero MONTO form-control fs-2 p-0" />
                     </div>
-                    @include("ventas.proceso.detalle.grill")
+                    @include("ventas.proceso.VentaDetalle.index")
                 </div>
             </div>
         </div>
@@ -119,27 +119,7 @@ Nueva venta
 
 
 
-    function nuevaVenta() {
-        ultimoIdVentaRegistrado = undefined;
-        //limpiar tabla
-        $("#grill-ticket").html("");
-        //cliente default
-
-        $("#CLIENTE-KEY").val("");
-        $("#CLIENTE-NAME").val("");
-
-        //limpiar campos de totales 
-        $("#RESUMEN input").val("0");
-        $("#TOTAL-VENTA").val("0");
-        $("#IMPORTE_PAGO").val("0");
-        $("#VUELTO").val("0");
-        //limpiar datos de forma de pago
-        $("#FORMAS-DE-PAGO input").val("");
-        //limpiar ultimo numero de ticket generado
-        $("#TICKET-NUMERO").val("");
-        $("#TICKET-DATA-PANEL").addClass("d-none");
-        ventas_model = [];
-    }
+    
 
 
     async function imprimirTicket(id_venta) {

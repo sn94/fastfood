@@ -102,7 +102,13 @@ width: 50px;
             <td class="text-center"> {{ $ven->SUCURSAL }}</td>
             <td> {{ $ven->SUCURSAL_NOMBRE }}</td>
             <td>{{ $ven->DESCRIPCION}} </td>
-            <td>{{ $ven->TIPO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO == "PE" ? "ELABORADO"  :  ( $ven->TIPO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO Y OTROS")   )    }}</td>
+            <td>
+            @php 
+            $TipoStock=$ven->TIPO;
+            @endphp
+            <x-tipo-stock-chooser :value="$TipoStock" style="border: none;" readonly="S" atributos="disabled" />
+            </td>
+
 
             <td class="text-center"> {{ $ven->NUMERO_PEDIDOS }}</td>
             <td class="text-center"> {{$ven->CANTIDAD}}</td>

@@ -54,7 +54,7 @@ Stock
 
         <x-slot name="top_panel">
            <div class="d-flex flex-row flex-wrap">
-           @if(session("NIVEL") == "SUPER" || session("NIVEL") == "GOD")
+           @if(  $MODULO_FLAG  !=  "c")
           <div class=" mb-1 col-md-1">
           <a class="btn btn-sm btn-warning  " href="<?= url("stock/create" . $QUERY_FLAG) ?>"> NUEVO</a>
           </div>

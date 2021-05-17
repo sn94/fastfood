@@ -22,18 +22,8 @@
 
 
         <label style="grid-column-start: 1;" class="mt-1" for="element_7">SALIDA: </label>
-        @php
-        $tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "PE"=>"PRODUCTO ELABORADO", "AF"=> "MOBILIARIO Y OTROS" ];
-        @endphp
-        <select class="form-control" name="TIPO_SALIDA" onchange="cambiar_tipo_salida(event);  ">
-            @foreach( $tipos_item as $tkey=> $tval)
-            @if( $tkey == "MP")
-            <option selected value="{{$tkey}}"> {{$tval}}</option>
-            @else
-            <option value="{{$tkey}}"> {{$tval}}</option>
-            @endif
-            @endforeach
-        </select>
+        <x-tipo-stock-chooser name="TIPO_SALIDA" callback="cambiar_tipo_salida(event);"  class="form-control" />
+            
 
     </div>
 

@@ -5,20 +5,8 @@
      <div class="col-12 col-md-6 col-lg-6">
         
              <label class="mt-1" for="element_7">TIPO: </label>
-             @php
-             $tipos_item= [ "PE"=>"PRODUCTO ELABORADO" , "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "AF"=> "MOBILIARIO Y OTROS"];
-             @endphp
-             <select class="form-control" name="TIPO">
-                 @foreach( $tipos_item as $tkey=> $tval)
-                 @if( $TIPO == $tkey)
-                 <option selected value="{{$tkey}}"> {{$tval}}</option>
-                 @else
-                 <option value="{{$tkey}}"> {{$tval}}</option>
-                 @endif
-                 @endforeach
-             </select>
-       
-
+            <x-tipo-stock-chooser id="" name="TIPO" :value="$TIPO" callback="opcionTipoStock(event);"  class="form-control" />
+           
     
              <label>CÓDIGO:</label>
              <input name="CODIGO" class="form-control" type="text" maxlength="15" value="{{$CODIGO}}" />
@@ -58,3 +46,17 @@
         
      </div>
  </div>
+
+
+ <script>
+
+function opcionTipoStock( ev){
+    if( ev.target.value== "COMBO")
+{    $('#FORMULARIO-COMBO').removeClass("d-none");
+    $('#FORMULARIO-RECETA').addClass("d-none");}
+    else 
+   { $('#FORMULARIO-COMBO').addClass("d-none");
+    $('#FORMULARIO-RECETA').removeClass("d-none");}
+}
+
+ </script>

@@ -103,4 +103,4 @@ $MENSAJE_TICKET= is_null( $params )? "" : $params->MENSAJE_TICKET;
 
 </style>
 
-@include("ventas.proceso.ticket.data")
+@include("ventas.proceso.ticket.solo_datos")

@@ -28,14 +28,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
         font-weight: 600;
     }
 
-    a i.fa-search,
-    a i.fa-download {
-        background-color: var( --color-4);
-        border-radius: 30px;
-        padding: 5px;
-        border: 1px solid black;
-        color: black;
-    }
+    
 
     .form-control {
     

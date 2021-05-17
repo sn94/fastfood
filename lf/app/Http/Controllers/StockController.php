@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Utilidades;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockRequest;
+use App\Models\Combos;
 use App\Models\Compras;
 use App\Models\Ficha_produccion_detalles;
 use App\Models\Nota_pedido_detalles;
@@ -50,15 +51,15 @@ class StockController extends Controller
 
         if ($formato ==  "pdf") {
             $stock =  $stock->get();
-            return $this->responsePdf("stock.grill.simple",  $stock,  "Stock");
+            return $this->responsePdf("stock.index.grill.simple",  $stock,  "Stock");
         }
 
         //Formato Html
         $stock =  $stock->paginate(20);
         if (request()->ajax())
-            return view('stock.grill.index',  ['TIPO' => $TIPO,  'stock' =>   $stock]);
+            return view('stock.index.grill.index',  ['TIPO' => $TIPO,  'stock' =>   $stock]);
         else
-            return view('stock.index',  ['TIPO' => $TIPO]);
+            return view('stock.index.index',  ['TIPO' => $TIPO]);
     }
 
 
@@ -147,7 +148,7 @@ class StockController extends Controller
                 }
                 return $stock;
             } else $stock =  $stock->where("TIPO", "=",  $tipo);
-        }elseif ($familia !=  "") { //Filtrar por familia 
+        } elseif ($familia !=  "") { //Filtrar por familia 
 
             $stock = $stock->where("FAMILIA", $familia);
         }
@@ -219,8 +220,11 @@ class StockController extends Controller
         $TITULO = "";
 
 
-        if (preg_match("/^3/", $filtro)) $filtro = 3;
-        $nombreFuncionFiltro = "filtro$filtro";
+        $filtroTemporal = "";
+        if (preg_match("/^3/", $filtro)) $filtroTemporal = 3;
+        else $filtroTemporal = $filtro;
+
+        $nombreFuncionFiltro = "filtro$filtroTemporal";
 
         try {
 
@@ -302,8 +306,7 @@ class StockController extends Controller
         $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
         $TIPO_PRODUCTO =   request()->has("TIPO_STOCK") ? request()->input("TIPO_STOCK") :  ""; //TIPO DE PRODUCTO
 
-        $loMasPedido = Nota_pedido_detalles::
-        join("nota_pedido_matriz",  "nota_pedido_matriz.REGNRO", "=", "nota_pedido_detalles.NPEDIDO_ID")
+        $loMasPedido = Nota_pedido_detalles::join("nota_pedido_matriz",  "nota_pedido_matriz.REGNRO", "=", "nota_pedido_detalles.NPEDIDO_ID")
             ->join("stock", "stock.REGNRO", "=", "nota_pedido_detalles.ITEM")
             ->join("sucursal", "sucursal.REGNRO", "=", "nota_pedido_matriz.SUCURSAL");
         //Solo filtrar por sucursal, si este parametro no se definio
@@ -332,7 +335,8 @@ class StockController extends Controller
             "sucursal.REGNRO AS SUCURSAL_ID",
 
             DB::raw(" IF(sucursal.MATRIZ='S', CONCAT( sucursal.DESCRIPCION, ' (MATRIZ)') ,  sucursal.DESCRIPCION )   AS SUCURSAL_NOMBRE"),
-            "stock.DESCRIPCION", "stock.TIPO",
+            "stock.DESCRIPCION",
+            "stock.TIPO",
             DB::raw("count(nota_pedido_detalles.REGNRO) AS NUMERO_PEDIDOS")
         );
 
@@ -552,7 +556,7 @@ class StockController extends Controller
     private function create_recipe(StockRequest  $request, $stock_id)
     {
         Receta::where("STOCK_ID", $stock_id)->delete();
-        
+
         if (!$request->has(["MPRIMA_ID", "CANTIDAD", "MEDIDA"]))  return;
 
         $mp_id = $request->input("MPRIMA_ID");
@@ -563,7 +567,7 @@ class StockController extends Controller
 
         for ($m = 0; $m <  sizeof($mp_id); $m++) {
             $Receta_det =  new Receta();
-            $cantidad_limpia= preg_replace("/(,)+/",  ".",  $cantidad[$m] );
+            $cantidad_limpia = preg_replace("/(,)+/",  ".",  $cantidad[$m]);
             $Receta_det->fill(
                 [
                     'STOCK_ID' => $stock_id,
@@ -595,27 +599,58 @@ class StockController extends Controller
     {
         PreciosVenta::where("STOCK_ID", $stock_id)->delete();
 
+        $pventaNormal =  $request->input("PVENTA");
+        $pventaMitad =  $request->input("PVENTA_MITAD");
+        $pventaExtra =  $request->input("PVENTA_EXTRA");
+        $data = [
+            ["DESCRIPCION" => "NORMAL", "PRECIO" => $pventaNormal],
+            ["DESCRIPCION" => "MITAD", "PRECIO" => $pventaMitad],
+            ["DESCRIPCION" => "EXTRA", "PRECIO" => $pventaExtra]
+        ];
+        /*
         $descripcion = $request->input("PRECIO_DESCR");
         $precio_entero = $request->input("PRECIO_ENTERO");
         $precio_mitad = $request->input("PRECIO_MITAD");
-        $precio_porcion = $request->input("PRECIO_PORCION");
-
-        if (!is_array($descripcion)) return;
-        for ($m = 0; $m <  sizeof($descripcion); $m++) {
+        $precio_porcion = $request->input("PRECIO_PORCION");*/
+        for ($m = 0; $m <  sizeof($data); $m++) {
 
             $preciosv =  new PreciosVenta();
             $preciosv->fill(
                 [
                     'STOCK_ID' =>  $stock_id,
-                    'DESCRIPCION' => $descripcion[$m],
-                    'ENTERO' => $precio_entero[$m],
-                    'MITAD' => $precio_mitad[$m],
-                    'PORCION' =>  $precio_porcion[$m]
+                    'DESCRIPCION' => $data[$m]['DESCRIPCION'],
+                    'PRECIO' =>  $data[$m]['PRECIO']
                 ]
             );
             $preciosv->save();
         }
     }
+
+
+    private function create_combo(StockRequest  $request, $stock_id)
+    {
+        Combos::where("COMBO_ID", $stock_id)->delete();
+
+        $comboProducto =  $request->input("COMBO_STOCK_ID");
+        $comboCantidad =  $request->input("COMBO_CANTIDAD");
+
+        if (gettype($comboProducto) == "array") {
+            for ($c = 0; $c <   sizeof($comboProducto); $c++) {
+
+                $combo_nuevo = new Combos();
+                $combo_nuevo->fill(
+                    [
+                        'COMBO_ID' => $stock_id,
+                        'STOCK_ID' => $comboProducto[$c],
+                        'CANTIDAD' => $comboCantidad[$c]
+                    ]
+                );
+                $combo_nuevo->save();
+            }
+        }
+    }
+
+
 
     public function create(StockRequest $request)
     {
@@ -635,19 +670,19 @@ class StockController extends Controller
             try {
                 $data = $request->input();
 
-
+                //Control de nombres redundantes
                 if ($this->codigo_redundante($data['CODIGO'],  $data['BARCODE']))
                     return response()->json(['err' => 'EL CODIGO YA EXISTE']);
 
                 if ($this->nombre_redundante($data['DESCRIPCION']))
                     return response()->json(['err' => 'EL NOMBRE DE PRODUCTO YA EXISTE']);
-               
+
                 //  return;
 
                 DB::beginTransaction();
 
                 $nuevo_stock =  new Stock();
-                
+
 
                 $nuevo_stock->fill($data);
                 $nuevo_stock->save();
@@ -672,13 +707,19 @@ class StockController extends Controller
                 //Guardar precios multiples
                 $this->create_prices($request, $stock_id);
 
+                //Crear detalle de Combo (si amerita)
+                if ($request->input("TIPO") == "COMBO")
+                    $this->create_combo($request,  $stock_id);
+
                 //Crear registro de existencias
-                $nueva_existencia = new Stock_existencias();
-                $nueva_existencia->fill([
-                    'STOCK_ID' => $stock_id, 'SUCURSAL' => session("SUCURSAL"),
-                    'CANTIDAD' => '0'
-                ]);
-                $nueva_existencia->save();
+                if ($request->input("TIPO") != "COMBO") {
+                    $nueva_existencia = new Stock_existencias();
+                    $nueva_existencia->fill([
+                        'STOCK_ID' => $stock_id, 'SUCURSAL' => session("SUCURSAL"),
+                        'CANTIDAD' => '0'
+                    ]);
+                    $nueva_existencia->save();
+                }
 
                 DB::commit();
 
@@ -702,11 +743,13 @@ class StockController extends Controller
             $RECETA =   $Stock__->receta;
             //Precios Venta
             $PRECIOS = $Stock__->precios;
+            //Detalle de combo
+            $COMBOS=  $Stock__->combos;
+ 
 
-          
             return view(
                 'stock.create.index',
-                ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS]
+                ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS , 'COMBO'=>$COMBOS ]
             );
         } else {
 
@@ -740,6 +783,12 @@ class StockController extends Controller
                 $path =  $this->save_photo($request, $stock_id);
                 $nuevo_stock->IMG = "lf/public/images/" . $path;
                 $nuevo_stock->save();
+
+                 //Crear detalle de Combo (si amerita)
+                 if ($request->input("TIPO") == "COMBO")
+                 $this->create_combo($request,  $stock_id);
+
+              
 
                 DB::commit();
                 return response()->json(['ok' =>  "Stock Actualizado"]);
@@ -806,6 +855,10 @@ class StockController extends Controller
 
 
 
+    /**
+     * Funciones de mantenimiento
+     */
+
     public function  restaurar_stock()
     {
         set_time_limit(0);
@@ -818,7 +871,7 @@ class StockController extends Controller
 
             foreach ($sucursales as $suc) :
 
-               
+
 
                 Stock_existencias::updateOrCreate(
                     ['SUCURSAL' => $suc->REGNRO, 'STOCK_ID' => $stock->REGNRO],
@@ -826,6 +879,37 @@ class StockController extends Controller
                 );
 
             endforeach;
+
+        endforeach;
+    }
+
+    public function  restaurar_precios()
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        $registros = Stock::where("TIPO", "PE")->orWhere("TIPO", "PP")->get();
+
+        foreach ($registros as $stock) :
+            $pventaNormal = $stock->PVENTA;
+            $pventaMitad = $stock->PVENTA_MITAD;
+            $pventaExtra =  $stock->PVENTA_EXTRA;
+
+            $data = [
+                ["DESCRIPCION" => "NORMAL", "PRECIO" => $pventaNormal],
+                ["DESCRIPCION" => "MITAD", "PRECIO" => $pventaMitad],
+                ["DESCRIPCION" => "EXTRA", "PRECIO" => $pventaExtra]
+            ];
+            for ($m = 0; $m < sizeof($data); $m++) {
+                $preciosv =  new PreciosVenta();
+                $preciosv->fill(
+                    [
+                        'STOCK_ID' =>  $stock->REGNRO,
+                        'DESCRIPCION' => $data[$m]['DESCRIPCION'],
+                        'PRECIO' =>  $data[$m]['PRECIO']
+                    ]
+                );
+                $preciosv->save();
+            }
 
         endforeach;
     }

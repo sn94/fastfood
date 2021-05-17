@@ -1,9 +1,6 @@
 <input type="hidden" id="buscador_stock_url" value="{{url('stock/buscar')}}">
 
-@php
-$tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "PE"=>"PRODUCTO ELABORADO" , "AF"=> "MOBILIARIO Y OTROS"];
  
-@endphp
 
 <div id="buscador_de_items" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -20,17 +17,10 @@ $tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "PE"=>"PRODUCTO ELA
 
                 @if( !isset($TIPO) )
                 Filtrar por:
-                <select class="form-control form.buscador" id="BUSCADOR-TIPO-STOCK" onchange="buscar_items__()">
-                    @foreach( $tipos_item as $tkey=> $tval)
-                    @if( $tkey == "MP")
-                    <option selected value="{{$tkey}}"> {{$tval}}</option>
-                    @else
-                    <option value="{{$tkey}}"> {{$tval}}</option>
-                    @endif
-                    @endforeach
-                </select>
+                <x-tipo-stock-chooser id="BUSCADOR-TIPO-STOCK" callback="buscar_items__();" class="form-control form.buscador" />
                 @else
-                <input type="hidden" id="BUSCADOR-TIPO-STOCK" value="{{$TIPO}}">
+                <x-tipo-stock-chooser id="BUSCADOR-TIPO-STOCK" :value="{{$TIPO}}" atributos="type='hidden'" />
+
                 @endif
 
 
@@ -118,8 +108,8 @@ $tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "PE"=>"PRODUCTO ELA
 <script>
     window.buscador_items_data_model = [];
     window.buscador_items_modelo = {};
-    if( !("buscar_items_target" in window))
-    window.buscar_items_target = undefined; //Object
+    if (!("buscar_items_target" in window))
+        window.buscar_items_target = undefined; //Object
 
 
 
@@ -133,8 +123,8 @@ $tipos_item= [ "MP" => "MATERIA PRIMA", "PP"=> "PARA VENTA", "PE"=>"PRODUCTO ELA
             buscador_items_modelo = modelo[0];
 
             //Existe target?
-            if (window.buscar_items_target != undefined  &&   typeof  window.buscar_items_target == "function") {
-                window.buscar_items_target(  buscador_items_modelo );
+            if (window.buscar_items_target != undefined && typeof window.buscar_items_target == "function") {
+                window.buscar_items_target(buscador_items_modelo);
             }
             //CERRAR
             $(".modal.show").modal("hide");

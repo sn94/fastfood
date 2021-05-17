@@ -491,7 +491,7 @@ class VentasController extends Controller
                 var_dump(Mail::to($email)->send(new TicketSender($venta)));
                 return response()->json(['ok' =>  "enviado"]);
             }
-        } else    return view("ventas.proceso.ticket.print.index", ["VENTA" => $venta, "DETALLE" => $detalle]);
+        } else    return view("ventas.proceso.ticket.version_impresa", ["VENTA" => $venta, "DETALLE" => $detalle]);
     }
 
 

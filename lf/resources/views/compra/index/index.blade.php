@@ -32,8 +32,7 @@ Compras
 @section("content")
 
 
-@include("ventas.proceso.res.impresion")
-
+ 
 
 
 <div class="container-fluid  col-12 col-md-12 col-lg-12 col-xl-10 bg-dark  mt-lg-2 mt-md-0 text-light pb-5 ">

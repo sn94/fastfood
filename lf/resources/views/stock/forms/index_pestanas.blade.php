@@ -45,14 +45,7 @@
          font-weight: 600;
      }
 
-     a i.fa-search,
-     a i.fa-download {
-         background-color: #f7fb55;
-         border-radius: 30px;
-         padding: 5px;
-         border: 1px solid black;
-         color: black;
-     }
+    
 
      .form-control {
          background: white !important;

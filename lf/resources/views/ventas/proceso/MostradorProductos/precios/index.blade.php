@@ -1,12 +1,14 @@
-@include("ventas.proceso.detalle.food_gallery.precios.estilos")
+@include("ventas.proceso.MostradorProductos.precios.estilos")
 
 <script>
     //Mostrar opcion de precios multiples Cuando hay mas de una variedad 
     function mostrarPreciosParaElegir(STOCK_ID) {
+        //Obtener modelo de datos con id STOCK_ID
         let itemEncontrado = listaDeProductosJSON.
         filter((ar) => ar.REGNRO == STOCK_ID)[0];
 
         let variedad_precios = itemEncontrado.precios;
+
         let rows = variedad_precios.map(({
             REGNRO,
             DESCRIPCION,
@@ -47,22 +49,33 @@
 
 
 
-    function mostrarPreciosDicotomicos(STOCK_ID) {
+
+
+
+    
+
+    function mostrarPreciosVarios(STOCK_ID) {
         let itemEncontrado = listaDeProductosJSON.
         filter((ar) => String(ar.REGNRO) ==  String( STOCK_ID) )[0];
-        console.log("dico",  itemEncontrado);
         
-        let pEntero = formatoNumerico.darFormatoEnMillares( itemEncontrado.PVENTA, 0);
-        let pMitad = formatoNumerico.darFormatoEnMillares( itemEncontrado.PVENTA_MITAD, 0);
+        let opcionesPrecio= itemEncontrado.precios.filter( ar => ar.PRECIO != undefined && ar.PRECIO != 0).map(
 
+            (precioOpc)=>
+          {
+          
+            let precio_ = formatoNumerico.darFormatoEnMillares( precioOpc.PRECIO, 0);
+                let callback= precioOpc.DESCRIPCION == "NORMAL" ?  `cargarSegunPrecioNormal(${ itemEncontrado.REGNRO})` : `cargarSegunPreciosVarios(${ itemEncontrado.REGNRO}, "${ precioOpc.DESCRIPCION}" )`;
+              return ` <tr><th>${precioOpc.DESCRIPCION}</th> <td> <button onclick='${callback}' type='button' >${precio_}</button></td> </tr>`}
+        );
+        
+        
         let html = `
         <div class="container col-12 col-md-4">
         <table id="VENTAS-VARIEDAD-PRECIOS" class="table">
         <thead><tr><th colspan="5">${itemEncontrado.DESCRIPCION}</th>  </tr></thead>
         <thead><tr> </tr></thead>
         <tbody>
-           <tr><th>ENTERO</th> <td> <button onclick='cargarSegunPrecioNormal( ${ itemEncontrado.REGNRO})' type='button' >${pEntero}</button></td> </tr>
-           <tr> <th>MITAD</th> <td> <button onclick='cargarSegunPrecioMitad( ${itemEncontrado.REGNRO})' type='button' >${pMitad}</button></td></tr>
+          ${opcionesPrecio}
         </tbody>
         </table>
         </div>
@@ -87,19 +100,43 @@
             cerrarMyModal();
     }
 
-    function cargarSegunPrecioMitad(paramStockId) {
+    function cargarSegunPreciosVarios(paramStockId, tipoPrecio) {
         //Se recibio el ID de producto
         let datosItem = {};
         let targetObject = listaDeProductosJSON.filter((ar) => ar.REGNRO == paramStockId)[0];
         Object.assign(datosItem, targetObject);
-        datosItem.PVENTA = targetObject.PVENTA_MITAD;
-        datosItem.DESCRIPCION=  targetObject.DESCRIPCION+" (MITAD)";
-        datosItem.TIPO_PRECIO = "MITAD";
-        datosItem.ID_PRECIO = "MITAD";
+        
+        let precioSeleccionado= 0;
+        switch( tipoPrecio){
+            case "NORMAL": precioSeleccionado=  targetObject.PVENTA;break;
+            case "MITAD": precioSeleccionado=  targetObject.PVENTA_MITAD;break;
+            case "EXTRA": precioSeleccionado=  targetObject.PVENTA_EXTRA;break;
+        }
+        datosItem.PVENTA = precioSeleccionado;
+        datosItem.DESCRIPCION=  targetObject.DESCRIPCION+" ("+tipoPrecio+")";
+        datosItem.TIPO_PRECIO = tipoPrecio;
+        datosItem.ID_PRECIO = tipoPrecio;
+
         cargar(datosItem);
         if ("cerrarMyModal" in window)
             cerrarMyModal();
     }
+    /*
+    function cargarSegunPreciosVarios(paramStockId) {
+        //Se recibio el ID de producto
+        let datosItem = {};
+        let targetObject = listaDeProductosJSON.filter((ar) => ar.REGNRO == paramStockId)[0];
+        Object.assign(datosItem, targetObject);
+
+        datosItem.PVENTA = targetObject.PVENTA_MITAD;
+        datosItem.DESCRIPCION=  targetObject.DESCRIPCION+" (MITAD)";
+        datosItem.TIPO_PRECIO = "MITAD";
+        datosItem.ID_PRECIO = "MITAD";
+
+        cargar(datosItem);
+        if ("cerrarMyModal" in window)
+            cerrarMyModal();
+    }*/
 
     function cargarSegunPrecioEspecial(paramIdPrecio, modus) {
         //Se recibio ID precio y modus(ENTERO, MITAD, PORCION)

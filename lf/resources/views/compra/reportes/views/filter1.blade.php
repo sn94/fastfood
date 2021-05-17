@@ -15,8 +15,7 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
     table tfoot tr td {
         padding: 0px !important;
         padding-left: 2px !important;
-        padding-right: 2px;
-        font-size: 12px;
+        padding-right: 2px; 
         
     }
 
@@ -31,7 +30,12 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
 table, h4{
     font-family: Arial, Helvetica, sans-serif;
 }
+table{
+    font-size: 12px;
+}
 </style>
+
+
 <h4 style="text-align: center;">Compras por producto y por proveedor</h4>
 @endif
 
@@ -62,7 +66,14 @@ table, h4{
             <td>{{$ven->COMPRA_ID}} </td>
             <td>{{$ven->FECHA->format('d/m/Y')}}</td>
             <td> {{$ven->DESCRIPCION}}</td>
-            <td>{{ $ven->TIPO_PRODUCTO == "MP" ? "MATERIA PRIMA" : ( $ven->TIPO_PRODUCTO == "PE" ? "ELABORADO"  :  ( $ven->TIPO_PRODUCTO == "PP"  ? "PARA VENTA"   :  "MOBILIARIO Y OTROS")   )    }}</td>
+            <td>
+            @php 
+            $TipoStock=$ven->TIPO_PRODUCTO;
+            @endphp
+            <x-tipo-stock-chooser :value="$TipoStock" style="border: none;" readonly="S" atributos="disabled" />
+            </td>
+
+           
             <td class="text-end fw-bold">{{ $ven->PVENTA == "" ? "****" :  $ven->PVENTA}}</td>
             <td class="text-end fw-bold">{{ $ven->P_UNITARIO}}</td>
 

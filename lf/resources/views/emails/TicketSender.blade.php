@@ -65,4 +65,4 @@ $MENSAJE_TICKET= "";
         font-weight: 600;
     }
 </style>
-@include("ventas.proceso.ticket.data")
+@include("ventas.proceso.ticket.solo_datos")

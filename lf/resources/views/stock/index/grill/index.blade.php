@@ -5,9 +5,9 @@ use App\Libs\Mobile_Detect;
 
 @if( (new Mobile_Detect())->isMobile() )
 
-@include("stock.grill.mobile")
+@include("stock.index.grill.mobile")
 @else
-@include("stock.grill.desktop.index")
+@include("stock.index.grill.desktop.index")
 @endif
 
 

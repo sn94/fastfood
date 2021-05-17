@@ -12,7 +12,7 @@ class PreciosVenta extends Model
     protected $table= "stock_precios";
     protected $primaryKey = 'REGNRO';
     public $timestamps = false;
-    protected $fillable = [ 'STOCK_ID','DESCRIPCION','ENTERO','MITAD', 'PORCION' ];
+    protected $fillable = [ 'STOCK_ID','DESCRIPCION','PRECIO'  ];
 
  
      

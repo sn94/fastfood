@@ -21,6 +21,8 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
  $FAMILIA_NOM= isset( $stock )? ( is_null($stock->familia ) ? '' : $stock->familia->DESCRIPCION ): "";
  $PVENTA= isset( $stock )? Utilidades::number_f( $stock->PVENTA ) : "0";
  $PVENTA_MITAD= isset( $stock )? Utilidades::number_f( $stock->PVENTA_MITAD) : "0";
+ $PVENTA_EXTRA= isset( $stock )? Utilidades::number_f( $stock->PVENTA_EXTRA) : "0";
+ 
  $PCOSTO= isset( $stock )? Utilidades::number_f( $stock->PCOSTO ) : "0";
  $STOCK_MAX= isset( $stock )? Utilidades::number_f( $stock->STOCK_MAX ): "0";
  $STOCK_MIN= isset( $stock )? Utilidades::number_f($stock->STOCK_MIN) : "0";
@@ -31,7 +33,7 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
  $TIPO_F= $TIPO=='F'? 'checked':'';
  $MEDIDA= isset( $stock )? $stock->MEDIDA : "UNIDAD";
  $SUCURSAL=  isset( $stock )? $stock->SUCURSAL : session("SUCURSAL");
- $VENDIDOXMITAD= isset( $stock )? $stock->VENDIDOXMITAD  : "N";
+ $PRECIOS_VARIOS= isset( $stock )? $stock->PRECIOS_VARIOS  : "N";
  //Source
  use App\Models\Familia;
 
@@ -52,20 +54,11 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
          font-weight: 600;
      }
 
-     a i.fa-search,
-     a i.fa-download {
-         background-color: #f7fb55;
-         border-radius: 30px;
-         padding: 5px;
-         border: 1px solid black;
-         color: black;
-     }
+     
 
      .form-control {
-         background: white !important;
-         color: black !important;
          height: 28px !important;
-         font-size: 12.5px;
+         
      }
 
 
@@ -95,13 +88,7 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
          grid-column-start: 2;
      }
 
-     #STOCKRECETA thead tr th,
-     #STOCKRECETA tbody tr td {
-         padding: 0px;
-         font-family: mainfont;
-         font-size: 15px;
-         font-weight: 600;
-     }
+     
  </style>
 
 
@@ -113,7 +100,7 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
  <div class="row">
      <div class="col-12">
 
-         <x-pretty-checkbox   name="VENDIDOXMITAD" :value="$VENDIDOXMITAD" onValue="S"  offValue="N"  label="VENDIDO POR MITAD:" />
+         <x-pretty-checkbox   name="PRECIOS_VARIOS" :value="$PRECIOS_VARIOS" onValue="S"  offValue="N"  label="VARIOS PRECIOS" />
 
      </div>
 
@@ -128,15 +115,21 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
      @include("stock.forms.form_foto")
      </div>
 
-     <div class="col-12 col-sm-6 col-md-6  ">
+   
+     <div class="col-12 col-sm-6 col-md-6  {{$TIPO == 'COMBO' ? '' : 'd-none' }}"  id="FORMULARIO-COMBO">
+        
+     @include("stock.forms.form_combo")
+  
+     </div>
+    
+     <div class="col-12 col-sm-6 col-md-6 {{$TIPO == 'PE' ? '' : 'd-none' }}"  id="FORMULARIO-RECETA">
      @include("stock.forms.form_receta")
      </div>
 
       
  </div><!--Fin fila-->
 
-
-
+ @include("buscador.Buscador")
  @include("validations.form_validate")
  @include("validations.formato_numerico")
 
@@ -228,6 +221,7 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
          if ("stockModel" in window && "restaurar_modelo_receta" in stockModel)
              stockModel.restaurar_modelo_receta();
+             tableDetalleComboModel.restaurar_modelo_combo();
          //recuperar_datos_modal();
          /*Formato numerico **/
          //formato entero

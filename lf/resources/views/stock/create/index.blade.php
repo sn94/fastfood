@@ -22,13 +22,13 @@ endif;
 @if( (request()->ajax()))
   
   @if( isset($stock) )
-   <?=view("stock.create.ajax",  ['stock'=> $stock ,  'RECETA'=> $RECETA])?>
+   <?=view("stock.create.ajax",  ['stock'=> $stock ,  'RECETA'=> $RECETA, 'COMBO'=>$COMBO])?>
    @else 
    <?=view("stock.create.ajax")?>
    @endif
 @else
 @if( isset($stock) )
-  <?=view("stock.create.no_ajax",   ['stock'=> $stock ,  'RECETA'=> $RECETA ] )?>
+  <?=view("stock.create.no_ajax",   ['stock'=> $stock ,  'RECETA'=> $RECETA, 'COMBO'=>$COMBO ] )?>
   @else 
   <?=view("stock.create.no_ajax" )?>
   @endif

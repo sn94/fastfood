@@ -4,37 +4,13 @@
 @section("content")
 
 
-<style>
-  /*
-  #SESION-FORM .form-control {
-    height: 30px !important;
-    background: white !important;
-    font-size: 14px;
-    color: black !important;
-  }
-
-  #SESION-FORM div.col-12:nth-child(7) {
-    align-items: center;
-  }
-
-  #SESION-FORM label {
-    font-weight: 500;
-    color: white;
-    font-size: 12px;
-  }*/
+<style> 
 
   #SESION-FORM input.form-control[readonly] {
     background-color: #9b9a9a !important;
   }
 
-  a i.fa-search,
-  a i.fa-plus {
-    background-color: #f7fb55;
-    border-radius: 30px;
-    padding: 5px;
-    border: 1px solid black;
-    color: black;
-  }
+   
 </style>
 
 

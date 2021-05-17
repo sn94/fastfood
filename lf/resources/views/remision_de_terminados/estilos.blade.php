@@ -25,14 +25,7 @@ label {
         font-weight: 600;
     }
 
-    a i.fa-search {
-        background-color: #f7fb55;
-        border-radius: 30px;
-        padding: 5px;
-        border: 1px solid black;
-        color: black;
-    }
-
+    
 
     table thead tr th, table tbody tr td{
         padding: 0px !important;

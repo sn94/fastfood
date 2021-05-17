@@ -108,3 +108,23 @@ label {
     background-position-y: bottom;
     background-position-x: right;
 }
+
+div>a i.fa-edit,
+div>a i.fa {
+    background-color: #ff0000;
+    border-radius: 40px;
+    padding: 5px;
+    border: 1px solid black;
+    color: white;
+    transition: all .5s ease;
+}
+
+div>a i.fa:hover {
+    border: 1px solid var(--color-3);
+    box-shadow: 0 0 10px var(--color-3);
+    background: linear-gradient( to bottom left, var(--color-3), var(--color-1));
+}
+
+.form-control:focus {
+    box-shadow: 0 0 10px 5px var(--color-3) !important;
+}

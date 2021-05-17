@@ -133,6 +133,7 @@ Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function ()
     Route::post('/buscar',   'StockController@index');
 
     Route::get('/restaurar-registros',   'StockController@restaurar_stock');
+    Route::get('/restaurar-precios',   'StockController@restaurar_precios');
 });
 
 

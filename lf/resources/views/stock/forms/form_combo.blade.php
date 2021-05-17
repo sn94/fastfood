@@ -4,48 +4,39 @@ use App\Helpers\Utilidades;
 ?>
 
 
-<style>
-    #STOCKRECETA thead tr th,
-    #STOCKRECETA tbody tr td {
-        padding: 0px;
-        font-family: mainfont;
-        font-size: 15px;
-        font-weight: 600;
-    }
-</style>
 
-<div class="row m-0  mt-1 " style="background-color: var(--color-3);">
+<div class="row m-0  mt-1 g-0  " style="background-color: var(--color-3);">
+
 
     <div class="col-12">
         <p style="background-color: var(--color-3);
 font-weight: bold;
 text-align: center; 
 letter-spacing: 3px;
-border-bottom: 1px solid var(--color-1);">Receta</p>
+border-bottom: 1px solid var(--color-1);">Combo</p>
     </div>
     <div class="col-12 col-md-8 col-lg-8 p-0 m-0">
 
-        <div class="p-0 m-0" style="display:  flex; flex-direction: row;">
-
+        <div class="p-0 m-0  d-flex flex-row">
 
             <label style="  font-size: 20px;  ">ITEM:</label>
-            <a href="#" onclick="buscarItemParaReceta()"><i class="fa fa-search"></i></a>
-            <input style="width: 60px;font-weight: 600; color: black;border: 1px solid #555 !important;  " class="form-control" type="text" id="FORM-STOCK-ITEM-ID" disabled>
+            <a href="#" onclick="buscarProductoParaCombo()"><i class="fa fa-search"></i></a>
 
-            <input disabled class="form-control" style="width: 100% !important;border: 1px solid #555 !important;" autocomplete="off" type="text" id="FORM-STOCK-ITEM-DESC">
+            <input style="width: 60px;font-weight: 600; color: black;border: 1px solid #555 !important;  " class="form-control" type="text" id="FORM-COMBO-ITEM-ID" disabled>
+
+            <input disabled class="form-control" style="width: 100% !important;border: 1px solid #555 !important;" autocomplete="off" type="text" id="FORM-COMBO-ITEM-DESC">
 
         </div>
     </div>
 
-    <div class="col-12  col-sm-6 col-md-4 col-lg-4  p-0 m-0">
-        <div style="display: flex; flex-direction: row;">
-            <label>CANTIDAD: </label>
-            <div style="display: flex; flex-direction: column;">
-                <input oninput="formatoNumerico.formatearDecimal(event)" onkeydown="if(event.keyCode==13) {event.preventDefault(); stockModel.cargar_tabla();}" id="FORM-STOCK-CANTIDAD" class="form-control decimal" type="text" />
-                <label style="color: black;font-size: 12px; font-weight: 600;" id="FORM-STOCK-MEDIDA"></label>
-            </div>
-            <a href="#" onclick="stockModel.cargar_tabla()"><i class="fa fa-download"></i></a>
+    <div class="col-12  col-sm-6 col-md-4 col-lg-4  p-0 m-0 d-flex flex-row">
+        <label>CANTIDAD: </label>
+        <div style="display: flex; flex-direction: column;">
+            <input oninput="formatoNumerico.formatearDecimal(event)" onkeydown="if(event.keyCode==13) {event.preventDefault(); tableDetalleComboModel.cargar_tabla();}" id="FORM-COMBO-CANTIDAD" class="form-control decimal" type="text" />
+            <label style="color: black;font-size: 12px; font-weight: 600;" id="FORM-COMBO-MEDIDA"></label>
         </div>
+        <a href="#" onclick="tableDetalleComboModel.cargar_tabla()"><i class="fa fa-download"></i></a>
+
     </div>
 
 
@@ -54,7 +45,8 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
 </div>
 
 <div class="row  p-0 pt-1  m-0 ">
-    <div class="col-12 col-md-12 p-0 ">
+
+    <div class="col-12 col-md-12 p-0">
         <table id="STOCKRECETA" class="table table-striped table-secondary text-dark">
 
             <thead>
@@ -66,24 +58,24 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
                     <th></th>
                 </tr>
             </thead>
-            <tbody id="RECETA-DETALLE">
+            <tbody id="COMBO-DETALLE">
 
-                @if( isset($RECETA))
+                @if( isset( $COMBO) )
 
-                @foreach( $RECETA as $receta_)
+                @foreach( $COMBO as $combo_)
+            
 
-
-                <tr id="{{$receta_->STOCK_ID}}" class="MP-class">
+                <tr id="{{$combo_->STOCK_ID}}">
                     <td class="text-center">
-                        {{$receta_->CODIGO != "" ?  $receta_->CODIGO  : ($receta_->BARCODE !="" ? $receta_->BARCODE :  $receta_->REGNRO)  }}
+                        {{ $combo_->STOCK_ID }}
                     </td>
                     <td>
-                        <input type="hidden" name="MPRIMA_ID[]" value="{{$receta_->MPRIMA_ID}}">
-                        {{$receta_->materia_prima->DESCRIPCION}}
+                        <input type="hidden" name="COMBO_STOCK_ID[]" value="{{$combo_->STOCK_ID}}">
+                        {{$combo_->stock->DESCRIPCION}}
                     </td>
-                    <td><input type='hidden' name='MEDIDA_[]' value="{{$receta_->MEDIDA_}}"> {{$receta_->MEDIDA_}}</td>
-                    <td> <input type='hidden' name='CANTIDAD[]' value="{{$receta_->CANTIDAD}}"> {{ Utilidades::number_f($receta_->CANTIDAD) }}</td>
-                    <td> <a style='color:black;' href='#' onclick='stockModel.deleteme( this )'> <i class='fa fa-trash'></i> </a> </td>
+                    <td><input type='hidden' name='COMBO_MEDIDA[]' value="{{$combo_->MEDIDA}}"> {{$combo_->MEDIDA}}</td>
+                    <td> <input type='hidden' name='COMBO_CANTIDAD[]' value="{{$combo_->CANTIDAD}}"> {{ Utilidades::number_f($combo_->CANTIDAD) }}</td>
+                    <td> <a style='color:black;' href='#' onclick='tableDetalleComboModel.deleteme( this )'> <i class='fa fa-trash'></i> </a> </td>
                 </tr>
 
                 @endforeach
@@ -111,20 +103,20 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
 
 
 <script>
-    var receta_model = [];
+    var combo_model = [];
 
 
 
-    var stockModel = {
+    var tableDetalleComboModel = {
 
         limpiar_campos_detalle: function() {
-            $("#FORM-STOCK-ITEM-ID").val("");
-            $("#FORM-STOCK-ITEM-DESC").val("");
-            $("#FORM-STOCK-CANTIDAD").val("");
-            $("#FORM-STOCK-MEDIDA").text("");
+            $("#FORM-COMBO-ITEM-ID").val("");
+            $("#FORM-COMBO-ITEM-DESC").val("");
+            $("#FORM-COMBO-CANTIDAD").val("");
+            $("#FORM-COMBO-MEDIDA").text("");
         },
         limpiar_tabla: function() {
-            $("#RECETA-DETALLE").html("");
+            $("#COMBO-DETALLE").html("");
         },
 
         deleteme: function(esto) {
@@ -133,18 +125,18 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
             let id = row.attr("id");
             $(esto.parentNode.parentNode).remove();
             //quitar del modelo 
-            receta_model = receta_model.filter(function(arg) {
+            combo_model = combo_model.filter(function(arg) {
                 return String(arg.ITEM) != String(id);
             });
         },
         actualizar_fila: function(objec) {
-            let existe = receta_model.map((ar) => ar.ITEM).filter((ar) => parseInt(ar) == parseInt(objec.ITEM)).length;
+            let existe = combo_model.map((ar) => ar.ITEM).filter((ar) => parseInt(ar) == parseInt(objec.ITEM)).length;
             if (existe > 0) {
-                let numero_de_filas = $("#RECETA-DETALLE tr").length;
+                let numero_de_filas = $("#COMBO-DETALLE tr").length;
                 if (numero_de_filas == 0) return false;
 
                 for (let nf = 0; nf < numero_de_filas; nf++) {
-                    let lafila = $("#RECETA-DETALLE tr")[nf];
+                    let lafila = $("#COMBO-DETALLE tr")[nf];
 
                     let esQueTipoStock = $(lafila).hasClass(objec.TIPO + "-class");
 
@@ -157,16 +149,16 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
         },
         actualiza_modelo_de_datos: function(NuevoObjeto) {
 
-            let EXISTE = receta_model.filter(
+            let EXISTE = combo_model.filter(
                 (ar) => {
                     return (ar.TIPO == NuevoObjeto.TIPO && ar.ITEM == String(NuevoObjeto.ITEM));
                 }
             ).length;
             if (EXISTE == 0) {
-                receta_model.push(NuevoObjeto);
+                combo_model.push(NuevoObjeto);
                 return;
             }
-            receta_model = receta_model.map(
+            combo_model = combo_model.map(
                 (ar) => {
                     if (ar.TIPO == NuevoObjeto.TIPO && ar.ITEM == String(NuevoObjeto.ITEM)) {
                         let obj_act = ar;
@@ -181,14 +173,14 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
             //if( Object.keys(buscador_items_modelo).length == 0  ) return;
 
             let codigo_item = buscador_items_modelo.CODIGO;
-            let regnro = $("#FORM-STOCK-ITEM-ID").val();
-            let descri = $("#FORM-STOCK-ITEM-DESC").val();
-            let cantidad = $("#FORM-STOCK-CANTIDAD").val();
-            let medida = $("#FORM-STOCK-MEDIDA").text();
+            let regnro = $("#FORM-COMBO-ITEM-ID").val();
+            let descri = $("#FORM-COMBO-ITEM-DESC").val();
+            let cantidad = $("#FORM-COMBO-CANTIDAD").val();
+            let medida = $("#FORM-COMBO-MEDIDA").text();
 
 
             /**Lista de elementos coincidentes en el modelo */
-            let modeloDeItemSeleccionado = receta_model.filter(
+            let modeloDeItemSeleccionado = combo_model.filter(
                 (ar) => {
                     return (ar.TIPO == buscador_items_modelo.TIPO && ar.ITEM == String(buscador_items_modelo.REGNRO));
                 }
@@ -201,10 +193,10 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
             }
 
             let coditem = "<td>" + codigo_item + "</td>";
-            let des = "<td><input type='hidden' name='MPRIMA_ID[]' value='" + regnro + "'>" + descri + "</td>";
-            let med = "<td><input type='hidden' name='MEDIDA_[]' value='" + medida + "'> " + medida + "</td>";
-            let cant = "<td><input type='hidden' name='CANTIDAD[]' value='" + cantidad + "'>" + cantidad + "</td>";
-            let del = "<td> <a style='color:black;' href='#' onclick='stockModel.deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>";
+            let des = "<td><input type='hidden' name='COMBO_STOCK_ID[]' value='" + regnro + "'>" + descri + "</td>";
+            let med = "<td><input type='hidden' name='COMBO_MEDIDA[]' value='" + medida + "'> " + medida + "</td>";
+            let cant = "<td><input type='hidden' name='COMBO_CANTIDAD[]' value='" + cantidad + "'>" + cantidad + "</td>";
+            let del = "<td> <a style='color:black;' href='#' onclick='tableDetalleComboModel.deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>";
 
             //agregar al modelo
             let tipoStock = buscador_items_modelo.TIPO;
@@ -225,16 +217,16 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
             this.actualizar_fila(objc); //Quitar de la tabla para actualizar la fila
 
 
-            $("#RECETA-DETALLE").append(nueva_tr);
+            $("#COMBO-DETALLE").append(nueva_tr);
             this.limpiar_campos_detalle();
 
 
 
             buscador_items_modelo = {};
         },
-        restaurar_modelo_receta: async function() {
+        restaurar_modelo_combo: async function() {
             //item cantidad tipo medida
-            let row = document.querySelectorAll("#RECETA-DETALLE tr");
+            let row = document.querySelectorAll("#COMBO-DETALLE tr");
             if (row.length == 0) return;
 
             let modelo = Array.prototype.map.call(row, function(domtr) {
@@ -252,7 +244,7 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
                     TIPO: TIPO
                 };
             });
-            receta_model = modelo;
+            combo_model = modelo;
         }
 
     }
@@ -260,19 +252,20 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
 
     //ver
 
-    async function buscarItemParaReceta() {
+    async function buscarProductoParaCombo() {
+        console.log("Combo");
         //**** */
         //Parametros de formulario
         let tipos_de_item = {
-            "MP": "MATERIA PRIMA",
             "PP": "PARA VENTA",
-            "PE": "PRODUCTO ELABORADO",
-            "AF": "MOBILIARIO Y OTROS"
+            "PE": "PRODUCTO ELABORADO"
         };
         let htmlParams = Object.entries(tipos_de_item).map(([key, val]) => {
-            return `<option value='${key}'>${val}</option>`;
+            return `<option  value='${key}'>${val}</option>`;
         });
-        htmlParams = `<form><input type='hidden' value='MP' name='tipo' /></form>`;
+        htmlParams = `
+        <form><select style='border:none; border-bottom: 1px solid black;' onchange=' Buscador.filtrar(this)'   >${htmlParams}</select>
+          <input type='hidden' value='VENTA' name='tipo'  /> </form>`;
 
         Buscador.url = "<?= url("stock/buscar") ?>";
         Buscador.httpMethod = "post";
@@ -288,9 +281,9 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
         Buscador.callback = function(seleccionado) {
 
             window.buscador_items_modelo = seleccionado;
-            $('#FORM-STOCK-ITEM-ID').val(seleccionado.REGNRO);
-            $('#FORM-STOCK-ITEM-DESC').val(seleccionado.DESCRIPCION);
-            $("#FORM-STOCK-MEDIDA").text(seleccionado.unidad_medida.DESCRIPCION);
+            $('#FORM-COMBO-ITEM-ID').val(seleccionado.REGNRO);
+            $('#FORM-COMBO-ITEM-DESC').val(seleccionado.DESCRIPCION);
+            $("#FORM-COMBO-MEDIDA").text(seleccionado.unidad_medida.DESCRIPCION);
 
         };
         Buscador.render();
