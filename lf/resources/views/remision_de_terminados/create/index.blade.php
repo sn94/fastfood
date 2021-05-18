@@ -12,69 +12,72 @@
 
 
 
-@include("deposito.remision_de_terminados.estilos")
-
-
-
-<!--URL -->
-<input type="hidden" id="RESOURCE-URL" value="{{url('productos/buscar')}}">
-<input type="hidden" id="RESOURCE-URL-ITEM" value="{{url('productos/get')}}">
-<input type="hidden" id="PROVEEDOR-URL" value="{{url('proveedores')}}">
-
-
-
+@include("remision_de_terminados.create.estilos")
+<!-- incluye funciones para generar y usar un buscador de datos -->
+@include("buscador.Buscador")
+ 
 
 
 <div id="loaderplace"></div>
-<div class="container-fluid bg-dark text-light col-12 col-md-11  mx-auto pb-5">
-<h2 class="text-center mt-2"  >Remisión de productos terminados</h2>
- 
-        <form action="<?= url("remision-prod-terminados") ?>" method="POST"  onkeypress="if(event.keyCode == 13) event.preventDefault();"    onsubmit="guardar(event)">
 
-            @if( isset($PRODUCCION))
-            <input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION->REGNRO}}">
-            @endif
-            <input type="hidden" name="REGISTRADO_POR" value="<?= session("ID") ?>">
-            <input type="hidden" name="SUCURSAL" value="<?= session("SUCURSAL") ?>">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+<div class="container-fluid bg-dark text-light col-12 col-md-11 col-lg-8  mx-auto pb-5">
+    <h2 class="text-center mt-2">Remisión de productos terminados</h2>
 
+    <form action="<?= url("remision-prod-terminados/create") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
 
-
-            <div class="row bg-dark mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
+        @if( isset($PRODUCCION))
+        <input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION->REGNRO}}">
+        @endif
+        <input type="hidden" name="REGISTRADO_POR" value="<?= session("ID") ?>">
+        <input type="hidden" name="SUCURSAL" value="<?= session("SUCURSAL") ?>">
+        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
 
 
+        <div class="row  mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
 
-                <div class="col-12 col-md-6">
-                    @includeIf('deposito.remision_de_terminados.ficha_produccion_view', ['PRODUCCION' => $PRODUCCION])
+            <div class="col-12 ">
+                @if( isset($PRODUCCION))
+                @includeIf('remision_de_terminados.create.ficha_produccion_view', ['PRODUCCION' => $PRODUCCION])
+                @endif
 
-                    <div class="row">
-                        <div class="col-12 col-md-3  mb-1">
-                            <label class="mt-1" for="element_7">FECHA: </label>
-                            <input value="{{date('Y-m-d')}}" name="FECHA" class="form-control mt-1" type="date" />
 
-                        </div>
+                <div class="row">
+                <div class="col-12 col-md-3  mb-1">
+                        <label class="mt-1 fs-6" for="element_7">Nota N°: </label>
+                        <input  name="NUMERO" class="form-control mt-1 fs-6" type="text" maxlength="15" />
 
-                        <div class="col-12 col-md-9  mb-1">
-                            <label class="mt-1" for="element_7">OBSERVACIÓN: </label>
-                            <input name="CONCEPTO" class="form-control mt-1" type="text" />
+                    </div>
 
-                        </div>
-                        <div class="col-12 col-md-2  mb-1">
-                            <button type="submit" class="btn btn-danger"> GUARDAR</button>
-                        </div>
+                    <div class="col-12 col-md-3  mb-1">
+                        <label class="mt-1 fs-6" for="element_7">Fecha: </label>
+                        <input value="{{date('Y-m-d')}}" name="FECHA" class="form-control mt-1 fs-6" type="date" />
+
+                    </div>
+
+                    <div class="col-12 col-md-6  mb-1">
+                        <label class="mt-1 fs-6" for="element_7">Autorizado Por: </label>
+                        <input maxlength="50" name="AUTORIZADO_POR" class="form-control mt-1 fs-6" type="text" />
+                    </div>
+
+                    <div class="col-12 col-md-5  mb-1">
+                        <label class="mt-1 fs-6" for="element_7">Observación: </label>
+                        <input name="CONCEPTO" class="form-control mt-1 fs-6" type="text" />
+                    </div>
+                    <div class="col-12 col-md-2  mb-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-danger"> GUARDAR</button>
                     </div>
                 </div>
-
-
-                <div class="col-12 col-md-6">
-                    @include("deposito.remision_de_terminados.grill")
-                </div>
-
-
             </div>
-        </form>
- 
+        </div>
+
+        <div class="row">
+            <div class="col-12 ">
+                @include("remision_de_terminados.create.grill")
+            </div>
+        </div>
+    </form>
+
 </div>
 
 
@@ -92,9 +95,9 @@
 
     async function guardar(ev) {
         //config_.processData= false; config_.contentType= false;
-      
-         ev.preventDefault();
-        
+
+        ev.preventDefault();
+
         formValidator.init(ev.target);
         if ($("#REMISION-DETALLE").children().length == 0) {
             alert("Cargue al menos un item");
@@ -130,7 +133,8 @@
             $("input[name=FECHA]").val((new Date()).getFecha());
             limpiar_tabla();
             alert(resp.ok);
-            //window.location.reload();
+            
+            window.location= "<?=url('remision-prod-terminados/index')?>";
         } else {
             alert(resp.err);
         }
@@ -138,42 +142,9 @@
 
     }
 
- 
-
-    //Autocomplete
-    async function autocompletado_proveedores() {
-        let url_ = $("#PROVEEDOR-URL").val();
-        let req = await fetch(url_, {
-            headers: {
-                formato: "json"
-            }
-        });
-        let resp = await req.json();
-
-        var dataArray = resp.map(function(value) {
-            return {
-                label: value.NOMBRE,
-                value: value.REGNRO
-            };
-        });
-
-        let elementosCoincidentes = document.querySelectorAll(".proveedor");
-
-        Array.prototype.forEach.call(elementosCoincidentes, function(input) {
-            new Awesomplete(input, {
-                list: dataArray,
-                // insert label instead of value into the input.
-                replace: function(suggestion) {
-                    this.input.value = suggestion.label;
-                    $("input[name=PROVEEDOR]").val(suggestion.value);
-                }
-            });
-        });
-
-    }
 
 
-
+     
 
     async function restaurar_modelo_remision() {
         //item cantidad tipo medida
@@ -184,7 +155,7 @@
 
 
             let ITEM = domtr.id;
-            let CODIGO= domtr.children[0].textContent;
+            let CODIGO = domtr.children[0].textContent;
             let CANTIDAD = domtr.children[3].textContent;
             let MEDIDA = domtr.children[2].textContent;
             let TIPO = domtr.className.split("-")[0];

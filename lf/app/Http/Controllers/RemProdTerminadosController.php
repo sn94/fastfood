@@ -3,16 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
- 
-use App\Models\Ficha_produccion; 
+
+use App\Models\Ficha_produccion;
 use App\Models\Remision_de_terminados;
-use App\Models\Remision_de_terminados_detalle; 
+use App\Models\Remision_de_terminados_detalle;
 use App\Models\Stock_existencias;
-use Exception; 
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class RemProdTerminadosController extends Controller
 {
+
+
+
+
+    public function index()
+    {
+
+        $sucursal = session("SUCURSAL");
+        $listaRemisiones =  Remision_de_terminados::where("SUCURSAL", $sucursal)->orderBy("created_at", "DESC")->paginate(10);
+
+        if (request()->ajax())
+            return view("remision_de_terminados.index.grill", ['REMISION' =>  $listaRemisiones]);
+        else
+            return view("remision_de_terminados.index.index", ['REMISION' =>  $listaRemisiones]);
+    }
+
 
 
     public function create($PRODUCCIONID =  NULL)
@@ -21,13 +37,18 @@ class RemProdTerminadosController extends Controller
 
 
             if (is_null($PRODUCCIONID))
-                return view('remision_de_terminados.index');
+                return view('remision_de_terminados.create.index');
             else {
                 $produccion = Ficha_produccion::find($PRODUCCIONID);
-
                 $pro_detalle = $produccion->detalle_produccion;
 
-                return view('remision_de_terminados.index', ["PRODUCCION" =>  $produccion, 'PRODUCCION_DETALLE' => $pro_detalle]);
+                return view(
+                    'remision_de_terminados.create.index',
+                    [
+                        "PRODUCCION" =>  $produccion,
+                        'PRODUCCION_DETALLE' => $pro_detalle
+                    ]
+                );
             }
         } else {
 
@@ -51,6 +72,7 @@ class RemProdTerminadosController extends Controller
                     $d_compra =  new Remision_de_terminados_detalle();
                     $d_compra->fill($datarow);
                     $d_compra->save();
+
                     $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
                         ->where("STOCK_ID",  $datarow['ITEM'])->first();
                     $existencia->CANTIDAD =  $existencia->CANTIDAD - $datarow['CANTIDAD'];
@@ -60,8 +82,10 @@ class RemProdTerminadosController extends Controller
 
                 //Actualizar estado
                 //Listo, cumplimentado
-                Ficha_produccion::find($CABECERA['PRODUCCION_ID'])
-                    ->fill(["ESTADO" => "LISTO", "FINALIZADO_POR" => session("ID")])->save();
+                if (isset($CABECERA['PRODUCCION_ID'])) {
+                    Ficha_produccion::find($CABECERA['PRODUCCION_ID'])
+                        ->fill(["ESTADO" => "LISTO", "FINALIZADO_POR" => session("ID")])->save();
+                }
                 DB::commit();
                 return response()->json(['ok' =>  "Remisión registrada"]);
             } catch (Exception  $ex) {
@@ -70,7 +94,4 @@ class RemProdTerminadosController extends Controller
             }
         }
     }
-
-
- 
 }

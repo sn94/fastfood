@@ -305,30 +305,39 @@ Route::group(['prefix' => 'pedidos', 'middleware' => ['auth.Caja']],   function 
 
 
 Route::prefix('ficha-produccion')->group(function () {
-    Route::get('/', 'FichaProduccionController@ficha_produccion');
-    Route::post('/',   'FichaProduccionController@ficha_produccion');
-    Route::put('/',   'FichaProduccionController@ficha_produccion');
-    Route::get('/{IDPRODUCCION}', 'FichaProduccionController@ficha_produccion');
+    Route::get('/index', 'FichaProduccionController@index');
+    Route::get('/', 'FichaProduccionController@create');
+    Route::post('/',   'FichaProduccionController@create');
+    Route::put('/',   'FichaProduccionController@create');
+    Route::get('/{IDPRODUCCION}', 'FichaProduccionController@create');
+
     Route::get('/fichas/{ESTADO}/{ACCION}', function ($ESTADO, $ACCION) {
         return view("ficha_produccion.index.index", ['ESTADO' => $ESTADO, 'ACCION' => $ACCION]);
     });
 });
 
 Route::prefix('salida')->group(function () {
-    Route::get('/{IDPRODUCCION}',   'SalidaController@create');
-    Route::get('/',   'SalidaController@create');
-    Route::post('/',   'SalidaController@create');
+   
+    Route::get('/index',   'SalidaController@index');
+    Route::get('/create-with-produccion-id/{IDPRODUCCION}',   'SalidaController@create');
+    Route::get('/create',   'SalidaController@create');
+    Route::post('/create',   'SalidaController@create');
 });
 
 
 Route::prefix('nota-residuos')->group(function () {
-    Route::get('/{IDPRODUCCION}',   'NotaResiduosController@create');
-    Route::post('/',   'NotaResiduosController@create');
+    Route::get('/index',   'NotaResiduosController@create');
+    Route::get('/create/{IDPRODUCCION}',   'NotaResiduosController@create');
+    Route::get('/create',   'NotaResiduosController@create');
+    Route::post('/create',   'NotaResiduosController@create');
 });
 
 Route::prefix('remision-prod-terminados')->group(function () {
-    Route::get('/{IDPRODUCCION}',   'RemProdTerminadosController@create');
-    Route::post('/',   'RemProdTerminadosController@create');
+ 
+    Route::get('/index',   'RemProdTerminadosController@index');
+    Route::get('/create',   'RemProdTerminadosController@create');
+    Route::get('/create/{IDPRODUCCION}',   'RemProdTerminadosController@create');
+    Route::post('/create',   'RemProdTerminadosController@create');
 });
 
 

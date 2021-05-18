@@ -466,8 +466,9 @@ class VentasController extends Controller
                             //Descontar productos del combo
                             $comboModel = Combos::where("COMBO_ID", $r1)->get();
                             foreach ($comboModel as $comboItem)
+                                {
                                 $descontarStock($comboItem->STOCK_ID,  $comboItem->CANTIDAD);
-                                $registrarSalidaIngrediente( $comboItem->STOCK_ID,  $comboItem->CANTIDAD );
+                                $registrarSalidaIngrediente($comboItem->STOCK_ID,  $comboItem->CANTIDAD);}
                         }
                         
                     }

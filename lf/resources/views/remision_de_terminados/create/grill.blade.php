@@ -1,45 +1,41 @@
-<div id="buscador_de_items" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Modal body text goes here.</p>
-            </div>
+<style>
+    #ITEM-MEDIDA {
+        font-weight: 600;
+        letter-spacing: 1px;
+        background-color: var(--color-3);
+        position: relative;
+        z-index: 100000;
+        top: -100%;
+        color: white;
+        border-radius: 8px 8px 0px 0px;
+        text-align: center;
+    }
+</style> 
 
-        </div>
-    </div>
-</div>
-
-
-<div class="row bg-dark ">
+<div class="row">
 
     <div class="col-12 col-md-8  mb-1">
         <div style="display: flex; flex-direction: row;">
 
 
-            <label style="  font-size: 20px;  ">ITEM:</label>
+            <label class="fs-6 ">Ítem:</label>
             @if( ! isset($PRODUCCION_DETALLE) )
             <a href="#" onclick="buscador_de_items()"><i class="fa fa-search"></i></a>
             @endif 
 
-            <input size="5" style="width:50px !important; font-weight: 600; color: black; " class="form-control" type="text" id="ITEM-ID" disabled>
+            <input size="5" style="width:50px !important; font-weight: 600; color: black; " class="form-control fs-6" type="text" id="ITEM-ID" disabled>
 
-            <input disabled class="form-control" style="width: 100% !important; height: 40px;" autocomplete="off" type="text" id="ITEM">
+            <input disabled class="form-control fs-6" style="width: 100% !important; height: 40px;" autocomplete="off" type="text" id="ITEM-DESCRIPCION">
 
         </div>
     </div>
 
     <div class="col-12  col-md-4  mb-1 pl-0 d-flex flex-row"  >
 
-        <label  >CANTIDAD:&nbsp; </label>
+        <label  class="fs-6" >Cantidad:&nbsp; </label>
         <div style="display: flex; flex-direction: column;">
-            <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="grid-column-start: 2;width: 90px !important;" id="CANTIDAD" class="form-control decimal" type="text" />
-            <label style="letter-spacing: 2px; font-weight: 600; color: yellow;grid-column-start: 3;" id="MEDIDA"></label>
+            <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="grid-column-start: 2;width: 90px !important;" id="CANTIDAD" class="form-control decimal fs-6" type="text" />
+            <label   id="ITEM-MEDIDA"></label>
         </div>
 
     </div>
@@ -49,15 +45,15 @@
 
 </div>
 
-<div class="container bg-dark mt-2 p-0  "> 
+<div class="container   mt-2 p-0  "> 
         <table class="table table-striped table-secondary text-dark">
 
             <thead>
-                <tr style="font-family: mainfont;font-size: 18px;">
-                    <th>CÓDIGO</th>
-                    <th>DESCRIPCIÓN</th>
-                    <th>UNI.MED.</th>
-                    <th> CANTIDAD</th>
+                <tr  >
+                    <th>Cód.</th>
+                    <th>Descripción</th>
+                    <th>Medida</th>
+                    <th> Cantidad</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -102,50 +98,35 @@
 
     async function buscador_de_items() {
 
-        let req = await fetch("<?= url('buscador-items') ?>/PE");
-        let resp = await req.text();
-        $("#buscador_de_items .modal-body").html(resp);
-        await buscar_items__();
-        $("#buscador_de_items").modal("show");
+        //Solo PE
+        let TIPOITEM ="PE";
+        
+        Buscador.url = "<?= url("stock/buscar") ?>/" + TIPOITEM;
+        Buscador.htmlFormForParams = `<form> <input name='TIPO' type='hidden' value='${TIPOITEM}'> </form>`;
+
+        Buscador.htmlFormFieldNames = ['TIPO'];
+        Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
+        Buscador.columnLabels = ['ID', 'DESCRIPCION'];
+        Buscador.callback = function(respuesta) {
+           
+            const {
+                REGNRO,
+                DESCRIPCION,
+                unidad_medida
+            } = respuesta;
+
+            window.buscador_items_modelo = respuesta;
+
+            $("#ITEM-ID").val(REGNRO);
+            $("#ITEM-DESCRIPCION").val(DESCRIPCION);
+            $("#ITEM-MEDIDA").text(unidad_medida.UNIDAD);
+
+        };
+        Buscador.render();
+ 
     }
 
-    //Autocomplete
-    async function autocompletado_items() {
-        let url_ = $("#RESOURCE-URL").val();
-        let req = await fetch(url_, {
-            method: "POST",
-
-            headers: {
-                formato: "json",
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            body: "tipo=P" /** preventa parametro solo valido para buscar productos */
-        });
-        let resp = await req.json();
-
-        var dataArray = resp.map(function(value) {
-            return {
-                label: value.DESCRIPCION,
-                value: value.REGNRO
-            };
-        });
-
-        let elementosTARGET = document.getElementById("ITEM");
-
-        new Awesomplete(elementosTARGET, {
-            list: dataArray,
-            // insert label instead of value into the input.
-            replace: function(suggestion) {
-                this.input.value = suggestion.label;
-                $("#ITEM-ID").val(suggestion.value);
-                mostrar_item(suggestion.value);
-            }
-        });
-
-    }
-
-
+    
 
 
     function editar_fila(esto) {
@@ -162,9 +143,9 @@
 
         let regnro = $("#ITEM-ID").val(rowid);
 
-        let descri = $("#ITEM").val(descr);
+        let descri = $("#ITEM-DESCRIPCION").val(descr);
         let cantidad = $("#CANTIDAD").val(canti);
-        let medida = $("#MEDIDA").text(medi);
+        let medida = $("#ITEM-MEDIDA").text(medi);
 
         window.buscador_items_modelo = {
             CODIGO: coditem,
@@ -194,9 +175,9 @@
 
     function limpiar_campos_detalle() {
         $("#ITEM-ID").val("");
-        $("#ITEM").val("");
+        $("#ITEM-DESCRIPCION").val("");
         $("#CANTIDAD").val("");
-        $("#MEDIDA").text("");
+        $("#ITEM-MEDIDA").text("");
     }
 
 
@@ -261,9 +242,9 @@
 
         let regnro = $("#ITEM-ID").val();
         let coditem = buscador_items_modelo.CODIGO;
-        let descri = $("#ITEM").val();
+        let descri = $("#ITEM-DESCRIPCION").val();
         let cantidad = $("#CANTIDAD").val();
-        let medida = $("#MEDIDA").text();
+        let medida = $("#ITEM-MEDIDA").text();
 
 
         /**Lista de elementos coincidentes en el modelo */

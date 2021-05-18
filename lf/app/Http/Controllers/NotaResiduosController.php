@@ -17,6 +17,17 @@ class NotaResiduosController extends Controller
   
 
  
+    public function index()
+    {
+
+        $sucursal = session("SUCURSAL");
+        $listaResiduos =  Nota_residuos::where("SUCURSAL", $sucursal)->orderBy("created_at", "DESC")->paginate(10);
+
+        if (request()->ajax())
+            return view("nota_residuos.index.grill", ['NOTAS_RESIDUOS' =>  $listaResiduos]);
+        else
+            return view("nota_residuos.index.index", ['NOTAS_RESIDUOS' =>  $listaResiduos]);
+    }
 
 
 
@@ -26,10 +37,10 @@ class NotaResiduosController extends Controller
 
 
             if (is_null($PRODUCCIONID))
-                return view('nota_residuos.index');
+                return view('nota_residuos.create.index');
             else {
                 $produccion = Ficha_produccion::find($PRODUCCIONID);
-                return view('nota_residuos.index', ["PRODUCCION" =>  $produccion]);
+                return view('nota_residuos.create.index', ["PRODUCCION" =>  $produccion]);
             }
         } else {
 

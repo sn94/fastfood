@@ -16,12 +16,24 @@ class SalidaController extends Controller
  
  
 
+    public function index(){
+
+        $sucursal= session("SUCURSAL");
+        $listaSalidas=  Salidas::where("SUCURSAL", $sucursal )->orderBy("created_at", "DESC")->paginate(10);
+
+        if(  request()->ajax())
+        return view("salida.index.grill", ['SALIDAS'=>  $listaSalidas]);
+        else
+        return view("salida.index.index", ['SALIDAS'=>  $listaSalidas]);
+
+    }
+
     public function create($PRODUCCIONID = null)
     {
         if (request()->getMethod()  ==  "GET") {
-
+ 
             if (is_null($PRODUCCIONID))  return view('salida.create.index');
-
+            /**Obtener datos de la ficha de produccion cuando se indique */
             $PROD = Ficha_produccion::find($PRODUCCIONID);
             return view(
                 'salida.create.index',
@@ -30,15 +42,13 @@ class SalidaController extends Controller
                     'PRODUCCION_DETALLE' =>   $PROD->detalle_produccion
                 ]
             );
+
+
         } else {
 
             $Datos = request()->input();
             $CABECERA = $Datos['CABECERA'];
-
-
             $DETALLE = $Datos['DETALLE'];
-
-
             try {
                 DB::beginTransaction();
                 //CABECERA
@@ -58,23 +68,37 @@ class SalidaController extends Controller
                         ->where("STOCK_ID",  $datarow['ITEM'])->first();
                     $existencia->CANTIDAD =  $existencia->CANTIDAD -  $datarow['CANTIDAD'];
                     $existencia->save(); //disminuir
+                    
 
                 endforeach;
 
 
 
-                //Cambiar estado de ficha de produccion a Despachado
-                if (isset($CABECERA['PRODUCCION_ID'])) {
+                //Cambiar estado de ficha de produccion a Despachado (Si se ha indicado un numero de Ficha de prod.)
+                if (isset($CABECERA['PRODUCCION_ID'])   &&  $CABECERA['PRODUCCION_ID'] != ""  ) {
                     Ficha_produccion::find($CABECERA['PRODUCCION_ID'])
                         ->fill(["ESTADO" => "DESPACHADO", "RECIBIDO_POR" => session("ID")])->save();
                 }
 
                 DB::commit();
                 return response()->json(['ok' =>  "Salida registrada"]);
+
             } catch (Exception  $ex) {
                 DB::rollBack();
                 return response()->json(['err' =>   $ex->getMessage()]);
             }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -11,7 +11,7 @@ $adminOptionsMenu = [
         "label" => "DEPOSITO", "link" =>
         [
 
-            ["label" => "SALIDAS DE PRODUCTOS Y MATERIA PRIMA", "link" =>  url('ficha-produccion/fichas/PENDIENTE/SALIDAS')],
+            ["label" => "SALIDAS DE PRODUCTOS Y MATERIA PRIMA", "link" =>  url('salida/index')],
             ["label" => "COMPRAS", "link" =>  url('compra/index')],
             ["label" => "STOCK",  "link" =>  url('stock')]
 
@@ -22,8 +22,8 @@ $adminOptionsMenu = [
         "label" => "COCINA", "link" =>
         [
             ["label" => "FICHA DE PRODUCCIÓN", "link" => url('ficha-produccion')],
-            ["label" => "REMISIÓN DE PRODUCTOS TERMINADOS", "link" => url('ficha-produccion/fichas/DESPACHADO/TERMINADOS')],
-            ["label" => "NOTA DE RESIDUOS",  "link" => url('ficha-produccion/fichas/DESPACHADO/RESIDUOS')]
+            ["label" => "REMISIÓN DE PRODUCTOS TERMINADOS", "link" => url('remision-prod-terminados/index')],
+            ["label" => "NOTA DE RESIDUOS",  "link" => url('nota-residuos/index')]
 
         ],
     ],

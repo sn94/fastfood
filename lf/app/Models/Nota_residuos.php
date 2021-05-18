@@ -14,11 +14,16 @@ class Nota_residuos extends Model
     public $timestamps = true;
     protected $fillable = [
         'NUMERO',  'FECHA',  'CONCEPTO', 'ESTADO',  'SUCURSAL',
-        'REGISTRADO_POR',  'PRODUCCION_ID'
+        'REGISTRADO_POR',  'PRODUCCION_ID', 'created_by'
     ];
 
 
+    protected $dates = [
+        "FECHA"
+    ];
 
+
+    
     public function residuos_detalle()
     {
         return $this->hasMany(Nota_residuos_detalle::class, 'NRESIDUO_ID',  'REGNRO');

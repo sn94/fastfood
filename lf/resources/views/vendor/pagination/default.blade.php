@@ -1,12 +1,26 @@
 <style>
+
+ 
 ul.pagination li{
     font-size: 16px;
-    padding-left: 20px;
+    padding: 5px 20px;
+    display: flex;
+    justify-content: center;
    
 }
 ul.pagination li a,  ul.pagination li span{
     color: black !important;
 }
+
+ul.pagination li:hover{
+  background: linear-gradient(to bottom left,var(--color-2)  ,  var(--color-1) );
+  border-radius: 50px;
+  position: relative;
+  z-index: 10000;
+  transform: scale(1.3);
+}
+
+
 </style>
 @php 
 $customCallbackName=  isset(  $customCallbackName ) ?  $customCallbackName :  "fill_grill";

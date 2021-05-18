@@ -14,15 +14,15 @@
 
     <div class="col-12   col-sm-6 col-md-6  mb-1">
         @if( ! is_null($PRODUCCION_ID) )
-        <label class="mt-1" for="element_7">ORDEN DE PRODUCCIÓN: </label>
+        <label class="mt-1 fs-6" for="element_7">Orden de Producción: </label>
         <input readonly value="{{$PRODUCCION_ID}}" name="PRODUCCION_ID" class="form-control mt-1" type="text" />
         @endif
-        <label style="grid-column-start: 1;" class="mt-1 mr-0 pr-0" for="element_7">FECHA: </label>
+        <label style="grid-column-start: 1;" class="mt-1 mr-0 pr-0 fs-6" for="element_7">Fecha: </label>
         <input value="{{date('Y-m-d')}}" name="FECHA" style="grid-column-start: 2;" class=" ml-0 form-control mt-1" type="date" />
 
 
-        <label style="grid-column-start: 1;" class="mt-1" for="element_7">SALIDA: </label>
-        <x-tipo-stock-chooser name="TIPO_SALIDA" callback="cambiar_tipo_salida(event);"  class="form-control" />
+        <label style="grid-column-start: 1;" class="mt-1 fs-6" for="element_7">Salida: </label>
+        <x-tipo-stock-chooser id="" name="TIPO_SALIDA" callback="cambiar_tipo_salida(event);"  class="form-control" />
             
 
     </div>
@@ -30,7 +30,7 @@
 
 
     <div class="col-12 col-sm-6 col-md-6   ">
-        <label style="grid-column-start: 1;" class="mt-1" for="element_7">DESTINO: </label>
+        <label style="grid-column-start: 1;" class="mt-1 fs-6" for="element_7">Destino: </label>
         @php
         $tipos_destino= [ "COCINA" => "COCINA", "SUCURSAL"=> "SUCURSAL" ];
         @endphp
@@ -45,7 +45,7 @@
         </select>
 
        <div id="SUCURSAL_DESTINO" class="d-none" >
-       <label style="grid-column-start: 1;">SUCURSAL: </label>
+       <label style="grid-column-start: 1;"  class="fs-6">SUCURSAL: </label>
         <select style="grid-column-start: 2;" class="form-control" name="SUCURSAL_DESTINO">
             @foreach( $SUCURSALES as $sucursal)
             <option value="{{$sucursal->REGNRO}}">{{$sucursal->DESCRIPCION}}</option>
@@ -53,7 +53,7 @@
         </select>
        </div>
 
-        <label style="grid-column-start: 1;" class="mt-1 " for="element_7">OBS.: </label>
+        <label style="grid-column-start: 1;" class="mt-1 fs-6 " for="element_7">Observación: </label>
         <input name="CONCEPTO" style="grid-column-start: 2;" class="form-control mt-1" type="text" />
 
 

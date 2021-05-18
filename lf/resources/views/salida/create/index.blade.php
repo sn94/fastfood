@@ -19,13 +19,13 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 @include("salida.routes")
 @include("buscador.Buscador")
 
-<div class="container-fluid col-12 col-sm-11 col-md-8 col-lg-7 bg-dark text-light mt-2 pb-5 px-2">
+<div class="container-fluid col-12 col-sm-11 col-md-10 col-lg-7 bg-dark text-light mt-2 pb-5 px-5">
 
     <h2 class="text-center mt-2">Salidas de productos y materia prima</h2>
 
     <div id="loaderplace"></div>
 
-    <form id="SALIDAFORM" action="<?= url("salida") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarSalida(event)">
+    <form id="SALIDAFORM" action="<?= url("salida/create") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarSalida(event)">
         <div class="row ">
             <div class="col-12 col-md-2  mb-1">
                 <button type="submit" class="btn btn-danger"> GUARDAR</button>
@@ -50,6 +50,7 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 
     function buscarItem() {
         let TIPOITEM = $("select[name=TIPO_SALIDA]").val();
+        
         Buscador.url = "<?= url("stock/buscar") ?>/" + TIPOITEM;
         Buscador.htmlFormForParams = `<form> <input name='TIPO' type='hidden' value='${TIPOITEM}'> </form>`;
 
@@ -106,7 +107,7 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
             $("input[name=FECHA]").val((new Date()).getFecha());
             limpiar_tabla();
             alert(resp.ok);
-            window.location = "<?= url('salida') ?>";
+            window.location = "<?= url('salida/index') ?>";
         } else {
             alert(resp.err);
         }

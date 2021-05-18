@@ -14,10 +14,13 @@ class Remision_de_terminados extends Model
     public $timestamps = true;
     protected $fillable = [
         'NUMERO',  'FECHA',  'CONCEPTO', 'ESTADO',  'SUCURSAL',
-        'REGISTRADO_POR',  'PRODUCCION_ID'
+        'REGISTRADO_POR',  'PRODUCCION_ID', 'AUTORIZADO_POR'
     ];
 
 
+    protected $dates = [
+        "FECHA"
+    ];
 
     public function remision_detalle()
     {

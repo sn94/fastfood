@@ -1,27 +1,34 @@
- 
+<style>
+    #MEDIDA {
+        font-weight: 600;
+        letter-spacing: 1px;
+        background-color: var(--color-3);
+        position: relative;
+        z-index: 100000;
+        top: -100%;
+        color: white;
+        border-radius: 8px 8px 0px 0px;
+        text-align: center;
+    }
+</style>
+<div class="row" id="RESIDUOS-FIELDS">
 
+    <div class="col-12 col-md-8  mb-1  d-flex flex-row">
 
-<div class="row bg-dark "  id="RESIDUOS-FIELDS">
+        <label class="fs-6">Ítem:</label>
+        <a href="#" onclick="buscarResiduo()"><i class="fa fa-search"></i></a>
+        <input size="5" style="width:50px !important; font-weight: 600; color: black; " class="form-control ITEM-ID fs-6" type="text" id="ITEM-ID" disabled>
 
-    <div class="col-12 col-md-8  mb-1">
-        <div style="display: flex; flex-direction: row;">
+        <input disabled class="form-control ITEM fs-6" style="width: 100% !important; height: 40px;" autocomplete="off" type="text" id="ITEM">
 
-
-            <label style="  font-size: 20px;  ">ITEM:</label>
-            <a href="#" onclick="buscarResiduo()"><i class="fa fa-search"></i></a>
-            <input size="5" style="width:50px !important; font-weight: 600; color: black; " class="form-control ITEM-ID" type="text" id="ITEM-ID" disabled>
-
-            <input disabled class="form-control ITEM" style="width: 100% !important; height: 40px;" autocomplete="off" type="text" id="ITEM">
-
-        </div>
     </div>
 
-    <div class="col-12  col-md-4  mb-1 pl-0" style="display: flex;  flex-direction: row;">
+    <div class="col-12  col-md-4  mb-1 ps-0  d-flex flex-row">
 
-        <label>CANTIDAD:&nbsp; </label>
-        <div style="display: flex; flex-direction: column;">
-            <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="width: 90px !important;" id="CANTIDAD" class="form-control CANTIDAD decimal" type="text" />
-            <label class="MEDIDA" style="letter-spacing: 2px; font-weight: 600; color: yellow;" id="MEDIDA"></label>
+        <label class="fs-6">Cantidad:&nbsp; </label>
+        <div class="d-flex flex-column">
+            <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="width: 90px !important;" id="CANTIDAD" class="form-control CANTIDAD decimal fs-6" type="text" />
+            <label class="MEDIDA" id="MEDIDA"></label>
         </div>
         <a href="#" onclick="cargar_tabla()"><i class="fa fa-download"></i></a>
 
@@ -32,16 +39,16 @@
 
 </div>
 
-<div class="row bg-dark mt-2 pt-1 pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
-    <div class="col-12 col-md-12 p-0">
+<div class="row mt-2    ">
+    <div class="col-12 col-md-12">
         <table class="table table-striped table-secondary text-dark">
 
             <thead>
-                <tr style="font-family: mainfont;font-size: 18px;">
-                <th>CÓDIGO</th>
-                    <th>DESCRIPCIÓN</th>
-                    <th>UNI.MED.</th>
-                    <th> CANTIDAD</th>
+                <tr >
+                    <th>Cód.</th>
+                    <th>Descripción</th>
+                    <th>Medida</th>
+                    <th> Cantidad</th>
                     <th></th>
                 </tr>
             </thead>
@@ -74,61 +81,33 @@
     async function buscarResiduo() {
 
         let PANEL_ID = "#RESIDUOS-FIELDS";
-            window.buscar_items_target = function({
+        let TIPOITEM = "MP";
+
+        Buscador.url = "<?= url("stock/buscar") ?>/" + TIPOITEM;
+        Buscador.htmlFormForParams = `<form> <input name='TIPO' type='hidden' value='${TIPOITEM}'> </form>`;
+
+        Buscador.htmlFormFieldNames = ['TIPO'];
+        Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
+        Buscador.columnLabels = ['ID', 'DESCRIPCION'];
+        Buscador.callback = function(respuesta) {
+
+            const {
                 REGNRO,
                 DESCRIPCION,
-                MEDIDA
-            }) {
+                unidad_medida
+            } = respuesta;
 
-                $(PANEL_ID + " .ITEM-ID").val(REGNRO);
-                $(PANEL_ID + " .ITEM").val(DESCRIPCION);
-                $(PANEL_ID + " .MEDIDA").text(MEDIDA);
-            };
+            window.buscador_items_modelo = respuesta;
 
-            if ("buscar_items__" in window) {
-                $("#BUSCADOR-TIPO-STOCK").val("MP");
-                await buscar_items__();
-            } else {
-                let req = await fetch("<?= url('buscador-items') ?>/MP" );
-                let resp = await req.text();
-                $("body").append(resp);
-                await buscar_items__();
-            }
-    }
+            $(PANEL_ID + " .ITEM-ID").val(REGNRO);
+            $(PANEL_ID + " .ITEM").val(DESCRIPCION);
+            $(PANEL_ID + " .MEDIDA").text(unidad_medida.UNIDAD);
 
-    //Autocomplete
-    async function autocompletado_items() {
-        let url_ = $("#RESOURCE-URL").val();
-        let req = await fetch(url_, {
-            method: "POST",
 
-            headers: {
-                formato: "json",
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            body: "tipo=P" /** preventa parametro solo valido para buscar productos */
-        });
-        let resp = await req.json();
 
-        var dataArray = resp.map(function(value) {
-            return {
-                label: value.DESCRIPCION,
-                value: value.REGNRO
-            };
-        });
+        };
+        Buscador.render();
 
-        let elementosTARGET = document.getElementById("ITEM");
-
-        new Awesomplete(elementosTARGET, {
-            list: dataArray,
-            // insert label instead of value into the input.
-            replace: function(suggestion) {
-                this.input.value = suggestion.label;
-                $("#ITEM-ID").val(suggestion.value);
-                mostrar_item(suggestion.value);
-            }
-        });
 
     }
 
@@ -219,7 +198,7 @@
         //if( Object.keys(buscador_items_modelo).length == 0  ) return;
 
         let regnro = $("#ITEM-ID").val();
-        let coditem= buscador_items_modelo.CODIGO;
+        let coditem = buscador_items_modelo.CODIGO;
         let descri = $("#ITEM").val();
         let cantidad = $("#CANTIDAD").val();
         let medida = $("#MEDIDA").text();
@@ -235,7 +214,7 @@
 
         if (regnro != "") {
 
-            let codite= "<td> " + coditem + "</td>";
+            let codite = "<td> " + coditem + "</td>";
             let des = "<td> " + descri + "</td>";
             let med = "<td> " + medida + "</td>";
             let cant = "<td>" + cantidad + "</td>";
@@ -253,7 +232,7 @@
 
             let classIdentTipoItem = tipoStock + "-class";
 
-            let nueva_tr = "<tr  class='" + classIdentTipoItem + "' id='" + regnro + "' >" + codite+ des + med + cant + del + "</tr>";
+            let nueva_tr = "<tr  class='" + classIdentTipoItem + "' id='" + regnro + "' >" + codite + des + med + cant + del + "</tr>";
 
             //Actualizar modelo de datos
             actualiza_modelo_de_datos(objc);
@@ -268,11 +247,4 @@
 
         buscador_items_modelo = {};
     }
-
-
-
-
-
-   
-   
 </script>
