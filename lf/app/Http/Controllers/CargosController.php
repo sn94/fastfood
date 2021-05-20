@@ -48,7 +48,7 @@ class CargosController extends Controller
 
 
 
-        $cargos =  $cargos->paginate(10);
+        $cargos =  $cargos->paginate(20);
 
         if (request()->ajax())
             return view('cargo.grill.index',  ['cargos' =>   $cargos]);

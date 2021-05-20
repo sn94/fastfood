@@ -70,8 +70,10 @@ class VentasController extends Controller
             return response()->json($ventas);
         }
 
-        $ventas =  $ventas->paginate(10);
+        $ventas =  $ventas->with("cajero")->paginate(20);
 
+        foreach(  $ventas as $v)
+        echo $v->cajero;
 
         if (request()->ajax())
             return view("ventas.index.grill", ['VENTAS' =>  $ventas]);
@@ -159,7 +161,7 @@ class VentasController extends Controller
         //Formato html
         try {
 
-            $VENTAS =  is_array($VENTAS)  ?  $VENTAS :  $VENTAS->paginate(15);
+            $VENTAS =  is_array($VENTAS)  ?  $VENTAS :  $VENTAS->paginate(20);
         } catch (Exception  $e) {
             return response()->json(['err' =>  $e->getMessage()]);
         }

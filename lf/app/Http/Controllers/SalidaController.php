@@ -19,7 +19,7 @@ class SalidaController extends Controller
     public function index(){
 
         $sucursal= session("SUCURSAL");
-        $listaSalidas=  Salidas::where("SUCURSAL", $sucursal )->orderBy("created_at", "DESC")->paginate(10);
+        $listaSalidas=  Salidas::where("SUCURSAL", $sucursal )->orderBy("created_at", "DESC")->paginate(20);
 
         if(  request()->ajax())
         return view("salida.index.grill", ['SALIDAS'=>  $listaSalidas]);

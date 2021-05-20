@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Libs\pdf_gen\PDF;
+
 use App\Models\Clientes;
-use Exception;
-use Facade\FlareClient\Http\Client;
+use Exception; 
 
 class ClientesController extends Controller
 {

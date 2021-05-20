@@ -72,7 +72,7 @@ class CompraController extends Controller
         }
 
         //Formato html
-        $COMPRAS = $COMPRAS->paginate(15);
+        $COMPRAS = $COMPRAS->paginate(20);
         if (request()->ajax())
             return view("compra.index.grill", ['COMPRAS' => $COMPRAS]);
         else
@@ -222,7 +222,7 @@ class CompraController extends Controller
 
         //Formato html
         try {
-            $COMPRAS =  is_array($COMPRAS)  ?  $COMPRAS :  $COMPRAS->paginate(15);
+            $COMPRAS =  is_array($COMPRAS)  ?  $COMPRAS :  $COMPRAS->paginate(20);
         } catch (Exception  $e) {
             return response()->json(['err' =>  $e->getMessage()]);
         }

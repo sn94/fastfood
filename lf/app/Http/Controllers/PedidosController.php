@@ -28,7 +28,7 @@ class PedidosController extends Controller
     {
 
         $productosVendidos =  (new StockController())->buscar_productos(request(), "VENTA"); //Filtrar solo los elaborados y para venta
-        $productosVendidos =  $productosVendidos->paginate(10);
+        $productosVendidos =  $productosVendidos->paginate(20);
 
         if (request()->ajax())
             return view("pedidos.vendidos.grill", ['PRODUCTOS' =>  $productosVendidos]);

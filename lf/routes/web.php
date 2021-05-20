@@ -129,6 +129,7 @@ Route::group(['prefix' => "stock",   'middleware' => ['auth.Caja']], function ()
     });
 
     Route::get('/buscar/{TIPO}',   'StockController@index');
+    Route::post('/buscar/{TIPO}',   'StockController@index');
     Route::get('/buscar',   'StockController@index');
     Route::post('/buscar',   'StockController@index');
 
@@ -306,6 +307,7 @@ Route::group(['prefix' => 'pedidos', 'middleware' => ['auth.Caja']],   function 
 
 Route::prefix('ficha-produccion')->group(function () {
     Route::get('/index', 'FichaProduccionController@index');
+    Route::post('/index', 'FichaProduccionController@index');
     Route::get('/', 'FichaProduccionController@create');
     Route::post('/',   'FichaProduccionController@create');
     Route::put('/',   'FichaProduccionController@create');
@@ -326,10 +328,14 @@ Route::prefix('salida')->group(function () {
 
 
 Route::prefix('nota-residuos')->group(function () {
-    Route::get('/index',   'NotaResiduosController@create');
+    Route::get('/index',   'NotaResiduosController@index');
+    Route::post('/index',   'NotaResiduosController@index');
     Route::get('/create/{IDPRODUCCION}',   'NotaResiduosController@create');
     Route::get('/create',   'NotaResiduosController@create');
     Route::post('/create',   'NotaResiduosController@create');
+    Route::get('/update/{ID}',   'NotaResiduosController@update');
+    Route::post('/update',   'NotaResiduosController@update');
+    Route::delete('/{ID}',   'NotaResiduosController@delete');
 });
 
 Route::prefix('remision-prod-terminados')->group(function () {

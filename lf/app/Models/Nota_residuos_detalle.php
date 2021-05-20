@@ -17,7 +17,11 @@ class Nota_residuos_detalle extends Model
  
 
     
-   
+    public function stock()
+    {
+        return $this->hasOne(Stock::class, 'REGNRO', 'ITEM'  ); 
+    }
+
 
     public function recepcion()
     {

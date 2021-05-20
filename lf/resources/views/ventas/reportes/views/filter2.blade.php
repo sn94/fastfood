@@ -93,6 +93,7 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
             <th class="text-center">N° LOCAL</th>
             <th>LOCAL</th>
             <th style="text-align: left;">FACTURA N°</th>
+            <th style="text-align: left;">CAJERO</th>
             <th style="text-align: left;">FECHA</th>
             <th>CLIENTE</th>
             <th class="text-center">TIPO PAGO</th>
@@ -105,10 +106,12 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
     <tbody class="text-dark">
 
         @foreach( $VENTAS as $ven)
+ 
         <tr>
             <td class="text-center"> {{ $ven->SUCURSAL_ID }}</td>
             <td> {{ $ven->SUCURSAL_NOMBRE }}</td>
             <td class="text-center">{{ $ven->FACTURA}} </td>
+            <td class="text-end"> {{ is_null( $ven->cajero) ? "***" :   $ven->cajero  }} </td>
             <td>{{ $ven->FECHA->format('d/m/Y')  }}</td>
             <td>{{$ven->cliente_nom}}</td>
             <td class="text-center"> {{ $ven->FORMA_PAGO }}</td>

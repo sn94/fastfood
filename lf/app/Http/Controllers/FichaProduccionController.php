@@ -19,6 +19,7 @@ class FichaProduccionController extends Controller
         $sucursal = session("SUCURSAL");
 
         $fecha=  request()->has("FECHA") ?  request()->input("FECHA")  :  date('Y-m-d') ; 
+        $fecha= $fecha == ""?  date('Y-m-d')   :  $fecha;
         $lista = Ficha_produccion::where("SUCURSAL", $sucursal)
         ->where("FECHA",  $fecha);
 

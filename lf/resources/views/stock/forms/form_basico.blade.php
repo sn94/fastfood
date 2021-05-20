@@ -19,7 +19,7 @@
 
      <div class="col-12 col-md-6 col-lg-6"> 
              <label>DESCRIPCIÓN: </label>
-             <input required name="DESCRIPCION" class="form-control" type="text" maxlength="80" value="{{$DESCRIPCION}}" />
+             <input  style="background-color: var(--bs-warning);" required name="DESCRIPCION" class="form-control" type="text" maxlength="80" value="{{$DESCRIPCION}}" />
  
              <label>DESCR. P/TICKET: </label>
              <input required name="DESCR_CORTA" class="form-control" type="text" maxlength="25" value="{{$DESCR_CORTA}}" />

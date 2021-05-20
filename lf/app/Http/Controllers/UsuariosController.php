@@ -49,7 +49,7 @@ class UsuariosController extends Controller
             return $this->pdf($usuarios->get());
 
         if ($formato ==  "html") {
-            $usuarios =  $usuarios->paginate(10);
+            $usuarios =  $usuarios->paginate(20);
             if (request()->ajax())
                 return view('usuario.grill.index',  ['usuarios' =>   $usuarios]);
             else

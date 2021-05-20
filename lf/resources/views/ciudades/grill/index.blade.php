@@ -52,6 +52,27 @@ padding-right: 2px;
         let req = await fetch(ev.currentTarget.href);
         let resp = await req.text();
         $("#form").html(resp);
+    }
+
+     async function fill_grill(url_optional) {
+
+
+        let grill_url = $("#GRILL-URL").val();
+        if (url_optional != undefined) {
+            url_optional.preventDefault();
+            grill_url = url_optional.currentTarget.href;
+        }
+
+        let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
+        $("#grill").html(loader);
+        let req = await fetch(grill_url, {
+
+            headers: {
+                'X-Requested-With': "XMLHttpRequest"
+            }
+        });
+        let resp = await req.text();
+        $("#grill").html(resp);
 
     }
     async function delete_row(ev) {

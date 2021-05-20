@@ -92,7 +92,7 @@
 
     #DRAGGABLE-BUTTONS {
         padding: 0px;
-        border: 5px solid green;
+        border: 5px solid var(--color-1);
         background-color: wheat;
     }
 
@@ -111,7 +111,7 @@
 
     .posicion-boton button {
         width: 100%;
-        background-color: #ffc107;
+        background-color: var(--color-4);
         display: flex;
         flex-direction: column;
         align-items: center;

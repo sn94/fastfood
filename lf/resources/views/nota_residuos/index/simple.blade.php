@@ -5,6 +5,12 @@
     }
 </style>
 
+
+@if( isset( $print_mode ))
+@include("templates.print_report")
+@endif
+
+<h4 style="text-align: center;">Notas de residuo</h4>
 <table id="SALIDA-TABLE" class="table table-striped table-hover bg-warning text-dark">
     <thead>
         <tr>

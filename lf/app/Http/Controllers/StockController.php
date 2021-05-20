@@ -269,7 +269,7 @@ class StockController extends Controller
         //Formato html
         try {
 
-            $STOCK =  is_array($STOCK)  ?  $STOCK :  $STOCK->paginate(15);
+            $STOCK =  is_array($STOCK)  ?  $STOCK :  $STOCK->paginate(20);
         } catch (Exception  $e) {
             return response()->json(['err' =>  $e->getMessage()]);
         }
@@ -553,6 +553,31 @@ class StockController extends Controller
 
 
 
+    public function  actualizar_existencia($stock_id, $cantidad = 0, $accion = "INC")
+    {
+        //Registrado en Existencia 
+        $registrado = Stock_existencias::where("STOCK_ID", $stock_id)->where("SUCURSAL", session("SUCURSAL"))->first();
+        if (is_null($registrado)) {
+            $nueva_existencia = new Stock_existencias();
+            $nueva_existencia->fill([
+                'STOCK_ID' => $stock_id, 'SUCURSAL' => session("SUCURSAL"),
+                'CANTIDAD' => '0'
+            ]);
+            $nueva_existencia->save();
+        } else {
+
+            if ($accion ==  "INC")
+                $registrado->CANTIDAD =  $registrado->CANTIDAD + $cantidad;
+            else {
+                if ($accion ==  "DEC")
+                    $registrado->CANTIDAD =  $registrado->CANTIDAD - $cantidad;
+                else
+                    $registrado->delete();
+            }
+            $registrado->save();
+        }
+    }
+
     private function create_recipe(StockRequest  $request, $stock_id)
     {
         Receta::where("STOCK_ID", $stock_id)->delete();
@@ -713,12 +738,8 @@ class StockController extends Controller
 
                 //Crear registro de existencias
                 if ($request->input("TIPO") != "COMBO") {
-                    $nueva_existencia = new Stock_existencias();
-                    $nueva_existencia->fill([
-                        'STOCK_ID' => $stock_id, 'SUCURSAL' => session("SUCURSAL"),
-                        'CANTIDAD' => '0'
-                    ]);
-                    $nueva_existencia->save();
+
+                    $this->actualizar_existencia($stock_id);
                 }
 
                 DB::commit();
@@ -744,12 +765,12 @@ class StockController extends Controller
             //Precios Venta
             $PRECIOS = $Stock__->precios;
             //Detalle de combo
-            $COMBOS=  $Stock__->combos;
- 
+            $COMBOS =  $Stock__->combos;
+
 
             return view(
                 'stock.create.index',
-                ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS , 'COMBO'=>$COMBOS ]
+                ['stock' =>  $Stock__,   'RECETA' =>   $RECETA, 'DETALLE_PRECIOS' => $PRECIOS, 'COMBO' => $COMBOS]
             );
         } else {
 
@@ -784,11 +805,11 @@ class StockController extends Controller
                 $nuevo_stock->IMG = "lf/public/images/" . $path;
                 $nuevo_stock->save();
 
-                 //Crear detalle de Combo (si amerita)
-                 if ($request->input("TIPO") == "COMBO")
-                 $this->create_combo($request,  $stock_id);
+                //Crear detalle de Combo (si amerita)
+                if ($request->input("TIPO") == "COMBO")
+                    $this->create_combo($request,  $stock_id);
 
-              
+
 
                 DB::commit();
                 return response()->json(['ok' =>  "Stock Actualizado"]);

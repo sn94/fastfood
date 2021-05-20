@@ -27,7 +27,7 @@
     <div class="col  pb-0">
         <label> Cajero/a:</label>
         <div class="d-flex flex-row ">
-        <a class="btn btn-warning  btn-sm pl-1 pr-1" href="#" onclick="abrirBuscadorCajero()"><i class="fa fa-search"></i></a>
+        <a  href="#" onclick="abrirBuscadorCajero()"><i class="fa fa-search"></i></a>
 <input type="hidden"  id="CAJERO">
 <input type="text" readonly id="CAJERO-NOMBRE" class="form-control-sm" >
         </div>
@@ -64,11 +64,11 @@
        
         let param = {
             FILTRO: 2,
-            FECHA_DESDE: fecha_desde,
-            FECHA_HASTA: fecha_hasta,
             ESTADO: anuladas
         };
 
+        if( fecha_desde != "")  param.FECHA_DESDE=  fecha_desde;
+        if( fecha_hasta != "")  param.FECHA_HASTA=  fecha_hasta;
         if($("#F_SUCURSAL").val() ==  "S")
         param.SUCURSAL=  sucursal;
         if($("#F_FORMA_PAGO").val() ==  "S")

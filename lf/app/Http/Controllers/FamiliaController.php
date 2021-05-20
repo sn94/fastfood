@@ -44,7 +44,7 @@ class FamiliaController extends Controller
               $familias =  $familias->get();
               return $this->responsePdf("familia.grill.simple",  $familias, "Familias de productos");
           }
-        $familias =  $familias->paginate(10);
+        $familias =  $familias->paginate(20);
         if (request()->ajax())
             return view('familia.grill.index',  ['familias' =>   $familias]);
         else

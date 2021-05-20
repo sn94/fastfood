@@ -44,7 +44,7 @@ class SucursalController extends Controller
             return $this->responsePdf("sucursal.grill.simple", [ "sucursales"=> $sucursales], "Sucursales");
         }
 
-        $sucursales =  $sucursales->paginate(10);
+        $sucursales =  $sucursales->paginate(20);
         if (request()->ajax())
             return view('sucursal.grill.index',  ['sucursales' =>   $sucursales]);
         else

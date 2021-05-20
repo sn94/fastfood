@@ -2,11 +2,12 @@
      window.Buscador = {
 
          url: "<?= url("clientes") ?>",
+         reiniciarRequestAlFiltrar: false,
+         mostrarCampoBusquedaPorPatron: true,
          httpMethod: "get",
          httpHeaders: {},
          columnNames: [],
          columnLabels: [],
-
          dataSource: [],
          dataSelected: undefined,
 
@@ -25,7 +26,7 @@
              hoja.innerHTML = this.styles();
              document.head.appendChild(hoja);
 
-             $("body").prepend(this.modalHtml);
+             $("body").prepend(this.modalHtml());
              /* document.querySelector("html").innerHTML = 
               this.modalHtml.concat(document.querySelector("html").innerHTML);*/
              //Mostrar formulario de parametros si esta definido
@@ -47,8 +48,11 @@
              this.customHandler = undefined;
              this.htmlFormForParams = undefined;
              //Desmontar componente
+             this.mostrarCampoBusquedaPorPatron= true;
+             this.reiniciarRequestAlFiltrar= false;
          },
-         modalHtml: `
+         modalHtml: function(){
+             return `
     <div id="BuscadorModal" class="container-fluid p-1 p-md-5 m-0">
 
     <div class="BuscadorModal-cuerpo container  col-12 col-md-5">
@@ -58,14 +62,16 @@
         
         <div class="form"></div> 
 
-        <input class="buscador-input-search" type="text" placeholder="BUSCAR POR DESCRIPCIÓN" oninput="Buscador.filtrar( this)">
+       ${ this.mostrarCampoBusquedaPorPatron ?  `<input class="buscador-input-search" type="text" placeholder="BUSCAR POR DESCRIPCIÓN" oninput="Buscador.filtrar( this)">` : '' }
+       
         <div class="container-fluid content m-0" style="background: white;">
             <p>Cargando...</p>
         </div>
     </div>
    
     </div>
-            `,
+            `;
+         },
          removeClass: function(selector, clase) {
              Array.prototype.filter.call(
                  document.querySelector(selector).classList,
@@ -147,7 +153,7 @@
          makeTable: function(data) {
 
              if (data == undefined && !(Array.isArray(data))) return;
-             if (data.length == 0) return;
+           //  if (data.length == 0) return;
 
              //Keys de columnas a renderizar 
              let columnasRendr = (this.columnNames.length == 0) ? Object.keys(data[0]) : this.columnNames;
@@ -216,7 +222,7 @@
                          postBody[arg] = paramX;
                      }
                  );
-                 console.log(postBody);
+                  
              }
 
 
@@ -240,13 +246,17 @@
              let resp = await req.json();
 
              this.dataSource = resp;
+             console.log( "Data source" ,  resp );
 
-             if (resp.length == 0) return;
+            // if (resp.length == 0) return;
 
              this.makeTable(this.dataSource);
          },
 
-         filtrar: function(input) {
+         filtrar: async function(input) {
+
+            if( this.reiniciarRequestAlFiltrar )
+            await this.consultar();
 
              /* if (input == undefined) {
                   let filtradoPorParametros = Buscador.dataSource.slice();

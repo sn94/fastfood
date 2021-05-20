@@ -10,6 +10,15 @@
         border-radius: 8px 8px 0px 0px;
         text-align: center;
     }
+
+
+
+
+    table thead tr th,
+    table tbody tr td {
+        padding: 0px !important;
+        font-weight: 600;
+    }
 </style>
 <div class="row" id="RESIDUOS-FIELDS">
 
@@ -44,7 +53,7 @@
         <table class="table table-striped table-secondary text-dark">
 
             <thead>
-                <tr >
+                <tr>
                     <th>Cód.</th>
                     <th>Descripción</th>
                     <th>Medida</th>
@@ -54,7 +63,31 @@
             </thead>
             <tbody id="RESIDUOS-DETALLE">
 
+                @if( isset($NOTA_RESIDUO_DETALLE) )
+
+                @foreach( $NOTA_RESIDUO_DETALLE as $nr_d)
+                <tr id="{{$nr_d->ITEM}}">
+                    <td>
+                        {{$nr_d->ITEM}}
+                    </td>
+                    <td>
+                        {{$nr_d->stock->DESCRIPCION}}
+                    </td>
+                    <td>
+                        {{$nr_d->MEDIDA}}
+                    </td>
+                    <td>
+                        {{$nr_d->CANTIDAD}}
+                    </td>
+                    <td> <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>
+                </tr>
+                @endforeach
+
+                @endif
+
             </tbody>
+
+
             <tfoot>
                 <tr>
                     <th colspan="4">
@@ -198,7 +231,7 @@
         //if( Object.keys(buscador_items_modelo).length == 0  ) return;
 
         let regnro = $("#ITEM-ID").val();
-        let coditem = buscador_items_modelo.CODIGO;
+       
         let descri = $("#ITEM").val();
         let cantidad = $("#CANTIDAD").val();
         let medida = $("#MEDIDA").text();
@@ -214,7 +247,7 @@
 
         if (regnro != "") {
 
-            let codite = "<td> " + coditem + "</td>";
+            let codite = "<td> " + regnro + "</td>";
             let des = "<td> " + descri + "</td>";
             let med = "<td> " + medida + "</td>";
             let cant = "<td>" + cantidad + "</td>";
@@ -222,8 +255,7 @@
 
             //agregar al modelo
             let tipoStock = buscador_items_modelo.TIPO;
-            let objc = {
-                CODIGO: coditem,
+            let objc = { 
                 ITEM: String(regnro),
                 CANTIDAD: formValidator.limpiarNumero(cantidad),
                 TIPO: tipoStock,
@@ -246,5 +278,31 @@
             alert("Seleccione un item antes de cargar, o complete todos los datos");
 
         buscador_items_modelo = {};
+    }
+
+
+
+
+    
+    async function restaurar_modelo_residuos() {
+        //item cantidad tipo medida
+        let row = document.querySelectorAll("#RESIDUOS-DETALLE tr");
+        if (row.length == 0) return;
+
+        let modelo = Array.prototype.map.call(row, function(domtr) {
+
+ 
+            let ITEM = domtr.children[0].textContent.trim();
+            let DESCRIPCION = domtr.children[1].textContent.trim();
+            let MEDIDA = domtr.children[2].textContent.trim();
+            let CANTIDAD = domtr.children[3].textContent.trim();
+             
+            return { 
+                ITEM: ITEM,
+                MEDIDA: MEDIDA,
+                CANTIDAD: CANTIDAD
+            };
+        });
+        residuos_model = modelo;
     }
 </script>

@@ -21,7 +21,7 @@ class RemProdTerminadosController extends Controller
     {
 
         $sucursal = session("SUCURSAL");
-        $listaRemisiones =  Remision_de_terminados::where("SUCURSAL", $sucursal)->orderBy("created_at", "DESC")->paginate(10);
+        $listaRemisiones =  Remision_de_terminados::where("SUCURSAL", $sucursal)->orderBy("created_at", "DESC")->paginate(20);
 
         if (request()->ajax())
             return view("remision_de_terminados.index.grill", ['REMISION' =>  $listaRemisiones]);
