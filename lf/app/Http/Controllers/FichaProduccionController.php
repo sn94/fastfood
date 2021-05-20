@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Ficha_produccion;
 use App\Models\Ficha_produccion_detalles;
- 
+
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -17,11 +17,20 @@ class FichaProduccionController extends Controller
     {
 
         $sucursal = session("SUCURSAL");
+        $fecha =  request()->has("FECHA") ?  request()->input("FECHA")  : null;
+        $fecha_desde =  request()->has("FECHA_DESDE") ?  request()->input("FECHA_DESDE")  : null;
+        $fecha_hasta =  request()->has("FECHA_HASTA") ?  request()->input("FECHA_HASTA")  : null;
 
-        $fecha=  request()->has("FECHA") ?  request()->input("FECHA")  :  date('Y-m-d') ; 
-        $fecha= $fecha == ""?  date('Y-m-d')   :  $fecha;
-        $lista = Ficha_produccion::where("SUCURSAL", $sucursal)
-        ->where("FECHA",  $fecha);
+
+
+        $lista = Ficha_produccion::where("SUCURSAL", $sucursal);
+        if (is_null($fecha)) {
+            if (!(is_null($fecha_desde))     &&    !(is_null($fecha_hasta)))
+                $lista = $lista->where("FECHA", ">=",  $fecha_desde)->where("FECHA", "<=",  $fecha_hasta);
+            else
+                $lista = $lista->orderBy("created_at", "DESC");
+        } else
+            $lista = $lista->where("FECHA",  $fecha);
 
         //El formato de los datos
         $formato =  request()->header("formato");
@@ -31,6 +40,20 @@ class FichaProduccionController extends Controller
             $lista = $lista->get();
             return response()->json($lista);
         }
+        if ($formato == "pdf") {
+            $lista = $lista->get();
+            return $this->responsePdf(
+                "ficha_produccion.index.grill",
+                ['FICHAS_PRODUCCION' => $lista],
+                "Órdenes de producción"
+            );
+        }
+
+
+if( request()->ajax())
+return view("ficha_produccion.index.grill",   ['FICHAS_PRODUCCION' =>  $lista->paginate(20)]);
+else
+        return view("ficha_produccion.index.index",   ['FICHAS_PRODUCCION' =>  $lista->paginate(20)]);
     }
 
 
@@ -39,15 +62,21 @@ class FichaProduccionController extends Controller
         if (request()->getMethod()  ==  "GET") {
 
             if (is_null($PRODUCCIONID))
-                return view('ficha_produccion.create');
+                return view('ficha_produccion.create.index');
             else {
-                $FORMATO =  request()->header("formato", "html");
-                if ($FORMATO  == "html") {
-                    $PRODUCCION = Ficha_produccion::find($PRODUCCIONID);
-                    return view('ficha_produccion.create',  ['PRODUCCION' => $PRODUCCION, 'PRODUCCION_ID' =>   $PRODUCCIONID]);
-                } elseif ($FORMATO ==  "json") {
-                    return $this->get_ficha_produccion($PRODUCCIONID);
-                }
+
+                //Edit  
+                $PRODUCCION = Ficha_produccion::find($PRODUCCIONID);
+                $DETALLE = $PRODUCCION->detalle_produccion;
+                
+
+                return view(
+                    'ficha_produccion.create.index',
+                    [
+                        'PRODUCCION' => $PRODUCCION, 'DETALLE' => $DETALLE,
+                        'PRODUCCION_ID' =>   $PRODUCCIONID
+                    ]
+                );
             }
         } else {
 
@@ -64,26 +93,30 @@ class FichaProduccionController extends Controller
 
                 DB::beginTransaction();
                 //CABECERA
-                $n_compra =  ($ANTI_SPOOFING_METHOD ==  "POST") ? (new Ficha_produccion()) : (Ficha_produccion::find($Datos['CABECERA']['REGNRO']));
-                $n_compra->fill($CABECERA);
-                $n_compra->save();
+                $f_produccion =  ($ANTI_SPOOFING_METHOD ==  "POST") ? (new Ficha_produccion()) : (Ficha_produccion::find($Datos['CABECERA']['REGNRO']));
+                $f_produccion->fill($CABECERA);
+                $f_produccion->save();
 
                 if ($ANTI_SPOOFING_METHOD ==  "PUT") {
                     //Borrar detalles
                     Ficha_produccion_detalles::where("PRODUCCION_ID",  $Datos['CABECERA']['REGNRO'])->delete();
                 }
                 //DETALLE
+                //Borrar detalle anterior
+                Ficha_produccion_detalles::where("PRODUCCION_ID", $f_produccion->REGNRO )->delete();
+
                 foreach ($DETALLE_PRODUCTOS as $row) :
                     $datarow = $row;
-                    $datarow['PRODUCCION_ID'] = $n_compra->REGNRO;
-
+                    $datarow['PRODUCCION_ID'] = $f_produccion->REGNRO;
                     $d_compra =  new Ficha_produccion_detalles();
                     $d_compra->fill($datarow);
                     $d_compra->save();
                 endforeach;
+
+
                 foreach ($DETALLE_INGREDIEN as $row) :
                     $datarow = $row;
-                    $datarow['PRODUCCION_ID'] = $n_compra->REGNRO;
+                    $datarow['PRODUCCION_ID'] = $f_produccion->REGNRO;
 
                     $d_compra =  new Ficha_produccion_detalles();
                     $d_compra->fill($datarow);
@@ -92,7 +125,7 @@ class FichaProduccionController extends Controller
 
                 foreach ($DETALLE_INSUMOS as $row) :
                     $datarow = $row;
-                    $datarow['PRODUCCION_ID'] = $n_compra->REGNRO;
+                    $datarow['PRODUCCION_ID'] = $f_produccion->REGNRO;
 
                     $d_compra =  new Ficha_produccion_detalles();
                     $d_compra->fill($datarow);
@@ -106,5 +139,38 @@ class FichaProduccionController extends Controller
                 return response()->json(['err' =>   $ex->getMessage()]);
             }
         }
+    }
+
+
+
+
+    public function get($PRODUCCIONID)
+    {
+
+        $ficha = Ficha_produccion::find($PRODUCCIONID);
+        $detalle =   Ficha_produccion_detalles::where("PRODUCCION_ID",  $PRODUCCIONID)->with("stock")->get();
+
+        $formato =  request()->header("formato");
+
+        //Si es JSON retornar
+        if ($formato == "json")
+            return response()->json(["HEADER" =>  $ficha, "DETALLE" => $detalle]);
+    }
+
+
+    public function delete(  $PRODUCCIONID){
+        try{
+            DB::beginTransaction();
+         Ficha_produccion::find($PRODUCCIONID)->delete();
+            Ficha_produccion_detalles::where("PRODUCCION_ID",  $PRODUCCIONID)->delete();
+            DB::commit();
+            return response()->json(['ok' =>  "Eliminado !"]);
+        }catch( Exception $ex){
+            DB::rollBack();
+            return response()->json(['err' =>   $ex->getMessage()]);
+
+        }
+
+
     }
 }

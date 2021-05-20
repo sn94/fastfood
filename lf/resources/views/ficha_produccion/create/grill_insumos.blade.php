@@ -1,4 +1,4 @@
-<!--<div id="MODAL-INGREDIENTES" class="modal" tabindex="-1" role="dialog">
+<div id="MODAL-INSUMOS" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,37 +14,33 @@
         </div>
     </div>
 </div>
--->
 
 
-<fieldset id="INGREDIENTES-PANEL">
-    <legend>INGREDIENTES</legend>
+<fieldset id="INSUMOS-PANEL">
+    <legend>OTROS</legend>
 
     <div class="container">
-        <div class="row  ">
+        <div class="row">
 
-            <div class="col-12 col-md-8  pr-0 mb-1 d-flex flex-row">
-               
-                    <label>ITEM:</label>
-                    <a data-toggle="tooltip" title="Click aquí para buscar un ítem" style="grid-column-start: 2; " href="#" onclick="ingredientes_controller.buscador_de_items( 'MP')"><i class="fa fa-search"></i></a>
-                    <input style=" width:60px; font-weight: 600; color: black; " class="form-control ITEM-ID " type="text" disabled>
+            <div class="col-12 col-md-8  pr-0 mb-1  d-flex flex-row"> 
+                    <label  >Ítem:</label>
+                    <a  data-toggle="tooltip" title="Click aquí para buscar un ítem"     href="#" onclick="insumos_controller.buscador_de_items( 'AF')"><i class="fa fa-search"></i></a>
+                    <input  style="width: 60px;font-weight: 600; color: black; " class="form-control ITEM-ID " type="text" disabled>
 
-                    <input disabled class="form-control ITEM" style="width: 100% !important;" autocomplete="off" type="text">
+                    <input   class="form-control ITEM  fw-bold" style="width: 100% !important; height: 40px;" autocomplete="off" type="text"   disabled>
  
             </div>
 
-            <div class="col-12  col-md-4  pl-1 mb-1  d-flex flex-column ">
-                
-                  <div class="d-flex flex-row ">
-                  <label>CANT.: </label>
-                    <input onkeydown="if(event.keyCode==13) {event.preventDefault(); ingredientes_controller.cargar_tabla();}" class="form-control decimal CANTIDAD " type="text" />
-                 
-                    <a href="#" onclick="ingredientes_controller.cargar_tabla()"><i class="fa fa-download"></i></a>
-                  </div>
-                  <div class="d-flex">
-                  <label class="MEDIDA text-light"></label>
-                  </div>
-                 
+            <div class="col-12  col-md-4  pl-1 mb-1 d-flex flex-row">
+            <label  >Cant.: </label>
+                <div class="d-flex flex-column">
+                    <input onkeydown="if(event.keyCode==13) {event.preventDefault(); insumos_controller.cargar_tabla();}"   class="form-control decimal CANTIDAD " type="text" />
+                    <label class="MEDIDA  text-light"  ></label>
+                  
+                </div>
+                <div class="d-flex">
+                <a   href="#" onclick="insumos_controller.cargar_tabla()"><i class="fa fa-download"></i></a>
+                </div>
             </div>
         </div>
 
@@ -54,7 +50,7 @@
 
                     <thead>
                         <tr style="font-size: 14px;">
-                            <th>CÓDIGO</th>
+                        <th>CÓDIGO</th>
                             <th>DESCRIPCIÓN</th>
                             <th>UNI.MED.</th>
                             <th> CANTIDAD</th>
@@ -83,27 +79,27 @@
 
 
 <script>
-    var ingredientes_model = [];
-    var ingredientes_controller = {};
+    var insumos_model = [];
+    var insumos_controller = {};
 
-    
 
-    var init_ingredientes = function() {
+
+    var init_insumos = function() {
 
         //INIT
-        ingredientes_controller = deepClone(itemSearcherObject);
+        insumos_controller = deepClone(itemSearcherObject);
         //Nombre del panel
-        ingredientes_controller.panel_name = "#INGREDIENTES-PANEL";
-        ingredientes_controller.modal_name = "#MODAL-INGREDIENTES";
-        ingredientes_controller.name = "materiaprima";
+        insumos_controller.panel_name = "#INSUMOS-PANEL";
+        insumos_controller.modal_name = "#MODAL-INSUMOS";
+        insumos_controller.name = "insumos";
         //modal
-        let panel = ingredientes_controller.panel_name;
+        let panel = insumos_controller.panel_name;
 
-        ingredientes_controller.callbackPostModal= function( seleccionado){
+        insumos_controller.callbackPostModal= function( seleccionado){
             let regnro = seleccionado.REGNRO;
             let descri = seleccionado.DESCRIPCION;
             let medida = seleccionado.unidad_medida.DESCRIPCION;
-            ingredientes_controller.buscador_items_modelo = seleccionado;
+            insumos_controller.buscador_items_modelo = seleccionado;
             window.buscador_items_modelo= seleccionado;
 
             $(panel + " .ITEM-ID").val(regnro);
@@ -113,20 +109,19 @@
            // $(productos_controller.modal_name + " .modal-body").html("");
 
         };
-        /*$(ingredientes_controller.modal_name).on('hidden.bs.modal', function(e) {
+        /*
+        $(insumos_controller.modal_name).on('hidden.bs.modal', function(e) {
 
             let regnro = buscador_items_modelo.REGNRO;
             let descri = buscador_items_modelo.DESCRIPCION;
             let medida = buscador_items_modelo.MEDIDA;
-            ingredientes_controller.buscador_items_modelo = buscador_items_modelo;
+            insumos_controller.buscador_items_modelo = buscador_items_modelo;
             $(panel + " .ITEM-ID").val(regnro);
             $(panel + " .ITEM").val(descri);
             $(panel + " .MEDIDA").text(medida);
-            $(ingredientes_controller.modal_name + " .modal-body").html("");
+            $(insumos_controller.modal_name + " .modal-body").html("");
             //cargar_tabla();
         });*/
-
-        
 
     };
 </script>

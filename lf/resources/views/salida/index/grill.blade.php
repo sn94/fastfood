@@ -4,9 +4,18 @@ padding:  0px 2px  !important;
 }
 </style>
 
+
+@if( isset( $print_mode ))
+@include("templates.print_report")
+<h4 style="text-align: center;">{{$titulo}}</h4>
+@endif
+
+
 <table id="SALIDA-TABLE" class="table table-striped table-hover bg-warning text-dark">
     <thead>
         <tr>
+        <th></th>
+        <th></th>
             <th>N°</th>
             <th>Fecha</th>
             <th>Tipo Salida</th>
@@ -21,6 +30,12 @@ padding:  0px 2px  !important;
         @if( isset($SALIDAS))
         @foreach( $SALIDAS as $SALIDA_)
         <tr>
+        <td>
+                <a style="color: black;" href="{{url('salida/update').'/'.$SALIDA_->REGNRO}}"> <i class="fas fa-edit"></i></a>
+            </td>
+            <td>
+                <a onclick="delete_row(event)" style="color: black;" href="{{url('salida').'/'.$SALIDA_->REGNRO}}"> <i class="fa fa-trash"></i></a>
+            </td>
         <td>{{   $SALIDA_->NUMERO == ''  ? '****' :  $SALIDA_->NUMERO}}</td>
         <td>{{   is_null($SALIDA_->FECHA) ? '****':  $SALIDA_->FECHA->format('d/m/Y')}}</td>
         <td>

@@ -515,7 +515,9 @@ class VentasController extends Controller
             if ($email ==  "")
                 return response()->json(['err' =>  "No se registra un email para este cliente"]);
             else {
-                var_dump(Mail::to($email)->send(new TicketSender($venta)));
+
+             
+                Mail::to( $email)->send( (new TicketSender(  $venta ) ) );
                 return response()->json(['ok' =>  "enviado"]);
             }
         } else    return view("ventas.proceso.ticket.version_impresa", ["VENTA" => $venta, "DETALLE" => $detalle]);

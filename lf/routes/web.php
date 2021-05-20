@@ -308,11 +308,12 @@ Route::group(['prefix' => 'pedidos', 'middleware' => ['auth.Caja']],   function 
 Route::prefix('ficha-produccion')->group(function () {
     Route::get('/index', 'FichaProduccionController@index');
     Route::post('/index', 'FichaProduccionController@index');
-    Route::get('/', 'FichaProduccionController@create');
-    Route::post('/',   'FichaProduccionController@create');
-    Route::put('/',   'FichaProduccionController@create');
-    Route::get('/{IDPRODUCCION}', 'FichaProduccionController@create');
-
+    Route::get('/create', 'FichaProduccionController@create');
+    Route::post('/create',   'FichaProduccionController@create');
+    Route::post('/update',   'FichaProduccionController@create');
+    Route::get('/update/{IDPRODUCCION}', 'FichaProduccionController@create');//for edit
+    Route::get('/get/{IDPRODUCCION}', 'FichaProduccionController@get');
+    Route::delete('/{IDPRODUCCION}', 'FichaProduccionController@delete');
     Route::get('/fichas/{ESTADO}/{ACCION}', function ($ESTADO, $ACCION) {
         return view("ficha_produccion.index.index", ['ESTADO' => $ESTADO, 'ACCION' => $ACCION]);
     });
@@ -321,9 +322,13 @@ Route::prefix('ficha-produccion')->group(function () {
 Route::prefix('salida')->group(function () {
    
     Route::get('/index',   'SalidaController@index');
+    Route::post('/index',   'SalidaController@index');
     Route::get('/create-with-produccion-id/{IDPRODUCCION}',   'SalidaController@create');
     Route::get('/create',   'SalidaController@create');
     Route::post('/create',   'SalidaController@create');
+    Route::get('/update/{ID}',   'SalidaController@update');
+    Route::post('/update',   'SalidaController@update');
+    Route::delete('/{ID}',   'SalidaController@delete');
 });
 
 

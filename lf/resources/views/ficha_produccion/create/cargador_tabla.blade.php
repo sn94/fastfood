@@ -65,7 +65,10 @@
                     return (ar.ITEM == String(NuevoObjeto.ITEM));
                 }
             ).length;
+
+
             if (EXISTE == 0) {
+           
                 this.data_model.push(NuevoObjeto);
                 return;
             }
@@ -82,16 +85,25 @@
             );
         },
 
-        delete_row: function(esto, contexto) {
+        delete_row: function(esto, TIPO) {
+            console.log(  TIPO);
             let row = $(esto.parentNode.parentNode);
             let id = row.attr("id");
             $(esto.parentNode.parentNode).remove();
             //quitar del modelo 
 
+            let contexto=  undefined;
+            switch( TIPO){
+               case "PE" : contexto= productos_controller ;break;
+               case "MP": contexto= ingredientes_controller;  break;
+               case "AF": contexto= insumos_controller;  break;
+            }
             contexto.data_model = contexto.data_model.filter(function(arg) {
                 return String(arg.ITEM) != String(id);
             });
         },
+
+
         limpiar_campos_detalle: function() {
             $(this.panel_name + " .ITEM-ID").val("");
             $(this.panel_name + " .ITEM").val("");
@@ -135,7 +147,9 @@
             let des = "<td> " + DESCRIPCION + "</td>";
             let med = "<td> " + MEDIDA + "</td>";
             let cant = "<td>" + CANTIDAD + "</td>";
-            let del = "<td> <a style='color:black;' href='#' onclick='delete_row( this, window.temporalContext )'> <i class='fa fa-trash'></i> </a>  </td>";
+            let del = `
+            <td> <a style='color:black;' href='#' onclick='delete_row( this, "${TIPO}" )'> <i class='fa fa-trash'></i> </a>  </td>
+            `;
 
             let classIdentTipoItem = TIPO + "-class";
             let nueva_tr = "<tr  class='" + classIdentTipoItem + "' id='" + ITEM + "' >" + codite + des + med + cant + del + "</tr>";
@@ -144,7 +158,7 @@
 
 
         cargar_tabla: function(objectData) {
-
+  
             let regnro = "";
             let codigo_item = "";
             let descri = "";
@@ -160,15 +174,15 @@
                 medida = $(this.panel_name + "  .MEDIDA").text();
             } else {
                 regnro = objectData.ITEM;
-                codigo_item = objectData.CODIGO;
-                descri = objectData.DESCRIPCION;
+                codigo_item = objectData.stock.CODIGO;
+                descri = objectData.stock.DESCRIPCION;
                 cantidad = objectData.CANTIDAD;
                 medida = objectData.MEDIDA;
             }
             if (regnro != "") {
 
                 //agregar al modelo
-                let tipoStock = window.buscador_items_modelo.TIPO;
+                let tipoStock = window.buscador_items_modelo ? window.buscador_items_modelo.TIPO  : objectData.TIPO;
                 let objc = {
                     CODIGO: codigo_item,
                     ITEM: String(regnro),
@@ -177,6 +191,7 @@
                     TIPO: tipoStock,
                     MEDIDA: medida
                 };
+       
                 //Actualizar modelo de datos
                 this.actualiza_modelo_de_datos(objc);
                 this.actualizar_fila(objc); //Quitar de la tabla para actualizar la fila

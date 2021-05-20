@@ -16,7 +16,7 @@
 
 <div class="row ">
     <div class="col-12 col-md-12 ">
-        @if( isset($PRODUCCION_DETALLE) )
+        @if( isset($DETALLE) )
         Productos, materia prima y otros; solicitados en la ficha de producción
         @endif
         <table id="SALIDA-TABLE" class="table table-striped table-hover bg-warning text-dark">
@@ -33,8 +33,8 @@
             </thead>
             <tbody id="SALIDA-DETALLE">
 
-                @if( isset($PRODUCCION_DETALLE) )
-                @foreach( $PRODUCCION_DETALLE as $ITEM)
+                @if( isset($DETALLE) )
+                @foreach( $DETALLE as $ITEM)
 
                 @if( $ITEM->TIPO != "PE")
                 <tr id="{{$ITEM->ITEM}}" class="{{$ITEM->TIPO}}-class">
@@ -42,7 +42,7 @@
 
                     <td>{{$ITEM->stock->CODIGO}}</td>
                     <td>{{$ITEM->stock->DESCRIPCION}}</td>
-                    <td>{{$ITEM->MEDIDA}}</td>
+                    <td>{{$ITEM->stock->unidad_medida->DESCRIPCION}}</td>
                     <td> {{$ITEM->CANTIDAD}}</td>
                     <td> <a class="mr-1" style='color:black;' href='#' onclick='editar_fila( this )'> <i class='fa fa-edit'></i> </a> 
                     <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a> </td>
@@ -212,7 +212,10 @@
             let des = "<td> " + descri + "</td>";
             let med = "<td> " + medida + "</td>";
             let cant = "<td>" + cantidad + "</td>";
-            let del = "<td> <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>";
+            let del = `
+            <td> <a class="mr-1" style='color:black;' href='#' onclick='editar_fila( this )'> <i class='fa fa-edit'></i> </a> 
+             <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>
+             `;
 
             //agregar al modelo
             let tipoStock = buscador_items_modelo.TIPO;

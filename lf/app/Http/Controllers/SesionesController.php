@@ -29,6 +29,8 @@ class SesionesController extends Controller
         $SUCURSAL =   request()->has("SUCURSAL") ?  request()->input("SUCURSAL") :   session("SUCURSAL");
         $USERID =  request()->has("USUARIO") ?  request()->input("USUARIO") : ($MODULO_FLAG == "c" ? session("ID") : null);
         $ESTADO =   request()->has("ESTADO") ?  request()->input("ESTADO") :  "A"; //Abiertas, mostradas por defecto
+        $fecha_desde= request()->has("FECHA_DESDE") ? request()->input("FECHA_DESDE") : NULL;
+        $fecha_hasta= request()->has("FECHA_HASTA") ? request()->input("FECHA_HASTA") : NULL;
 
         $sesiones = Sesiones::where("SUCURSAL",  $SUCURSAL)
             ->where("ESTADO", $ESTADO);
@@ -37,6 +39,11 @@ class SesionesController extends Controller
         if (!is_null($USERID))
             $sesiones =  $sesiones->where("CAJERO", $USERID);
 
+            //fecha
+            if(  !is_null($fecha_desde)   &&  !is_null($fecha_hasta)   )
+            $sesiones=  $sesiones->where("FECHA_APE", ">=", $fecha_desde)->where("FECHA_APE", "<=", $fecha_hasta);
+
+            
         $sesiones =  $sesiones->select(
             "sesiones.*",
             DB::raw("FORMAT(EFECTIVO_INI,0,'de_DE') AS EFECTIVO_INI"),

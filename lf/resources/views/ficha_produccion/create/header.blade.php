@@ -34,7 +34,7 @@ $ELABORADO_POR= isset( $PRODUCCION) ? $PRODUCCION->ELABORADO_POR: "";
     <div class="col-12 col-sm-3 col-md-2 col-lg-2  mb-1 pl-0 d-flex flex-column">
 
         <label   class="mt-1 text-light" for="element_7">FECHA: </label>
-        <input value="{{$FECHA}}" name="FECHA"   class="form-control mt-1" type="date" />
+        <input value="{{$FECHA}}" name="FECHA"   class="form-control mt-1 p-0" type="date" />
 
     </div>
 

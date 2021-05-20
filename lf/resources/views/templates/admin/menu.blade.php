@@ -21,7 +21,7 @@ $adminOptionsMenu = [
     [
         "label" => "COCINA", "link" =>
         [
-            ["label" => "FICHA DE PRODUCCIÓN", "link" => url('ficha-produccion')],
+            ["label" => "FICHA DE PRODUCCIÓN", "link" => url('ficha-produccion/index')],
             ["label" => "REMISIÓN DE PRODUCTOS TERMINADOS", "link" => url('remision-prod-terminados/index')],
             ["label" => "NOTA DE RESIDUOS",  "link" => url('nota-residuos/index')]
 

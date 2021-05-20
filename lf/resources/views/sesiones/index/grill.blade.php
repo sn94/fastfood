@@ -66,4 +66,9 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
     </tbody>
 
 </table>
-{{$SESIONES->links('vendor.pagination.default')}}
+
+ 
+
+<x-pretty-paginator   :datos="$SESIONES"  callback="buscarSesiones"/>
+
+ 

@@ -9,7 +9,8 @@ use App\Models\Sucursal;
 //FUENTES
 $SUCURSALES= Sucursal::get();
 
-$PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
+$urlAction=  isset($SALIDA) ? url('salida/update')  : url('salida/create');
+
 @endphp
 
 
@@ -25,7 +26,7 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
 
     <div id="loaderplace"></div>
 
-    <form id="SALIDAFORM" action="<?= url("salida/create") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarSalida(event)">
+    <form id="SALIDAFORM" action="<?= $urlAction ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarSalida(event)">
         <div class="row ">
             <div class="col-12 col-md-2  mb-1">
                 <button type="submit" class="btn btn-danger"> GUARDAR</button>
@@ -141,7 +142,36 @@ $PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : NULL;
     }
 
 
+    async function buscarFichaProduccion() {
+  
+  Buscador.url = "<?= url("ficha-produccion/index") ?>" ;
+  Buscador.httpMethod = "post" ;
+  Buscador.mostrarCampoBusquedaPorPatron= false;
+  Buscador.reiniciarRequestAlFiltrar = true;
+  Buscador.htmlFormForParams = `<form> <label class='fw-bold text-dark fs-6'>Por Fecha:</label> <input name='FECHA' type='date' onchange='Buscador.filtrar()' > </form>`;
+  
+  Buscador.htmlFormFieldNames = ['FECHA'];
+  Buscador.columnNames = ["REGNRO", "ELABORADO_POR"];
+  Buscador.columnLabels = ['ID', 'REGISTRADO POR'];
+  Buscador.callback = function(respuesta) {
+  
+      const {
+          REGNRO,
+          ELABORADO_POR
+      } = respuesta;
+  
+      window.buscador_items_modelo = respuesta;
+      console.log( respuesta);
+     
+      $("#PRODUCCION_ID").val(REGNRO);
+     /* $(PANEL_ID + " .ITEM").val(DESCRIPCION);
+      $(PANEL_ID + " .MEDIDA").text(unidad_medida.UNIDAD);*/
+  };
+  Buscador.render();
+  }
 
+
+  
     window.onload = async function() {
         //   autocompletado_items();
         restaurar_modelo_salida();

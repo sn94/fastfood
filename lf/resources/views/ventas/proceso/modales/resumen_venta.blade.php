@@ -188,8 +188,8 @@
 
     async function enviarTicketPorEmail( idd) {
 
-        let idv = ultimoIdVentaRegistrado;
-        let req = await fetch("<?= url("ventas/ticket") ?>/" + idd, {
+        let idv = idd ? idd :  ultimoIdVentaRegistrado;
+        let req = await fetch("<?= url("ventas/ticket") ?>/" + idv, {
             headers: {
                 formato: "email"
             }

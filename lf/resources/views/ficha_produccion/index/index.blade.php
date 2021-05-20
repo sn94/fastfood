@@ -1,106 +1,142 @@
-@extends("templates.admin.index")
+ @extends( "templates.admin.index")
+
+ @section("PageTitle")
+Órdenes de producción
+ @endsection
 
 
-@section("content")
+ @section("content")
 
-@php
+ <div class="container-fluid col-12 col-md-12 col-lg-10 col-xl-8 bg-dark pb-5">
+     <h2 class="text-center mt-2 text-light">Órdenes de producción</h2>
 
+     <div id="loaderplace"></div>
 
-use App\Models\Ficha_produccion;
-
-
-
-
-$ficha_produc= Ficha_produccion::where("SUCURSAL", session("SUCURSAL") )
-->select( "ficha_produccion.*", DB::raw("DATE_FORMAT(FECHA, '%d/%m/%Y') as FECHA"));
-
-if( $ESTADO == "DESPACHADO" && $ACCION =="RESIDUOS")
-$ficha_produc= $ficha_produc->where("ESTADO", "DESPACHADO")
-->orWhere("ESTADO", "LISTO");
-else
-$ficha_produc= $ficha_produc->where("ESTADO", $ESTADO);
-
-$ficha_produc=
-$ficha_produc->get();
-
-@endphp
+     <a class="btn btn-warning mb-1" href="{{url('ficha-produccion/create')}}">NUEVA ORDEN</a>
 
 
+     <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarOrdenesDeProd()" showSearcherInput="N">
+       
+   
+     <div class="row pt-1 text-light w-100">
 
 
-<style>
-    label {
-        font-size: 18px !important;
-        color: white;
-    }
+<div class="col-12  col-md-3  pb-0">
+        <label> Desde: </label>
+        <input class="form-control form-control-sm" type="date" id="FECHA_DESDE" onchange="buscarOrdenesDeProd()">
+    </div>
+
+    <div class="col-12   col-md-3   pb-0">
+        <label> Hasta:</label>
+        <input class="form-control form-control-sm" type="date" id="FECHA_HASTA" onchange="buscarOrdenesDeProd()">
+    </div>
+     </div>
+
+   
+    </x-search-report-downloader>
+
+     <div class="mt-2" id="grill">
+
+         @include("ficha_produccion.index.grill")
+     </div>
+ </div>
+
+ @endsection
 
 
-
-    table thead tr th,
-    table tbody tr td {
-        padding: 0px !important;
-        color: #414141;
-        font-weight: 600;
-    }
-
-    /* En línea #20 | http://localhost/fastfood/salida */
-
-    .form-control {
-        /* height: 40px !important; */
-        height: 30px !important;
-        background: white !important;
-        color: black !important;
-        font-size: 16px;
-    }
-</style>
+ @section("jsScripts")
 
 
+ <script src="<?= url("assets/xls_gen/xls.js") ?>"></script>
+ <script src="<?= url("assets/xls_gen/xls_ini.js?v=" . rand(0.0, 100)) ?>"></script>
+ <script src="<?= url("assets/js/buscador.js?v=" . rand(0.0, 100)) ?>"></script>
+
+ <script>
+     async function fill_grill(url_optional) {
 
 
-<div class="container-fluid bg-dark text-light col-12 col-lg-10 pb-5">
+         let grill_url = "<?=url('ficha-produccion/index')?>";
 
-<h2 class="text-center mt-2"  >Órdenes de producción</h2>
-<div id="loaderplace"></div>
-    <!--BOTONES DE ACCIONES PERSONALIZADAS  -->
-    @if( $ESTADO == "PENDIENTE")
-    <a class="btn btn-danger mb-1" href="{{url('salida')}}">NUEVA SALIDA</a>
-    @endif
+         if (url_optional != undefined) {
+             url_optional.preventDefault();
+             grill_url = url_optional.currentTarget.href;
+         }
 
+         show_loader();
+         
 
-    @if( $ESTADO == "PENDIENTE")
-    @include("ficha_produccion.index.pendientes")
-    @elseif(  $ESTADO == "DESPACHADO")
-    @include("ficha_produccion.index.aprobados")
-    @elseif(  $ESTADO == "LISTO")
-    @include("ficha_produccion.index.listos")
-    @endif
+         let req = await fetch(grill_url, {
 
-</div>
+             headers: {
+                 'X-Requested-With': "XMLHttpRequest"
+             }
+         });
+         let resp = await req.text();
+
+         $("#grill").html(resp);
+
+         hide_loader();
+
+     }
+
  
 
+     function prepararBusquedas() {
+        //PARMETROS
+        
+        let F_desde = $("#FECHA_DESDE").val();
+        let F_hasta = $("#FECHA_HASTA").val();
+     
+        let parametros = { };
+        if( F_desde  != "")   parametros.FECHA_DESDE=  F_desde;
+        if( F_hasta  != "")   parametros.FECHA_HASTA=  F_hasta;
 
 
-<script>
-    
+        dataSearcher.setUrl=  "<?=url('ficha-produccion/index')?>";
+        dataSearcher.setOutputTarget = "#grill";
+        dataSearcher.setParametros = parametros; 
+    }
+
+     
+     function buscarOrdenesDeProd() {
+       prepararBusquedas();
+        dataSearcher.formatoHtml();
+    }
+
+
+
+
+
+    async function delete_row(ev) {
+        ev.preventDefault();
+        if (!confirm("continuar?")) return;
+        let req = await fetch(ev.currentTarget.href, {
+            "method": "DELETE",
+            headers: {
+
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            body: "_method=DELETE&_token=" + $('meta[name="csrf-token"]').attr('content')
+
+        });
+        let resp = await req.json();
+        if ("ok" in resp) buscarOrdenesDeProd();
+        else alert(resp.err);
+
+    }
+
+
+
+
+    var dataSearcher = undefined;
 
     window.onload = function() {
+        dataSearcher = new DataSearcher();
+        prepararBusquedas();
+       // fill_grill();
+    }
+ </script>
 
 
-        //formato entero
-        let enteros = document.querySelectorAll(".entero");
-        Array.prototype.forEach.call(enteros, function(inpu) {
-            inpu.oninput = formatoNumerico.formatearEntero;
-            $(inpu).addClass("text-end");
-        });
-
-
-        let decimales = document.querySelectorAll(".decimal");
-        Array.prototype.forEach.call(decimales, function(inpu) {
-            inpu.oninput = formatoNumerico.formatearDecimal;
-            $(inpu).addClass("text-end");
-        });
-
-    };
-</script>
-
-@endsection
+ @endsection

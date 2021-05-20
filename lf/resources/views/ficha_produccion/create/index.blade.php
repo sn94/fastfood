@@ -19,21 +19,28 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
 
 <style>
+ 
     input:disabled {
         background-color: var(--color-14) !important;
     }
 
     .MEDIDA {
-        color: #222;
         font-weight: 600;
+        letter-spacing: 1px;
+        background-color: var(--color-3);
+        position: relative;
+        z-index: 1;
+        top: -100%;
+        color: white;
+        border-radius: 8px 8px 0px 0px;
+        text-align: center;
     }
 
-    
+
 
     .form-control {
-    
-        height: 25px !important;
-        font-size: 14px;
+
+        height: 25px !important; 
     }
 
 
@@ -63,18 +70,13 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
         padding: 0px;
     }
 
-
-    label {
-        font-size: 14px !important;
-        color: black;
-        font-family: Arial, Helvetica, sans-serif !important;
-    }
+ 
 
 
     fieldset {
         padding: 2px !important;
         background-color: var(--color-14);
-        border-radius: 8px 8px ;
+        border-radius: 8px 8px;
     }
 
 
@@ -88,9 +90,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
     }
 
 
-    .fa-search {
-        color: black;
-    }
+   
 </style>
 
 
@@ -116,10 +116,10 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
 
         @if( $PRODUCCION_ID != '' )
-        <form id="PRODUCCIONFORM" action="<?= url("ficha-produccion") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
+        <form id="PRODUCCIONFORM" action="<?= url("ficha-produccion/update") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
             <input type="hidden" name="_method" value="PUT">
             @else
-            <form action="<?= url("ficha-produccion") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
+            <form action="<?= url("ficha-produccion/create") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
                 @endif
 
 
@@ -137,18 +137,18 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
                 <div class="col-12 col-md-2  mb-1">
                     <button type="submit" class="btn btn-danger"> GUARDAR FICHA</button>
                 </div>
-                @include("ficha_produccion.header")
+                @include("ficha_produccion.create.header")
 
                 <div class="row">
                     <div class="col-12 col-md-6">
-                        @include("ficha_produccion.grill_productos")
+                        @include("ficha_produccion.create.grill_productos")
                     </div>
                     <div class="col-12 col-md-6">
-                        @include("ficha_produccion.grill_ingredientes")
+                        @include("ficha_produccion.create.grill_ingredientes")
                     </div>
 
                     <div class="col-12 col-md-6 mt-1">
-                        @include("ficha_produccion.grill_insumos")
+                        @include("ficha_produccion.create.grill_insumos")
                     </div>
                 </div>
 
@@ -160,7 +160,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
 @include("validations.form_validate")
 @include("validations.formato_numerico")
-@include("ficha_produccion.cargador_tabla")
+@include("ficha_produccion.create.cargador_tabla")
 @include("buscador.Buscador")
 
 
@@ -188,6 +188,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
         }
 
         show_loader();
+        if( $("input[name=FECHA]").val()== "")   $("input[name=FECHA]").val( (new Date()).getFecha() );
         //componer
         let cabecera = formValidator.getData("application/json");
         let detalle1 = productos_controller.data_model;
@@ -219,7 +220,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
             insumos_controller.limpiar_tabla();
             alert(resp.ok);
 */
-            window.location.reload();
+            window.location=   "<?=url('ficha-produccion/index')?>";
         } else {
             alert(resp.err);
         }
@@ -228,7 +229,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
     }
 
 
- 
+
 
 
 
@@ -238,9 +239,10 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
     async function restaurar_ficha_produccion() {
         let produccionId = $("#PRODUCCION_ID").val();
+        if (produccionId == undefined) return;
         if (produccionId != "") {
 
-            let url__ = "<?= url('ficha-produccion') ?>/" + produccionId;
+            let url__ = "<?= url('ficha-produccion/get') ?>/" + produccionId;
             let req = await fetch(url__, {
                 headers: {
                     formato: "json"

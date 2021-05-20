@@ -1,3 +1,21 @@
+@php
+
+
+$PRODUCCION_ID= isset( $PRODUCCION_ID) ? $PRODUCCION_ID : ( isset($SALIDA) ? $SALIDA->PRODUCCION_ID : NULL);
+$FECHA= isset( $SALIDA) ? $SALIDA->FECHA : date( 'Y-m-d');
+$TIPO_SALIDA= isset( $SALIDA) ? $SALIDA->TIPO_SALIDA : '';
+$DESTINO= isset( $SALIDA) ? $SALIDA->DESTINO : '';
+$SUCURSAL_DESTINO= isset( $SALIDA) ? $SALIDA->SUCURSAL_DESTINO : '';
+$CONCEPTO= isset( $SALIDA) ? $SALIDA->CONCEPTO : '';
+
+@endphp
+
+
+@if(  isset($SALIDA))
+
+<input type="hidden" name="REGNRO" value="{{$SALIDA->REGNRO}}">
+@endif
+
 <input type="hidden" name="REGISTRADO_POR" value="<?= session("ID") ?>">
 <input type="hidden" name="SUCURSAL" value="<?= session("SUCURSAL") ?>">
 <input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION_ID}}">
@@ -13,17 +31,23 @@
 
 
     <div class="col-12   col-sm-6 col-md-6  mb-1">
-        @if( ! is_null($PRODUCCION_ID) )
+
         <label class="mt-1 fs-6" for="element_7">Orden de Producción: </label>
-        <input readonly value="{{$PRODUCCION_ID}}" name="PRODUCCION_ID" class="form-control mt-1" type="text" />
-        @endif
+
+        <div class="d-flex flex-row">
+        <a href="#" onclick="buscarFichaProduccion()"><i class="fa fa-search"></i></a>
+            <input value="{{$PRODUCCION_ID}}" readonly name="PRODUCCION_ID" id="PRODUCCION_ID" class="form-control mt-1 fs-6" type="text" maxlength="15" />
+           
+        </div>
+
+
         <label style="grid-column-start: 1;" class="mt-1 mr-0 pr-0 fs-6" for="element_7">Fecha: </label>
-        <input value="{{date('Y-m-d')}}" name="FECHA" style="grid-column-start: 2;" class=" ml-0 form-control mt-1" type="date" />
+        <input value="{{$FECHA}}" name="FECHA" style="grid-column-start: 2;" class=" ml-0 form-control mt-1" type="date" />
 
 
         <label style="grid-column-start: 1;" class="mt-1 fs-6" for="element_7">Salida: </label>
-        <x-tipo-stock-chooser id="" name="TIPO_SALIDA" callback="cambiar_tipo_salida(event);"  class="form-control" />
-            
+        <x-tipo-stock-chooser id="" name="TIPO_SALIDA" :value="$TIPO_SALIDA" callback="cambiar_tipo_salida(event);" class="form-control" />
+
 
     </div>
 
@@ -36,7 +60,7 @@
         @endphp
         <select class="form-control" name="DESTINO" onchange="cambiar_destino(event)">
             @foreach( $tipos_destino as $tkey=> $tval)
-            @if( $tkey == "MP")
+            @if( $tkey == $DESTINO)
             <option selected value="{{$tkey}}"> {{$tval}}</option>
             @else
             <option value="{{$tkey}}"> {{$tval}}</option>
@@ -44,17 +68,22 @@
             @endforeach
         </select>
 
-       <div id="SUCURSAL_DESTINO" class="d-none" >
-       <label style="grid-column-start: 1;"  class="fs-6">SUCURSAL: </label>
-        <select style="grid-column-start: 2;" class="form-control" name="SUCURSAL_DESTINO">
-            @foreach( $SUCURSALES as $sucursal)
-            <option value="{{$sucursal->REGNRO}}">{{$sucursal->DESCRIPCION}}</option>
-            @endforeach
-        </select>
-       </div>
+        <div id="SUCURSAL_DESTINO" class="d-none">
+            <label style="grid-column-start: 1;" class="fs-6">SUCURSAL: </label>
+            <select style="grid-column-start: 2;" class="form-control" name="SUCURSAL_DESTINO">
+                @foreach( $SUCURSALES as $sucursal)
+                @if( $tkey == $SUCURSAL_DESTINO)
+                <option selected value="{{$sucursal->REGNRO}}">{{$sucursal->DESCRIPCION}}</option>
+                @else
+                <option value="{{$sucursal->REGNRO}}">{{$sucursal->DESCRIPCION}}</option>
+                @endif
+
+                @endforeach
+            </select>
+        </div>
 
         <label style="grid-column-start: 1;" class="mt-1 fs-6 " for="element_7">Observación: </label>
-        <input name="CONCEPTO" style="grid-column-start: 2;" class="form-control mt-1" type="text" />
+        <input value="{{$CONCEPTO}}" name="CONCEPTO" style="grid-column-start: 2;" class="form-control mt-1" type="text" />
 
 
     </div>

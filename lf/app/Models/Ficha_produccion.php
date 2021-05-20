@@ -17,6 +17,15 @@ class Ficha_produccion extends Model
 
 
 
+     
+    protected $dates = [
+        "FECHA",
+        'created_at',
+        'updated_at'
+    ];
+
+
+
     public function detalle_produccion()
     {
         return $this->hasMany(Ficha_produccion_detalles::class, 'PRODUCCION_ID',  'REGNRO');
