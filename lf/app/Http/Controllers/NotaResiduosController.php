@@ -80,7 +80,7 @@ class NotaResiduosController extends Controller
                     $d_compra->fill($datarow);
                     $d_compra->save();
                     //Actualizar existencia
-                    (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
+                  //  (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
 
 
 
@@ -137,7 +137,7 @@ class NotaResiduosController extends Controller
                 $d_compra->fill($datarow);
                 $d_compra->save();
                 //Actualizar existencia
-                (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
+               // (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
 
             endforeach;
             DB::commit();
@@ -156,10 +156,10 @@ class NotaResiduosController extends Controller
             DB::beginTransaction();
             Nota_residuos::find($id)->delete();
             //deshacr
-            $NotaResiduoDetalle = Nota_residuos_detalle::where("NRESIDUO_ID",  $id)->get();
-            foreach ($NotaResiduoDetalle  as $nrd) {
+           /* $NotaResiduoDetalle = Nota_residuos_detalle::where("NRESIDUO_ID",  $id)->get();
+           foreach ($NotaResiduoDetalle  as $nrd) {
                 (new StockController())->actualizar_existencia($nrd->ITEM, $nrd->CANTIDAD, 'DEC');
-            }
+            }*/
             Nota_residuos_detalle::where("NRESIDUO_ID",  $id)->delete();
             DB::commit();
             return response()->json(['ok' =>  "Nota de residuos eliminada"]);

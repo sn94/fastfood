@@ -22,10 +22,6 @@
      <button class="mt-2 btn btn-sm btn-success w-100" type="submit">GUARDAR</button>
      </div>
     </div>
-
-
-     
-
      <input type="hidden" name="ITEM" value="{{$STOCK->REGNRO}}">
 
  </form>

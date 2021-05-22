@@ -4,7 +4,7 @@
         letter-spacing: 1px;
         background-color: var(--color-3);
         position: relative;
-        z-index: 100000;
+        z-index: 1;
         top: -100%;
         color: white;
         border-radius: 8px 8px 0px 0px;

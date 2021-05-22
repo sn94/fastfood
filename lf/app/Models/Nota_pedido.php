@@ -15,7 +15,7 @@ class Nota_pedido extends Model
     protected $fillable = [
         'FECHA',  'CONCEPTO', 'ESTADO',  'SUCURSAL', 'REGISTRADO_POR', 'SOLICITADO_POR',
         'OBSERVACION',
-        'RECIBIDO_POR'
+        'RECIBIDO_POR', 'received_by'
     ];
 
  

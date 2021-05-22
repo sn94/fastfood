@@ -12,7 +12,7 @@ class Nota_pedido_detalles extends Model
     protected $table= "nota_pedido_detalles";
     protected $primaryKey = 'REGNRO';
     public $timestamps = false;
-    protected $fillable = [  'NPEDIDO_ID', 'ITEM', 'CANTIDAD', 'TIPO' ];
+    protected $fillable = [  'NPEDIDO_ID', 'ITEM', 'CANTIDAD', 'TIPO' , 'CANT_ACEPTADA'];
 
  
 

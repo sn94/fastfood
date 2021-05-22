@@ -1,7 +1,7 @@
  @extends( "templates.admin.index")
 
  @section("PageTitle")
- Remisión de Productos & Materia Prima
+ Notas de remisión de productos elaborados
  @endsection
 
 
@@ -9,11 +9,11 @@
 
 
  <x-fast-food-modal id="NOTA-REMISION-MODAL" title="Detalles" />
-
+ 
 
 
  <div class="container-fluid col-12 col-md-12 col-lg-10 col-xl-8 bg-dark pb-5">
-     <h2 class="text-center mt-2 text-light">Remisión de productos terminados</h2>
+     <h2 class="text-center mt-2 text-light"> Notas de remisión de productos elaborados </h2>
 
      <div id="loaderplace"></div>
 
@@ -21,7 +21,7 @@
 
      <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarNotaRemision()" showSearcherInput="N">
 
-         <a class="btn btn-warning mb-1" href="{{url('remision-prod-terminados/create')}}">NUEVA NOTA DE REMISIÓN</a>
+        
          <div class="row pt-1 text-light w-100">
 
 
@@ -38,11 +38,10 @@
              <div class="col-12   col-md-3   pb-0">
                  <label> Por Estado:</label>
                  <select class="form-select p-0" id="ESTADO" onchange="buscarNotaRemision()">
-                     <option value="P">Pendiente</option>
-                     <option value="C">Aceptado</option>
+                 <option value="P">Pendiente</option>
+                 <option value="C">Aceptado</option>
                  </select>
              </div>
-
          </div>
 
 
@@ -51,7 +50,7 @@
 
 
      <div class="mt-2" id="grill">
-         @include("remision_de_terminados.index.grill")
+         @include("remision_de_terminados.confirmar.grill")
      </div>
  </div>
 
@@ -69,7 +68,7 @@
      function configurarBusqueda(url_opcional) {
          if (!("dataSearcher" in window))
              window.dataSearcher = new DataSearcher();
-         let grill_url = "<?= url('remision-prod-terminados/index') ?>";
+         let grill_url = "<?= url('remision-prod-terminados/index/confirmar') ?>";
 
          if (url_opcional) {
              url_opcional.preventDefault();
@@ -83,7 +82,6 @@
          if (F_desde != "") parametros.FECHA_DESDE = F_desde;
          if (F_hasta != "") parametros.FECHA_HASTA = F_hasta;
          if (estado != "") parametros.ESTADO = estado;
-
          dataSearcher.setUrl = grill_url;
          dataSearcher.setOutputTarget = "#grill";
          dataSearcher.setParametros = parametros;
@@ -105,7 +103,7 @@
      window.onload = function() {
 
          configurarBusqueda();
-         // fill_grill();
+         
      }
  </script>
 

@@ -27,8 +27,8 @@ if( $STOCK_ACTUAL <= 0): $ESTADO_STOCK="table-danger" ; $MENSAJE_STOCK="(Sin sto
     </td>
     @endif
 
-    <td>{{($prov->CODIGO=='' ? '****':  $prov->CODIGO)}}</td>
-    <td>{{($prov->BARCODE=='' ? '****':  $prov->BARCODE)}}</td>
+    <td>{{($prov->CODIGO=='' ? '':  $prov->CODIGO)}}</td>
+    <td>{{($prov->BARCODE=='' ? '':  $prov->BARCODE)}}</td>
     <td>{{$prov->DESCRIPCION}} <span style="color:red;font-weight: 600;">{{$MENSAJE_STOCK}}</span> </td>
 
 

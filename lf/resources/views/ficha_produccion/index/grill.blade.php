@@ -36,10 +36,10 @@
 
             <td>{{ $FICHAS_PRODUCCION_->REGNRO }}</td>
 
-            <td>{{ $FICHAS_PRODUCCION_->NUMERO == ''  ? '****' :  $FICHAS_PRODUCCION_->NUMERO}}</td>
-            <td>{{ is_null($FICHAS_PRODUCCION_->FECHA) ? '****':  $FICHAS_PRODUCCION_->FECHA->format('d/m/Y')}}</td>
+            <td>{{ $FICHAS_PRODUCCION_->NUMERO == ''  ? '' :  $FICHAS_PRODUCCION_->NUMERO}}</td>
+            <td>{{ is_null($FICHAS_PRODUCCION_->FECHA) ? '':  $FICHAS_PRODUCCION_->FECHA->format('d/m/Y')}}</td>
 
-            <td>{{$FICHAS_PRODUCCION_->ELABORADO_POR ==  "" ? "*****" : $FICHAS_PRODUCCION_->ELABORADO_POR  }} </td>
+            <td>{{$FICHAS_PRODUCCION_->ELABORADO_POR ==  "" ? '' : $FICHAS_PRODUCCION_->ELABORADO_POR  }} </td>
 
         </tr>
         @endforeach

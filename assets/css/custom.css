@@ -130,3 +130,19 @@ div>a i.fa:hover {
 .form-control:focus {
     box-shadow: 0 0 0px 7px var(--color-3-trans) !important;
 }
+
+.backward-button {
+    border-radius: 0 100% 100% 0;
+    padding: 18px;
+    position: fixed;
+    background-color: var(--color-3-dark);
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+.backward-button:hover {
+    background-color: var(--color-3);
+    box-shadow: 0 0 10px var(--color-3-dark);
+    font-size: calc(1em + 5px);
+}

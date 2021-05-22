@@ -57,7 +57,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
  
   <tr>
     <th>Cajero/a:</th>
-    <td>{{is_null($SESION->cajero) ?  '***' :   $SESION->cajero->NOMBRES}}</td>
+    <td>{{is_null($SESION->cajero) ?  '' :   $SESION->cajero->NOMBRES}}</td>
   </tr>
 </table>
 
@@ -76,8 +76,8 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
     <tr>
       <td>{{$ticket->REGNRO}}</td>
       <td>{{$ticket->REGNRO}}</td>
-      <td>{{ is_null($ticket->FECHA) ? '***':  $ticket->FECHA->format('d/m/Y')}}</td>
-      <td>{{ is_null($ticket->cliente) ?  '***' : $ticket->cliente->NOMBRE}}</td>
+      <td>{{ is_null($ticket->FECHA) ? '':  $ticket->FECHA->format('d/m/Y')}}</td>
+      <td>{{ is_null($ticket->cliente) ?  '' : $ticket->cliente->NOMBRE}}</td>
       <td class="text-end">{{ Utilidades::number_f( $ticket->TOTAL )}}</td>
     </tr>
     @endforeach
@@ -122,7 +122,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
       <td>{{$ticket->REGNRO}}</td>
       <td>{{$ticket->REGNRO}}</td>
       <td>{{$ticket->FECHA->format('d/m/Y')}}</td>
-      <td>{{ is_null($ticket->cliente) ? '***' :  $ticket->cliente->NOMBRE}}</td>
+      <td>{{ is_null($ticket->cliente) ? '' :  $ticket->cliente->NOMBRE}}</td>
       <td class="text-end">{{ Utilidades::number_f( $ticket->TOTAL )}}</td>
     </tr>
     @endforeach

@@ -4,7 +4,7 @@
 
 
 
- <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1 pb-lg-5 ">
+ <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1 pt-3 pb-lg-5 ">
 
 
    @include("validations.formato_numerico")
@@ -14,30 +14,13 @@
 
    <!--Modal -->
    <x-fast-food-modal id="PEDIDO-MODAL" title="CONFIRMAR PEDIDO" />
+ 
 
-
-
-   <div class="row">
-     <div class="col-12 col-md-3">
-       <table class="mb-2">
-         <tr>
-           <td style="width: 50px;background: #71d788;height: 20px;"></td>
-           <td style="color: white !important;font-weight: 600;">APROBADO</td>
-         </tr>
-         <tr>
-           <td style="width: 50px;background: #f0d88e;height: 20px;"></td>
-           <td style="color: white !important;font-weight: 600;">PENDIENTE</td>
-         </tr>
-       </table>
-     </div>
-
-   </div>
-
-   <h4 class="text-center">Pedidos de {{ strtolower( $STOCK->DESCRIPCION)}}</h4>
+   <h4 class="text-center">Pedidos de productos, materia prima y otros</h4>
 
    <div class="container-fluid mb-5 pb-5" id="grill">
 
-     @include("pedidos.index.grill")
+     @include("pedidos.realizados.grill")
    </div>
 
  </div>
@@ -53,7 +36,7 @@ if (ev != undefined && typeof ev == "object") {
   if (url_parts.length > 1) page_index = url_parts[1].split("=")[1];
 }
 
-     let grill_url = "<?= url('pedidos/list/'.$STOCK->REGNRO) ?>?page="+page_index;
+     let grill_url = "<?= url('pedidos/realizados') ?>?page="+page_index;
 
 
      let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";

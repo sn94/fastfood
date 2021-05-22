@@ -44,10 +44,11 @@ $CONCEPTO= isset( $SALIDA) ? $SALIDA->CONCEPTO : '';
         <label style="grid-column-start: 1;" class="mt-1 mr-0 pr-0 fs-6" for="element_7">Fecha: </label>
         <input value="{{$FECHA}}" name="FECHA" style="grid-column-start: 2;" class=" ml-0 form-control mt-1" type="date" />
 
+@if( false)
 
         <label style="grid-column-start: 1;" class="mt-1 fs-6" for="element_7">Salida: </label>
         <x-tipo-stock-chooser id="" name="TIPO_SALIDA" :value="$TIPO_SALIDA" callback="cambiar_tipo_salida(event);" class="form-control" />
-
+@endif
 
     </div>
 

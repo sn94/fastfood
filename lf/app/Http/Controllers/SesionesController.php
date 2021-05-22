@@ -49,7 +49,12 @@ class SesionesController extends Controller
             DB::raw("FORMAT(EFECTIVO_INI,0,'de_DE') AS EFECTIVO_INI"),
             DB::raw("FORMAT(TOTAL_EFE,0,'de_DE') AS TOTAL_EFE"),
             DB::raw("FORMAT(TOTAL_TAR,0,'de_DE') AS TOTAL_TAR"),
-            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIRO")
+            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIRO"),
+
+            DB::raw("FORMAT(SUM(EFECTIVO_INI) ,0,'de_DE' ) AS EFECTIVO_INI_TOTAL"),
+            DB::raw("FORMAT( SUM(TOTAL_EFE) ,0,'de_DE') AS TOTAL_EFE_TOTAL"),
+            DB::raw("FORMAT( SUM(TOTAL_TAR) ,0,'de_DE') AS TOTAL_TAR_TOTAL"),
+            DB::raw("FORMAT( SUM(TOTAL_GIRO) ,0,'de_DE') AS TOTAL_GIRO_TOTAL")
            
         );
          

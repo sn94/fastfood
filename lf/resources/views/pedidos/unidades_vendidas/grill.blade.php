@@ -54,10 +54,9 @@ use App\Models\Nota_pedido_detalles;
             <th>CÓDIGO</th>
             <th>BARCODE</th>
             <th>DESCRIPCIÓN</th>
-            <th>VENDIDOS</th>
-            <th>STOCK</th> 
-            <th>PEDIDO</th>
-            <th>RECIBIDO</th>
+        
+            <th>STOCK</th>
+            <th></th> 
 
         </tr>
     </thead>
@@ -66,11 +65,8 @@ use App\Models\Nota_pedido_detalles;
 
         @foreach( $PRODUCTOS as $ven)
 
-        <?php
-        //Calcular stock 
-          $stockActual = ($ven->ENTRADAS + $ven->ENTRADA_PE + $ven->ENTRADA_RESIDUO) - ($ven->SALIDAS + $ven->SALIDA_VENTA);
-
-        ?>
+        @if( $ven->TIPO != "COMBO")
+        
 
         <tr>
 
@@ -78,29 +74,22 @@ use App\Models\Nota_pedido_detalles;
             <td>{{$ven->CODIGO}}</td>
             <td>{{$ven->BARCODE}}</td>
             <td>{{$ven->DESCRIPCION}}</td>
-            <td>{{$ven->SALIDA_VENTA}}</td>
-           
-            <td  >
-            {{$stockActual}} 
-            @php 
-            $medida = ($ven->unidad_medida) ? $ven->unidad_medida->DESCRIPCION  :  "";
-            @endphp
-            <span class="badge bg-success text-end">{{ $medida}}</span>
-            </td>
+            
 
-            <td> 
-                <a  href="{{url('pedidos/create/'.$ven->REGNRO)}}" onclick="mostrar_form(event)" class="btn btn-sm btn-danger">PEDIR</a>
+            <td>
+                {{$ven->CANTIDAD}}
+                
+                <span class="badge bg-success text-end">{{ $ven->MEDIDA}}</span>
             </td>
 
             <td>
-            <a  href="{{url('pedidos/list/'.$ven->REGNRO)}}"   class="btn btn-sm btn-danger">REALIZADOS</a>
-                  <!--Solo si no hay pedido aprobado -->
-                  @if( FALSE )
-                @include("pedidos.forms.recibido")
-                @endif
+                <a href="{{url('pedidos/create/'.$ven->REGNRO)}}" onclick="mostrar_form(event)" class="btn btn-sm btn-danger">PEDIR</a>
             </td>
 
+            
+
         </tr>
+        @endif
         @endforeach
 
 
@@ -108,6 +97,4 @@ use App\Models\Nota_pedido_detalles;
 </table>
 
 
-<x-pretty-paginator   :datos="$PRODUCTOS"  callback="fill_grill"/>
-
- 
+<x-pretty-paginator :datos="$PRODUCTOS" callback="fill_grill" />

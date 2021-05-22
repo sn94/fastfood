@@ -26,8 +26,7 @@ endif;
 
 
 
-<a class="btn btn-sm btn-warning" href="<?= url("clientes".$QUERY_FLAG) ?>"> IR ATRÁS</a>
-
+ 
 <h2 class="text-center mt-2"  >Ficha de cliente</h2>
 
 

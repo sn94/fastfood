@@ -43,7 +43,7 @@ use App\Helpers\Utilidades;
             <td>{{$ven->SESION}}</td>
             <td>{{ Utilidades::fecha_f($ven->FECHA) }}</td>
             <td>{{ date("H:i:s", strtotime(  $ven->created_at )   )}}</td>
-            <td>{{  is_null($ven->cliente) ? '***' : $ven->cliente->NOMBRE . "(". $ven->cliente->CEDULA_RUC . ")"}}</td>
+            <td>{{  is_null($ven->cliente) ? '' : $ven->cliente->NOMBRE . "(". $ven->cliente->CEDULA_RUC . ")"}}</td>
             <td>{{ $ven->TOTAL}}</td>
             <td>{{ $ven->ESTADO =='A'  ? 'ACTIVA'  : 'ANULADA'}}</td>
         </tr>

@@ -4,13 +4,13 @@
         letter-spacing: 1px;
         background-color: var(--color-3);
         position: relative;
-        z-index: 100000;
+        z-index: 1;
         top: -100%;
         color: white;
         border-radius: 8px 8px 0px 0px;
         text-align: center;
     }
-</style> 
+</style>
 
 <div class="row">
 
@@ -21,7 +21,7 @@
             <label class="fs-6 ">Ítem:</label>
             @if( ! isset($PRODUCCION_DETALLE) )
             <a href="#" onclick="buscador_de_items()"><i class="fa fa-search"></i></a>
-            @endif 
+            @endif
 
             <input size="5" style="width:50px !important; font-weight: 600; color: black; " class="form-control fs-6" type="text" id="ITEM-ID" disabled>
 
@@ -30,13 +30,15 @@
         </div>
     </div>
 
-    <div class="col-12  col-md-4  mb-1 pl-0 d-flex flex-row"  >
+    <div class="col-12  col-md-4  mb-1 pl-0 d-flex flex-row align-items-start">
 
-        <label  class="fs-6" >Cantidad:&nbsp; </label>
+        <label class="fs-6">Cantidad:&nbsp; </label>
         <div style="display: flex; flex-direction: column;">
+      
             <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="grid-column-start: 2;width: 90px !important;" id="CANTIDAD" class="form-control decimal fs-6" type="text" />
-            <label   id="ITEM-MEDIDA"></label>
+            <label id="ITEM-MEDIDA"></label>
         </div>
+        <a style="display: flex; flex-direction: row; align-items: flex-end;" href="#" onclick="cargar_tabla()"><i class="fa fa-download"></i></a>
 
     </div>
 
@@ -45,46 +47,46 @@
 
 </div>
 
-<div class="container   mt-2 p-0  "> 
-        <table class="table table-striped table-secondary text-dark">
+<div class="container   mt-2 p-0  ">
+    <table class="table table-striped table-secondary text-dark">
 
-            <thead>
-                <tr  >
-                    <th>Cód.</th>
-                    <th>Descripción</th>
-                    <th>Medida</th>
-                    <th> Cantidad</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="REMISION-DETALLE">
+        <thead>
+            <tr>
+                <th>Cód.</th>
+                <th>Descripción</th>
+                <th>Medida</th>
+                <th> Cantidad</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="REMISION-DETALLE">
 
-                @if( isset($PRODUCCION_DETALLE) )
-                @foreach( $PRODUCCION_DETALLE as $ITEM)
+            @if( isset($DETALLE) )
+            @foreach( $DETALLE as $ITEM)
 
-                @if( $ITEM->TIPO == "PE")
-                <tr id="{{$ITEM->ITEM}}" class="{{$ITEM->TIPO}}-class">
+            @if( $ITEM->TIPO == "PE")
+            <tr id="{{$ITEM->ITEM}}" class="{{$ITEM->TIPO}}-class">
 
-                    <td>{{$ITEM->stock->CODIGO}}</td>
-                    <td>{{$ITEM->stock->DESCRIPCION}}</td>
-                    <td>{{$ITEM->MEDIDA}}</td>
-                    <td>{{$ITEM->CANTIDAD}}</td>
-                    <td> <a style='color:black;' href='#' onclick='editar_fila( this )'> <i class='fa fa-edit'></i> </a> </td>
-                    <td> <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a> </td>
-                </tr>
-                @endif
-                @endforeach
-                @endif
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="5">
-                    </th>
-                    <th></th>
-                </tr>
-            </tfoot>
-        </table>
+                <td>{{$ITEM->stock->CODIGO}}</td>
+                <td>{{$ITEM->stock->DESCRIPCION}}</td>
+                <td>{{$ITEM->MEDIDA}}</td>
+                <td>{{$ITEM->CANTIDAD}}</td>
+                <td> <a style='color:black;' href='#' onclick='editar_fila( this )'> <i class='fa fa-edit'></i> </a> </td>
+                <td> <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a> </td>
+            </tr>
+            @endif
+            @endforeach
+            @endif
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5">
+                </th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 
 
@@ -99,8 +101,8 @@
     async function buscador_de_items() {
 
         //Solo PE
-        let TIPOITEM ="PE";
-        
+        let TIPOITEM = "PE";
+
         Buscador.url = "<?= url("stock/buscar") ?>/" + TIPOITEM;
         Buscador.htmlFormForParams = `<form> <input name='TIPO' type='hidden' value='${TIPOITEM}'> </form>`;
 
@@ -108,7 +110,7 @@
         Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
         Buscador.columnLabels = ['ID', 'DESCRIPCION'];
         Buscador.callback = function(respuesta) {
-           
+
             const {
                 REGNRO,
                 DESCRIPCION,
@@ -123,10 +125,11 @@
 
         };
         Buscador.render();
- 
+
+        window.history.replaceState({}, "", "");
     }
 
-    
+
 
 
     function editar_fila(esto) {
@@ -261,7 +264,7 @@
             let des = "<td> " + descri + "</td>";
             let med = "<td> " + medida + "</td>";
             let cant = "<td>" + cantidad + "</td>";
-            let edit= "  <td> <a style='color:black;' href='#' onclick='editar_fila( this )'> <i class='fa fa-edit'></i> </a> </td>";
+            let edit = "  <td> <a style='color:black;' href='#' onclick='editar_fila( this )'> <i class='fa fa-edit'></i> </a> </td>";
             let del = "<td> <a style='color:black;' href='#' onclick='deleteme( this )'> <i class='fa fa-trash'></i> </a>  </td>";
 
             //agregar al modelo
@@ -276,7 +279,7 @@
 
             let classIdentTipoItem = tipoStock + "-class";
 
-            let nueva_tr = "<tr  class='" + classIdentTipoItem + "' id='" + regnro + "' >" + cod_item + des + med + cant + edit+ del + "</tr>";
+            let nueva_tr = "<tr  class='" + classIdentTipoItem + "' id='" + regnro + "' >" + cod_item + des + med + cant + edit + del + "</tr>";
 
             //Actualizar modelo de datos
             actualiza_modelo_de_datos(objc);

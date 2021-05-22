@@ -7,6 +7,15 @@
 
 @php
 
+//Url para procesar el form 
+$urlAction=  isset( $REMISION)  ?  url("remision-prod-terminados/update")  :  url("remision-prod-terminados/create");
+
+$REGNRO= isset($REMISION) ? $REMISION->REGNRO : '';
+$NUMERO= isset($REMISION) ? $REMISION->NUMERO : '';
+$FECHA= isset($REMISION) ? $REMISION->FECHA : date('Y-m-d');
+$AUTORIZADO_POR= isset($REMISION) ? $REMISION->AUTORIZADO_POR : '';
+$CONCEPTO= isset($REMISION) ? $REMISION->CONCEPTO : '';
+$PRODUCCION_ID= isset($REMISION) ? $REMISION->PRODUCCION_ID : ( isset($PRODUCCION) ? $PRODUCCION->REGNRO : '');
 @endphp
 
 
@@ -15,7 +24,7 @@
 @include("remision_de_terminados.create.estilos")
 <!-- incluye funciones para generar y usar un buscador de datos -->
 @include("buscador.Buscador")
- 
+
 
 
 <div id="loaderplace"></div>
@@ -23,11 +32,9 @@
 <div class="container-fluid bg-dark text-light col-12 col-md-11 col-lg-8  mx-auto pb-5">
     <h2 class="text-center mt-2">Remisión de productos terminados</h2>
 
-    <form action="<?= url("remision-prod-terminados/create") ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
+    <form action="<?= $urlAction ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
 
-        @if( isset($PRODUCCION))
-        <input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION->REGNRO}}">
-        @endif
+        <input type="hidden" name="PRODUCCION_ID" value="{{$PRODUCCION_ID}}">
         <input type="hidden" name="REGISTRADO_POR" value="<?= session("ID") ?>">
         <input type="hidden" name="SUCURSAL" value="<?= session("SUCURSAL") ?>">
         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
@@ -43,26 +50,34 @@
 
 
                 <div class="row">
-                <div class="col-12 col-md-3  mb-1">
+
+                    @if( isset($REMISION))
+                    <div class="col-12 col-md-2  mb-1">
                         <label class="mt-1 fs-6" for="element_7">Nota N°: </label>
-                        <input  name="NUMERO" class="form-control mt-1 fs-6" type="text" maxlength="15" />
+                        <input name="REGNRO" class="form-control mt-1 fs-6 text-center" type="text"  readonly value="{{$REGNRO}}" />
+                    </div>
+                    @endif
+
+                    <div class="col-12 col-md-3  mb-1">
+                        <label class="mt-1 fs-6" for="element_7">Número doc.: </label>
+                        <input name="NUMERO" value="{{$NUMERO}}" class="form-control mt-1 fs-6" type="text" maxlength="15" />
 
                     </div>
 
                     <div class="col-12 col-md-3  mb-1">
                         <label class="mt-1 fs-6" for="element_7">Fecha: </label>
-                        <input value="{{date('Y-m-d')}}" name="FECHA" class="form-control mt-1 fs-6" type="date" />
+                        <input value="{{$FECHA}}" name="FECHA" class="form-control mt-1 fs-6" type="date" />
 
                     </div>
 
                     <div class="col-12 col-md-6  mb-1">
                         <label class="mt-1 fs-6" for="element_7">Autorizado Por: </label>
-                        <input maxlength="50" name="AUTORIZADO_POR" class="form-control mt-1 fs-6" type="text" />
+                        <input maxlength="50" value="{{$AUTORIZADO_POR}}" name="AUTORIZADO_POR" class="form-control mt-1 fs-6" type="text" />
                     </div>
 
                     <div class="col-12 col-md-5  mb-1">
                         <label class="mt-1 fs-6" for="element_7">Observación: </label>
-                        <input name="CONCEPTO" class="form-control mt-1 fs-6" type="text" />
+                        <input value="{{$CONCEPTO}}" name="CONCEPTO" class="form-control mt-1 fs-6" type="text" />
                     </div>
                     <div class="col-12 col-md-2  mb-1 d-flex align-items-end">
                         <button type="submit" class="btn btn-danger"> GUARDAR</button>
@@ -134,7 +149,8 @@
             limpiar_tabla();
             alert(resp.ok);
             
-            window.location= "<?=url('remision-prod-terminados/index')?>";
+
+            window.location = "<?= url('remision-prod-terminados/index') ?>";
         } else {
             alert(resp.err);
         }
@@ -144,7 +160,7 @@
 
 
 
-     
+
 
     async function restaurar_modelo_remision() {
         //item cantidad tipo medida

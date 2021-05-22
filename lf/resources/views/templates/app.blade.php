@@ -85,19 +85,18 @@
      </script>
  </head>
 
- <body class="h-100">
+ <body class="h-100 p-0">
 
 
      @include("templates.mymodal" )
 
+
+
      @yield("menu")
 
+     <button class="backward-button" onclick="window.history.go(-1);"  class="button">Atrás</button>
 
      <!--  style="background-image: url( $BASE_ASSETS /images/bg_1.jpg);" -->
-
-
-
-
      @yield("content")
 
      @yield('jsScripts')

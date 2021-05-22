@@ -28,7 +28,7 @@ $STOCK_ACTUAL= $prov->ENTRADAS + $prov->ENTRADA_PE + $prov->ENTRADA_RESIDUO -($p
                     <b style="font-size: 12.5px;color:black;">{{$prov->DESCRIPCION}}</b>
                     <span style="display:block;" class="badge badge-dark"> {{ Utilidades::number_f( $prov->PVENTA) }}</span>
 
-                    <b style="font-size: 12px;display:block;">Cód.Barras: {{($prov->BARCODE=='') ? '****': $prov->BARCODE}}</b>
+                    <b style="font-size: 12px;display:block;">Cód.Barras: {{($prov->BARCODE=='') ? '': $prov->BARCODE}}</b>
 
 
                     @if( $STOCK_ACTUAL<= 0 ) <span class="badge badge-danger">Sin stock </span>

@@ -36,8 +36,8 @@ padding:  0px 2px  !important;
             <td>
                 <a onclick="delete_row(event)" style="color: black;" href="{{url('salida').'/'.$SALIDA_->REGNRO}}"> <i class="fa fa-trash"></i></a>
             </td>
-        <td>{{   $SALIDA_->NUMERO == ''  ? '****' :  $SALIDA_->NUMERO}}</td>
-        <td>{{   is_null($SALIDA_->FECHA) ? '****':  $SALIDA_->FECHA->format('d/m/Y')}}</td>
+        <td>{{   $SALIDA_->NUMERO == ''  ? '' :  $SALIDA_->NUMERO}}</td>
+        <td>{{   is_null($SALIDA_->FECHA) ? '':  $SALIDA_->FECHA->format('d/m/Y')}}</td>
         <td>
             @php 
             $tipo_salida= $SALIDA_->TIPO_SALIDA;
@@ -47,10 +47,10 @@ padding:  0px 2px  !important;
             
 
         </td>
-        <td>{{$SALIDA_->DESTINO == "" ? '****' : $SALIDA_->DESTINO }}</td>
-        <td>{{$SALIDA_->SUCURSAL_DESTINO == "" ? '****' :  $SALIDA_->SUCURSAL_DESTINO }}</td>
-        <td>{{$SALIDA_->PRODUCCION_ID == "" ? '****' :  $SALIDA_->PRODUCCION_ID  }}</td>
-        <td>{{$SALIDA_->PEDIDO_ID  == "" ? '****' :  $SALIDA_->PEDIDO_ID  }}</td>
+        <td>{{$SALIDA_->DESTINO == "" ? '' : $SALIDA_->DESTINO }}</td>
+        <td>{{$SALIDA_->SUCURSAL_DESTINO == "" ? '' :  $SALIDA_->SUCURSAL_DESTINO }}</td>
+        <td>{{$SALIDA_->PRODUCCION_ID == "" ? '' :  $SALIDA_->PRODUCCION_ID  }}</td>
+        <td>{{$SALIDA_->PEDIDO_ID  == "" ? '' :  $SALIDA_->PEDIDO_ID  }}</td>
         </tr>
         @endforeach
         @endif

@@ -14,7 +14,7 @@
 use App\Models\Sucursal;
 
 $suc= Sucursal::find(   session('SUCURSAL') );
-$nombreSuc=  is_null(  $suc) ?   '***' :   $suc->DESCRIPCION;
+$nombreSuc=  is_null(  $suc) ?   '' :   $suc->DESCRIPCION;
 
 @endphp
 <div class="card text-dark bg-warning mb-3" style="max-width: 18rem;">

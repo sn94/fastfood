@@ -10,7 +10,6 @@
         <tr>
             <th></th>
             <th></th>
-            <th></th>
             <th>Id</th>
             <th>N°</th>
             <th>Fecha</th>
@@ -30,16 +29,16 @@
         <tr>
 
             <td>
-                <a style="color: black;" href="{{url('remision-prod-terminados/update').'/'.$REMISION_->REGNRO}}"> <i class="fas fa-edit"></i></a>
+                @if( $REMISION_->ESTADO == "P" )
+                <a onclick="confirmarRecepcion(event);" class="btn btn-sm btn-success" href="{{url('remision-prod-terminados/confirmar').'/'.$REMISION_->REGNRO}}"> Confirmar</a>
+                @endif
             </td>
             <td>
-                <a onclick="verDetalles(event)" style="color: black;"  href="{{url('remision-prod-terminados/view').'/'.$REMISION_->REGNRO}}"> <i class="fas fa-eye"></i> </a>
-            </td>
-            <td>
-                <a onclick="delete_row(event)" style="color: black;" href="{{url('remision-prod-terminados').'/'.$REMISION_->REGNRO}}"> <i class="fa fa-trash"></i></a>
+                <a onclick="verDetalles(event)" class="text-dark" href="{{url('remision-prod-terminados/view').'/'.$REMISION_->REGNRO}}"> <i class="fa fa-eye"></i> </a>
             </td>
 
-            <td>{{ $REMISION_->REGNRO }}</td>
+
+            <td>{{ $REMISION_->REGNRO  }}</td>
             <td>{{ $REMISION_->NUMERO == ''  ? '' :  $REMISION_->NUMERO}}</td>
             <td>{{ is_null($REMISION_->FECHA) ? '':  $REMISION_->FECHA->format('d/m/Y')}}</td>
 
@@ -62,24 +61,19 @@
 
 
 <script>
-    async function delete_row(ev) {
+    async function confirmarRecepcion(ev) {
         ev.preventDefault();
-        if (!confirm("continuar?")) return;
-        let req = await fetch(ev.currentTarget.href, {
-            "method": "DELETE",
-            headers: {
-
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            body: "_method=DELETE&_token=" + $('meta[name="csrf-token"]').attr('content')
-
-        });
+        if (!confirm("confirmar recepción de productos elaborados?")) return;
+        let req = await fetch(ev.currentTarget.href);
         let resp = await req.json();
-        if ("ok" in resp) buscarNotaRemision();
-        else alert(resp.err);
+        if ("ok" in resp) {
+            alert(resp.ok)
+            buscarNotaRemision();
+        } else alert(resp.err);
 
     }
+
+
 
 
     async function verDetalles(ev) {

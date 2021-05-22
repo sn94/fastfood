@@ -74,7 +74,7 @@ table{
             </td>
 
            
-            <td class="text-end fw-bold">{{ $ven->PVENTA == "" ? "****" :  $ven->PVENTA}}</td>
+            <td class="text-end fw-bold">{{ $ven->PVENTA == "" ? '' :  $ven->PVENTA}}</td>
             <td class="text-end fw-bold">{{ $ven->P_UNITARIO}}</td>
 
             <td>{{ $ven->PROVEEDOR_NOM}}</td>

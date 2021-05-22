@@ -1,47 +1,48 @@
- @extends("templates.caja.index")
+ @extends("templates.admin.index")
 
  @section("content")
 
 
 
+ <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1 pt-3 pb-lg-5 ">
 
 
- @include("validations.formato_numerico")
- @include("validations.form_validate")
+   @include("validations.formato_numerico")
+   @include("validations.form_validate")
 
 
 
- <!--Modal -->
- <x-fast-food-modal id="PEDIDO-MODAL" title="NUEVO PEDIDO" />
+   <!--Modal -->
+   <x-fast-food-modal id="PEDIDO-MODAL" title="CONFIRMAR PEDIDO" />
+ 
 
+   <h4 class="text-center">Pedidos de Sucursales</h4>
 
- <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1 pb-5">
+   <div class="container-fluid mb-5 pb-5" id="grill">
 
-   <h3 class="text-center">Pedidos </h3>
-
-
-   <div class="container-fluid" id="grill">
-
-     @include("pedidos.vendidos.grill")
+     @include("pedidos.sucursales.grill")
    </div>
 
  </div>
 
  <script>
-   async function fill_grill(ev) {
-     let page_index = 1;
+   async function fill_grill( ev) {
+    let page_index = 1;
 
-     //prevenir propagacion
-     if (ev != undefined && typeof ev == "object") {
-       ev.preventDefault();
-       let url_parts = ev.target.href.split("?");
-       if (url_parts.length > 1) page_index = url_parts[1].split("=")[1];
-     }
+//prevenir propagacion
+if (ev != undefined && typeof ev == "object") {
+  ev.preventDefault();
+  let url_parts = ev.target.href.split("?");
+  if (url_parts.length > 1) page_index = url_parts[1].split("=")[1];
+}
 
-     let grill_url = "<?= url('pedidos') ?>?page="+page_index;
+     let grill_url = "<?= url('pedidos/sucursales') ?>?page="+page_index;
+
+
      let loader = "<img style='z-index: 400000;position: absolute;top: 50%;left: 50%;'  src='<?= url("assets/images/loader.gif") ?>'   />";
      $("#grill").html(loader);
      let req = await fetch(grill_url, {
+
        headers: {
          'X-Requested-With': "XMLHttpRequest"
        }
@@ -65,7 +66,7 @@
    }
 
 
-   async function pedir_recibir(ev) {
+   async function aprobarPedido(ev) {
 
      ev.preventDefault();
      let url_ = ev.target.action;
@@ -80,14 +81,6 @@
        },
        body: formValidator.getData()
      });
-     if (parseInt(req.status) != 200) {
-       $("#PEDIDO-MODAL .modal-body").html("");
-       $("#PEDIDO-MODAL").modal("hide");
-       alert(req.statusText);
-       return;
-     }
-
-
      let resp = await req.json();
      if ("ok" in resp) {
        alert(resp.ok);

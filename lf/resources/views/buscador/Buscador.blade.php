@@ -198,7 +198,7 @@
                 
                 `);
                 let tableContainerTag = document.createElement("div");
-                tableContainerTag.style.height= "250px";
+                tableContainerTag.style.height= "500px";
                 tableContainerTag.style.overflow= "scroll";
                 tableContainerTag.appendChild(  tableTag);
              //  tableTag.innerHTML =  `    ${header}  ${body}   `;

@@ -12,9 +12,7 @@ $QUERY_FLAG =  $MODULO_FLAG != "c"  ? ""  :    "?m=$MODULO_FLAG";
 
 <div class="container-fluid bg-dark text-light col-12 col-md-6 mt-1">
 
-        @if( ! request()->ajax() )
-        <a class="btn btn-sm btn-warning" href="<?= url("clientes" . $QUERY_FLAG) ?>"> IR ATRÁS</a>
-        @endif
+        
 
         <h2 class="text-center mt-2">Ficha de cliente</h2>
 

@@ -9,7 +9,7 @@ use App\Models\Sucursal;
 //FUENTES
 $SUCURSALES= Sucursal::get();
 
-$urlAction=  isset($SALIDA) ? url('salida/update')  : url('salida/create');
+$urlAction= isset($SALIDA) ? url('salida/update') : url('salida/create');
 
 @endphp
 
@@ -49,17 +49,72 @@ $urlAction=  isset($SALIDA) ? url('salida/update')  : url('salida/create');
 
 
 
-    function buscarItem() {
-        let TIPOITEM = $("select[name=TIPO_SALIDA]").val();
-        
-        Buscador.url = "<?= url("stock/buscar") ?>/" + TIPOITEM;
-        Buscador.htmlFormForParams = `<form> <input name='TIPO' type='hidden' value='${TIPOITEM}'> </form>`;
+    async function buscarItemParaCompra() {
 
-        Buscador.htmlFormFieldNames = ['TIPO'];
+        //**** */
+        //Parametros de formulario
+        let tipos_de_item = {
+            "MP": "MATERIA PRIMA",
+            "PP": "PARA VENTA",
+            "PE": "PRODUCTO ELABORADO",
+            "AF": "MOBILIARIO Y OTROS"
+        };
+        let htmlParams = Object.entries(tipos_de_item).map(([key, val]) => {
+            return `<option value='${key}'>${val}</option>`;
+        });
+        htmlParams = `<form><select onchange='Buscador.consultar()' name='tipo' class='form-control'>${htmlParams}</select></form>`;
+
+        Buscador.url = "<?= url("stock/buscar") ?>";
+        Buscador.httpMethod = "post";
+        Buscador.httpHeaders = {
+            formato: "json"
+        };
+        Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
+        Buscador.columnLabels = ['ID', 'DESCRIPCIÓN'];
+        Buscador.htmlFormForParams = htmlParams;
+        Buscador.htmlFormFieldNames = ['tipo'];
+
+
+        Buscador.callback = function(seleccionado) {
+
+            window.buscador_items_modelo = seleccionado;
+            $('#COMPRA-ITEM-ID').val(seleccionado.REGNRO);
+            $('#COMPRA-ITEM-DESC').val(seleccionado.DESCRIPCION);
+            $("#COMPRA-MEDIDA").text(seleccionado.unidad_medida.DESCRIPCION);
+            $("#COMPRA-PRECIO").val(formatoNumerico.darFormatoEnMillares(seleccionado.PCOSTO, 0));
+        };
+        Buscador.render();
+        /*** */
+    }
+
+
+
+    function buscarItem() {
+        //**** */
+        //Parametros de formulario
+        let tipos_de_item = {
+            "MP": "MATERIA PRIMA",
+            "PP": "PARA VENTA",
+            "PE": "PRODUCTO ELABORADO",
+            "AF": "MOBILIARIO Y OTROS"
+        };
+        let htmlParams = Object.entries(tipos_de_item).map(([key, val]) => {
+            return `<option value='${key}'>${val}</option>`;
+        });
+        htmlParams = `<form><select  onchange='Buscador.consultar()' name='tipo' class='form-select'>${htmlParams}</select></form>`;
+
+
+        Buscador.url = "<?= url("stock/buscar") ?>";
+        Buscador.htmlFormForParams = htmlParams;
+        Buscador.httpMethod = "post";
+        Buscador.httpHeaders = {
+            formato: "json"
+        };
+        Buscador.htmlFormFieldNames = ['tipo'];
         Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
         Buscador.columnLabels = ['ID', 'DESCRIPCION'];
         Buscador.callback = function(respuesta) {
-           
+
             const {
                 REGNRO,
                 DESCRIPCION,
@@ -143,35 +198,35 @@ $urlAction=  isset($SALIDA) ? url('salida/update')  : url('salida/create');
 
 
     async function buscarFichaProduccion() {
-  
-  Buscador.url = "<?= url("ficha-produccion/index") ?>" ;
-  Buscador.httpMethod = "post" ;
-  Buscador.mostrarCampoBusquedaPorPatron= false;
-  Buscador.reiniciarRequestAlFiltrar = true;
-  Buscador.htmlFormForParams = `<form> <label class='fw-bold text-dark fs-6'>Por Fecha:</label> <input name='FECHA' type='date' onchange='Buscador.filtrar()' > </form>`;
-  
-  Buscador.htmlFormFieldNames = ['FECHA'];
-  Buscador.columnNames = ["REGNRO", "ELABORADO_POR"];
-  Buscador.columnLabels = ['ID', 'REGISTRADO POR'];
-  Buscador.callback = function(respuesta) {
-  
-      const {
-          REGNRO,
-          ELABORADO_POR
-      } = respuesta;
-  
-      window.buscador_items_modelo = respuesta;
-      console.log( respuesta);
-     
-      $("#PRODUCCION_ID").val(REGNRO);
-     /* $(PANEL_ID + " .ITEM").val(DESCRIPCION);
-      $(PANEL_ID + " .MEDIDA").text(unidad_medida.UNIDAD);*/
-  };
-  Buscador.render();
-  }
+
+        Buscador.url = "<?= url("ficha-produccion/index") ?>";
+        Buscador.httpMethod = "post";
+        Buscador.mostrarCampoBusquedaPorPatron = false;
+        Buscador.reiniciarRequestAlFiltrar = true;
+        Buscador.htmlFormForParams = `<form> <label class='fw-bold text-dark fs-6'>Por Fecha:</label> <input name='FECHA' type='date' onchange='Buscador.filtrar()' > </form>`;
+
+        Buscador.htmlFormFieldNames = ['FECHA'];
+        Buscador.columnNames = ["REGNRO", "ELABORADO_POR"];
+        Buscador.columnLabels = ['ID', 'REGISTRADO POR'];
+        Buscador.callback = function(respuesta) {
+
+            const {
+                REGNRO,
+                ELABORADO_POR
+            } = respuesta;
+
+            window.buscador_items_modelo = respuesta;
+            console.log(respuesta);
+
+            $("#PRODUCCION_ID").val(REGNRO);
+            /* $(PANEL_ID + " .ITEM").val(DESCRIPCION);
+             $(PANEL_ID + " .MEDIDA").text(unidad_medida.UNIDAD);*/
+        };
+        Buscador.render();
+    }
 
 
-  
+
     window.onload = async function() {
         //   autocompletado_items();
         restaurar_modelo_salida();

@@ -24,7 +24,10 @@ $cajaOptionsMenu = [
   ["label" => "CLIENTES",  "link" => url('clientes?m=c')],
   ["label" => "STOCK",  "link" => url("stock?m=c")],
   ["label" => "SESIÓN",  "link" => $sesiones_links],
-  ["label" => "PEDIDOS",  "link" =>  url("pedidos")],
+  ["label" => "PEDIDOS",   "link" =>  [ 
+      ["label" => "NUEVO", "link" =>  url("pedidos/unidades-vendidas")],
+      ["label" => "PEDIDOS REALIZADOS", "link" =>  url("pedidos/realizados")]
+  ] ],
   ["label" => "COMPRAS",  "link" => url("compra/index?m=c")],
   [
     "label" => "REPORTES", "link" =>

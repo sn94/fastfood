@@ -11,6 +11,8 @@ $adminOptionsMenu = [
         "label" => "DEPOSITO", "link" =>
         [
 
+            ["label" => "PEDIDOS DE SUCURSALES", "link" =>  url('pedidos/sucursales')],
+            ["label" => "RECEPCIÓN DE PRODUCTOS ELABORADOS", "link" =>  url('remision-prod-terminados/index/confirmar')],
             ["label" => "SALIDAS DE PRODUCTOS Y MATERIA PRIMA", "link" =>  url('salida/index')],
             ["label" => "COMPRAS", "link" =>  url('compra/index')],
             ["label" => "STOCK",  "link" =>  url('stock')]

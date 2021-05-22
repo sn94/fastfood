@@ -10,12 +10,14 @@
         <input class="form-control form-control-sm" type="date" id="FECHA_HASTA" onchange="filtrar()">
     </div>
 
-    <div class="col col-lg-2  pb-0">
+    <div class="col col-lg-2 d-flex flex-column  pb-0">
         <label>
             Sucursal:
         </label>
-        <x-sucursal-chooser class="form-control-sm" name="SUCURSAL" value="" id="SUCURSAL" callback="filtrar()" style=""></x-sucursal-chooser>
+       <div class="d-flex flex-row">
+       <x-sucursal-chooser class="form-control-sm" name="SUCURSAL" value="" id="SUCURSAL" callback="filtrar()" style=""></x-sucursal-chooser>
         <x-pretty-checkbox callback="filtrar()" id="F_SUCURSAL" name="" value="N" onValue="S" offValue="N" label=""></x-pretty-checkbox>
+       </div>
     </div>
 
     <div class="col col-lg-2 pb-0 d-flex flex-column">

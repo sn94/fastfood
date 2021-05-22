@@ -39,13 +39,13 @@
 
 
 
-            <td>{{ $NOTAS_RESIDUOS_->NUMERO == ''  ? '****' :  $NOTAS_RESIDUOS_->NUMERO}}</td>
-            <td>{{ is_null($NOTAS_RESIDUOS_->FECHA) ? '****':  $NOTAS_RESIDUOS_->FECHA->format('d/m/Y')}}</td>
+            <td>{{ $NOTAS_RESIDUOS_->NUMERO == ''  ? '' :  $NOTAS_RESIDUOS_->NUMERO}}</td>
+            <td>{{ is_null($NOTAS_RESIDUOS_->FECHA) ? '':  $NOTAS_RESIDUOS_->FECHA->format('d/m/Y')}}</td>
 
 
-            <td>{{$NOTAS_RESIDUOS_->PRODUCCION_ID == "" ? '****' :  $NOTAS_RESIDUOS_->PRODUCCION_ID  }}</td>
-            <td>{{$NOTAS_RESIDUOS_->REGISTRADO_POR ==  "" ? "*****" : $NOTAS_RESIDUOS_->REGISTRADO_POR  }} </td>
-            <td> {{$NOTAS_RESIDUOS_->CONCEPTO == ""  ?  "*********" :   $NOTAS_RESIDUOS_->CONCEPTO }}  </td>
+            <td>{{$NOTAS_RESIDUOS_->PRODUCCION_ID == "" ? '' :  $NOTAS_RESIDUOS_->PRODUCCION_ID  }}</td>
+            <td>{{$NOTAS_RESIDUOS_->REGISTRADO_POR ==  "" ? '' : $NOTAS_RESIDUOS_->REGISTRADO_POR  }} </td>
+            <td> {{$NOTAS_RESIDUOS_->CONCEPTO == ""  ?  '' :   $NOTAS_RESIDUOS_->CONCEPTO }}  </td>
         </tr>
         @endforeach
         @endif

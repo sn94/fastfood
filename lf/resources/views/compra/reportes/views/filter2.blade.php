@@ -114,7 +114,7 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
             <td> {{ $ven->SUCURSAL }}</td>
             <td>{{ $codigo}} </td>
             <td> {{ $barcode}} </td>
-            <td> {{ is_null($ven)  ? '***' : $ven->DESCRIPCION}}</td>
+            <td> {{ is_null($ven)  ? '' : $ven->DESCRIPCION}}</td>
             
             <td>
             @php 

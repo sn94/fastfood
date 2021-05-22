@@ -293,13 +293,15 @@ Route::group(['prefix' => 'compra', 'middleware' => ['auth.Caja']],   function (
 
 
 Route::group(['prefix' => 'pedidos', 'middleware' => ['auth.Caja']],   function () {
-    Route::get('/',   'PedidosController@index'); //lista los productos vendidos por cantidad, con opcion de pedido y control de pedido
+    Route::get('/unidades-vendidas',   'PedidosController@unidades_vendidas'); //lista los productos vendidos por cantidad, con opcion de pedido y control de pedido
 
-    Route::get('/list/{STOCKID}',   'PedidosController@list');
+    Route::get('/sucursales',   'PedidosController@sucursales');
+    Route::get('/realizados',   'PedidosController@realizados');
     Route::get('/create/{STOCKID}',   'PedidosController@create');
     Route::post('/create',   'PedidosController@create');
     Route::get('/recibir/{PEDIDOID}',   'PedidosController@recibir');
-    Route::get('/recibidos',   'PedidosController@recibidos');
+    Route::post('/recibir',   'PedidosController@recibir');
+   
     Route::get('/aprobar/{id}',   'PedidosController@aprobar');
     Route::post('/aprobar',   'PedidosController@aprobar');
 });
@@ -346,9 +348,19 @@ Route::prefix('nota-residuos')->group(function () {
 Route::prefix('remision-prod-terminados')->group(function () {
  
     Route::get('/index',   'RemProdTerminadosController@index');
+    Route::get('/index/{modo_visualizacion}',   'RemProdTerminadosController@index');
+    Route::post('/index',   'RemProdTerminadosController@index');
+    Route::post('/index/{modo_visualizacion}',   'RemProdTerminadosController@index');
+    
     Route::get('/create',   'RemProdTerminadosController@create');
     Route::get('/create/{IDPRODUCCION}',   'RemProdTerminadosController@create');
     Route::post('/create',   'RemProdTerminadosController@create');
+    Route::get('/update/{id}',   'RemProdTerminadosController@update');
+    Route::post('/update',   'RemProdTerminadosController@update');
+    Route::delete('/{id}',   'RemProdTerminadosController@delete');
+    Route::get('/confirmar/{id}',   'RemProdTerminadosController@confirmar');
+    Route::get('/view/{id}',   'RemProdTerminadosController@view');
+
 });
 
 

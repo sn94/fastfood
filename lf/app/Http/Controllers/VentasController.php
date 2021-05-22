@@ -427,28 +427,14 @@ class VentasController extends Controller
                         $existencia->save(); //disminuir
                     };
 
-                    $registrarSalidaIngrediente = function ($item, $cantidad) {
-                        $salida = (new Salidas());
-                        $salida->SUCURSAL = session("SUCURSAL");
-                        $salida->FECHA =  date("Y-m-d");
-                        $salida->TIPO_SALIDA = "MP";
-                        $salida->REGISTRADO_POR = session("ID");
-                        $salida->CONCEPTO = "DISMINUCIÓN DE MATERIA PR. P/ VENTA DE PROD. ELABORADO";
-                        $salida->save();
-                        $det_salida = (new Salidas_detalles());
-                        $det_salida->SALIDA_ID =  $salida->REGNRO;
-                        $det_salida->ITEM =  $item;
-                        $det_salida->CANTIDAD = $cantidad;
-                        $det_salida->TIPO = "MP";
-                        $det_salida->save();
-                    };
+                    
                     //Detalle Venta Item
                     $DetalleVentaItemModel =  Stock::find($r1);
 
                     //Actualizar existencia Si no es un Combo
                     if ($DetalleVentaItemModel->TIPO != "COMBO") {
                         $descontarStock($r1, $r2);
-                        $registrarSalidaIngrediente( $r1, $r2 );
+                       
                     } 
                     
 
@@ -459,7 +445,7 @@ class VentasController extends Controller
                         if (sizeof($receta)) {
                             foreach ($receta as $item) {
                                 $descontarStock($item->MPRIMA_ID, $item->CANTIDAD);
-                                $registrarSalidaIngrediente($item->MPRIMA_ID, $item->CANTIDAD);
+                                
                             }
                         }
                         /** Receta definida? */
@@ -470,7 +456,8 @@ class VentasController extends Controller
                             foreach ($comboModel as $comboItem)
                                 {
                                 $descontarStock($comboItem->STOCK_ID,  $comboItem->CANTIDAD);
-                                $registrarSalidaIngrediente($comboItem->STOCK_ID,  $comboItem->CANTIDAD);}
+                                
+                            }
                         }
                         
                     }

@@ -150,6 +150,8 @@ use App\Helpers\Utilidades;
         $("#grill").html(resp);
 
     }
+
+    
 </script>
 
 

@@ -3,7 +3,7 @@
      @csrf
      <input type="hidden" name="PEDIDO_ID" value="{{$PEDIDO_ID}}">
 
-     <label>AUTORIZADO POR: </label>
+     <label>Autorizado por: </label>
      <input type="text" name="AUTORIZADO_POR">
 
      <x-pretty-radio-button name="opcion_aprobacion"  value="APROBADO_COMPLETO" label="Aprobar cantidad solicitada" checked="si" />
@@ -13,7 +13,7 @@
      <x-pretty-radio-button name="opcion_aprobacion"  value="SIN_STOCK" label=" Sin existencia" />
  
  
-     <button type="button" class="btn btn-sm btn-warning" onclick="aprobar()">ACEPTAR</button>
+     <button type="button" class="btn btn-sm btn-success" onclick="aprobar()">ACEPTAR</button>
  </form>
 
  <script>
@@ -37,8 +37,9 @@
          if ("ok" in resp) {
              alert(resp.ok);
              //cerrar modal
-             $("#APROBACION-SALIDA-MODAL .modal-body").html("");
-             $("#APROBACION-SALIDA-MODAL").modal("hide");
+             
+             $("#PEDIDO-MODAL .modal-body").html("");
+             $("#PEDIDO-MODAL").modal("hide");
              fill_grill();
          } else
              alert(resp.err);

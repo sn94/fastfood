@@ -111,7 +111,7 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
             <td class="text-center"> {{ $ven->SUCURSAL_ID }}</td>
             <td> {{ $ven->SUCURSAL_NOMBRE }}</td>
             <td class="text-center">{{ $ven->FACTURA}} </td>
-            <td class="text-end"> {{ is_null( $ven->cajero) ? "***" :   $ven->cajero  }} </td>
+            <td class="text-end"> {{ is_null( $ven->cajero) ? '' :   $ven->cajero  }} </td>
             <td>{{ $ven->FECHA->format('d/m/Y')  }}</td>
             <td>{{$ven->cliente_nom}}</td>
             <td class="text-center"> {{ $ven->FORMA_PAGO }}</td>

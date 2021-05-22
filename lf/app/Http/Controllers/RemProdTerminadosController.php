@@ -10,6 +10,7 @@ use App\Models\Remision_de_terminados_detalle;
 use App\Models\Stock_existencias;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Foreach_;
 
 class RemProdTerminadosController extends Controller
 {
@@ -17,16 +18,47 @@ class RemProdTerminadosController extends Controller
 
 
 
-    public function index()
+    public function index($modoVisualizacion = "cocina")
     {
 
         $sucursal = session("SUCURSAL");
-        $listaRemisiones =  Remision_de_terminados::where("SUCURSAL", $sucursal)->orderBy("created_at", "DESC")->paginate(20);
+        $fecha_desde = request()->has("FECHA_DESDE") ? request()->input("FECHA_DESDE") : NULL;
+        $fecha_hasta = request()->has("FECHA_HASTA") ? request()->input("FECHA_HASTA") : NULL;
+        $estado = request()->has("ESTADO") ? request()->input("ESTADO") : "P";
 
-        if (request()->ajax())
-            return view("remision_de_terminados.index.grill", ['REMISION' =>  $listaRemisiones]);
-        else
-            return view("remision_de_terminados.index.index", ['REMISION' =>  $listaRemisiones]);
+        $listaRemisiones =  Remision_de_terminados::where("SUCURSAL", $sucursal);
+
+        if (!is_null($fecha_desde)   &&  !is_null($fecha_hasta))
+            $listaRemisiones =  $listaRemisiones->where("FECHA", ">=", $fecha_desde)->where("FECHA", "<=", $fecha_hasta);
+
+        $listaRemisiones = $listaRemisiones->where("ESTADO", $estado)->orderBy("created_at", "DESC");
+
+        //El formato de los datos
+        $formato =  request()->header("formato");
+
+
+        //Si es JSON retornar
+        if ($formato == "json")  return response()->json($listaRemisiones->get());
+
+        if ($formato == "pdf")  return $this->responsePdf(
+            "remision_de_terminados.index.simple",
+            ["REMISION" => $listaRemisiones->get()],
+            "Notas de Remisión"
+        );
+
+        $listaRemisiones = $listaRemisiones->paginate(20);
+
+        if (request()->ajax()) {
+            if ($modoVisualizacion == "cocina")
+                return view("remision_de_terminados.index.grill", ['REMISION' =>  $listaRemisiones]);
+            if ($modoVisualizacion == "confirmar")
+                return view("remision_de_terminados.confirmar.grill", ['REMISION' =>  $listaRemisiones]);
+        } else {
+            if ($modoVisualizacion == "cocina")
+                return view("remision_de_terminados.index.index", ['REMISION' =>  $listaRemisiones]);
+            if ($modoVisualizacion == "confirmar")
+                return view("remision_de_terminados.confirmar.index", ['REMISION' =>  $listaRemisiones]);
+        }
     }
 
 
@@ -60,24 +92,18 @@ class RemProdTerminadosController extends Controller
             try {
                 DB::beginTransaction();
                 //CABECERA
-                $n_compra = new Remision_de_terminados();
-                $n_compra->fill($CABECERA);
-                $n_compra->save();
+                $_n_remision = new Remision_de_terminados();
+                $_n_remision->fill($CABECERA);
+                $_n_remision->save();
                 //DETALLE
 
                 foreach ($DETALLE as $row) :
                     $datarow = $row;
-                    $datarow['REMISION_ID'] = $n_compra->REGNRO;
+                    $datarow['REMISION_ID'] = $_n_remision->REGNRO;
 
                     $d_compra =  new Remision_de_terminados_detalle();
                     $d_compra->fill($datarow);
                     $d_compra->save();
-
-                    $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
-                        ->where("STOCK_ID",  $datarow['ITEM'])->first();
-                    $existencia->CANTIDAD =  $existencia->CANTIDAD - $datarow['CANTIDAD'];
-                    $existencia->save(); //disminuir
-
                 endforeach;
 
                 //Actualizar estado
@@ -92,6 +118,110 @@ class RemProdTerminadosController extends Controller
                 DB::rollBack();
                 return response()->json(['err' =>   $ex->getMessage()]);
             }
+        }
+    }
+
+
+
+
+    public function view($id =  NULL)
+    {
+
+        $Remision = Remision_de_terminados::find($id);
+        $Detalle =  $Remision->remision_detalle;
+        return view('remision_de_terminados.view.index', ['REMISION' => $Remision, 'DETALLE' =>  $Detalle]);
+    }
+
+
+    public function update($id =  NULL)
+    {
+        if (request()->getMethod()  ==  "GET") {
+
+            $Remision = Remision_de_terminados::find($id);
+            $Detalle =  $Remision->remision_detalle;
+            return view('remision_de_terminados.create.index', ['REMISION' => $Remision, 'DETALLE' =>  $Detalle]);
+        } else {
+
+            $Datos = request()->input();
+            $CABECERA = $Datos['CABECERA'];
+            $DETALLE = $Datos['DETALLE'];
+
+            try {
+
+
+                DB::beginTransaction();
+                //CABECERA
+                $_n_remision = Remision_de_terminados::find($CABECERA['REGNRO']);
+                if ($_n_remision->ESTADO != "P")
+                    return response()->json(['err' =>  "Nota de remisión ya fue aceptada. No puede editarse."]);
+
+
+                $_n_remision->fill($CABECERA);
+                $_n_remision->save();
+                //DETALLE
+                Remision_de_terminados_detalle::where("REMISION_ID", $CABECERA['REGNRO'])->delete();
+                foreach ($DETALLE as $row) :
+                    $datarow = $row;
+                    $datarow['REMISION_ID'] = $_n_remision->REGNRO;
+                    $d_compra =  new Remision_de_terminados_detalle();
+                    $d_compra->fill($datarow);
+                    $d_compra->save();
+
+                //  (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
+                endforeach;
+
+                DB::commit();
+                return response()->json(['ok' =>  "Remisión actualizada"]);
+            } catch (Exception  $ex) {
+                DB::rollBack();
+                return response()->json(['err' =>   $ex->getMessage()]);
+            }
+        }
+    }
+
+
+
+
+    public function  delete($id)
+    {
+        try {
+            DB::beginTransaction();
+            $nr =  Remision_de_terminados::find($id);
+
+            if ($nr->ESTADO == "P")  $nr->delete();
+            else  return response()->json(['err' =>  "Nota de remisión ya fue aceptada. No puede borrarse."]);
+
+            Remision_de_terminados_detalle::where("REMISION_ID",  $id)->delete();
+            DB::commit();
+            return response()->json(['ok' =>  "Nota de remisión eliminada"]);
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return response()->json(['err' =>   $ex->getMessage()]);
+        }
+    }
+
+    public function  confirmar($id)
+    {
+        try {
+            DB::beginTransaction();
+            $nr =  Remision_de_terminados::find($id);
+
+
+            if ($nr->ESTADO == "C")
+                return response()->json(['err' =>  "Nota de remisión ya fue aceptada anteriormente."]);
+
+            $nr->ESTADO = "C";
+            $nr->save();
+            //Actualizar stock
+            $detalleRemision =   $nr->remision_detalle;
+            foreach ($detalleRemision as $detalle) (new StockController())->actualizar_existencia($detalle->ITEM, $detalle->CANTIDAD, 'INC');
+
+            DB::commit();
+            return response()->json(['ok' =>  "Nota de remisión Confirmada. Stock actualizado."]);
+        } catch (Exception $ex) {
+
+            DB::rollBack();
+            return response()->json(['err' =>   $ex->getMessage()]);
         }
     }
 }
