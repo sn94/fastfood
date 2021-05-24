@@ -15,7 +15,7 @@ class Stock extends Model
     protected $fillable = [
         'CODIGO','BARCODE','BOTON','FAMILIA',
         'PVENTA' , 'PVENTA_MITAD' , 'PVENTA_EXTRA' ,'DESCRIPCION'  ,  'DESCR_CORTA','PCOSTO',
-        'STOCK_MAX','STOCK_MIN', 'IMG',  'TRIBUTO',  'TIPO',  'MEDIDA',  'PRESENTACION',
+        'STOCK_MAX','STOCK_MIN', 'IMG', 'IMG_EXT_URL',  'TRIBUTO',  'TIPO',  'MEDIDA',  'PRESENTACION',
         'PRECIOS_VARIOS'
     ];
 

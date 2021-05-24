@@ -214,7 +214,8 @@ class RemProdTerminadosController extends Controller
             $nr->save();
             //Actualizar stock
             $detalleRemision =   $nr->remision_detalle;
-            foreach ($detalleRemision as $detalle) (new StockController())->actualizar_existencia($detalle->ITEM, $detalle->CANTIDAD, 'INC');
+            foreach ($detalleRemision as $detalle) 
+            (new StockController())->actualizar_existencia($detalle->ITEM, $detalle->CANTIDAD, 'INC');
 
             DB::commit();
             return response()->json(['ok' =>  "Nota de remisión Confirmada. Stock actualizado."]);

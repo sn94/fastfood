@@ -85,7 +85,7 @@ use App\Helpers\Utilidades;
     async function enviarTicketPorEmail(ev) {
 
         ev.preventDefault();
-        let req = await fetch(ev.target.href, {
+        let req = await fetch(ev.currentTarget.href, {
             headers: {
                 formato: "email"
             }

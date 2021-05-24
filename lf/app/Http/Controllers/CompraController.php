@@ -341,11 +341,8 @@ class CompraController extends Controller
                     $d_compra->fill($datarow);
                     $d_compra->save();
 
-                    //Actualizar existencia
-                    $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
-                        ->where("STOCK_ID",  $datarow['ITEM'])->first();
-                    $existencia->CANTIDAD =  $existencia->CANTIDAD + $datarow['CANTIDAD'];
-                    $existencia->save(); //disminuir
+                    (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
+
 
                 endforeach;
 
@@ -386,13 +383,19 @@ class CompraController extends Controller
                 $n_compra->save();
                 //DETALLE
 
+                //Deshacer stock
+                $d_compra =  $n_compra->compras_detalle;
+                foreach ($d_compra as $datarow) (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'DEC');
+                //Eliminar
                 Compras_detalles::where("COMPRA_ID",  $n_compra->REGNRO)->delete();
+
                 foreach ($DETALLE as $row) :
                     $datarow = $row;
                     $datarow['COMPRA_ID'] = $n_compra->REGNRO;
                     $d_compra =  new Compras_detalles();
                     $d_compra->fill($datarow);
                     $d_compra->save();
+                    (new StockController())->actualizar_existencia($row['ITEM'], $row['CANTIDAD'], 'INC');
                 endforeach;
 
 
@@ -413,7 +416,14 @@ class CompraController extends Controller
         $compra = Compras::find($IDCOMPRA);
         try {
             DB::beginTransaction();
-            if (!is_null($compra))  $compra->delete();
+           
+                  //Deshacer stock
+                  $d_compra =  $compra->compras_detalle;
+                  foreach ($d_compra as $datarow) (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'DEC');
+                  //Eliminar
+                  Compras_detalles::where("COMPRA_ID",  $compra->REGNRO)->delete();
+                  if (!is_null($compra))  $compra->delete();
+
             //borrar detalle
             Compras_detalles::where("COMPRA_ID",  $IDCOMPRA)->delete();
             DB::commit();

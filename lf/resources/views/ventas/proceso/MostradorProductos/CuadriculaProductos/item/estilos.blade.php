@@ -7,7 +7,17 @@
         background-color:  var(--color-6) !important ;
        
     }
-
+    .FOOD-CELL.resaltado{
+        border-bottom: 5px solid  var(--color-3) !important;
+       
+    }
+    .FOOD-CELL.resaltado::before{
+        content: '';
+        position: absolute;
+        border-bottom: 5px solid  var(--color-3) !important;
+        background-color:  var(--color-3);
+       
+    }
     .FOOD-CELL:hover,  .FOOD-CELL:active  { 
         transform: scale(1.3) translateX(10px);
         position: relative;

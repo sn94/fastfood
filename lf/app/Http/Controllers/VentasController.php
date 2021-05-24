@@ -72,8 +72,7 @@ class VentasController extends Controller
 
         $ventas =  $ventas->with("cajero")->paginate(20);
 
-        foreach(  $ventas as $v)
-        echo $v->cajero;
+        
 
         if (request()->ajax())
             return view("ventas.index.grill", ['VENTAS' =>  $ventas]);

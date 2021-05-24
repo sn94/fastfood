@@ -10,7 +10,12 @@ use App\Helpers\Utilidades;
 
     <input type="hidden" id="iva{{$item->REGNRO}}" value="{{$item->TRIBUTO}}">
 
-    <img onclick="cargarSegunPrecioNormal(<?= $item->REGNRO ?>)" target="{{$item->REGNRO}}" src='{{url("$item->IMG")}}' class=" mx-auto d-block img-fluid  img-thumbnail" alt=""  onerror="this.src='{{url('assets/images/default_food.png')}}';" >
+@php 
+
+$urlDeLaImagen=  $item->IMG_EXT_URL == '' ?   $item->IMG :   $item->IMG_EXT_URL;
+
+@endphp
+    <img onclick="cargarSegunPrecioNormal(<?= $item->REGNRO ?>)" target="{{$item->REGNRO}}" src='{{$urlDeLaImagen}}' class=" mx-auto d-block img-fluid  img-thumbnail" alt=""  onerror="this.src='{{url('assets/images/default_food.png')}}';" >
 
 
     <span class="text-white pt-1 descripcion"  >{{$item->DESCR_CORTA}}</span>

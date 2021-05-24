@@ -5,18 +5,15 @@
     var celdaResaltadaDom = "";
 
     function filtrarProductos(ev) {
-        $(".resaltado").css("background-color", "black");
+        $(".resaltado").removeClass("resaltado");
 
         let quitarResaltado = function() {
-            $(celdaResaltadaDom).css("background-color", "black");
-            $(".resaltado").removeClass("resaltado");
-            $(".resaltado").css("background-color", "black");
+            $(celdaResaltadaDom).removeClass("resaltado");
+            $(".resaltado").removeClass("resaltado"); 
             //   $(celdaResaltadaDom + " span.descripcion").css("color", "white"); 
         };
         let agregarResaltado = function() {
-            $(celdaResaltadaDom).addClass("resaltado");
-            $(celdaResaltadaDom).css("background-color", "red");
-            //$(celdaResaltadaDom + " span.descripcion").css("color", "yellow");
+            $(celdaResaltadaDom).addClass("resaltado");  
 
         };
 
