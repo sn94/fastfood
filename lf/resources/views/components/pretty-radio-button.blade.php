@@ -12,7 +12,7 @@ $iconSize= "width: {$size}px;height: {$size}px;";
 ?>
 
 
-<div class="form-check p-0">
+<div class="form-check p-0" >
     <input style="display: none;" onchange="<?= $idDinamico ?>onchange(event)" id="{{$idDinamico}}" type="radio" name="{{$name}}" value="{{$value}}" {{$checkar}}>
 
     <img style="{{$iconSize}}"  class="{{$mostrarOn}}" id="{{$idDinamico.'-on'}}" onclick="<?= $idDinamico ?>prettyRadioButtonAction('off')" src="{{url('assets/icons/radio_on.png')}}" alt="">
@@ -40,7 +40,7 @@ $iconSize= "width: {$size}px;height: {$size}px;";
             $("#<?= $idDinamico ?>-off").removeClass("d-none");
         }
 
-       
+     
     }
 
     function <?= $idDinamico ?>prettyRadioButtonAction(whatToDo) {
@@ -61,6 +61,6 @@ $iconSize= "width: {$size}px;height: {$size}px;";
             radioButtonActual.onchange(  radioButtonActual);
 
         }  
-
+        <?=$callback?>
     }
 </script>

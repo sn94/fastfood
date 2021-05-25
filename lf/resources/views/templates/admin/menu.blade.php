@@ -45,7 +45,8 @@ $adminOptionsMenu = [
             ["label" => "PARÁMETROS",  "link" => url('parametros')],
             ["label" => "CIUDADES",  "link" => url('ciudades')],
             ["label" => "UNID. DE MEDIDA",  "link" => url('medidas')],
-            ["label" => "CAJAS",  "link" => url('caja')]
+            ["label" => "CAJAS",  "link" => url('caja')],
+            ["label" => "ORIGEN DE VENTA",  "link" => url('origen-venta')]
         ],
     ],
 

@@ -7,8 +7,12 @@ use App\Libs\Mobile_Detect;
 
 @include("stock.index.grill.mobile")
 @else
-@include("stock.index.grill.desktop.index")
+@include("stock.index.grill.desktop")
 @endif
+
+<x-pretty-paginator  :datos="$stock"  callback='buscarStock(event);' />
+ 
+
 
 
 <script>

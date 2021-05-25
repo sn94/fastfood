@@ -302,14 +302,14 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
      </form>
     `;
 
-        Buscador.url = "<?= url("stock/buscar/ALL") ?>";
+        Buscador.url = "<?= url("stock/buscar") ?>";
         Buscador.htmlFormForParams = formHtml;
         Buscador.htmlFormFieldNames = ['TIPO'];
         Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
         Buscador.columnLabels = ['ID', 'DESCRIPCION'];
         Buscador.callback = function(seleccionado) {
 
-            console.log("Elegiste", seleccionado);
+            
             /*   $('#PROVEEDOR-KEY').val( seleccionado.REGNRO);
                $('#PROVEEDOR-NAME').val( seleccionado.NOMBRE);*/
         };

@@ -19,6 +19,7 @@ class PrettyRadioButton extends Component
 
     public $size= "32";//tamanio de los iconos
 
+    public $callback= "";
  
 
     /**
@@ -26,13 +27,14 @@ class PrettyRadioButton extends Component
      *
      * @return void
      */
-    public function __construct($name, $value, $label, $checked= "no", $size="32" )
+    public function __construct($name, $value, $label, $checked= "no", $size="32", $callback= "" )
     {
         $this->name = $name;
         $this->value = $value;
         $this->label = $label;
         $this->checked = $checked == "si" ? "true" : "false";
         $this->size = $size;
+        $this->callback= $callback;
       
     }
 

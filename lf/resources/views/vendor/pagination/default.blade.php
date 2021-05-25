@@ -1,18 +1,27 @@
 <style>
 
- 
+ /*
 ul.pagination li{
     font-size: 16px;
     padding: 5px 20px;
     display: flex;
     justify-content: center;
    
+}*/
+ 
+ul.pagination li.active span{
+    background-color: var(--color-2) !important;
+    color: white !important;
+    font-size: 16.5px;
 }
 ul.pagination li a,  ul.pagination li span{
     color: black !important;
+    font-size: 16px;
+    padding: 5px 20px;
+    display: flex;
+    justify-content: center;
 }
-
-ul.pagination li:hover{
+ul.pagination li:hover a{
   background: linear-gradient(to bottom left,var(--color-2)  ,  var(--color-1) );
   border-radius: 50px;
   position: relative;

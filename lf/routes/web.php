@@ -227,6 +227,16 @@ Route::group(['prefix' => 'cargo', 'middleware' => ['auth.Admin']], function () 
     Route::delete('/{id}',    'CargosController@delete');
 });
 
+Route::group(['prefix' => 'origen-venta', 'middleware' => ['auth.Admin']], function () {
+    Route::get('/',   'OrigenVentaController@index');
+    Route::post('/buscar',   'OrigenVentaController@index');
+    Route::get('/buscar',   'OrigenVentaController@index');
+    Route::get('/create',    'OrigenVentaController@create');
+    Route::post('/',    'OrigenVentaController@create');
+    Route::get('/update/{id}',    'OrigenVentaController@update');
+    Route::put('/',    'OrigenVentaController@update');
+    Route::delete('/{id}',    'OrigenVentaController@delete');
+});
 Route::group(['prefix' => 'medidas', 'middleware' => ['auth.Admin']], function () {
     Route::get('/',   'MedidasController@index');
     Route::post('/buscar',   'MedidasController@index');

@@ -60,6 +60,9 @@
 
              formValidator.limpiarCampos();
              fill_grill();
+             let formRefrescado = await fetch("<?=url('cargo/create')?>");
+             let formHtml = await formRefrescado.text();
+             $("#form").html(formHtml);
          } else {
 
              alert(resp.err);

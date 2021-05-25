@@ -36,77 +36,22 @@ class StockController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function index($TIPO = "ALL") //PE
+    public function index(Request $request, $TIPO = "") //PE
     {
         Artisan::call('storage:link'); //crea enlaces simbolicos si falta 
-
-        $stock =  $this->buscar_productos(request(), $TIPO)->with("precios")->with("unidad_medida");
-        //El formato de los datos
-        $formato =  request()->header("formato");
-        //Si es JSON retornar
-        if ($formato == "json") {
-            $stock =  $stock->get();
-            return response()->json($stock);
-        }
-
-        if ($formato ==  "pdf") {
-            $stock =  $stock->get();
-            return $this->responsePdf("stock.index.grill.simple",  $stock,  "Stock");
-        }
-
-        //Formato Html
-        $stock =  $stock->paginate(20);
-        if (request()->ajax())
-            return view('stock.index.grill.index',  ['TIPO' => $TIPO,  'stock' =>   $stock]);
-        else
-            return view('stock.index.index',  ['TIPO' => $TIPO]);
-    }
-
-
-
-
-    public function index_light()
-    {
-        return response()->json(Stock::findAll());
-    }
-
-
-
-
-
-
-    /**
-     * @todo
-     * Filtra por nombre de producto
-     * y  Filtra por tipo:   (MP|PE|PP|AF)    o    por familia
-     * y Ordena por:
-     * DESCRIPCION  ASC|DESC
-     * PVENTA  ASC/DESC
-     */
-    public function buscar_productos(Request $request, $TIPO)
-    {
-
 
         /**
          * Parametros
          */
-        $buscado = "";
-        $tipo =  $TIPO;
-        $familia = "";
-        $sucursal = session("SUCURSAL");
-        //parametros de orden
-        $descripcion_orden =  "";
-        $pventa_orden =  "";
 
-        if ($request->method() ==  "POST") {
-            $buscado =  $request->input("buscado");
-            $tipo = $request->has("tipo") ?   $request->input("tipo") :   $tipo;
-            $familia = $request->has("familia") ?   $request->input("familia") :   $familia;
+        $buscado =  $request->has("buscado") ?  $request->input("buscado") :  "";
+        $tipo = $request->has("tipo") ?   $request->input("tipo") :  $TIPO;
+        $familia = $request->has("familia") ?   $request->input("familia") :   "";
+        $sucursal = $request->has("sucursal") ?   $request->input("sucursal")  :  session("SUCURSAL");
+        //parametros de ordenamiento
+        $descripcion_orden = $request->has("orden.DESCRIPCION") ?   $request->input("orden.DESCRIPCION")  :  "";
+        $pventa_orden = $request->has("orden.PVENTA") ?   $request->input("orden.PVENTA")  :  ""; //Ordenar por precio de venta
 
-            $sucursal = $request->has("sucursal") ?   $request->input("sucursal")  :  $sucursal;
-            $descripcion_orden = $request->has("orden.DESCRIPCION") ?   $request->input("orden.DESCRIPCION")  :  $descripcion_orden;
-            $pventa_orden = $request->has("orden.PVENTA") ?   $request->input("orden.PVENTA")  :  $pventa_orden;
-        }
 
         /**
          * Ordenamiento
@@ -130,33 +75,134 @@ class StockController extends Controller
                 DB::raw("if( BARCODE is NULL or BARCODE='' , stock.REGNRO, stock.BARCODE) AS BARCODE")
             );
         /**Filtrar por nombre de producto */
-        if ($buscado !=  "") {
-            $stock =  $stock
-                ->whereRaw("  CODIGO LIKE '%$buscado%' or BARCODE LIKE '%$buscado%' or  DESCRIPCION LIKE '%$buscado%'  ");
+        // if ($buscado !=  "") {
+        $stock =  $stock
+            ->whereRaw("  (CODIGO LIKE '%$buscado%' or BARCODE LIKE '%$buscado%' or  DESCRIPCION LIKE '%$buscado%')  ");
+        // }
+
+        //Filtrar por preventa o preparados o todos
+        if ($tipo !=  "") {
+            switch ($tipo) {
+                case "VENTA":
+                    $stock =  $stock->where(function ($query) {
+                        $query->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP")->orWhere("TIPO", "=", "COMBO");
+                    });
+                    break;
+                default:
+                    $stock =  $stock->where("TIPO", "=",  $tipo);
+                    break;
+            }
+        }
+        if ($familia !=  "") $stock = $stock->where("FAMILIA", $familia);
+ 
+        $stock = $stock->with("precios")->with("unidad_medida");
+
+        //El formato de los datos
+        $formato =  request()->header("formato");
+        //Si es JSON retornar
+        if ($formato == "json") {
+            $stock =  $stock->get();
+            return response()->json($stock);
         }
 
-        //Filtrar por preventa o preparados
-        if ($tipo !=  "") {
-            //Solicitud de datos para venta? Si no es por venta, permitir filtrar por un
-            // solo tipo de item
-            if ($tipo == "VENTA")
-                $stock =  $stock->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP")->orWhere("TIPO", "=", "COMBO");
-            elseif ($tipo == "ALL") {
-                $stock = $stock->orderBy("TIPO");
-                if ($familia !=  "") {
-                    $stock = $stock->where("FAMILIA", $familia);
-                }
-                return $stock;
-            } else $stock =  $stock->where("TIPO", "=",  $tipo);
-        } elseif ($familia !=  "") { //Filtrar por familia 
+        if ($formato ==  "pdf") {
+            $stock =  $stock->get();
+            return $this->responsePdf("stock.index.grill.simple",  $stock,  "Stock");
+        }
 
+        //Formato Html
+        $stock =  $stock->paginate(20);
+        if (request()->ajax())
+            return view('stock.index.grill.index',  ['TIPO' => $tipo,  'stock' =>   $stock]);
+        else
+            return view('stock.index.index',  ['TIPO' => $tipo]);
+    }
+
+
+
+
+    public function index_light()
+    {
+        return response()->json(Stock::findAll());
+    }
+
+
+
+
+
+
+    /**
+     * @todo
+     * Filtra por nombre de producto
+     * y  Filtra por tipo:   (MP|PE|PP|AF)    o    por familia
+     * y Ordena por:
+     * DESCRIPCION  ASC|DESC
+     * PVENTA  ASC/DESC
+     */
+    public function buscar_productos(Request $request, $TIPO = "")
+    {
+
+
+        /**
+         * Parametros
+         */
+
+        $buscado =  $request->has("buscado") ?  $request->input("buscado") :  "";
+        $tipo = $request->has("tipo") ?   $request->input("tipo") :  $TIPO;
+        $familia = $request->has("familia") ?   $request->input("familia") :   "";
+        $sucursal = $request->has("sucursal") ?   $request->input("sucursal")  :  session("SUCURSAL");
+        //parametros de ordenamiento
+        $descripcion_orden = $request->has("orden.DESCRIPCION") ?   $request->input("orden.DESCRIPCION")  :  "";
+        $pventa_orden = $request->has("orden.PVENTA") ?   $request->input("orden.PVENTA")  :  ""; //Ordenar por precio de venta
+
+
+        /**
+         * Ordenamiento
+         */
+
+        $columnaOrdena = "created_at";
+        $valorOrdena = "DESC";
+
+        if ($descripcion_orden != "")  $columnaOrdena = "DESCRIPCION";
+        elseif ($pventa_orden != "") $columnaOrdena = "PVENTA";
+        else $columnaOrdena = "created_at";
+
+        if ($descripcion_orden != "")  $valorOrdena = $descripcion_orden;
+        elseif ($pventa_orden != "") $valorOrdena = $pventa_orden;
+        else $valorOrdena = "DESC";
+
+        $stock =  Stock::orderBy($columnaOrdena,  $valorOrdena)
+            ->select(
+                "stock.*",
+                DB::raw("if( CODIGO is NULL or CODIGO='' , stock.REGNRO, stock.CODIGO) AS CODIGO"),
+                DB::raw("if( BARCODE is NULL or BARCODE='' , stock.REGNRO, stock.BARCODE) AS BARCODE")
+            );
+        /**Filtrar por nombre de producto */
+        // if ($buscado !=  "") {
+        $stock =  $stock
+            ->whereRaw("  CODIGO LIKE '%$buscado%' or BARCODE LIKE '%$buscado%' or  DESCRIPCION LIKE '%$buscado%'  ");
+        // }
+
+        //Filtrar por preventa o preparados o todos
+        if ($tipo !=  "") {
+            switch ($tipo) {
+                case "VENTA":
+                    $stock =  $stock->where("TIPO", "=",  "PE")->orWhere("TIPO", "=", "PP")->orWhere("TIPO", "=", "COMBO");
+                    break;
+                default:
+                    $stock =  $stock->where("TIPO", "=",  $tipo);
+                    break;
+            }
+        }
+        if ($familia !=  "") {
             $stock = $stock->where("FAMILIA", $familia);
         }
+        $stock = $stock->orderBy("TIPO");
 
         //Recoger entradas y salidas de la sucursal actual
         //En compras y salidas
 
-        $stock =  $stock->addSelect([
+        /* $stock =  $stock->addSelect([
             'ENTRADAS' =>  Compras::join("compras_detalles", "compras.REGNRO", "compras_detalles.COMPRA_ID")
                 ->whereColumn('compras_detalles.ITEM', 'stock.REGNRO')
                 ->where("compras.SUCURSAL",  $sucursal)
@@ -187,7 +233,7 @@ class StockController extends Controller
                 ->select(DB::raw("if(  sum(CANTIDAD)  is null, 0 , sum(CANTIDAD) ) "))
                 ->limit(1),
 
-        ]);
+        ]);*/
         return $stock;
     }
 
@@ -567,10 +613,10 @@ class StockController extends Controller
         } else {
 
             if ($accion ==  "INC")
-                $registrado->CANTIDAD =  ($registrado->CANTIDAD < 0 ? 0 : $registrado->CANTIDAD ) + $cantidad;
+                $registrado->CANTIDAD =  ($registrado->CANTIDAD < 0 ? 0 : $registrado->CANTIDAD) + $cantidad;
             else {
                 if ($accion ==  "DEC")
-                    $registrado->CANTIDAD =   ($registrado->CANTIDAD < 0 ? 0 : $registrado->CANTIDAD ) - $cantidad;
+                    $registrado->CANTIDAD =   ($registrado->CANTIDAD < 0 ? 0 : $registrado->CANTIDAD) - $cantidad;
                 else
                     $registrado->delete();
             }
@@ -884,7 +930,7 @@ class StockController extends Controller
     {
         set_time_limit(0);
         ini_set('memory_limit', '-1');
-        $registros = $this->buscar_productos(request(),  "ALL")->get();
+        $registros = $this->buscar_productos(request())->get();
         foreach ($registros as $stock) :
             $sucursales = Sucursal::select("REGNRO")->get();
             $valorStock = $stock->ENTRADAS + $stock->ENTRADA_PE + $stock->ENTRADA_RESIDUO - ($stock->SALIDAS +

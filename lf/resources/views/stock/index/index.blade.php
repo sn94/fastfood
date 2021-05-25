@@ -64,6 +64,7 @@ Stock
 
                 <label style="display: flex;flex-direction: row; color: white;" class="ml-2">Filtrar por:
                 </label>
+
                 <x-pretty-radio-button callback="buscarStock()" id="F_TIPO" name="FILTRO" value="TIPO" label="" checked="si"></x-pretty-radio-button>
                 <x-tipo-stock-chooser id="TIPO-STOCK" :value="$TIPO" checked="true" i callback="buscarStock()" style="height: 25px;" class="form-control-sm"></x-tipo-stock-chooser>
             </div>
@@ -72,7 +73,7 @@ Stock
             <div class="d-flex flex-row  col-12 col-md-4">
                 <label style="display: flex;flex-direction: row; color: white;"> Familia:
                 </label>
-                <x-pretty-radio-button callback="buscarStock()" id="F_FAMILIA" name="FILTRO" value="FAMILIA" label="" checked="no"></x-pretty-radio-button>
+                <x-pretty-radio-button callback="buscarStock();" id="F_FAMILIA" name="FILTRO" value="FAMILIA" label="" checked="no"   ></x-pretty-radio-button>
                 <x-familia-stock-chooser id="FAMILIA-STOCK" name="" value="" callback="buscarStock()" style="height: 25px;" class="form-control-sm"></x-familia-stock-chooser>
             </div>
             <input type="hidden" id="DESCRIPCION-ORDER" value="ASC">
@@ -110,7 +111,10 @@ Stock
 
 
 
-    function buscarStock() {
+    function buscarStock( urlOpcional ) {
+        if( urlOpcional &&   typeof urlOpcional == "object"  && "currentTarget" in urlOpcional)
+        urlOpcional.preventDefault();
+
         //PARMETROS
         let buscado = $("#search").val();
         //valores de filtros
@@ -135,9 +139,11 @@ Stock
             parametros.tipo = tipoStock;
         if (filtroTipo == "FAMILIA")
             parametros.familia = familia;
-
-console.log( parametros);
+ 
         dataSearcher.setRequestContentType = "application/json";
+        if( urlOpcional )
+        dataSearcher.setUrl= urlOpcional.currentTarget.href;
+        else
         dataSearcher.setDataLink = "#GRILL-URL-CUSTOM";
         dataSearcher.setOutputTarget = "#grill";
         dataSearcher.setParametros = parametros;

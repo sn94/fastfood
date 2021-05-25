@@ -54,8 +54,5 @@ $STOCK_ACTUAL= $prov->ENTRADAS + $prov->ENTRADA_PE + $prov->ENTRADA_RESIDUO -($p
 </div>
 @endforeach
 
-
-{{ $stock->links('vendor.pagination.default') }}
-
-
-
+ 
+ 

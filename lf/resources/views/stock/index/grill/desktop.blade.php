@@ -1,9 +1,9 @@
 <?php
 
-$MODULO_FLAG =    isset($_GET['m']) ? $_GET['m'] :  "";
- 
-$QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  ""; 
+use App\Helpers\Utilidades;
 
+$MODULO_FLAG =    isset($_GET['m']) ? $_GET['m'] :  "";
+$QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  ""; 
 
 ?>
 
@@ -37,9 +37,6 @@ $QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
     <thead>
         <tr>
- 
-
-
             @if( session("NIVEL") == "SUPER" ||  session("NIVEL") == "GOD" )
             <th></th>
             <th></th>
@@ -63,15 +60,46 @@ $QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
     <tbody>
 
-        @foreach( $stock as $prov)
+        @foreach( $stock as $itemStock)
+ 
 
-        @include("stock.index.grill.desktop.item")
+ @php
+ $ESTADO_STOCK= "table-success";
+ $MENSAJE_STOCK= "";
+
+ $STOCK_ACTUAL= $itemStock->CANTIDAD;
+
+ if( $STOCK_ACTUAL <= 0): $ESTADO_STOCK="table-danger" ; $MENSAJE_STOCK="(Sin stock)" ; endif; @endphp <tr class="{{$ESTADO_STOCK}}">
+
+     @if( session("NIVEL") == "SUPER" || session("NIVEL") == "GOD" )
+     <td>
+         <a style="color: black;" href="{{url('stock/update').'/'.$itemStock->REGNRO}}"> <i class="fas fa-edit"></i></a>
+     </td>
+     <td>
+         <a onclick="delete_row(event)" style="color: black;" href="{{url('stock').'/'.$itemStock->REGNRO}}"> <i class="fa fa-trash"></i></a>
+     </td>
+     @endif
+
+     <td>{{($itemStock->CODIGO=='' ? '':  $itemStock->CODIGO)}}</td>
+     <td>{{($itemStock->BARCODE=='' ? '':  $itemStock->BARCODE)}}</td>
+     <td>{{$itemStock->DESCRIPCION}} <span style="color:red;font-weight: 600;">{{$MENSAJE_STOCK}}</span> </td>
+
+
+
+     <td class="text-end"> {{ $STOCK_ACTUAL}}
+         @if($MODULO_FLAG != "c")
+         {{$itemStock->unidad_medida->DESCRIPCION}}
+         @endif
+     </td>
+     <td class="text-end">{{ Utilidades::number_f( $itemStock->PVENTA) }}</td>
+     @if( $MODULO_FLAG== "c")
+     <td class="text-end">{{ Utilidades::number_f( $itemStock->PVENTA_MITAD) }}</td>
+     <td class="text-center"> {{$itemStock->PRECIOS_VARIOS=="S" ? "SI" : "NO"}} </td>
+     @endif
+
+     </tr>
         @endforeach
     </tbody>
 
 </table>
-
-{{ $stock->links('vendor.pagination.default') }}
-
-
  

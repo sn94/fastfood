@@ -3,21 +3,21 @@
 
 
 
- $REGNRO= isset( $caja )? $caja->REGNRO : "";
- $DESCRIPCION= isset( $caja )? $caja->DESCRIPCION : "";
- $ORDEN= isset( $caja )? $caja->ORDEN : "";
+ $REGNRO= isset( $origen_venta )? $origen_venta->REGNRO : "";
+ $DESCRIPCION= isset( $origen_venta )? $origen_venta->DESCRIPCION : "";
+ $ORDEN= isset( $origen_venta )? $origen_venta->ORDEN : "";
  @endphp
 
 
 
- <input type="hidden" id="CAJA-URL" value="{{url('caja')}}">
+ <input type="hidden" id="ORIGEN-VENTA-URL" value="{{url('origen-venta')}}">
  @if( $REGNRO != "")
  <input type="hidden" name="REGNRO" value="{{$REGNRO}}">
  @endif
 
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
- <div class="row   pt-2 pb-2 ">
+ <div class="row  pt-2 ">
      <div class="col-12 col-md-5 ">
          <label class="pr-1">DESCRIPCIÓN: </label>
          <input name="DESCRIPCION" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />
@@ -44,23 +44,26 @@
          show_loader();
          formValidator.init(ev.target);
          let req = await fetch(ev.target.action, {
-             "method": "POST",
+             "method": $("input[name=_method]").val(),
 
              headers: {
-
-
+                 'Content-Type': 'application/x-www-form-urlencoded',
                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 
              },
-             body: new FormData(ev.target)
+             body: formValidator.getData()
          });
          let resp = await req.json();
          hide_loader();
          if ("ok" in resp) {
              alert(resp.ok);
 
-             formValidator.limpiarCampos();
+               formValidator.limpiarCampos();
+            
              fill_grill();
+             let formRefrescado = await fetch("<?=url('origen-venta/create')?>");
+             let formHtml = await formRefrescado.text();
+             $("#form").html(formHtml);
          } else {
 
              alert(resp.err);
