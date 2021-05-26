@@ -83,7 +83,7 @@ Sesiones
                 <input type="text" readonly id="CAJERO-NOMBRE" class="form-control-sm">
                 <x-pretty-checkbox callback="buscarSesiones()" id="F_CAJERO" name="" value="N" onValue="S" offValue="N" label=""></x-pretty-checkbox>
             </div>
-          
+
 
         </div>
         @endif
@@ -99,32 +99,46 @@ Sesiones
 
 
 <script>
+    function abrirBuscadorCajero() {
+        //KEY:'#PROVEEDOR-KEY',NAME:'#PROVEEDOR-NAME
 
 
-function  abrirBuscadorCajero(){
-    //KEY:'#PROVEEDOR-KEY',NAME:'#PROVEEDOR-NAME
+        Buscador.url = "<?= url("usuario") ?>";
+        Buscador.htmlFormForParams = "<input type='hidden' value='CAJA' /> ";
+        Buscador.columnNames = ["REGNRO", "CEDULA", "NOMBRES"];
+        Buscador.columnLabels = ['ID', 'CÉDULA', 'NOMBRES'];
+        Buscador.callback = function(seleccionado) {
+
+            $('#CAJERO').val(seleccionado.REGNRO);
+            $('#CAJERO-NOMBRE').val(seleccionado.NOMBRES);
+            buscarSesiones();
+        };
+        Buscador.render();
+    }
 
 
-    Buscador.url= "<?=url("usuario")?>";
-    Buscador.htmlFormForParams= "<input type='hidden' value='CAJA' /> ";
-    Buscador.columnNames= ["REGNRO", "CEDULA", "NOMBRES"];
-    Buscador.columnLabels= ['ID', 'CÉDULA', 'NOMBRES'];
-    Buscador.callback= function(   seleccionado){
+    function buscarSesiones(ev_url_opcional) {
+        if (ev_url_opcional) ev_url_opcional.preventDefault();
 
-        $('#CAJERO').val( seleccionado.REGNRO);
-        $('#CAJERO-NOMBRE').val( seleccionado.NOMBRES);
-        buscarSesiones();
-    };
-    Buscador.render();
-}
-
-
-    function buscarSesiones( ev_url_opcional) {
-        if( ev_url_opcional) ev_url_opcional.preventDefault();
-
-        let url_opcional=  ev_url_opcional ? ev_url_opcional.target.href  :  undefined;
-        inicializar( url_opcional);
+        let url_opcional = ev_url_opcional ? ev_url_opcional.target.href : undefined;
+        inicializar(url_opcional);
         dataSearcher.formatoHtml();
+    }
+
+    //enviar arqueo por email
+    async function enviarArqueoPorEmail(ev) {
+        ev.preventDefault();
+        let enlace_descarga = ev.currentTarget.href;
+        show_loader();
+        let req = await fetch(enlace_descarga, {
+            headers: {
+                formato: "email"
+            }
+        });
+        let resp = await req.json();
+        hide_loader();
+        if ("ok" in resp) alert(resp.ok);
+        else alert(resp.err);
     }
 
     //descarga en pdf
@@ -154,14 +168,14 @@ function  abrirBuscadorCajero(){
         Descargar PDF <i class='fa fa-download' ></i> </a>`);
     }
 
-    function inicializar( url_opcional) {
+    function inicializar(url_opcional) {
         dataSearcher.setMetodo = "post";
         dataSearcher.setRequestContentType = "application/json";
 
-        if( url_opcional != undefined)
-        dataSearcher.setUrl= url_opcional;
+        if (url_opcional != undefined)
+            dataSearcher.setUrl = url_opcional;
         else
-        dataSearcher.setDataLink = "#SESION-INDEX-URL";
+            dataSearcher.setDataLink = "#SESION-INDEX-URL";
 
         dataSearcher.setOutputTarget = "#grill";
         //params
@@ -170,7 +184,7 @@ function  abrirBuscadorCajero(){
         let usuario = $("#USER-ID").val();
         let F_desde = $("#FECHA_DESDE").val();
         let F_hasta = $("#FECHA_HASTA").val();
-        let cajero= $('#CAJERO').val();
+        let cajero = $('#CAJERO').val();
 
 
         let paramsr = {
@@ -180,7 +194,7 @@ function  abrirBuscadorCajero(){
         if (usuario != undefined) paramsr.USUARIO = usuario;
         if (F_desde != "") paramsr.FECHA_DESDE = F_desde;
         if (F_hasta != "") paramsr.FECHA_HASTA = F_hasta;
-        if (cajero != ""  &&  $("#F_CAJERO").val() == "S") paramsr.USUARIO = cajero;//Cajero - usuario de caja
+        if (cajero != "" && $("#F_CAJERO").val() == "S") paramsr.USUARIO = cajero; //Cajero - usuario de caja
 
 
         dataSearcher.setParametros = paramsr;

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\GenericEmailSender;
+use App\Models\Parametros;
 use App\Models\Sesiones;
 use App\Models\Ventas;
 use App\Models\Ventas_det;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class SesionesController extends Controller
 {
@@ -20,17 +23,17 @@ class SesionesController extends Controller
      */
     public function index()
     {
-         
+
         //Modulo de origen
         $MODULO_FLAG =    isset($_GET['m']) ? $_GET['m'] :  "";
 
-       
+
 
         $SUCURSAL =   request()->has("SUCURSAL") ?  request()->input("SUCURSAL") :   session("SUCURSAL");
         $USERID =  request()->has("USUARIO") ?  request()->input("USUARIO") : ($MODULO_FLAG == "c" ? session("ID") : null);
         $ESTADO =   request()->has("ESTADO") ?  request()->input("ESTADO") :  "A"; //Abiertas, mostradas por defecto
-        $fecha_desde= request()->has("FECHA_DESDE") ? request()->input("FECHA_DESDE") : NULL;
-        $fecha_hasta= request()->has("FECHA_HASTA") ? request()->input("FECHA_HASTA") : NULL;
+        $fecha_desde = request()->has("FECHA_DESDE") ? request()->input("FECHA_DESDE") : NULL;
+        $fecha_hasta = request()->has("FECHA_HASTA") ? request()->input("FECHA_HASTA") : NULL;
 
         $sesiones = Sesiones::where("SUCURSAL",  $SUCURSAL)
             ->where("ESTADO", $ESTADO);
@@ -39,26 +42,26 @@ class SesionesController extends Controller
         if (!is_null($USERID))
             $sesiones =  $sesiones->where("CAJERO", $USERID);
 
-            //fecha
-            if(  !is_null($fecha_desde)   &&  !is_null($fecha_hasta)   )
-            $sesiones=  $sesiones->where("FECHA_APE", ">=", $fecha_desde)->where("FECHA_APE", "<=", $fecha_hasta);
+        //fecha
+        if (!is_null($fecha_desde)   &&  !is_null($fecha_hasta))
+            $sesiones =  $sesiones->where("FECHA_APE", ">=", $fecha_desde)->where("FECHA_APE", "<=", $fecha_hasta);
 
-            
+
         $sesiones =  $sesiones->select(
             "sesiones.*",
-            DB::raw("FORMAT(EFECTIVO_INI,0,'de_DE') AS EFECTIVO_INI"),
-            DB::raw("FORMAT(TOTAL_EFE,0,'de_DE') AS TOTAL_EFE"),
-            DB::raw("FORMAT(TOTAL_TAR,0,'de_DE') AS TOTAL_TAR"),
-            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIRO"),
+            DB::raw("FORMAT(EFECTIVO_INI,0,'de_DE') AS EFECTIVO_INICIAL"),
+            DB::raw("FORMAT(TOTAL_EFE,0,'de_DE') AS TOTAL_EFECTIVO"),
+            DB::raw("FORMAT(TOTAL_TAR,0,'de_DE') AS TOTAL_TARJETA"),
+            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIROS")
 
-            DB::raw("FORMAT(SUM(EFECTIVO_INI) ,0,'de_DE' ) AS EFECTIVO_INI_TOTAL"),
+           /* DB::raw("FORMAT(SUM(EFECTIVO_INI) ,0,'de_DE' ) AS EFECTIVO_INI_TOTAL"),
             DB::raw("FORMAT( SUM(TOTAL_EFE) ,0,'de_DE') AS TOTAL_EFE_TOTAL"),
             DB::raw("FORMAT( SUM(TOTAL_TAR) ,0,'de_DE') AS TOTAL_TAR_TOTAL"),
-            DB::raw("FORMAT( SUM(TOTAL_GIRO) ,0,'de_DE') AS TOTAL_GIRO_TOTAL")
-           
+            DB::raw("FORMAT( SUM(TOTAL_GIRO) ,0,'de_DE') AS TOTAL_GIRO_TOTAL")*/
+
         );
-         
-        $sesiones =   $sesiones->orderBy("REGNRO", "DESC");
+
+        $sesiones =   $sesiones->orderBy("REGNRO", "DESC")->groupBy("REGNRO");
         $formato =  request()->header("formato");
 
         $formato =  is_null($formato) ?  "html"  :   $formato;
@@ -90,9 +93,9 @@ class SesionesController extends Controller
 
 
 
-    public function tieneSesionAbierta( $SESIONID= NULL)
+    public function tieneSesionAbierta($SESIONID = NULL)
     {
-        $ses_id= is_null(  $SESIONID) ? session("ID"):  $SESIONID;
+        $ses_id = is_null($SESIONID) ? session("ID") :  $SESIONID;
         $sesionAbierta =  Sesiones::where("CAJERO",   $ses_id)
             ->where("SUCURSAL", session("SUCURSAL"))
             ->where("ESTADO", "A")
@@ -151,6 +154,15 @@ class SesionesController extends Controller
 
 
 
+    private function enviarArqueoPorEmail($params)
+    {
+        $adminEmail =  Parametros::first()->EMAIL_ADMIN;
+        $params =  ['data' => $params,  'view' => "sesiones.arqueo.simple", 'title'=> 'INFORME DE ARQUEO'];
+        Mail::to($adminEmail)->send((new GenericEmailSender($params)));
+        return response()->json(['ok' => "Se envió por e-mail el informe de arqueo."]);
+    }
+
+
     public function  totalesArqueo($SESION,  $ARRAY_RETURN = FALSE)
     {
 
@@ -161,7 +173,7 @@ class SesionesController extends Controller
 
 
         if ($formato ==   "json")
-            return  response()->json(Sesiones::where("CAJERO", session("ID"))->get());
+            return  response()->json(Sesiones::where("CAJERO", $SESION)->get());
 
         //Obtener datos de la sesion 
         $sesion =  Sesiones::find($SESION);
@@ -178,6 +190,7 @@ class SesionesController extends Controller
         //Totales discriminados por forma de pago
         $totales =    Ventas::where("SESION",  $sesion->REGNRO)
             ->select(DB::raw("sum(TOTAL) AS TOTAL"), "FORMA")
+
             ->groupBy("FORMA")
             ->get();
         //TARJETA TIGO_MONEY EFECTIVO
@@ -217,6 +230,15 @@ class SesionesController extends Controller
             return $parametros;
         else {
 
+            if ($formato == "email") {
+               try{
+                $this->enviarArqueoPorEmail($parametros);
+                return response()->json( ['ok'=> "Se ha enviado por email el informe de arqueo."]);
+               }catch( Exception $e){
+                return response()->json( ['err'=>  $e->getMessage()]);
+               }
+             
+            }
             if ($formato ==   "pdf")
                 return $this->responsePdf("sesiones.arqueo.simple", $parametros, "INFORME DE ARQUEO");
             if ($formato ==  "html")
@@ -231,14 +253,14 @@ class SesionesController extends Controller
     {
         /*  if( is_null($this->esMiSesion($SESIONID) )   )
         return response()->json(['err' =>  ""]);*/
-/*
+        /*
         
         if (is_null($this->tieneSesionAbierta( $SESIONID)))
             return redirect("sesiones/create");*/
         //Obtener datos de la sesion 
-       
+
         $SesionId =  is_null($SESIONID) ? session("SESION")  :  $SESIONID;
-        $sesion =  Sesiones::find( $SesionId);
+        $sesion =  Sesiones::find($SesionId);
         $parametros =  $this->totalesArqueo($SesionId, TRUE);
 
         if (request()->getMethod() == "GET") {
@@ -258,7 +280,13 @@ class SesionesController extends Controller
                     ]
                 );
                 $sesion->save();
+
+                //ENVIAR POR EMAIL
+                $datosDelArqueo = $this->totalesArqueo($SesionId, TRUE);
+                $this->enviarArqueoPorEmail($datosDelArqueo);
+
                 //session
+
                 request()->session()->forget('SESION');
                 return response()->json(['ok' =>  "Sesión cerrada"]);
             } catch (Exception $e) {

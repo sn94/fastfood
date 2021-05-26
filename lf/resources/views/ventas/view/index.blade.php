@@ -11,7 +11,7 @@ use App\Helpers\Utilidades;
 
 
 
-<div class="container-fluid bg-dark text-light col-12 col-lg-10  pb-2 mt-2 ">
+<div class="container-fluid bg-dark text-light col-12 col-lg-10  pb-5 mt-2 ">
     <h3 class="text-center">Venta N° {{ $HEADER->REGNRO}}</h3>
 
     <div class="container bg-light text-dark">
@@ -19,6 +19,11 @@ use App\Helpers\Utilidades;
             <div class="col col-md-2 d-flex flex-column">
                 <label>Fecha:</label>
                 <input disabled type="date" value="{{$HEADER->FECHA}}" class="form-control-sm">
+            </div>
+            <div class="col  d-flex flex-column">
+                <label>Origen:</label>
+
+                <input disabled type="text" value="{{ is_null($HEADER->origen_venta) ? '' : $HEADER->origen_venta->DESCRIPCION}}" class="form-control-sm">
             </div>
             <div class="col  d-flex flex-column">
                 <label>Cliente CI°:</label>
@@ -150,8 +155,6 @@ use App\Helpers\Utilidades;
         $("#grill").html(resp);
 
     }
-
-    
 </script>
 
 

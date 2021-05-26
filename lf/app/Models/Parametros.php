@@ -11,7 +11,7 @@ class Parametros extends Model
      
     protected $primaryKey = 'REGNRO';
     public $timestamps = false;
-    protected $fillable = [  'MENSAJE_TICKET', 'DESCONTAR_MP_EN_VENTA' ];
+    protected $fillable = [  'MENSAJE_TICKET', 'DESCONTAR_MP_EN_VENTA', 'EMAIL_ADMIN' ];
 
  
 }

@@ -7,6 +7,7 @@
  $CLIENTE_PORDEFECTO= isset( $parametros )? $parametros->CLIENTE_PORDEFECTO : "";
  $MENSAJE_TICKET= isset( $parametros )? $parametros->MENSAJE_TICKET : "";
  $DESCONTAR_MP_EN_VENTA=    isset( $parametros )? $parametros->DESCONTAR_MP_EN_VENTA : "N";
+ $EMAIL_ADMIN= isset( $parametros )? $parametros->EMAIL_ADMIN : "";
 
  @endphp
 
@@ -30,11 +31,18 @@
           
          <x-pretty-checkbox name="DESCONTAR_MP_EN_VENTA" :value="$DESCONTAR_MP_EN_VENTA" label="DESCONTAR MATERIA PRIMA EN LA VENTA" onValue="S" offValue="N"   />
 
-        
      </div>
 
 
-     <div class="col-12   d-flex justify-content-center ">
+
+     <div class="col-12  " style="display: flex;flex-direction: row;">
+         <label style="color: white !important;width: 100%;" class="pr-1">EMAIL ADMINISTRATIVO: </label>
+         <input style="color:black !important;height: 30px !important; width: 100%;" name="EMAIL_ADMIN" class="form-control" type="text" maxlength="100" value="{{$EMAIL_ADMIN}}" />
+     </div>
+
+
+
+     <div class="col-12   d-flex justify-content-center pt-1">
          <button style="height: 30px !important;" type="submit" class="btn btn-warning ">GUARDAR</button>
      </div>
 

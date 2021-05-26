@@ -18,8 +18,7 @@ use App\Models\Ventas;
 use App\Models\Ventas_det;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use PHPUnit\Framework\MockObject\Rule\Parameters;
+use Illuminate\Support\Facades\Mail; 
 
 class VentasController extends Controller
 {

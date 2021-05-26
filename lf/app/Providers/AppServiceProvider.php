@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Providers;
-
+ 
 use App\View\Components\Alert;
 use App\View\Components\CityChooser;
 use App\View\Components\FamiliaStockChooser;
 use App\View\Components\FastFoodModal;
 use App\View\Components\FastFoodNavbar;
 use App\View\Components\FormaPagoChooser;
+use App\View\Components\OrigenVentaList;
 use App\View\Components\PrettyCheckbox;
 use App\View\Components\PrettyPaginator;
 use App\View\Components\PrettyRadioButton;
@@ -60,5 +61,6 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('forma-pago-chooser', FormaPagoChooser::class);
         Blade::component('user-info-box', UserInfoBox::class);
         Blade::component('pretty-paginator', PrettyPaginator::class);
+        Blade::component('origen-venta-list', OrigenVentaList::class);
     }
 }

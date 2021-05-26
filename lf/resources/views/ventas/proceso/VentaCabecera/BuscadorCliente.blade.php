@@ -2,13 +2,13 @@
 
     <div class="col-3">
         <a href="#" onclick="crear_cliente()"><i class="fa fa-plus"></i></a>
-        <label class="pr-1 pl-1 fs-4">Cliente:</label>
+        <label class="pr-1 pl-1 fs-5">Cliente:</label>
     </div>
     <div class="col-2">
-        <input readonly id="CLIENTE-KEY" class="fs-5 form-control form-control-md pl-1 bg-secondary" type="text" name="CLIENTE">
+        <input readonly id="CLIENTE-KEY" class="fs-5 form-control p-0 pl-1 bg-secondary text-center" type="text" name="CLIENTE">
     </div>
     <div class="col-6">
-        <input readonly id="CLIENTE-NAME" class="fs-5 form-control bg-secondary" type="text" />
+        <input readonly id="CLIENTE-NAME" class="fs-5 form-control p-0  bg-secondary" type="text" />
     </div>
     <div class="col-1 d-flex align-items-center">
         <a href="#" onclick="abrirBuscadorCliente()"><i class="fa fa-search"></i></a>

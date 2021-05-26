@@ -1,6 +1,6 @@
 <style>
     table thead tr th,
-    table tbody tr td {
+    table tbody tr td , table tfoot td{
         padding: 0px !important;
         padding-left: 2px !important;
         padding-right: 2px;
@@ -23,6 +23,7 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
 
     <thead style="font-family: mainfont;font-size: 18px;">
         <tr>
+            <th></th>
             <th></th>
             <th>Sucursal</th>
             <th>Sesión N°</th>
@@ -48,10 +49,10 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
 
         @foreach( $SESIONES as $sesion)
         @php
-        $t_efe_ini= $sesion->EFECTIVO_INI_TOTAL;
-        $t_efectivo= $sesion->TOTAL_EFE_TOTAL;
-        $t_tar= $sesion->TOTAL_TAR_TOTAL;
-        $tot_giro= $sesion->TOTAL_GIRO_TOTAL;
+        $t_efe_ini += $sesion->EFECTIVO_INI;
+        $t_efectivo += $sesion->TOTAL_EFE;
+        $t_tar += $sesion->TOTAL_TAR;
+        $tot_giro += $sesion->TOTAL_GIRO;
         @endphp
         <tr>
             <td>
@@ -63,6 +64,11 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
                 @endif
                 @endif
             </td>
+            <td>
+            <a onclick="enviarArqueoPorEmail(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="text-dark fw-bold">
+            <i class="fa fa-envelope"></i>
+            </a>
+            </td>
             <td>{{$sesion->SUCURSAL}}</td>
 
             <td>{{$sesion->REGNRO}}</td>
@@ -70,16 +76,16 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
             <td>{{ is_null($sesion->FECHA_CIE) ?  "-" : $sesion->FECHA_CIE->format('d/m/Y')}}</td>
             <td>{{$sesion->CAJA}}</td>
             <td>{{ is_null($sesion->cajero ) ? '' : $sesion->cajero->NOMBRES}} </td>
-            <td class="text-end">{{$sesion->EFECTIVO_INI}}</td>
-            <td class="text-end">{{$sesion->TOTAL_EFE}}</td>
-            <td class="text-end">{{$sesion->TOTAL_TAR}}</td>
-            <td class="text-end">{{$sesion->TOTAL_GIRO}}</td>
+            <td class="text-end">{{$sesion->EFECTIVO_INICIAL}}</td>
+            <td class="text-end">{{$sesion->TOTAL_EFECTIVO}}</td>
+            <td class="text-end">{{$sesion->TOTAL_TARJETA}}</td>
+            <td class="text-end">{{$sesion->TOTAL_GIROS}}</td>
         </tr>
         @endforeach
     </tbody>
 
     <tfoot>
-        <td colspan="7"></td>
+        <td colspan="8"></td>
         <td class="text-end">{{ $t_efe_ini}}</td>
         <td class="text-end">{{ $t_efectivo}}</td>
         <td class="text-end">{{ $t_tar}}</td>

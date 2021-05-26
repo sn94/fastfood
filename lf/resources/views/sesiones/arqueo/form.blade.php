@@ -32,6 +32,9 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
     border-bottom: 1px solid black;
   }
 
+.text-center{
+  text-align: center;
+}
   .text-end {
     text-align: right;
   }

@@ -57,7 +57,7 @@ Nueva venta
                 </div>
                 <div class="col-12  pl-0 pr-0 bg-light  ">
                     <div id="VENTA_PROCESO_TOTAL" class=" d-flex flex-row">
-                        <label class="MONTO fs-2 w-100">TOTAL A PAGAR:</label>
+                        <label class="MONTO fs-2 w-100">Total a pagar:</label>
                         <input readonly value="0" type="text" id="TOTAL-VENTA" name="TOTAL" class="entero MONTO form-control fs-2 p-0" />
                     </div>
                     @include("ventas.proceso.VentaDetalle.index")

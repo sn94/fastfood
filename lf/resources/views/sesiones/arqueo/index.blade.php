@@ -21,7 +21,7 @@ Arqueo de caja {{date('d-m-Y')}}
 
 <div id="loaderplace">
 </div>
-<div class="container col-12 col-md-10 col-lg-7 bg-dark mt-0 mb-0  mt-md-0 mb-md-0 mt-lg-3 mb-lg-3 pb-2">
+<div class="container col-12 col-md-10 col-lg-7 bg-dark mt-0 mb-0  mt-md-0 mb-md-0 mt-lg-3 mb-lg-3 pb-5">
 
 <input type="hidden" value="<?= url("sesiones/informe-arqueo/" . session("SESION")) ?>"  id="INFORME-LINK">
     <button onclick="guardar()" id="BOTON-GUARDAR" class="btn btn-danger btn-sm" type="button">CERRAR SESIÓN</button>
