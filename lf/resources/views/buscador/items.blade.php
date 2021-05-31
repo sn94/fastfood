@@ -33,7 +33,7 @@
                         <tr>
                             <th>ID</th>
                             <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN</th>
+                            <th>Descripción</th>
                         </tr>
                     </thead>
                     <tbody id="buscador_grill">

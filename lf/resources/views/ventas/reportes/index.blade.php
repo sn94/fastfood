@@ -28,21 +28,17 @@ Ventas
 
 
 <div id="loaderplace"></div>
-<div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light pb-5  mb-5 ">
+<div class="container-fluid  col-12 col-md-12 col-lg-10 fast-food-bg  mt-2   pb-5  mb-5 ">
 
-  <h3 class="text-center">Ventas</h3>
-  <div class="row">
-    @include("ventas.reportes.graficos.grafico1")
-    @include("ventas.reportes.graficos.grafico2") 
-    @include("ventas.reportes.graficos.grafico3") 
-  </div>
+  <h3 class="fast-food-big-title">Ventas</h3>
+
 
   <div class=" col-12 col-md-5 pb-0">
     <label> Filtro: </label>
     <select class="form-control form-control-sm" id="FILTRO" onchange="formularioDeFiltro(event)">
       <option value="1">PRODUCTOS MÁS VENDIDOS POR SUCURSALES</option>
       <option value="2">OTROS PARÁMETROS</option>
-      
+
     </select>
   </div>
 
@@ -55,13 +51,14 @@ Ventas
   <div class="container-fluid p-0 pt-2 pb-2" id="grill">
     @include("ventas.reportes.views.filter".$FILTRO)
   </div>
-
+  <div class="row">
+    @include("ventas.reportes.graficos.grafico1")
+    @include("ventas.reportes.graficos.grafico2")
+    @include("ventas.reportes.graficos.grafico3")
+  </div>
 
 </div>
 <script>
-   
-
-
   async function buscarVentas(params) {
     let parametros = params;
     let grill_url = "<?= $index ?>" + "<?= $QUERY_FLAG ?>";
@@ -76,8 +73,8 @@ Ventas
 
   async function formularioDeFiltro(ev) {
     let nroFiltro = ev.target.value;
-    let url__= "<?= $index ?>/" + nroFiltro + "<?= $QUERY_FLAG ?>";
-    let req = await fetch(  url__, {
+    let url__ = "<?= $index ?>/" + nroFiltro + "<?= $QUERY_FLAG ?>";
+    let req = await fetch(url__, {
 
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
@@ -109,9 +106,9 @@ Ventas
   window.onload = function() {
     dataSearcher = new DataSearcher();
     inicializar();
-   grafProductosMasVendidos(); 
-   grafMediosDePagoPreferido();
-   grafRecaudacionesUltimosSeisMeses();
+    grafProductosMasVendidos();
+    grafMediosDePagoPreferido();
+    grafRecaudacionesUltimosSeisMeses();
   }
 </script>
 

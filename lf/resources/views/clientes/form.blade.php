@@ -56,7 +56,7 @@ $EMAIL= isset( $cliente )? $cliente->EMAIL : "";
 
 
             <div class="col-12 mt-2 d-flex justify-content-center">
-                <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
+                 <button type="submit" class="btn fast-food-form-button">Guardar</button>
             </div>
 
 

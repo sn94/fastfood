@@ -28,7 +28,7 @@ elseif (preg_match("/compras-en-caja/", request()->path())) :
 endif;
 ?>
 
-<table class="table table-hover table-striped  bg-warning">
+<table class="table table-hover table-striped  fast-food-table">
     <thead class="thead-dark">
 
         <th></th>

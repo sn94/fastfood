@@ -3,7 +3,7 @@
 
 
     <div style="display: flex;flex-direction: row;justify-content: flex-end;align-items: baseline;">
-        <label style="font-weight: 600; color: white;">POR DESTINO:</label>
+        <label style="font-weight: 600;">POR DESTINO:</label>
         @php
         $tipos_destino= [ "COCINA" => "COCINA", "SUCURSAL"=> "SUCURSAL" ];
         @endphp
@@ -15,7 +15,7 @@
     </div>
 
     <div style="display: flex;flex-direction: row;justify-content: flex-end;align-items: baseline;">
-        <label style="font-weight: 600; color: white;">FECHAS:</label>
+        <label style="font-weight: 600;">FECHAS:</label>
         <input type="date" id="FECHA-DESDE">
         <input type="date" id="FECHA-HASTA">
     </div>

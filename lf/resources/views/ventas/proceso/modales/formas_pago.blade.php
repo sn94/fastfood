@@ -1,42 +1,10 @@
-<style>
-    #FORMAS-DE-PAGO fieldset label {
-        font-size: 12px;
-        color: white !important;
-    }
-
-    #FORMAS-DE-PAGO fieldset legend {
-        font-size: 14px;
-        background-color:  var(--color-3) !important;
-        color: white;
-        border-bottom: 3px  white solid;
-
-        text-align: center;
-    }
-
-    #FORMAS-DE-PAGO fieldset {
-        border: none;
-        padding: 2px;
-        height: 100%;
-    }
-    #FORMAS-DE-PAGO fieldset:hover , #FORMAS-DE-PAGO fieldset:active {
-        box-shadow: 0 0 0 10px var(--color-3-dark) !important;
-    }
-
-    #FORMAS-DE-PAGO fieldset input {
-        height: 29px !important;
-    }
-
-    #FORMAS-DE-PAGO fieldset label {
-        width: 100% !important;
-    }
-</style>
-
+ 
 
 
 
 <div id="FORMAS-DE-PAGO" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document" style="width: 650px !important;max-width: 700px;">
-        <div class="modal-content "  style="background-color: var(--color-3) !important;">
+        <div class="modal-content "  >
             <div class="modal-header ">  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -72,7 +40,7 @@
                             <div class="row mb-1 mt-1">
                               <div class="col-12 col-md-6">
                               <div class="d-flex flex-row">
-                                    <label style="width: 120px !important;" class="fs-4 text-light">Entrega:</label>
+                                    <label style="width: 120px !important;" class="fs-4  ">Entrega:</label>
                                 
                                     <input onfocus="this.value='';" onblur="if(this.value=='') this.value='0';" value="0" type="text" id="IMPORTE_PAGO" name="IMPORTE_PAGO" class="form-control fs-4 entero MONTO" />
                                 </div>
@@ -80,7 +48,7 @@
 
                               <div class="col-12 col-md-6">
                               <div class="d-flex flex-row">
-                              <label style="width: 120px !important;"  class="fs-4 text-light">Vuelto:&nbsp;</label>
+                              <label style="width: 120px !important;"  class="fs-4  ">Vuelto:&nbsp;</label>
                                    <input value="0" readonly type="text" id="VUELTO" name="VUELTO" class="form-control fs-4 entero MONTO" />
                               </div>
                               </div>

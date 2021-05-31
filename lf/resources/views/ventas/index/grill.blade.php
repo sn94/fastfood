@@ -11,19 +11,31 @@ use App\Helpers\Utilidades;
 </style>
 
 
-<table class="table table-hover table-striped bg-warning">
+@if( isset($print_mode))
+@include("templates.print_report")
+<h4 style="text-align: center; margin-bottom: 1px;"> {{ $titulo}} </h4>
+<h6 style="text-align: center; margin-top: 1px;">Cajero: {{$CAJERO->REGNRO.' - '. $CAJERO->NOMBRES}}</h6>
+@endif
+
+
+
+<table class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th>N° TICKET</th>
-        <th>SESIÓN</th>
-        <th>FECHA</th>
-        <th>HORA</th>
-        <th>CLIENTE</th>
-        <th>TOTAL</th>
-        <th>ESTADO</th>
+        <tr>
+            @if( !isset($print_mode))
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            @endif
+            <th>N° TICKET</th>
+            <th>SESIÓN</th>
+            <th>FECHA</th>
+            <th>HORA</th>
+            <th>CLIENTE</th>
+            <th>TOTAL</th>
+            <th>ESTADO</th>
+        </tr>
     </thead>
 
     <tbody class="text-dark">
@@ -31,19 +43,18 @@ use App\Helpers\Utilidades;
         @foreach( $VENTAS as $ven)
 
         <tr>
+            @if( !isset($print_mode))
             <td><a onclick="anular(  event)" class="btn btn-danger btn-sm" href="{{url('ventas/anular/'.$ven->REGNRO)}}">ANULAR</a></td>
             <td><a onclick="imprimirTicket(<?= $ven->REGNRO ?>)" class="btn btn-danger btn-sm" href="#">RE-IMPRIMIR</a></td>
-
-            <td><a onclick="enviarTicketPorEmail(event)" class="text-dark" href="<?= url("ventas/ticket/" . $ven->REGNRO) ?>">
-            <i class="fas fa-envelope"></i>
-            </a></td>
+            <td><a onclick="enviarTicketPorEmail(event)" class="text-dark" href="<?= url("ventas/ticket/" . $ven->REGNRO) ?>"><i class="fas fa-envelope"></i></a></td>
             <td> <a href="{{url('ventas/view/'.$ven->REGNRO)}}" class="text-dark"> <i class="fas fa-eye"></i></a> </td>
+            @endif
 
             <td>{{$ven->REGNRO}}</td>
             <td>{{$ven->SESION}}</td>
             <td>{{ Utilidades::fecha_f($ven->FECHA) }}</td>
             <td>{{ date("H:i:s", strtotime(  $ven->created_at )   )}}</td>
-            <td>{{  is_null($ven->cliente) ? '' : $ven->cliente->NOMBRE . "(". $ven->cliente->CEDULA_RUC . ")"}}</td>
+            <td>{{ is_null($ven->cliente) ? '' : $ven->cliente->NOMBRE . "(". $ven->cliente->CEDULA_RUC . ")"}}</td>
             <td>{{ $ven->TOTAL}}</td>
             <td>{{ $ven->ESTADO =='A'  ? 'ACTIVA'  : 'ANULADA'}}</td>
         </tr>
@@ -53,9 +64,10 @@ use App\Helpers\Utilidades;
     </tbody>
 </table>
 
-{{ $VENTAS->links('vendor.pagination.default') }}
 
 
+
+<x-pretty-paginator :datos="$VENTAS" callback="fill_grill" />
 
 <script>
     async function anular(ev) {

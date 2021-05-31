@@ -14,7 +14,7 @@ class Nota_pedido extends Model
     public $timestamps = true;
     protected $fillable = [
         'FECHA',  'CONCEPTO', 'ESTADO',  'SUCURSAL', 'REGISTRADO_POR', 'SOLICITADO_POR',
-        'OBSERVACION',
+        'OBSERVACION', 'FECHA_VENTA',
         'RECIBIDO_POR', 'received_by'
     ];
 
@@ -22,6 +22,7 @@ class Nota_pedido extends Model
 
     protected $dates = [
         "FECHA",
+        "FECHA_VENTA",
         'created_at',
         'updated_at'
     ];

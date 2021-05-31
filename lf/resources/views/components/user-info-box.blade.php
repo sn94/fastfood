@@ -17,7 +17,7 @@ $suc= Sucursal::find(   session('SUCURSAL') );
 $nombreSuc=  is_null(  $suc) ?   '' :   $suc->DESCRIPCION;
 
 @endphp
-<div class="card text-dark bg-warning mb-3" style="max-width: 18rem;">
+<div class="card text-dark fast-food-table mb-3" style="max-width: 18rem;">
  
   <div class="card-body">
 <h5> Sucursal: {{session('SUCURSAL')}}  {{$nombreSuc}} </h5>

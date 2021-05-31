@@ -11,6 +11,9 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
 
 
 <style>
+    .text-center{
+        text-align: center;
+    }
     /** Estilos generales  */
     table thead tr th,
     table tbody tr td,
@@ -42,13 +45,13 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
     table thead tr th:nth-child(4),
     table tbody tr td:nth-child(4),
     table tfoot tr td:nth-child(4) {
-        width: 40px !important;
+        width: 45px !important;
     }
 
     table thead tr th:nth-child(5),
     table tbody tr td:nth-child(5),
     table tfoot tr td:nth-child(5)  {
-        width: 150px !important;
+        width: 70px !important;
     }
 
 
@@ -68,6 +71,11 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
     table tfoot tr td:nth-child(8) {
         width: 50px;
     }
+    table thead tr th:nth-child(9),
+    table tbody tr td:nth-child(9),
+    table tfoot tr td:nth-child(9) {
+        width: 50px;
+    }
 </style>
 
 @if( isset($print_mode) )
@@ -82,19 +90,19 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
 @endif
 
 @if( isset( $titulo ))
-<h4 style="text-align: center;">{{$titulo}}</h4>
+<h4 class="text-center">{{$titulo}}</h4>
 @endif
 
 
-<table class="table table-hover table-striped bg-warning">
+<table class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
 
         <tr>
             <th class="text-center">N° LOCAL</th>
             <th>LOCAL</th>
             <th style="text-align: left;">FACTURA N°</th>
-            <th style="text-align: left;">CAJERO</th>
-            <th style="text-align: left;">FECHA</th>
+            <th class="text-center">CAJERO</th>
+            <th class="text-center">FECHA</th>
             <th>CLIENTE</th>
             <th class="text-center">TIPO PAGO</th>
             <th class="text-end">TOTAL</th>
@@ -111,8 +119,8 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
             <td class="text-center"> {{ $ven->SUCURSAL_ID }}</td>
             <td> {{ $ven->SUCURSAL_NOMBRE }}</td>
             <td class="text-center">{{ $ven->FACTURA}} </td>
-            <td class="text-end"> {{ is_null( $ven->cajero) ? '' :   $ven->cajero  }} </td>
-            <td>{{ $ven->FECHA->format('d/m/Y')  }}</td>
+            <td class="text-center"> {{  $ven->CAJERO  }} </td>
+            <td class="text-center">{{ is_null($ven->FECHA) ? '' : $ven->FECHA->format('d/m/Y')  }}</td>
             <td>{{$ven->cliente_nom}}</td>
             <td class="text-center"> {{ $ven->FORMA_PAGO }}</td>
             <td class="text-end"> {{ $ven->TOTAL}}</td>
@@ -124,9 +132,7 @@ $VENTAS =   isset($datalist) ? $datalist : $VENTAS;
     </tbody>
 </table>
 
-@if( method_exists($VENTAS, "links"))
-{{ $VENTAS->links('vendor.pagination.default') }}
-@if( sizeof( $VENTAS ) == 0)
-<p class="text-center p-2 bg-warning text-dark">Sin registros</p>
-@endif
-@endif
+
+
+<x-pretty-paginator :datos="$VENTAS" callback="fill_grill" />
+ 

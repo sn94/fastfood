@@ -41,11 +41,11 @@ $customCallbackName=  isset(  $customCallbackName ) ?  $customCallbackName :  "f
         <ul class="pagination ">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
-                <li class="disabled bg-warning text-dark " aria-disabled="true" aria-label="@lang('pagination.previous')">
+                <li class="disabled fast-food-table text-dark " aria-disabled="true" aria-label="@lang('pagination.previous')">
                     <span aria-hidden="true">&lsaquo;</span>
                 </li>
             @else
-                <li class="bg-warning text-dark ">
+                <li class="fast-food-table text-dark ">
                     <a onclick='{{$customCallbackName}}(event)' href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
                 </li>
             @endif
@@ -54,16 +54,16 @@ $customCallbackName=  isset(  $customCallbackName ) ?  $customCallbackName :  "f
             @foreach ($elements as $element)
                 {{-- "Three Dots" Separator --}}
                 @if (is_string($element))
-                    <li class="disabled  bg-warning text-dark " aria-disabled="true"><span>{{ $element }}</span></li>
+                    <li class="disabled  fast-food-table text-dark " aria-disabled="true"><span>{{ $element }}</span></li>
                 @endif
 
                 {{-- Array Of Links --}}
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <li class="active bg-warning text-dark " aria-current="page"><span>{{ $page }}</span></li>
+                            <li class="active fast-food-table text-dark " aria-current="page"><span>{{ $page }}</span></li>
                         @else
-                            <li class="bg-warning text-dark "><a onclick='{{$customCallbackName}}(event)' href="{{ $url }}">{{ $page }}</a></li>
+                            <li class="fast-food-table text-dark "><a onclick='{{$customCallbackName}}(event)' href="{{ $url }}">{{ $page }}</a></li>
                         @endif
                     @endforeach
                 @endif
@@ -71,11 +71,11 @@ $customCallbackName=  isset(  $customCallbackName ) ?  $customCallbackName :  "f
 
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
-                <li class="bg-warning text-dark ">
+                <li class="fast-food-table text-dark ">
                     <a onclick='{{$customCallbackName}}(event)' href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
                 </li>
             @else
-                <li class="disabled bg-warning text-dark " aria-disabled="true" aria-label="@lang('pagination.next')">
+                <li class="disabled fast-food-table text-dark " aria-disabled="true" aria-label="@lang('pagination.next')">
                     <span aria-hidden="true">&rsaquo;</span>
                 </li>
             @endif

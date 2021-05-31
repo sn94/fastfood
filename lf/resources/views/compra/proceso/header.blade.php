@@ -16,14 +16,14 @@ $FORMA_PAGO = isset($COMPRA) ? ($COMPRA->FORMA_PAGO) :  "";
 
 <div class="col-12 col-sm-4 col-md-2   col-lg-2  ">
 
-    <label for="element_7">N° COMPRA:</label>
+    <label for="element_7">REGISTRO N°:</label>
     <input name="REGNRO" readonly value="{{$REGNRO}}" class="form-control form-control-sm" type="text" />
 
 </div>
 
 <div class="col-12  col-sm-4 col-md-2   col-lg-2  g-1">
 
-    <label for="element_7">FACTURA N°: </label>
+    <label for="element_7">COMPROBANTE N°: </label>
     <input value="{{$NUMERO}}" name="NUMERO" class="form-control form-control-sm" type="text" />
 
 </div>
@@ -103,7 +103,8 @@ function  abrirBuscadorProveedor(){
     //KEY:'#PROVEEDOR-KEY',NAME:'#PROVEEDOR-NAME
 
 
-    Buscador.url= "<?=url("proveedores")?>";
+    Buscador.url= "<?=url("proveedores/buscar")?>";
+    Buscador.httpMethod= "post";
     Buscador.columnNames= ["REGNRO", "CEDULA_RUC", "NOMBRE"];
     Buscador.columnLabels= ['ID', 'CÉDULA', 'NOMBRES'];
     Buscador.callback= function(   seleccionado){

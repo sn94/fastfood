@@ -20,16 +20,16 @@ $urlAction= isset($SALIDA) ? url('salida/update') : url('salida/create');
 @include("salida.routes")
 @include("buscador.Buscador")
 
-<div class="container-fluid col-12 col-sm-11 col-md-10 col-lg-7 bg-dark text-light mt-2 pb-5 px-5">
+<div class="container-fluid col-12 col-sm-11 col-md-10 col-lg-7 fast-food-bg   mt-2 pb-5 px-5">
 
-    <h2 class="text-center mt-2">Salidas de productos y materia prima</h2>
+    <h3 class="fast-food-big-title">Salidas de productos y materia prima</h3>
 
     <div id="loaderplace"></div>
 
     <form id="SALIDAFORM" action="<?= $urlAction ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarSalida(event)">
         <div class="row ">
             <div class="col-12 col-md-2  mb-1">
-                <button type="submit" class="btn btn-danger"> GUARDAR</button>
+                 <button type="submit" class="btn fast-food-form-button"> Guardar</button>
             </div>
         </div>
 
@@ -70,7 +70,7 @@ $urlAction= isset($SALIDA) ? url('salida/update') : url('salida/create');
             formato: "json"
         };
         Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
-        Buscador.columnLabels = ['ID', 'DESCRIPCIÓN'];
+        Buscador.columnLabels = ['ID', 'Descripción'];
         Buscador.htmlFormForParams = htmlParams;
         Buscador.htmlFormFieldNames = ['tipo'];
 

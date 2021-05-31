@@ -1,0 +1,121 @@
+ .fast-food-navbar.navbar {
+     background: linear-gradient(to bottom left, #6EB4E6, #DE6F1F) !important;
+ }
+ 
+  .fast-food-navbar.navbar-expand-lg .navbar-nav .dropdown-menu {
+     background-image: url(https://media.informabtl.com/wp-content/uploads/2019/09/3d2d3442-las-10-marca-de-fast-food-m%C3%A1s-valiosas-del-mundo-en-2019.jpg) !important;
+     background-repeat: no-repeat;
+     background-size: cover;
+     border: none !important;
+     border-radius: 0px 0px 100% 100%;
+     padding-bottom: 150px;
+ }
+ /*Menus**/
+ /* En línea #10 | http://localhost/fastfood/pedidos/sucursales */
+ 
+  .fast-food-navbar .nav-link {
+     color: white !important;
+     position: relative;
+     z-index: 1;
+     overflow: hidden;
+ }
+ 
+  .fast-food-navbar .nav-link::before {
+     content: '';
+     position: absolute;
+     top: 0px;
+     left: -25%;
+     width: 50%;
+     height: 100%;
+     background: #6EB4E6;
+     z-index: -1;
+     transition: all 1s ease;
+ }
+ 
+  .fast-food-navbar .nav-link:hover::before {
+     border-radius: 100%;
+     top: 0%;
+ }
+ 
+  .fast-food-navbar .nav-link::before {
+     top: 100%;
+     left: 0%;
+     width: 100%;
+ }
+ /**Cada submenu item **/
+ 
+  .fast-food-navbar .dropdown-item {
+     color: white !important;
+     background: linear-gradient(to bottom left, #6EB4E6, #DE6F1F) !important;
+     border-radius: 20px !important;
+     margin-bottom: 1px !important;
+     position: relative !important;
+     overflow: hidden !important;
+     z-index: 1 !important;
+ }
+ 
+  .fast-food-navbar .dropdown-item:hover {
+     box-shadow: 0 0 0 5px white !important;
+     color: white !important;
+     text-align: center !important;
+ }
+ 
+ .fast-food-navbar .dropdown-item:hover::before {
+     width: 50% !important;
+ }
+ 
+  .fast-food-navbar .dropdown-item::before {
+     content: '' !important;
+     position: absolute !important;
+     background-color: #DE6F1F !important;
+     width: 0px !important;
+     height: 100% !important;
+     top: 0px;
+     left: 0% !important;
+     transition: all 1s ease !important;
+     transform: skewX(35deg) !important;
+     z-index: -1;
+ }
+ 
+ .fast-food-navbar .dropdown-item:hover::after {
+     left: 50% !important;
+ }
+ 
+  .fast-food-navbar.dropdown-item::after {
+     content: '' !important;
+     position: absolute !important;
+     width: 100% !important;
+     height: 100% !important;
+     background-color: #6EB4E6 !important;
+     top: 0px !important;
+     left: 100% !important;
+     transform: skewX(35deg) !important;
+     z-index: -1 !important;
+     transition: all 1s ease !important;
+ }
+ /**Contenedor de imagen de fondo */
+ 
+  .fast-food-navbar.nav-item.dropdown div {
+     position: absolute;
+     top: 0px;
+     left: 0px;
+     width: 100%;
+     height: 100%;
+     padding: 0px;
+     margin: 0px;
+     z-index: -1;
+     border-radius: 0px 0px 100% 100%;
+     background-color: rgba(222, 111, 31, 0.39);
+     padding-bottom: 100px;
+ }
+ 
+ @media only screen and (max-width: 768px) {
+     /* For mobile phones: */
+   .fast-food-navbar   .nav-item.dropdown div {
+         z-index: 1;
+     }
+   .fast-food-navbar   .nav-item.dropdown li {
+         position: relative;
+         z-index: 2;
+     }
+ }

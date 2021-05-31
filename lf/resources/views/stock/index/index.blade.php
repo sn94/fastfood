@@ -45,41 +45,41 @@ Stock
 
 <div id="loaderplace"></div>
 
-<div class="container col-12 col-md-12 col-lg-9 bg-dark text-light pb-5">
+<div class="container mt-1 col-12 col-md-12 col-lg-9 fast-food-bg   pb-5">
 
-    <h2 class="text-center mt-2"> Fichas de Stock</h2>
+    <h3 class="fast-food-big-title"> Fichas de Stock</h3>
 
 
     <x-search-report-downloader placeholder="BUSCAR POR CÓDIGO DE BARRA O DESCRIPCION" callback="buscarStock()">
+ 
+            <div class="container-fluid m-0 p-0 d-flex flex-row flex-wrap ">
+                @if( $MODULO_FLAG != "c")
+                <div class=" mb-1 col-md-1">
+                    <a class="btn fast-food-form-button " href="<?= url("stock/create" . $QUERY_FLAG) ?>"> NUEVO</a>
+                </div>
+                @endif
 
-        <x-slot name="top_panel">
-           <div class="d-flex flex-row flex-wrap">
-           @if(  $MODULO_FLAG  !=  "c")
-          <div class=" mb-1 col-md-1">
-          <a class="btn btn-sm btn-warning  " href="<?= url("stock/create" . $QUERY_FLAG) ?>"> NUEVO</a>
-          </div>
-            @endif
+                <div class="d-flex flex-row col-12 col-md-6 col-lg-4">
 
-            <div class="d-flex flex-row col-12 col-md-4">
+                    <label style="width: 150px;">Filtrar por:</label>
 
-                <label style="display: flex;flex-direction: row; color: white;" class="ml-2">Filtrar por:
-                </label>
+                    <x-pretty-radio-button callback="buscarStock()" id="F_TIPO" name="FILTRO" value="TIPO" label="" checked="si"></x-pretty-radio-button>
+                    <x-tipo-stock-chooser id="TIPO-STOCK" :value="$TIPO" checked="true" i callback="buscarStock()" style="height: 25px;" class="form-control-sm"></x-tipo-stock-chooser>
+                </div>
 
-                <x-pretty-radio-button callback="buscarStock()" id="F_TIPO" name="FILTRO" value="TIPO" label="" checked="si"></x-pretty-radio-button>
-                <x-tipo-stock-chooser id="TIPO-STOCK" :value="$TIPO" checked="true" i callback="buscarStock()" style="height: 25px;" class="form-control-sm"></x-tipo-stock-chooser>
+
+                <div class="d-flex flex-row  col-12 col-md-6 col-lg-4">
+                    <label class="ms-2 w-100"> Familia:
+                    </label>
+                    <x-pretty-radio-button callback="buscarStock();" id="F_FAMILIA" name="FILTRO" value="FAMILIA" label="" checked="no"></x-pretty-radio-button>
+                    <x-familia-stock-chooser id="FAMILIA-STOCK" name="" value="" callback="buscarStock()" style="height: 25px;" class="form-control-sm"></x-familia-stock-chooser>
+
+
+                </div>
+                <input type="hidden" id="DESCRIPCION-ORDER" value="ASC">
+                <input type="hidden" id="PVENTA-ORDER" value="">
             </div>
-
-
-            <div class="d-flex flex-row  col-12 col-md-4">
-                <label style="display: flex;flex-direction: row; color: white;"> Familia:
-                </label>
-                <x-pretty-radio-button callback="buscarStock();" id="F_FAMILIA" name="FILTRO" value="FAMILIA" label="" checked="no"   ></x-pretty-radio-button>
-                <x-familia-stock-chooser id="FAMILIA-STOCK" name="" value="" callback="buscarStock()" style="height: 25px;" class="form-control-sm"></x-familia-stock-chooser>
-            </div>
-            <input type="hidden" id="DESCRIPCION-ORDER" value="ASC">
-            <input type="hidden" id="PVENTA-ORDER" value="">
-           </div>
-        </x-slot>
+    
 
     </x-search-report-downloader>
 
@@ -87,10 +87,7 @@ Stock
 </div>
 
 
-<script> 
-
-
-
+<script>
     function ordenarDescripcion(sentido) {
         /*ASC  DESC */
 
@@ -111,9 +108,9 @@ Stock
 
 
 
-    function buscarStock( urlOpcional ) {
-        if( urlOpcional &&   typeof urlOpcional == "object"  && "currentTarget" in urlOpcional)
-        urlOpcional.preventDefault();
+    function buscarStock(urlOpcional) {
+        if (urlOpcional && typeof urlOpcional == "object" && "currentTarget" in urlOpcional)
+            urlOpcional.preventDefault();
 
         //PARMETROS
         let buscado = $("#search").val();
@@ -139,12 +136,12 @@ Stock
             parametros.tipo = tipoStock;
         if (filtroTipo == "FAMILIA")
             parametros.familia = familia;
- 
+
         dataSearcher.setRequestContentType = "application/json";
-        if( urlOpcional )
-        dataSearcher.setUrl= urlOpcional.currentTarget.href;
+        if (urlOpcional)
+            dataSearcher.setUrl = urlOpcional.currentTarget.href;
         else
-        dataSearcher.setDataLink = "#GRILL-URL-CUSTOM";
+            dataSearcher.setDataLink = "#GRILL-URL-CUSTOM";
         dataSearcher.setOutputTarget = "#grill";
         dataSearcher.setParametros = parametros;
         dataSearcher.formatoHtml();

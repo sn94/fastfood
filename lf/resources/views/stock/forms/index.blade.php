@@ -49,11 +49,7 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
          background-color: #7d7d7d !important;
      }
 
-     .MEDIDA {
-         color: #222;
-         font-weight: 600;
-     }
-
+      
      
 
      .form-control {
@@ -61,12 +57,7 @@ $QUERY_FLAG=  $MODULO_FLAG == "c" ? "?m=c"  :  "";
          
      }
 
-
-
-     label {
-         font-size: 14px !important;
-         color: white;
-     }
+ 
 
      .div-inline-30-70 {
          display: grid;

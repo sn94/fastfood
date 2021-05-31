@@ -13,7 +13,7 @@ table tbody tr td, table thead tr th{
 }
 </style> 
 
-<table class="table bg-warning bg-gradient    text-dark">
+<table class="table fast-food-table bg-gradient    text-dark">
 
     <thead style="font-family: mainfont;font-size: 18px;">
         <th></th>

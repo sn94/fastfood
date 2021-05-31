@@ -21,29 +21,29 @@
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
  <div class="row  pt-2 ">
-     <div class="col-12  " style="display: flex;flex-direction: row;">
-         <label style="color: white !important;width: 100%;" class="pr-1">MENSAJE PARA TICKET: </label>
-         <input style="color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="MENSAJE_TICKET" class="form-control" type="text" maxlength="30" value="{{$MENSAJE_TICKET}}" />
+     <div class="col-12" >
+         <label  >Mensaje para ticket: </label>
+         <input style="height: 30px !important; width: 100%;" name="MENSAJE_TICKET" class="form-control" type="text" maxlength="30" value="{{$MENSAJE_TICKET}}" />
      </div>
 
 
-     <div class="col-12 text-light d-flex flex-row align-items-center justify-content-between "  >
+     <div class="col-12"  >
           
-         <x-pretty-checkbox name="DESCONTAR_MP_EN_VENTA" :value="$DESCONTAR_MP_EN_VENTA" label="DESCONTAR MATERIA PRIMA EN LA VENTA" onValue="S" offValue="N"   />
+         <x-pretty-checkbox name="DESCONTAR_MP_EN_VENTA" :value="$DESCONTAR_MP_EN_VENTA" label="Descontar materia prima en la venta" onValue="S" offValue="N"   />
 
      </div>
 
 
 
-     <div class="col-12  " style="display: flex;flex-direction: row;">
-         <label style="color: white !important;width: 100%;" class="pr-1">EMAIL ADMINISTRATIVO: </label>
+     <div class="col-12  " >
+         <label  >Email administrativo: </label>
          <input style="color:black !important;height: 30px !important; width: 100%;" name="EMAIL_ADMIN" class="form-control" type="text" maxlength="100" value="{{$EMAIL_ADMIN}}" />
      </div>
 
 
 
      <div class="col-12   d-flex justify-content-center pt-1">
-         <button style="height: 30px !important;" type="submit" class="btn btn-warning ">GUARDAR</button>
+         <button style="height: 30px !important;" type="submit" class="btn fast-food-form-button ">Guardar</button>
      </div>
 
 

@@ -85,14 +85,14 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
 
 
 
-<table class="table table-hover table-striped bg-warning">
+<table class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
 
         <tr>
             <th>SUCURSAL</th>
             <th>CÓDIGO</th>
             <th>BARCODE</th>
-            <th>DESCRIPCIÓN</th>
+            <th>Descripción</th>
             <th>TIPO</th>
             <th class="text-center">N° COMPRAS</th>
             <th class="text-end">CANTIDAD</th>
@@ -142,7 +142,7 @@ $COMPRAS =   isset($datalist) ? $datalist : $COMPRAS;
 @if( method_exists($COMPRAS, "links"))
 {{ $COMPRAS->links('vendor.pagination.default') }}
 @if(  sizeof( $COMPRAS ) == 0)
-<p class="text-center p-2 bg-warning text-dark">Sin registros</p>
+<p class="text-center p-2 fast-food-table text-dark">Sin registros</p>
 @endif
 @endif
 

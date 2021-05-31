@@ -6,7 +6,7 @@
 
         @extends("templates.admin.index")
         @section("content")
-        <div class="container-fluid col-12 col-md-8 bg-dark text-light mt-2">
+        <div class="container-fluid col-12 col-md-8 fast-food-bg   mt-2">
                 @include("proveedores.create.ajax")
         </div>
         @endsection

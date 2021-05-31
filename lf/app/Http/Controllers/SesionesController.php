@@ -73,7 +73,7 @@ class SesionesController extends Controller
         }
 
         if ($formato ==   "pdf")
-            return $this->responsePdf("sesiones.index.simple",  $sesiones->get(), "Sesiones");
+            return $this->responsePdf("sesiones.index.grill",  [ 'SESIONES'=> $sesiones->get()], "Sesiones");
 
         if ($formato ==  "html") {
 
@@ -157,7 +157,8 @@ class SesionesController extends Controller
     private function enviarArqueoPorEmail($params)
     {
         $adminEmail =  Parametros::first()->EMAIL_ADMIN;
-        $params =  ['data' => $params,  'view' => "sesiones.arqueo.simple", 'title'=> 'INFORME DE ARQUEO'];
+        $tituloArqueoReporte=  "INFORME DE ARQUEO N° {$params['SESION']->REGNRO}";
+        $params =  ['data' => $params,  'view' => "sesiones.arqueo.simple", 'title'=>  $tituloArqueoReporte];
         Mail::to($adminEmail)->send((new GenericEmailSender($params)));
         return response()->json(['ok' => "Se envió por e-mail el informe de arqueo."]);
     }
@@ -216,7 +217,7 @@ class SesionesController extends Controller
         $detalleVentas =  Ventas_det::join("ventas",  "ventas_det.VENTA_ID", "=", "ventas.REGNRO")
             ->where("ventas.SESION",  $sesion->REGNRO)
             ->where("ventas.SUCURSAL", $sesion->SUCURSAL)
-            ->select("ventas_det.ITEM", DB::raw("sum(ventas_det.P_UNITARIO * ventas_det.CANTIDAD) as IMPORTE"), DB::raw("count(ventas_det.ITEM) as CANTIDAD "))
+            ->select("ventas_det.ITEM", DB::raw("sum(ventas_det.P_UNITARIO * ventas_det.CANTIDAD) as IMPORTE"), DB::raw("sum(ventas_det.CANTIDAD) as CANTIDAD "))
             ->groupBy("ventas_det.ITEM")
             ->with("producto")
             ->get();

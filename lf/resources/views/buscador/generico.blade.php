@@ -69,7 +69,7 @@ switch ($TIPO) {
                     <thead>
                         <tr>
                             <th>NÚMERO</th>
-                            <th>DESCRIPCIÓN</th>
+                            <th>Descripción</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -166,7 +166,7 @@
 
             let regnro = buscador_items_modelo.REGNRO;
             let descri = buscador_items_modelo.DESCRIPCION;
-            let precio = parseInt(formValidator.limpiarNumero($("#COMPRA-PRECIO").val()));
+            let precio =  parseInt(formValidator.limpiarNumero($("#COMPRA-PRECIO").val()));
             let canti = parseFloat(formValidator.limpiarNumero($("#COMPRA-CANTIDAD").val()));
             let medida = buscador_items_modelo.unidad_medida.DESCRIPCION;
             let iva = parseInt($("#COMPRA-IVA").val());
@@ -177,7 +177,7 @@
             let i5 = iva == 5 ? subtotal : 0;
             let i10 = iva == 10 ? subtotal : 0;
 
-            if (regnro == "" || (precio == "" || precio == "0") || canti == "") {
+            if (regnro == ""   || canti == "") {
                 alert("Seleccione un item antes de cargar, o complete todos los datos");
                 return;
             }
@@ -238,7 +238,7 @@
         Buscador.httpMethod= "post";
         Buscador.httpHeaders= { formato: "json" };
         Buscador.columnNames = ["REGNRO", "DESCRIPCION" ];
-        Buscador.columnLabels = ['ID', 'DESCRIPCIÓN'];
+        Buscador.columnLabels = ['ID', 'Descripción'];
         Buscador.htmlFormForParams=  htmlParams; 
         Buscador.htmlFormFieldNames= ['tipo'];
 

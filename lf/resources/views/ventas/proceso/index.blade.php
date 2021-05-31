@@ -5,6 +5,10 @@
 Nueva venta
 @endsection
 
+ @section("cssStyles")
+@include("ventas.proceso.styles")
+@endsection 
+
 @section("menu")
 @endsection
 

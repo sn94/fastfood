@@ -33,9 +33,8 @@
 
  <input type="hidden" name="SUCURSAL" value="{{$SUCURSAL}}">
 
- <div class="container col-12 col-md-12 " style="display: flex; flex-direction: row;">
-     <label class=" fs-4 w-100"  >SESIÓN N°: </label>
-     <input style=" font-weight: 600; " readonly value="{{$REGNRO}}" name="REGNRO" class="form-control text-center w-100 fs-4 p-0 " type="text" />
+ <div class="container col-12 col-md-12 "  >
+     <h3 class="fast-food-big-title">Sesión N° {{$REGNRO}}</h3>
  </div>
 
  <div class="container-fluid ">
@@ -77,7 +76,7 @@
      </div>
 
      <label class="fs-6">Efectivo inicial: </label>
-     <input <?= isset($SESION)? 'disabled' : ''?> value="{{$EFECTIVO_INI}}" onblur="if(this.value=='')this.value='0';" onfocus="if(this.value=='0')this.value='';" name="EFECTIVO_INI" class="form-control entero fs-6 p-1" type="text" />
+     <input <?= isset($SESION) ? 'disabled' : '' ?> value="{{$EFECTIVO_INI}}" onblur="if(this.value=='')this.value='0';" onfocus="if(this.value=='0')this.value='';" name="EFECTIVO_INI" class="form-control entero fs-6 p-1" type="text" />
 
  </div>
 
@@ -88,7 +87,7 @@
      <a class="btn btn-danger mt-2 " href="<?= url('sesiones/cerrar') ?>">CERRAR</a>
      <a class="btn btn-success mt-2 " href="<?= url('modulo-caja') ?>">CONTINUAR</a>
      @else
-     <button type="submit" class="btn btn-success mt-2 ">ABRIR</button>
+     <button type="submit" class="btn fast-food-form-button">ABRIR</button>
      @endif
 
 
@@ -169,7 +168,7 @@
 
 
 
-   
+
 
 
      window.onload = function() {

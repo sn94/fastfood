@@ -14,10 +14,10 @@ use App\Helpers\Utilidades;
     }
 </style>
 
-<div class="row m-0  mt-1 " style="background-color: var(--color-3);">
+<div class="row m-0  mt-1 " style="background-color: var(--color-primario);">
 
     <div class="col-12">
-        <p style="background-color: var(--color-3);
+        <p style="background-color: var(--color-primario);
 font-weight: bold;
 text-align: center; 
 letter-spacing: 3px;
@@ -60,7 +60,7 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
             <thead>
                 <tr>
                     <th class="text-center">CÓDIGO</th>
-                    <th>DESCRIPCIÓN</th>
+                    <th>Descripción</th>
                     <th>UNI.MED.</th>
                     <th> CANTIDAD</th>
                     <th></th>
@@ -280,7 +280,7 @@ border-bottom: 1px solid var(--color-1);">Receta</p>
             formato: "json"
         };
         Buscador.columnNames = ["REGNRO", "DESCRIPCION"];
-        Buscador.columnLabels = ['ID', 'DESCRIPCIÓN'];
+        Buscador.columnLabels = ['ID', 'Descripción'];
         Buscador.htmlFormForParams = htmlParams;
         Buscador.htmlFormFieldNames = ['tipo'];
 

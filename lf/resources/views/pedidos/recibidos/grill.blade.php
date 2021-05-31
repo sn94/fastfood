@@ -47,13 +47,13 @@ use App\Models\Nota_pedido_detalles;
 
 
 
-<table id="PEDIDOS-TABLE" class="table table-hover table-striped bg-warning">
+<table id="PEDIDOS-TABLE" class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
         <tr>
             <th>PEDIDO N°</th>
             <th>FECHA</th>
             <th>HORA</th>
-            <th>DESCRIPCIÓN</th>
+            <th>Descripción</th>
             <th>CANTIDAD</th>
             <th></th>
 

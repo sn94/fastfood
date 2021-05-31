@@ -20,9 +20,11 @@ label {
     /**Paleta*/
     --color-1: #bc7a41;
     --color-2: #6a3d13;
-    --color-3: #b61909;
-    --color-3-trans: #b6190970;
-    --color-3-dark: #a01809;
+    --color-primario: #BD2006;
+    --color-secundario: #C95C04;
+    --color-acentuador: #03A631;
+    --color-primario-translucido: #b6190970;
+    --color-primario-oscuro: #a01809;
     --color-4: #ebcc8c;
     --color-5: #070707;
     --color-6: #1b1b1c;
@@ -37,10 +39,8 @@ label {
     --color-15: #413c36;
 }
 
-.ftco-footer {
-    /* padding: 7em 0; */
-    padding: 3px;
-    height: 50px !important;
+body {
+    background-color: #8f998b !important;
 }
 
 .bg-warning {
@@ -51,58 +51,13 @@ label {
     background-color: var(--bs-warning) !important;
 }
 
-.bg-orange-100 {
-    background-color: #ffe5d0;
-}
 
-.bg-orange-200 {
-    background-color: #fecba1;
-}
+/**Estilos propios**/
 
-.bg-orange-300 {
-    background-color: #feb272;
-}
-
-.bg-orange-400 {
-    background-color: #fd9843;
-}
-
-.bg-orange-500 {
-    background-color: #fd7e14;
-}
-
-.bg-orange-600 {
-    background-color: #ca6510;
-}
-
-.bg-orange-800 {
-    background-color: #653208;
-}
-
-.bg-orange-900 {
-    background-color: #331904;
-}
-
-
-/**Rojo**/
-
-.bg-red-500 {
-    background-color: #dc3545;
-}
-
-.bd-red-700 {
-    background-color: #842029;
-}
-
-.bg-red-900 {
-    background-color: #2c0b0e;
-}
-
-
-/**Sobre escribir **/
-
-.bg-dark {
-    background-color: var(--color-15) !important;
+.fast-food-bg {
+    border: 1px solid var(--color-14) !important;
+    box-shadow: 1px 1px 0px 1px gray;
+    background-color: white !important;
     border-radius: 8px;
     background-image: url(../../assets/images/bg-screen.png);
     background-repeat: no-repeat;
@@ -111,31 +66,72 @@ label {
     background-position-x: right;
 }
 
-div>a i.fa-edit,
+.fast-food-bg .fast-food-big-title {
+    text-align: center;
+    background: var(--color-14) !important;
+    border-radius: 0px 0px 100% 100% !important;
+    font-size: 1.3em !important;
+    color: white !important;
+}
+
+.fast-food-form-button {
+    color: white !important;
+    background-color: var(--color-primario) !important;
+}
+
+.fast-food-form-button:hover {
+    box-shadow: 0px 0px 5px 1px red;
+}
+
+.fast-food-secondary-button {
+    color: white !important;
+    background-color: var(--color-secundario) !important;
+    margin-right: 1px;
+}
+
+.fast-food-secondary-button:hover {
+    box-shadow: 0px 0px 5px 1px orangered;
+}
+
+.fast-food-table {
+    background-color: white !important;
+}
+
+
+/**
+Sobreescribir estilos **/
+
 div>a i.fa {
-    background-color: #ff0000;
+    background-color: var(--color-secundario);
     border-radius: 40px;
     padding: 5px;
-    border: 1px solid black;
+    border: 1px solid var(--color-primario);
     color: white;
     transition: all .5s ease;
 }
 
 div>a i.fa:hover {
-    border: 1px solid var(--color-3);
-    box-shadow: 0 0 10px var(--color-3);
-    background: linear-gradient( to bottom left, var(--color-3), var(--color-1));
+    border: 1px solid var(--color-primario);
+    box-shadow: 0 0 10px var(--color-primario);
+    background: linear-gradient( to bottom left, var(--color-primario), var(--color-1));
 }
 
 .form-control:focus {
-    box-shadow: 0 0 0px 7px var(--color-3-trans) !important;
+    box-shadow: 0 0 0px 7px var(--color-primario-translucido) !important;
 }
+
+input[readonly] {
+    background-color: #9b9a9a !important;
+}
+
+
+/**Boton de retroceso **/
 
 .backward-button {
     border-radius: 0 100% 100% 0;
     padding: 18px;
     position: fixed;
-    background-color: var(--color-3-dark);
+    background-color: var(--color-primario-oscuro);
     color: white;
     font-weight: bold;
     border: none;
@@ -145,7 +141,23 @@ div>a i.fa:hover {
 }
 
 .backward-button:hover {
-    background-color: var(--color-3);
-    box-shadow: 0 0 10px var(--color-3-dark);
+    background-color: var(--color-primario);
+    box-shadow: 0 0 10px var(--color-primario-oscuro);
     font-size: calc(1em + 5px);
+}
+
+
+/***
+Unidad de medida de producto **/
+
+.MEDIDA {
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color: var(--color-secundario) !important;
+    position: relative;
+    z-index: 1;
+    top: 1px;
+    color: white;
+    border-radius: 0px 0px 8px 8px;
+    text-align: center;
 }

@@ -7,7 +7,7 @@
 
 
 
- <table class="table table-hover table-striped bg-warning">
+ <table class="table table-hover table-striped fast-food-table">
      <thead class="thead-dark">
          <tr>
              <th></th>

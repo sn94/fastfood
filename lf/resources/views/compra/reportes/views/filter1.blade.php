@@ -41,14 +41,14 @@ table{
 
 
 
-<table class="table table-hover table-striped bg-warning">
+<table class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
         <tr>
 
             <th>SUC.</th>
             <th>COMPRA</th>
             <th>FECHA</th>
-            <th>DESCRIPCIÓN</th>
+            <th>Descripción</th>
             <th>TIPO</th>
             <th>P.VENTA</th>
             <th>P.COSTO</th>
@@ -88,7 +88,7 @@ table{
 @if( method_exists($COMPRAS, "links"))
 {{ $COMPRAS->links('vendor.pagination.default') }}
 @if(  sizeof( $COMPRAS ) == 0)
-<p class="text-center p-2 bg-warning text-dark">Sin registros</p>
+<p class="text-center p-2 fast-food-table text-dark">Sin registros</p>
 @endif
 @endif
 

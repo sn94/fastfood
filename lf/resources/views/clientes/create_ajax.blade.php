@@ -10,11 +10,11 @@ $QUERY_FLAG =  $MODULO_FLAG != "c"  ? ""  :    "?m=$MODULO_FLAG";
 <input type="hidden" id="CLIENTES-INDEX" value="{{url('clientes'.$QUERY_FLAG)}}">
 
 
-<div class="container-fluid bg-dark text-light col-12 col-md-6 mt-1">
+<div class="container-fluid fast-food-bg   col-12 col-md-6 mt-1">
 
         
 
-        <h2 class="text-center mt-2">Ficha de cliente</h2>
+        <h3 class="fast-food-big-title">Ficha de cliente</h3>
 
         <form id="FORM-CLIENTE" action="{{url('clientes'.$QUERY_FLAG)}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
 

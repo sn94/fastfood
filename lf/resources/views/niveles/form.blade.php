@@ -16,15 +16,15 @@
 
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
- <div class="row bg-dark   pt-2 ">
+ <div class="row fast-food-bg   pt-2 ">
      <div class="col-12 col-md-8 " style="display: flex;flex-direction: row;">
-         <label style="color: white !important;"  class="pr-1">DESCRIPCIÓN: </label>
-         <input style="color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="DESCRIPCION" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />
+         <label    class="pr-1">Descripción: </label>
+         <input style="height: 30px !important; width: 100%;" name="DESCRIPCION" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />
      </div>
 
 
      <div class="col-12  col-md-4  d-flex justify-content-center ">
-         <button style="height: 30px !important;" type="submit" class="btn btn-warning ">GUARDAR</button>
+         <button style="height: 30px !important;" type="submit" class="btn btn-warning ">Guardar</button>
      </div>
 
 

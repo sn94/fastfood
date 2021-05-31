@@ -6,14 +6,14 @@
         padding-right: 2px;
     }
 </style>
-<table class="table bg-warning bg-gradient    text-dark">
+<table class="table fast-food-table bg-gradient    text-dark">
 
     <thead style="font-family: mainfont;font-size: 18px;">
         <tr>
             <th></th>
             <th></th>
             <th>ID</th>
-            <th>DESCRIPCIÓN</th>
+            <th>Descripción</th>
             <th>POSICION N°</th>
         </tr>
     </thead>

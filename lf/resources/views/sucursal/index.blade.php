@@ -16,8 +16,8 @@ Sucursales
 
 
 
-<div class="container col-12 col-md-6 bg-dark text-light">
-<h2 class="text-center mt-2"  >Ficha de Sucursales</h2>
+<div class="container mt-1 col-12 col-md-6 fast-food-bg  ">
+<h3 class="fast-food-big-title"  >Ficha de Sucursales</h3>
 
  
 

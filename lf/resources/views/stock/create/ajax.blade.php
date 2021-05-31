@@ -13,7 +13,7 @@ $QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  "";
 
 
 
-<form class=" text-light    bg-dark  p-1 rounded" id="STOCKFORM" action="{{url('stock')}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarStock(event)" enctype="multipart/form-data">
+<form class="      fast-food-bg  p-1 rounded" id="STOCKFORM" action="{{url('stock')}}" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarStock(event)" enctype="multipart/form-data">
 
 
     @if( isset($stock) )
@@ -37,7 +37,7 @@ $QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  "";
                         <a class="btn btn-sm  btn-secondary mr-2" href="<?= url("stock$QUERY_FLAG") ?>"> VOLVER </a>
                         <a class="btn btn-secondary btn-sm" href="{{url('stock/create'.$QUERY_FLAG)}}">NUEVO</a>
                         @endif
-                        <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
+                         <button type="submit" class="btn fast-food-form-button">Guardar</button>
 
                     </div>
                 </div>
@@ -47,7 +47,7 @@ $QUERY_FLAG =  $MODULO_FLAG == "c" ? "?m=c"  :  "";
         <!--End Botones -->
 
         <div class="col-12 col-md-4">
-            <h3 class="text-center ">Ficha de Stock</h3>
+            <h3 class="fast-food-big-title" >Ficha de Stock</h3>
         </div>
     </div>
 

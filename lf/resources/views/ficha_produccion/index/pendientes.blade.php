@@ -1,4 +1,4 @@
-<table class="table table-striped table-hover  bg-warning">
+<table class="table table-striped table-hover  fast-food-table">
     <thead>
         <tr>
             <th></th> 

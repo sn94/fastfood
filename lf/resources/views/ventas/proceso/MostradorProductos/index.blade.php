@@ -7,52 +7,8 @@
 
   ?>
 
-
-
- <style>
-
-
-.nav-tabs {
-  background-color:  var(--color-3) !important;
-}
-
-   .nav-tabs .nav-item.show .nav-link,
-   .nav-tabs .nav-link.active {
-     color: #ff0000 !important;
-     background-color: white !important;
-   }
-
-   .nav-tabs .nav-link {
-     color: white !important;
-     background-color:  var(--color-3) !important;
-     border: 1px solid #f90000c7 !important;
-   }
-
-   .nav-link {
-     color: #910808 !important;
-     font-weight: 600 !important;
-   }
-
-   .nav-tabs .nav-link:focus,
-   .nav-tabs .nav-link:hover {
-     background: #2d2928 !important;
-     color: white !important;
-   }
-
-
-
- 
-
-
- </style>
-
-
  @include("ventas.proceso.MostradorProductos.filtrar_productos")
-
- @include("ventas.proceso.MostradorProductos.CuadriculaProductos.item.estilos")
-
-
-
+ 
 
 
 

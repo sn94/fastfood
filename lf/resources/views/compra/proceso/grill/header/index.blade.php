@@ -24,7 +24,7 @@
     <div class="col-12  col-sm-4 col-md-2 col-lg-2  ">
 
         <label style="width: 200px !important;" class="pr-1 ">PRECIO UNIT.: </label>
-        <input onkeydown="if(event.keyCode==13) {event.preventDefault(); compraObj.cargar_tabla();}" id="COMPRA-PRECIO" class="form-control form-control-sm entero text-end" type="text" />
+        <input onfocus="if(this.value=='0') this.value='';"  onblur="if(this.value=='') this.value= '0';" onkeydown="if(event.keyCode==13) {event.preventDefault(); compraObj.cargar_tabla();}" id="COMPRA-PRECIO" class="form-control form-control-sm entero text-end" type="text" />
 
 
     </div>

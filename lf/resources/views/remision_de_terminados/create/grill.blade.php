@@ -1,16 +1,4 @@
-<style>
-    #ITEM-MEDIDA {
-        font-weight: 600;
-        letter-spacing: 1px;
-        background-color: var(--color-3);
-        position: relative;
-        z-index: 1;
-        top: -100%;
-        color: white;
-        border-radius: 8px 8px 0px 0px;
-        text-align: center;
-    }
-</style>
+ 
 
 <div class="row">
 
@@ -36,7 +24,7 @@
         <div style="display: flex; flex-direction: column;">
       
             <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="grid-column-start: 2;width: 90px !important;" id="CANTIDAD" class="form-control decimal fs-6" type="text" />
-            <label id="ITEM-MEDIDA"></label>
+            <label class="MEDIDA" id="ITEM-MEDIDA"></label>
         </div>
         <a style="display: flex; flex-direction: row; align-items: flex-end;" href="#" onclick="cargar_tabla()"><i class="fa fa-download"></i></a>
 

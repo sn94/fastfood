@@ -131,7 +131,7 @@
 
 <div class="row">
     <div class="col-12">
-        <label style="font-family: Arial, Helvetica, sans-serif; color: white;font-weight: 600;" for="">ARRASTRA A LA POSICIÓN DESEADA (ESTA DISPOSICIÓN SE APLICARÁ EN LA PANTALLA DE VENTAS)</label>
+        <label style="font-family: Arial, Helvetica, sans-serif; font-weight: 600;" for="">ARRASTRA A LA POSICIÓN DESEADA (ESTA DISPOSICIÓN SE APLICARÁ EN LA PANTALLA DE VENTAS)</label>
         <div id="DRAGGABLE-BUTTONS" class="container-fluid m-0">
 
             @php
@@ -152,7 +152,7 @@
             @endforeach
         </div>
         <div>
-            <button onclick="guardarPosiciones()" class="btn btn-sm btn-success" type="button">GUARDAR POSICIONES</button>
+            <button onclick="guardarPosiciones()" class="btn btn-sm btn-success" type="button">Guardar POSICIONES</button>
         </div>
     </div>
 </div>

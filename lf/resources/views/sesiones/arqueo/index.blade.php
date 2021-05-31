@@ -21,10 +21,10 @@ Arqueo de caja {{date('d-m-Y')}}
 
 <div id="loaderplace">
 </div>
-<div class="container col-12 col-md-10 col-lg-7 bg-dark mt-0 mb-0  mt-md-0 mb-md-0 mt-lg-3 mb-lg-3 pb-5">
+<div class="container col-12 col-md-10 col-lg-7 fast-food-bg mt-0 mb-0  mt-md-0 mb-md-0 mt-lg-3 mb-lg-3 pb-5">
 
 <input type="hidden" value="<?= url("sesiones/informe-arqueo/" . session("SESION")) ?>"  id="INFORME-LINK">
-    <button onclick="guardar()" id="BOTON-GUARDAR" class="btn btn-danger btn-sm" type="button">CERRAR SESIÓN</button>
+    <button onclick="guardar()" id="BOTON-Guardar" class="btn btn-danger btn-sm" type="button">CERRAR SESIÓN</button>
     <button id="BOTON-ARQUEO" onclick="imprimirArqueo()" class="btn btn-success btn-sm d-none" type="button">GENERAR INFORME DE ARQUEO</button>
     @include("sesiones.arqueo.form")
 
@@ -36,7 +36,7 @@ Arqueo de caja {{date('d-m-Y')}}
     async function guardar() {
         //config_.processData= false; config_.contentType= false;
         
-        $("#BOTON-GUARDAR").prop("disabled", true);
+        $("#BOTON-Guardar").prop("disabled", true);
         show_loader();
         let req = await fetch(  "<?=url("sesiones/cerrar/".$SESION->REGNRO)?>" , {
             method: "POST",
@@ -51,14 +51,14 @@ Arqueo de caja {{date('d-m-Y')}}
         if ("ok" in resp) {
             alert(resp.ok);
             $("#BOTON-ARQUEO").removeClass("d-none");
-            $("#BOTON-GUARDAR").addClass("d-none");
+            $("#BOTON-Guardar").addClass("d-none");
 
             //Index sesiones limitada a listar solo las propias
             window.location = "<?= url("sesiones?m=c") ?>";
 
         } else {
-            $("#BOTON-GUARDAR").removeClass("d-none");
-            $("#BOTON-GUARDAR").prop("disabled", false);
+            $("#BOTON-Guardar").removeClass("d-none");
+            $("#BOTON-Guardar").prop("disabled", false);
             $("#BOTON-ARQUEO").addClass("d-none");
             alert(resp.err);
         }

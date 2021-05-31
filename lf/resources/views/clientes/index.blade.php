@@ -38,17 +38,17 @@ Clientes
 
 
 
-<div class="container-fluid bg-dark text-light col-12 col-md-12 col-lg-10 col-xl-8 pb-5">
-    <h2 class="text-center mt-2" >Ficha de Clientes</h2>
+<div class="container-fluid mt-1 fast-food-bg   col-12 col-md-12 col-lg-10 col-xl-8 pb-5">
+    <h3 class="fast-food-big-title" >Ficha de Clientes</h3>
 
     <div id="loaderplace"></div>
 
     <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarClientes()">
-        <a class="btn btn-sm btn-warning" href="<?= url("clientes/create".$QUERY_FLAG) ?>"> NUEVO</a>
+        <a class="btn fast-food-form-button" href="<?= url("clientes/create".$QUERY_FLAG) ?>"> NUEVO</a>
 
         <div class="pr-2" style="display: flex;flex-direction: row;justify-content: flex-end;align-items: baseline;">
-            <label style="font-weight: 600; color: white;">POR CIUDAD:</label>
-            <x-city-chooser onChange="buscarClientes()" name="CIUDAD" clase="form-control" style="padding: 0px !important; font-size: 13px !important;color: white;background: white !important;color: black !important;height: 25px !important;" value="" />
+            <label style="font-weight: 600; ">POR CIUDAD:</label>
+            <x-city-chooser onChange="buscarClientes()" name="CIUDAD" clase="form-control" style="padding: 0px !important; font-size: 13px !important;background: white !important;height: 25px !important;" value="" />
         </div>
     </x-search-report-downloader>
     <div class="mt-2" id="grill" style="min-height: 300px;">

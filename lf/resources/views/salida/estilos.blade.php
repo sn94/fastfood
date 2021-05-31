@@ -1,9 +1,5 @@
 <style>
-    label {
-        font-size: 14px !important;
-        color: white;
-    }
- 
+    
 
 
     .form-control {
@@ -18,11 +14,7 @@
         background-color: #7d7d7d !important;
     }
 
-    .MEDIDA {
-        color: #222;
-        font-weight: 600;
-    }
-
+    
     
 
 

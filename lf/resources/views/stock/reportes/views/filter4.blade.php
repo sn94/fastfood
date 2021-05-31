@@ -79,13 +79,13 @@ width: 50px;
 
 
 
-<table class="table table-hover table-striped bg-warning">
+<table class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
 
         <tr>
             <th class="text-center">N° LOCAL</th>
             <th>LOCAL</th>
-            <th style="text-align: left;">DESCRIPCIÓN</th>
+            <th style="text-align: left;">Descripción</th>
             <th>TIPO</th>
             <th class="text-center">FAMILIA</th>
             <th class="text-center" >STOCK</th>

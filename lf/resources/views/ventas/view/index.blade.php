@@ -11,8 +11,8 @@ use App\Helpers\Utilidades;
 
 
 
-<div class="container-fluid bg-dark text-light col-12 col-lg-10  pb-5 mt-2 ">
-    <h3 class="text-center">Venta N° {{ $HEADER->REGNRO}}</h3>
+<div class="container-fluid fast-food-bg   col-12 col-lg-10  pb-5 mt-2 ">
+    <h3 class="fast-food-big-title" >Venta N° {{ $HEADER->REGNRO}}</h3>
 
     <div class="container bg-light text-dark">
         <div class="row">

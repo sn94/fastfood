@@ -19,15 +19,15 @@ Familias
 
 
 
-<div class="container col-12 col-sm-12 col-md-8 col-lg-8  bg-dark ">
-    <h3 class="text-center mt-2 p-0 text-light"  >Ficha de Familia de productos</h3>
+<div class="container mt-1 col-12 col-sm-12 col-md-8 col-lg-8  fast-food-bg ">
+    <h3 class="fast-food-big-title"   >Ficha de Familia de productos</h3>
 
 
 
     <div id="loaderplace"></div>
 
 
-<button id="BOTON-NUEVO"    onclick="$(this).addClass('d-none'); $('#form').removeClass('d-none');" type="button" class="btn btn-warning">NUEVO</button>
+<button id="BOTON-NUEVO"    onclick="$(this).addClass('d-none'); $('#form').removeClass('d-none');" type="button" class="btn fast-food-form-button">NUEVO</button>
     <div id="form" class="d-none">
         @include("familia.create")
        

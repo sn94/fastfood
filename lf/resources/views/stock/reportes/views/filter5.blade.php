@@ -94,7 +94,7 @@ $STOCK =   isset($datalist) ? $datalist : $STOCK;
 
 
 
-<table class="table table-hover table-striped bg-warning">
+<table class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
 
         <tr>
@@ -102,7 +102,7 @@ $STOCK =   isset($datalist) ? $datalist : $STOCK;
             <th>LOCAL</th>
             <th class="text-center">FECHA</th>
             <th class="text-center">SALIDA N°</th>
-            <th style="text-align: left;">DESCRIPCIÓN</th>
+            <th style="text-align: left;">Descripción</th>
             <th>TIPO</th>
           
             <th class="text-center">CANTIDAD</th>

@@ -6,7 +6,7 @@ padding-right: 2px;
     }
 </style>
 <div class="table-responsive"   style="height: 350px;">
-<table class="table bg-warning bg-gradient    text-dark">
+<table class="table fast-food-table bg-gradient    text-dark">
 
     <thead style="font-family: mainfont;font-size: 18px;">
         <tr>

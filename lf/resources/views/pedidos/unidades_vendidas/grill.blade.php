@@ -45,18 +45,24 @@ use App\Models\Nota_pedido_detalles;
     }
 </style>
 
+@if( isset($print_mode))
+@include("templates.print_report")
+<h4>Unidades vendidas para {{ $fecha}} </h4>
+@endif
 
-
-<table id="PEDIDOS-TABLE" class="table table-hover table-striped bg-warning">
+<table id="PEDIDOS-TABLE" class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
         <tr>
-            <th>ID</th>
-            <th>CÓDIGO</th>
-            <th>BARCODE</th>
-            <th>DESCRIPCIÓN</th>
-        
-            <th>STOCK</th>
-            <th></th> 
+            <th>Id</th>
+            <th>Código</th>
+            <th>Barcode</th>
+            <th>Descripción</th>
+<th>Fecha Venta</th>
+            <th>Vendido</th>
+  
+            @if( !isset($print_mode))
+            <th></th>
+            @endif
 
         </tr>
     </thead>
@@ -66,7 +72,7 @@ use App\Models\Nota_pedido_detalles;
         @foreach( $PRODUCTOS as $ven)
 
         @if( $ven->TIPO != "COMBO")
-        
+
 
         <tr>
 
@@ -74,19 +80,20 @@ use App\Models\Nota_pedido_detalles;
             <td>{{$ven->CODIGO}}</td>
             <td>{{$ven->BARCODE}}</td>
             <td>{{$ven->DESCRIPCION}}</td>
-            
+            <td>{{ $ven->FECHA->format('d/m/Y') }}</td>
+
 
             <td>
-                {{$ven->CANTIDAD}}
-                
-                <span class="badge bg-success text-end">{{ $ven->MEDIDA}}</span>
+                {{$ven->CANTIDAD_VENDIDA}}
+                <span class="badge bg-success text-end">{{ $ven->UNIDAD_MEDIDA}}</span>
             </td>
-
+          
+            @if( !isset($print_mode))
             <td>
-                <a href="{{url('pedidos/create/'.$ven->REGNRO)}}" onclick="mostrar_form(event)" class="btn btn-sm btn-danger">PEDIR</a>
+                <a href="{{url('pedidos/create/'.$ven->REGNRO.'/'.$ven->CANTIDAD_VENDIDA)}}" onclick="mostrar_form(event)" class="btn btn-sm btn-danger">PEDIR</a>
             </td>
+            @endif
 
-            
 
         </tr>
         @endif

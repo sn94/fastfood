@@ -4,7 +4,7 @@
 
 
 
- <div class="container col-12 col-md-12 col-lg-10 bg-dark text-light mt-1 pt-3 pb-lg-5 ">
+ <div class="container col-12 col-md-12 col-lg-10 fast-food-bg   mt-1 pt-3 pb-lg-5 ">
 
 
    @include("validations.formato_numerico")
@@ -16,7 +16,7 @@
    <x-fast-food-modal id="PEDIDO-MODAL" title="CONFIRMAR PEDIDO" />
  
 
-   <h4 class="text-center">Pedidos de Sucursales</h4>
+   <h3 class="fast-food-big-title">Pedidos de Sucursales</h3>
 
    <div class="container-fluid mb-5 pb-5" id="grill">
 

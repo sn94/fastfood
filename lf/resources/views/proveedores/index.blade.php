@@ -1,5 +1,4 @@
 @extends("templates.admin.index")
-
 @section("PageTitle")
 Proveedores
 @endsection
@@ -14,17 +13,17 @@ Proveedores
 
 
 
-<div class="container-fluid bg-dark text-light col-12 col-md-12 col-lg-10 col-xl-8 pb-5 mb-5">
+<div class="container-fluid mt-1 fast-food-bg   col-12 col-md-12 col-lg-10 col-xl-8 pb-5 mb-5">
 
-    <h2 class="text-center mt-2">Ficha de Proveedores</h2>
+    <h3 class="fast-food-big-title">Ficha de Proveedores</h3>
 
     <div id="loaderplace"></div>
     <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarProveedores()">
-        <a class="btn btn-sm btn-warning" href="<?= url("proveedores/create") ?>"> NUEVO</a>
+        <a class="btn fast-food-form-button" href="<?= url("proveedores/create") ?>"> NUEVO</a>
 
         <div class="pr-2" style="display: flex;flex-direction: row;justify-content: flex-end;align-items: baseline;">
-            <label style="font-weight: 600; color: white;">POR CIUDAD:</label>
-            <x-city-chooser onChange="buscarProveedores()" name="CIUDAD" clase="form-control" style="padding: 0px !important; font-size: 13px !important;color: white;background: white !important;color: black !important;height: 25px !important;" value="" />
+            <label style="font-weight: 600;">POR CIUDAD:</label>
+            <x-city-chooser onChange="buscarProveedores()" name="CIUDAD" clase="form-control" style="padding: 0px !important; font-size: 13px !important;background: white !important;height: 25px !important;" value="" />
         </div>
     </x-search-report-downloader>
 

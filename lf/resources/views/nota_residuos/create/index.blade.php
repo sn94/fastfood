@@ -38,9 +38,9 @@ $CONCEPTO= isset($NOTA_RESIDUO) ?   $NOTA_RESIDUO->CONCEPTO  :  '' ;
 
 </style>
 
-<div class="container-fluid bg-dark text-light col-12 col-md-10 col-lg-8 px-5 pb-5">
+<div class="container-fluid mt-1 fast-food-bg   col-12 col-md-10 col-lg-8 px-5 pb-5">
 
-    <h2 class="text-center mt-2">Nota de residuos</h2>
+    <h3 class="fast-food-big-title">Nota de residuos</h3>
     <div id="loaderplace"></div>
 
     <form action="<?= $actionUrl ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
@@ -87,7 +87,7 @@ $CONCEPTO= isset($NOTA_RESIDUO) ?   $NOTA_RESIDUO->CONCEPTO  :  '' ;
                             <input  value="{{$CONCEPTO}}" name="CONCEPTO" class="form-control mt-1  fs-6" type="text" />
                         </div>
                         <div class="col-12 col-md-2  mb-1  d-flex align-items-end">
-                            <button type="submit" class="btn btn-danger"> GUARDAR</button>
+                             <button type="submit" class="btn fast-food-form-button"> Guardar</button>
                         </div>
                     </div>
                 </div>

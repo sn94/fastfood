@@ -16,8 +16,8 @@ Cajas
 
 
 
-<div class="container col-12 col-md-4  bg-dark text-light">
-    <h3 class="text-center mt-2"  >Ficha de Cajas</h3>
+<div class="container mt-1 col-12 col-md-4  fast-food-bg">
+    <h3 class="fast-food-big-title"   >Ficha de Cajas</h3>
     <div id="loaderplace"></div>
 
     <div id="form">

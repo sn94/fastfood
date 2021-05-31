@@ -28,7 +28,7 @@
 
      <div class="col-12 col-md-5">
 
-         <label class="pr-2">DESCRIPCIÓN: </label>
+         <label class="pr-2">Descripción: </label>
          <input name="DESCRIPCION" class="form-control" type="text" maxlength="80" value="{{$DESCRIPCION}}" />
 
      </div>
@@ -41,7 +41,7 @@
 
      <div class="col-12  col-md-2 d-flex align-items-end">
 
-         <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
+          <button type="submit" class="btn fast-food-form-button">Guardar</button>
      </div>
  </div>
  @include("validations.form_validate")

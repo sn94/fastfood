@@ -10,8 +10,8 @@ Turnos
 <input type="hidden" id="GRILL-URL" value="{{url('turno')}}">
 <input type="hidden" id="GRILL-URL-CUSTOM" value="{{url('turno/buscar')}}">
 
-<div class="container col-12 col-md-6 bg-dark text-light">
-    <h3 class="text-center mt-2">Fichas de Turnos</h3>
+<div class="container mt-1 col-12 col-md-6 fast-food-bg  ">
+    <h3 class="fast-food-big-title" >Fichas de Turnos</h3>
     <div id="loaderplace"></div>
     <div id="form">
         @include("turno.create")

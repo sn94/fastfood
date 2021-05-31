@@ -21,7 +21,7 @@
                 <div class="d-flex flex-column ">
 
                     <input onkeydown="if(event.keyCode==13) {event.preventDefault(); ingredientes_controller.cargar_tabla();}" class="form-control decimal CANTIDAD " type="text" />
-                    <label class="MEDIDA text-light"></label>
+                    <label class="MEDIDA  "></label>
 
                 </div>
                 <div class="d-flex">
@@ -38,7 +38,7 @@
                     <thead>
                         <tr style="font-size: 14px;">
                             <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN</th>
+                            <th>Descripción</th>
                             <th>UNI.MED.</th>
                             <th> CANTIDAD</th>
                             <th></th>

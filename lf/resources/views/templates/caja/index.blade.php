@@ -1,13 +1,16 @@
  @extends("templates.app")
 
- <input type="hidden"  id="fast-food-identification-for-module-context"  value="CAJA">
+ @section("cssStyles")
+ @yield("cssStyles")
+ @endsection
 
- 
  @section("menu")
  @include("templates.caja.menu")
  @endsection
 
- @section("content")
+ 
+ @section("contenido")
+ <input type="hidden"  id="fast-food-identification-for-module-context"  value="CAJA">
  @yield("content")
  @endsection
 

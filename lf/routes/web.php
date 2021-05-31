@@ -304,16 +304,22 @@ Route::group(['prefix' => 'compra', 'middleware' => ['auth.Caja']],   function (
 
 Route::group(['prefix' => 'pedidos', 'middleware' => ['auth.Caja']],   function () {
     Route::get('/unidades-vendidas',   'PedidosController@unidades_vendidas'); //lista los productos vendidos por cantidad, con opcion de pedido y control de pedido
+    Route::post('/unidades-vendidas',   'PedidosController@unidades_vendidas'); //lista los productos vendidos por cantidad, con opcion de pedido y control de pedido
 
     Route::get('/sucursales',   'PedidosController@sucursales');
     Route::get('/realizados',   'PedidosController@realizados');
+    Route::post('/realizados',   'PedidosController@realizados');
     Route::get('/create/{STOCKID}',   'PedidosController@create');
+    Route::get('/create/{STOCKID}/{VENDIDOS}',   'PedidosController@create');
     Route::post('/create',   'PedidosController@create');
+    Route::get('/editar/{PEDIDOID}',   'PedidosController@editar');
     Route::get('/recibir/{PEDIDOID}',   'PedidosController@recibir');
     Route::post('/recibir',   'PedidosController@recibir');
    
     Route::get('/aprobar/{id}',   'PedidosController@aprobar');
     Route::post('/aprobar',   'PedidosController@aprobar');
+    Route::get('/editar/{STOCKID}',   'PedidosController@editar');
+    Route::post('/editar',   'PedidosController@editar');
 });
 
 
@@ -379,6 +385,7 @@ Route::prefix('remision-prod-terminados')->group(function () {
 
 Route::prefix('ventas')->group(function () {
     Route::get('/index',   'VentasController@index');
+    Route::post('/index',   'VentasController@index');
     Route::get('/filtrar',   'VentasController@filtrar');
     Route::get('/filtrar/{filtro}',   'VentasController@filtrar');
     Route::post('/filtrar',   'VentasController@filtrar');

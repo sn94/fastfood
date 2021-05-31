@@ -37,7 +37,7 @@
 
 
     <div class="col col-lg-1 pb-0  d-flex  align-items-center">
-        <button onclick="filtrar()" class="btn btn-warning btn-sm">Buscar</button>
+        <button onclick="filtrar()" class="btn fast-food-form-button btn-sm">Buscar</button>
     </div>
 </div>
 

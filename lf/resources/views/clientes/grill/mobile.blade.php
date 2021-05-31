@@ -5,10 +5,10 @@
          <li class="list-group-item">
              <b> CI°:</b> &nbsp; {{$cli->CEDULA_RUC}} &nbsp; {{$cli->NOMBRE}}
              <div style="display: grid;grid-template-columns: 50% 50%;">
-                 <a class="ml-3 mr-3 btn btn-sm btn-warning" style="color: black;" href="{{url('clientes/update').'/'.$cli->REGNRO}}">
-                 EDITAR <i class="fas fa-edit"></i></a>
-                 <a class="ml-3 mr-3  btn btn-sm btn-warning"  onclick="delete_row(event)" style="color: black;" href="{{url('clientes').'/'.$cli->REGNRO}}">
-                 BORRAR <i class="fa fa-trash"></i></a>
+                 <a style="text-decoration: none;" class="ml-3 mr-3 text-dark fw-bold btn btn-warning" style="color: black;" href="{{url('clientes/update').'/'.$cli->REGNRO}}">
+                 Editar <i class="fas fa-edit"></i></a>
+                 <a style="text-decoration: none;" class="ml-3 mr-3 text-dark fw-bold btn btn-warning "  onclick="delete_row(event)" style="color: black;" href="{{url('clientes').'/'.$cli->REGNRO}}">
+                 Borrar <i class="fa fa-trash"></i></a>
 
              </div>
 

@@ -7,18 +7,18 @@
 
  @section("content")
 
- <div class="container-fluid col-12 col-md-12 col-lg-10 col-xl-8 bg-dark pb-5">
-     <h2 class="text-center mt-2 text-light">Notas de residuo</h2>
+ <div class="container-fluid mt-1 col-12 col-md-12 col-lg-10 col-xl-8 fast-food-bg pb-5">
+     <h3 class="fast-food-big-title">Notas de residuo</h3>
 
      <div id="loaderplace"></div>
 
-     <a class="btn btn-warning mb-1" href="{{url('nota-residuos/create')}}">NUEVA NOTA DE RESIDUO</a>
+     <a class="btn fast-food-form-button mb-1" href="{{url('nota-residuos/create')}}">NUEVA NOTA DE RESIDUO</a>
 
 
      <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarNotaResiduos()" showSearcherInput="N">
        
    
-     <div class="row pt-1 text-light w-100">
+     <div class="row pt-1   w-100">
 
 
 <div class="col-12  col-md-3  pb-0">

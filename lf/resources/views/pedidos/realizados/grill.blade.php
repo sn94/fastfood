@@ -6,22 +6,29 @@
  </style>
 
 
+ @if( isset($print_mode))
+ @include("templates.print_report")
+ <h4>Pedidos realizados el {{ $fecha}} </h4>
+ @endif
 
- <table class="table table-hover table-striped bg-warning">
+
+ <table class="table table-hover table-striped fast-food-table">
      <thead class="thead-dark">
          <tr>
-         <th></th>
-         <th>Estado</th>
-            
+             <th></th>
+             <th>Estado</th>
+
+             <th></th>
              <th class="text-center">Pedido N°</th>
              <th>Fecha</th>
+             <th>Venta</th>
              <th>Descripción</th>
              <th>Pedido</th>
              <th>Aceptado</th>
              <th>Solicitado por</th>
              <th>Recibido por</th>
              <th>Observación</th>
-            
+
 
          </tr>
      </thead>
@@ -33,7 +40,13 @@
 
          <tr>
 
-         <td>
+             <td>
+                 @if( $pedido->ESTADO == "P")
+                 <a onclick="mostrar_form(event)" href="{{url('pedidos/editar/'.$pedido->NPEDIDO_ID)}}" class="btn btn-sm btn-success">Editar</a>
+                 @endif
+
+             </td>
+             <td>
 
                  <!--Pendiente Aceptado Finalizado -->
                  @if( $pedido->ESTADO == "A")
@@ -43,7 +56,7 @@
 
              </td>
 
-         <td>
+             <td>
                  @php
                  $colorEstado= ($pedido->ESTADO == "A" ? "text-success fw-bold" :
                  ($pedido->ESTADO == "P" ? "text-danger fw-bold" : ( $pedido->ESTADO == "R" ? "text-dark fw-bold" : "" ) ));
@@ -62,27 +75,28 @@
                  <span class="{{$colorEstado}}">
                      {{ $textState }}</span>
              </td>
-             
+
 
              <td class="text-center">{{$pedido->REGNRO}}</td>
              <td>{{$pedido->FECHA->format('d/m/Y')}}</td>
+             <td>{{ is_null($pedido->FECHA_VENTA) ? '': $pedido->FECHA_VENTA->format('d/m/Y')}}</td>
              <td>{{$pedido->DESCRIPCION}}</td>
              <td>
                  {{$pedido->CANTIDAD}} {{ $pedido->MEDIDA}}
 
              </td>
              <td>
-             @if( $pedido->ESTADO == "A" ||  $pedido->ESTADO == "F" )
-             
-             {{$pedido->CANT_ACEPTADA}} {{ $pedido->MEDIDA}}
-             @endif 
+                 @if( $pedido->ESTADO == "A" || $pedido->ESTADO == "F" )
+
+                 {{$pedido->CANT_ACEPTADA}} {{ $pedido->MEDIDA}}
+                 @endif
 
              </td>
 
              <td>{{$pedido->SOLICITADO_POR == ''  ?  '' :  $pedido->SOLICITADO_POR}}</td>
              <td>{{ $pedido->RECIBIDO_POR}}</td>
              <td>{{$pedido->OBSERVACION=='' ? '':  $pedido->OBSERVACION}}</td>
-            
+
          </tr>
          @endforeach
 

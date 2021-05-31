@@ -49,11 +49,7 @@ $REGISTRADO_POR= isset($COMPRA) ? $COMPRA->REGISTRADO_POR : session("ID") ;
         background-color: #7d7d7d !important;
     }
 
-    .MEDIDA {
-        color: #222;
-        font-weight: 600;
-    }
-
+ 
     
 
 </style>
@@ -69,10 +65,10 @@ $REGISTRADO_POR= isset($COMPRA) ? $COMPRA->REGISTRADO_POR : session("ID") ;
 @include("buscador.personas", ['TIPO'=>'PROVEEDOR'] )
 
 <div id="loaderplace"></div>
-<div class="container-fluid col-12 col-lg-10 bg-dark text-light pb-5">
+<div class="container-fluid  mt-1 col-12 col-lg-10 fast-food-bg   pb-5">
 
 
-    <h2 class="text-center mt-2">Compras</h2>
+    <h3 class="fast-food-big-title">Compras & Entradas de productos y materia prima</h3>
 
     <form class="mb-5" id="COMPRASFORM" action="{{$create}}" method="{{isset($EDICION)?'PUT':'POST'}}" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardarCompra(event)">
 
@@ -89,7 +85,7 @@ $REGISTRADO_POR= isset($COMPRA) ? $COMPRA->REGISTRADO_POR : session("ID") ;
 
         <div class="col-12  mb-1">
             <a onclick="event.preventDefault(); if(confirm('Cancelar?')) window.location= this.href; " href="{{$index}}" class="btn btn-danger">CANCELAR</a>
-            <button type="submit" class="btn btn-warning"> ACEPTAR</button>
+             <button type="submit" class="btn fast-food-form-button"> ACEPTAR</button>
         </div>
         <!-- CABECERA  --->
        <div class="row">

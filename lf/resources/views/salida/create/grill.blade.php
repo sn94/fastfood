@@ -19,7 +19,7 @@
         @if( isset($DETALLE) )
         Productos, materia prima y otros; solicitados en la ficha de producción
         @endif
-        <table id="SALIDA-TABLE" class="table table-striped table-hover bg-warning text-dark">
+        <table id="SALIDA-TABLE" class="table table-striped table-hover fast-food-table text-dark">
 
             <thead>
                 <tr>

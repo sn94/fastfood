@@ -32,13 +32,13 @@ $STOCK =   isset($datalist) ? $datalist : $STOCK;
 @endif
 
 
-<table class="table table-hover table-striped bg-warning">
+<table class="table table-hover table-striped fast-food-table">
     <thead class="thead-dark">
         <tr>
 
             <th>N° LOCAL</th>
             <th>LOCAL</th>
-            <th>DESCRIPCIÓN</th>
+            <th>Descripción</th>
             <th>TIPO</th>
             <th>N° PEDIDOS</th>
         </tr>
@@ -71,6 +71,6 @@ $STOCK =   isset($datalist) ? $datalist : $STOCK;
 @if( method_exists($STOCK, "links"))
 {{ $STOCK->links('vendor.pagination.default') }}
 @if( sizeof( $STOCK ) == 0)
-<p class="text-center p-2 bg-warning text-dark">Sin registros</p>
+<p class="text-center p-2 fast-food-table text-dark">Sin registros</p>
 @endif
 @endif

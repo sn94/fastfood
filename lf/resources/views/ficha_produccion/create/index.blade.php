@@ -24,17 +24,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
         background-color: var(--color-14) !important;
     }
 
-    .MEDIDA {
-        font-weight: 600;
-        letter-spacing: 1px;
-        background-color: var(--color-3);
-        position: relative;
-        z-index: 1;
-        top: -100%;
-        color: white;
-        border-radius: 8px 8px 0px 0px;
-        text-align: center;
-    }
+   
 
 
 
@@ -107,11 +97,10 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
 
 
-
-<div class="container-fluid pb-5 ">
-    <div class="container col-12 col-md-12 bg-dark text-light pb-5 ">
+ 
+    <div class="container-fluid mt-1 col-12 col-md-12 col-lg-10 fast-food-bg   pb-5 ">
         <div id="loaderplace"></div>
-        <h2 class="text-center mt-2">Ficha de producción</h2>
+        <h3 class="fast-food-big-title">Ficha de producción</h3>
 
 
 
@@ -135,7 +124,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
 
 
                 <div class="col-12 col-md-2  mb-1">
-                    <button type="submit" class="btn btn-danger"> GUARDAR FICHA</button>
+                     <button type="submit" class="btn fast-food-form-button"> Guardar FICHA</button>
                 </div>
                 @include("ficha_produccion.create.header")
 
@@ -155,7 +144,7 @@ $RECIBIDO_POR= isset( $PRODUCCION) ? session("ID") : "";
             </form>
 
     </div>
-</div>
+ 
 
 
 @include("validations.form_validate")

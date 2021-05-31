@@ -34,19 +34,13 @@ Compras
 
 
 <div id="loaderplace"></div>
-<div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light  mb-5 pb-5 ">
+<div class="container-fluid  col-12 col-md-12 col-lg-10 fast-food-bg  mt-2    mb-5 pb-5 ">
 
-  <h3 class="text-center">Compras</h3>
+  <h3 class="fast-food-big-title">Compras</h3>
 
-  <div class="row">
 
-    @include("compra.reportes.graficos.grafico1")
 
-    @include("compra.reportes.graficos.grafico2")
 
-  </div>
-
-  
   <div class=" col-12 col-md-5 pb-0">
     <label> Filtro: </label>
     <select class="form-control form-control-sm" id="FILTRO" onchange="formularioDeFiltro(event)">
@@ -72,12 +66,16 @@ Compras
   <div class="container-fluid p-0 pt-2 pb-2" id="grill">
     @include("compra.reportes.views.filter".$FILTRO)
   </div>
+  <div class="row">
 
+    @include("compra.reportes.graficos.grafico1")
+
+    @include("compra.reportes.graficos.grafico2")
+
+  </div>
 
 </div>
 <script>
-
-
   async function buscarCompras(params) {
 
     let parametros = params;

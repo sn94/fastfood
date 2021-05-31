@@ -11,13 +11,13 @@ $sucursales= isset($datalist) ? $datalist : $sucursales;
 
     }
 </style>
-<table class="table bg-warning bg-gradient    text-dark">
+<table class="table fast-food-table bg-gradient    text-dark">
 
     <thead>
         <tr>
             <th></th>
             <th></th>
-            <th>DESCRIPCIÓN</th>
+            <th>Descripción</th>
             <th></th>
             <th>ORDEN</th>
         </tr>

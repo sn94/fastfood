@@ -36,11 +36,8 @@
 
  <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
-
- <div class="row">
-
-     <div class="col-12 offset-md-2 col-md-8">
-         <div class="row  pb-2 pr-2 pl-2 pr-md-2 pl-md-2">
+ 
+         <div class="row">
 
              <div class="col-12  col-md-4">
                  <label>USUARIO(*): </label>
@@ -124,13 +121,12 @@
              </div>
 
              <div class="col-12 offset-md-4 col-md-4 mt-2 d-flex justify-content-center">
-                 <button type="submit" class="btn btn-warning btn-sm">GUARDAR</button>
+                  <button type="submit" class="btn fast-food-form-button">Guardar</button>
              </div>
 
 
          </div>
-     </div>
- </div>
+       
  @include("validations.form_validate")
  @include("validations.formato_numerico")
 

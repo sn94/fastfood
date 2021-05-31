@@ -1,6 +1,7 @@
 <style>
     table thead tr th,
-    table tbody tr td , table tfoot td{
+    table tbody tr td,
+    table tfoot td {
         padding: 0px !important;
         padding-left: 2px !important;
         padding-right: 2px;
@@ -10,21 +11,42 @@
     .text-end {
         text-align: right;
     }
+
+    h4 {
+        text-align: center;
+    }
 </style>
+
+@if( isset( $print_mode ))
+
+<style>
+    table thead tr th,
+    table tbody tr td {
+        font-size: 11px;
+    }
+</style>
+
+@include("templates.print_report")
+<h4 style="text-align: center;">Sesiones de caja</h4>
+
+@endif
+
 
 
 <?php
 
-$SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
+$SESIONES =  isset($SESIONES) ? $SESIONES :  [];
 ?>
-<table class="table table-hover table-striped text-dark bg-warning">
 
 
-
+<div class="table-responsive" >
+<table class="table table-hover table-striped text-dark fast-food-table table-responsive">
     <thead style="font-family: mainfont;font-size: 18px;">
         <tr>
+            @if( !isset($print_mode) )
             <th></th>
             <th></th>
+            @endif
             <th>Sucursal</th>
             <th>Sesión N°</th>
             <th>Apertura</th>
@@ -55,6 +77,7 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
         $tot_giro += $sesion->TOTAL_GIRO;
         @endphp
         <tr>
+            @if( !isset($print_mode) )
             <td>
                 @if( $sesion->CAJERO == session("ID") || ( session("NIVEL") == "SUPER" ) )
                 @if( $sesion->ESTADO == "A")
@@ -65,10 +88,12 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
                 @endif
             </td>
             <td>
-            <a onclick="enviarArqueoPorEmail(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="text-dark fw-bold">
-            <i class="fa fa-envelope"></i>
-            </a>
+                <a onclick="enviarArqueoPorEmail(event)" href="{{url('sesiones/informe-arqueo/'.$sesion->REGNRO)}}" class="text-dark fw-bold">
+                    <i class="fa fa-envelope"></i>
+                </a>
             </td>
+            @endif
+
             <td>{{$sesion->SUCURSAL}}</td>
 
             <td>{{$sesion->REGNRO}}</td>
@@ -92,7 +117,7 @@ $SESIONES =  isset($datalist) ? $datalist :  $SESIONES;
         <td class="text-end">{{ $tot_giro}}</td>
     </tfoot>
 </table>
-
+</div>
 
 
 <x-pretty-paginator :datos="$SESIONES" callback="buscarSesiones" />

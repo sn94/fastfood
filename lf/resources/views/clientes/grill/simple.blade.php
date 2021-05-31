@@ -30,7 +30,7 @@
 
 
 <h4>{{$titulo}}</h4>
-<table class="table bg-warning bg-gradient    text-dark">
+<table class="table fast-food-table bg-gradient    text-dark">
     <thead style="font-family: mainfont;font-size: 18px;">
         <tr>
 

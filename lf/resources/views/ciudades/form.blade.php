@@ -24,8 +24,8 @@
 
  <div class="row  p-2 ">
      <div class="col-12 col-md-6 " style="display: flex;flex-direction: row;">
-         <label style="color: white !important;"  class="pr-1">DEPART.: </label>
-         <select style="font-size: 12.5px ; color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="departa" class="form-control"   >
+         <label    class="pr-1">DEPART.: </label>
+         <select style="font-size: 12.5px ;height: 30px !important; width: 100%;" name="departa" class="form-control"   >
          @foreach( $departamentos as $depa)
          @if(  $DEPARTA ==  $depa->regnro)
          <option selected value="{{$depa->regnro}}">{{$depa->departa}}</option>
@@ -37,13 +37,13 @@
          </select>
      </div>
      <div class="col-12 col-md-6 " style="display: flex;flex-direction: row;">
-         <label style="color: white !important;"  class="pr-1">NOMBRE: </label>
-         <input style="font-size: 12.5px ; color:black !important;height: 30px !important; width: 100%;background-color: white !important;" name="ciudad" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />
+         <label    class="pr-1">NOMBRE: </label>
+         <input style="font-size: 12.5px ; height: 30px !important; width: 100%;" name="ciudad" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />
      </div>
 
 
      <div class="col-12  col-md-12  d-flex justify-content-center ">
-         <button style="height: 30px !important;" type="submit" class="btn btn-warning ">GUARDAR</button>
+         <button style="height: 30px !important;" type="submit" class="btn fast-food-form-button ">Guardar</button>
      </div>
 
 

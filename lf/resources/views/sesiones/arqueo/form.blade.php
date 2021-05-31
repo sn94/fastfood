@@ -45,10 +45,10 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
 </style>
 
 @if( ! request()->ajax())
-<h4 class="text-center text-light">Arqueo de caja</h4>
+<h4 class="text-center  ">Arqueo de caja</h4>
 @endif 
 
-<table id="tabla0" class="table bg-warning bg-gradient   table-bordered header">
+<table id="tabla0" class="table fast-food-table bg-gradient   table-bordered header">
 <tr >
     <th>Fecha de impresión:</th>
     <td>{{date('d/m/Y')}}</td>
@@ -64,7 +64,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
   </tr>
 </table>
 
-<table id="tabla1"   class="table bg-warning bg-gradient   table-bordered">
+<table id="tabla1"   class="table fast-food-table bg-gradient   table-bordered">
   <thead>
     <tr>
       <th>Venta ID°</th>
@@ -105,7 +105,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
   </tfoot>
 </table>
 
-<table id="tabla2" class="table bg-warning bg-gradient   table-bordered">
+<table id="tabla2" class="table fast-food-table bg-gradient   table-bordered">
   <thead>
     <tr>
       <th colspan="5">VENTAS ANULADAS EN ESTA SESIÓN</th>
@@ -140,7 +140,7 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
 
 
 
-<table id="tabla3" class="table bg-warning bg-gradient   table-bordered">
+<table id="tabla3" class="table fast-food-table bg-gradient   table-bordered">
   <thead>
     <tr>
       <th colspan="4">SUMATORIA DE PRODUCTOS VENDIDOS</th>

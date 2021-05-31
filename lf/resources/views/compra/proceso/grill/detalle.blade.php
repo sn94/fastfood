@@ -29,7 +29,7 @@ $TOTAL_IVA10=0;
             <thead>
                 <tr style="font-family: mainfont;font-size: 18px;">
                     <th class='text-center'>CÓDIGO</th>
-                    <th class='text-center'>DESCRIPCIÓN</th>
+                    <th class='text-center'>Descripción</th>
                     <th class='text-end'>UNI.MED.</th>
                     <th class='text-end'>PRECIO</th>
                     <th class='text-end'> CANTIDAD</th>

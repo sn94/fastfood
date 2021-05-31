@@ -68,9 +68,11 @@ class StockController extends Controller
         elseif ($pventa_orden != "") $valorOrdena = $pventa_orden;
         else $valorOrdena = "DESC";
 
-        $stock =  Stock::orderBy($columnaOrdena,  $valorOrdena)
+        $stock =  Stock::join("stock_existencias", "stock_existencias.STOCK_ID","=","stock.REGNRO")
+        ->orderBy($columnaOrdena,  $valorOrdena)
             ->select(
                 "stock.*",
+                "stock_existencias.CANTIDAD",
                 DB::raw("if( CODIGO is NULL or CODIGO='' , stock.REGNRO, stock.CODIGO) AS CODIGO"),
                 DB::raw("if( BARCODE is NULL or BARCODE='' , stock.REGNRO, stock.BARCODE) AS BARCODE")
             );

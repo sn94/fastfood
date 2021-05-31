@@ -19,7 +19,7 @@
 
  <div class="row  pt-2 ">
      <div class="col-12 col-md-4 "> 
-         <label   class="pr-1">DESCRIPCIÓN: </label>
+         <label   class="pr-1">Descripción: </label>
          <input  name="DESCRIPCION" class="form-control" type="text" maxlength="50" value="{{$DESCRIPCION}}" />
      </div>
      <div class="col-12 col-md-2">
@@ -29,7 +29,7 @@
 
 
      <div class="col-12  col-md-2  d-flex align-items-end ">
-         <button   type="submit" class="btn btn-warning ">GUARDAR</button>
+          <button type="submit" class="btn fast-food-form-button">Guardar</button>
      </div>
 
 

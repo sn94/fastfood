@@ -10,10 +10,10 @@
 
 
     #mymodal .mymodal-close button {
-        border-radius: 20px;
+        border-radius: 100%;
         background-color: red;
         color: white;
-        padding: 5 px;
+        padding: 5px 10px;
     }
 </style>
 <div id="mymodal" class="container-fluid p-1 p-md-5 m-0 d-none">

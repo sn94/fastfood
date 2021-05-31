@@ -5,45 +5,47 @@ use App\Helpers\Utilidades;
 ?>
 
 
-@foreach( $stock as $prov)
+@foreach( $stock as $itemStock)
 
 
-
-@php
-$STOCK_ACTUAL= $prov->ENTRADAS + $prov->ENTRADA_PE + $prov->ENTRADA_RESIDUO -($prov->SALIDAS + $prov->SALIDA_VENTA);
-
-@endphp
 
 <div class="card" style="width: 100%;">
 
 
-    <div class="card-body">
+    <div class="card-body text-dark">
 
         <div class="row">
             <div class="col-6">
-                <img style="width: 100%; height: auto;" src="{{url($prov->IMG)}}" alt="Sin Foto">
+                @php
+
+                $urlDeLaImagen= $itemStock->IMG_EXT_URL == '' ? $itemStock->IMG : $itemStock->IMG_EXT_URL;
+                $urlImagenDefault= url('assets/images/default_food.png');
+                @endphp
+                <img style="width: 100%; height: auto;" src="{{$urlDeLaImagen}}" onerror="this.src='{{$urlImagenDefault}}';" alt="Sin Foto">
             </div>
             <div class="col-6 p-0">
                 <p class="card-text">
-                    <b style="font-size: 12.5px;color:black;">{{$prov->DESCRIPCION}}</b>
-                    <span style="display:block;" class="badge badge-dark"> {{ Utilidades::number_f( $prov->PVENTA) }}</span>
+                    <b style="font-size: 12.5px;color:black;">{{$itemStock->DESCRIPCION}}</b>
+                    <span style="display:block;" class="badge bg-success">Precio de venta:
+                     {{ Utilidades::number_f( $itemStock->PVENTA) }}</span>
 
-                    <b style="font-size: 12px;display:block;">Cód.Barras: {{($prov->BARCODE=='') ? '': $prov->BARCODE}}</b>
+                    <b style="font-size: 12px;display:block;">Cód.Barras: {{($itemStock->BARCODE=='') ? '': $itemStock->BARCODE}}</b>
 
 
-                    @if( $STOCK_ACTUAL<= 0 ) <span class="badge badge-danger">Sin stock </span>
+                    @if( $itemStock->CANTIDAD <= 0 ) <span class="badge bg-danger">Sin stock </span>
                         @else
-                        <span class="badge badge-success">Stock: {{ $STOCK_ACTUAL}} &nbsp; {{$prov->MEDIDA}}(s)</span>
+                        <span class="badge badge-success">Stock: {{ $itemStock->CANTIDAD}} &nbsp;</span>
                         @endif
-
-
                 </p>
 
-                @if( session("NIVEL") == "SUPER"  ||  session("NIVEL") == "GOD" )
-                <a class="btn btn-sm btn-warning p-0" style="color: black;" href="{{url('stock/update').'/'.$prov->REGNRO}}">
-                    <i class="fas fa-edit"></i>EDITAR</a>
-                <a class="btn btn-sm btn-warning p-0" onclick="delete_row(event)" style="color: black;" href="{{url('stock').'/'.$prov->REGNRO}}">
-                    <i class="fa fa-trash"></i>BORRAR</a>
+                @if( session("NIVEL") == "SUPER" || session("NIVEL") == "GOD" )
+                <a class="text-dark p-0"  style="text-decoration: none;" href="{{url('stock/update').'/'.$itemStock->REGNRO}}">
+                    <i class="fas fa-edit"></i>
+                    <span class="fw-bold">Editar</span></a>
+
+
+                <a class="text-dark p-0" style="text-decoration: none;" onclick="delete_row(event)"   href="{{url('stock').'/'.$itemStock->REGNRO}}">
+                    <i class="fa fa-trash"></i><span class="fw-bold">Borrar</span></a>
                 @endif
             </div>
         </div>
@@ -53,6 +55,3 @@ $STOCK_ACTUAL= $prov->ENTRADAS + $prov->ENTRADA_PE + $prov->ENTRADA_RESIDUO -($p
     </div>
 </div>
 @endforeach
-
- 
- 

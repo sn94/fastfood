@@ -37,15 +37,15 @@
     </div>
 
     @endif
-    <div  class="d-flex flex-row" >
+    <div  class="container-fluid m-0 p-0 d-flex flex-row " >
 
-        <div id="search-report-downloader-center-panel" class="d-flex flex-row flex-wrap w-100 justify-content-start" >
+        <div id="search-report-downloader-center-panel" class="d-flex flex-row flex-wrap w-100 align-items-center justify-content-start" >
             {{$slot}}
         </div>
         <div style="display: flex;flex-direction: row;  justify-content: flex-end;align-items: flex-end;">
 
-            <a onclick="dataSearcher.formatoPdf(event)" class="btn btn-sm btn-warning" href="#"><img src="{{url('assets/icons/download.png')}}" />PDF</a>
-            <a onclick="dataSearcher.formatoExcel(event);" class="btn btn-sm btn-warning" href="#"><img src="{{url('assets/icons/download.png')}}" />EXCEL</a>
+            <a onclick="dataSearcher.formatoPdf(event)" class="btn btn-sm fast-food-secondary-button" href="#"><img src="{{url('assets/icons/download.png')}}" />PDF</a>
+            <a onclick="dataSearcher.formatoExcel(event);" class="btn btn-sm fast-food-secondary-button" href="#"><img src="{{url('assets/icons/download.png')}}" />EXCEL</a>
         </div>
     </div>
 

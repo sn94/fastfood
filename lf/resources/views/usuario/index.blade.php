@@ -9,13 +9,13 @@ Usuarios
 <input type="hidden" id="GRILL-URL" value="{{url('usuario')}}">
 <input type="hidden" id="GRILL-URL-CUSTOM" value="{{url('usuario/buscar')}}">
 
-<div class="container-fluid col-12 col-md-10 bg-dark text-light">
-<h2 class="text-center mt-2" >Fichas de usuarios</h2>
+<div class="container-fluid mt-1 col-12 col-md-10 fast-food-bg  ">
+<h3 class="fast-food-big-title" >Fichas de usuarios</h3>
 
 <div id="loaderplace"></div>
  
 <x-search-report-downloader placeholder="BUSCAR POR NOMBRE DE USUARIO, O NOMBRE-APELLIDO" callback="buscarUsuarios()" >
-<a class="btn btn-sm btn-warning" href="<?= url("usuario/create") ?>"> NUEVO</a>
+<a class="btn fast-food-form-button" href="<?= url("usuario/create") ?>"> NUEVO</a>
 
 </x-search-report-downloader>
 <div id="grill"  style="min-height: 300px;"> 

@@ -10,7 +10,7 @@
 @include("templates.print_report")
 <h4  style="text-align: center;">Órdenes de producción</h4>
 @endif
-<table id="FP-TABLE" class="table table-striped table-hover bg-warning text-dark">
+<table id="FP-TABLE" class="table table-striped table-hover fast-food-table text-dark">
     <thead>
         <tr>
             <th></th>

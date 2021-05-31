@@ -28,16 +28,12 @@ Stock
 
 
 <div id="loaderplace"></div>
-<div class="container-fluid  col-12 col-md-12 col-lg-10 bg-dark  mt-2 text-light mb-5 pb-5">
+<div class="container-fluid  col-12 col-md-12 col-lg-10 fast-food-bg  mt-2   mb-5 pb-5">
 
-  <h3 class="text-center">Stock</h3>
-  <div class="row">
-    @include("stock.reportes.graficos.grafico1")
-    @include("stock.reportes.graficos.grafico2")
-    @include("stock.reportes.graficos.grafico3")
-  </div>
+  <h3 class="fast-food-big-title" >Stock</h3>
 
-  <div class=" col-12 col-md-5 pb-0">
+
+  <div class=" container pb-0">
     <label> Filtro: </label>
     <select class="form-control form-control-sm" id="FILTRO" onchange="formularioDeFiltro(event)">
       <option value="1">PRODUCTOS MÁS PEDIDOS POR SUCURSALES</option>
@@ -57,6 +53,11 @@ Stock
 
   <div class="container-fluid p-0 pt-2 pb-2" id="grill">
     @include("stock.reportes.views.filter".$FILTRO)
+  </div>
+  <div class="row">
+    @include("stock.reportes.graficos.grafico1")
+    @include("stock.reportes.graficos.grafico2")
+    @include("stock.reportes.graficos.grafico3")
   </div>
 
 

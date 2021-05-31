@@ -1,5 +1,4 @@
-@include("ventas.proceso.MostradorProductos.precios.estilos")
-
+ 
 <script>
     //Mostrar opcion de precios multiples Cuando hay mas de una variedad 
     function mostrarPreciosParaElegir(STOCK_ID) {

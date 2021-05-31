@@ -1,16 +1,4 @@
-<style>
-    #SALIDA-MEDIDA {
-        font-weight: 600;
-        letter-spacing: 1px;
-        background-color: var(--color-3);
-        position: relative;
-        z-index: 1;
-        top: -100%;
-        color: white;
-        border-radius: 8px 8px 0px 0px;
-        text-align: center;
-    }
-</style>
+ 
 
 <div class="row  mt-2">
     <!--style="display: grid;  grid-template-columns: 10% 10% 15%  65%;"-->
@@ -33,7 +21,7 @@
         <label class="pr-1 fs-6">Cantidad: </label>
         <div class="d-flex flex-column ps-2">
             <input onkeydown="if(event.keyCode==13) {event.preventDefault(); cargar_tabla();}" style="grid-column-start: 2;" id="SALIDA-CANTIDAD" class="form-control decimal  fs-6" type="text" />
-            <label id="SALIDA-MEDIDA"></label>
+            <label class="MEDIDA" id="SALIDA-MEDIDA"></label>
         </div>
         <a href="#" onclick="cargar_tabla()"><i class="fa fa-download"></i></a>
 

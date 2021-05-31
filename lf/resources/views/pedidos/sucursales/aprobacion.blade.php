@@ -13,7 +13,7 @@
      <x-pretty-radio-button name="opcion_aprobacion"  value="SIN_STOCK" label=" Sin existencia" />
  
  
-     <button type="button" class="btn btn-sm btn-success" onclick="aprobar()">ACEPTAR</button>
+     <button type="button" class="btn fast-food-form-button" onclick="aprobar()">ACEPTAR</button>
  </form>
 
  <script>

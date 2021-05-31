@@ -2,7 +2,7 @@
 
     <div class="col-3">
         <a href="#" onclick="crear_cliente()"><i class="fa fa-plus"></i></a>
-        <label class="pr-1 pl-1 fs-5">Cliente:</label>
+        <label class="pr-1 pl-1 fs-5 text-light">Cliente:</label>
     </div>
     <div class="col-2">
         <input readonly id="CLIENTE-KEY" class="fs-5 form-control p-0 pl-1 bg-secondary text-center" type="text" name="CLIENTE">

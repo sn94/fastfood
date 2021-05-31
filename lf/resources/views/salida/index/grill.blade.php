@@ -11,7 +11,7 @@ padding:  0px 2px  !important;
 @endif
 
 
-<table id="SALIDA-TABLE" class="table table-striped table-hover bg-warning text-dark">
+<table id="SALIDA-TABLE" class="table table-striped table-hover fast-food-table text-dark">
     <thead>
         <tr>
         <th></th>

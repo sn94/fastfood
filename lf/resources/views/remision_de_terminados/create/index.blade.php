@@ -29,8 +29,8 @@ $PRODUCCION_ID= isset($REMISION) ? $REMISION->PRODUCCION_ID : ( isset($PRODUCCIO
 
 <div id="loaderplace"></div>
 
-<div class="container-fluid bg-dark text-light col-12 col-md-11 col-lg-8  mx-auto pb-5">
-    <h2 class="text-center mt-2">Remisión de productos terminados</h2>
+<div class="container-fluid mt-1 fast-food-bg   col-12 col-md-11 col-lg-8  mx-auto pb-5">
+    <h3 class="fast-food-big-title">Remisión de productos terminados</h3>
 
     <form action="<?= $urlAction ?>" method="POST" onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="guardar(event)">
 
@@ -80,7 +80,7 @@ $PRODUCCION_ID= isset($REMISION) ? $REMISION->PRODUCCION_ID : ( isset($PRODUCCIO
                         <input value="{{$CONCEPTO}}" name="CONCEPTO" class="form-control mt-1 fs-6" type="text" />
                     </div>
                     <div class="col-12 col-md-2  mb-1 d-flex align-items-end">
-                        <button type="submit" class="btn btn-danger"> GUARDAR</button>
+                         <button type="submit" class="btn fast-food-form-button"> Guardar</button>
                     </div>
                 </div>
             </div>

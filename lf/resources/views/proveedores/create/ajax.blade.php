@@ -1,9 +1,7 @@
-<div class="container-fluid text-light">
+<div class="container-fluid  ">
 
-        @if(! request()->ajax())
-        <a class="btn btn-sm btn-warning" href="<?= url("proveedores") ?>"> Lista de proveedores</a>
-        @endif
-        <h4 class="text-center mt-2">Ficha de proveedor</h4>
+    
+        <h3 class="fast-food-big-title">Ficha de proveedor</h3>
 
         <div id="loaderplace"></div>
 

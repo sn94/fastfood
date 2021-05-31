@@ -1,0 +1,46 @@
+ .fast-food-navbar.navbar {
+     background-color: #BD2006 !important;
+     background-image: url(/fastfood/assets/images/logo.png);
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position-x: right;
+ }
+ 
+ .fast-food-navbar.navbar::after {}
+ 
+ .fast-food-navbar .nav-item .nav-link {
+     color: white !important;
+ }
+ 
+ .fast-food-navbar .navbar-light .navbar-nav .nav-link {
+     color: #f9bf78 !important;
+ }
+ 
+ .fast-food-navbar .nav-link:hover {
+     background-color: #BD0661 !important;
+ }
+ 
+ .fast-food-navbar.navbar-expand-lg .navbar-nav .dropdown-menu {
+     background-color: #BD2006 !important;
+ }
+ 
+ .fast-food-navbar .dropdown-item {
+     color: white !important;
+     border-bottom: 1px solid #db8851 !important;
+ }
+ 
+ .fast-food-navbar .dropdown-item:hover {
+     background-color: #BD0661 !important;
+ }
+ 
+ .fast-food-navbar .navbar-toggler {
+     background-color: #fdd6c4 !important;
+ }
+ 
+ .fast-food-navbar .navbar-brand {
+     color: white !important;
+ }
+ 
+ .fast-food-navbar .nav-item.dropdown div {
+     display: none !important;
+ }

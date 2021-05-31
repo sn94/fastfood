@@ -35,11 +35,11 @@ Compras
  
 
 
-<div class="container-fluid  col-12 col-md-12 col-lg-12 col-xl-10 bg-dark  mt-lg-2 mt-md-0 text-light pb-5 ">
+<div class="container-fluid  col-12 col-md-12 col-lg-12 col-xl-10 fast-food-bg  mt-lg-2 mt-md-0   pb-5 ">
 
-  <h3 class="text-center">Compras</h3>
+  <h3 class="fast-food-big-title" >Compras & Entradas de productos y materia prima</h3>
   <div class="container-fluid mb-1">
-    <a class="btn btn-warning" href="{{$create}}">NUEVO</a>
+    <a class="btn fast-food-form-button" href="{{$create}}">NUEVO</a>
   </div>
 
 
@@ -92,7 +92,7 @@ Compras
   </x-search-report-downloader>
 
 
-  <div class="container-fluid pt-2 pb-2" id="grill">
+  <div class="container-fluid p-0" id="grill">
 
     @include("compra.index.grill")
   </div>

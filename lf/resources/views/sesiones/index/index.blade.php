@@ -38,14 +38,14 @@ Sesiones
 
 <input type="hidden" id="SESION-INDEX-URL" value="{{$SESION_INDEX_URL}}">
 
-<div class="container col-12 col-md-12 col-lg-10 bg-dark text-light pb-2">
-    <h3 class="text-center mt-2">Sesiones</h3>
+<div class="container-fluid mt-1 col-12 col-md-12 col-lg-11 col-xl-10 fast-food-bg   pb-5">
+    <h3 class="fast-food-big-title" >Sesiones</h3>
     <div id="loaderplace"></div>
 
     <x-search-report-downloader placeholder="BUSCAR POR DESCRIPCION" callback="buscarSesiones()" showSearcherInput="N">
 
         @if( $MODULO_FLAG != "c")
-        <label class="text-light d-flex flex-column pe-1"> Por Sucursal:
+        <label class="  d-flex flex-column pe-1"> Por Sucursal:
             <x-sucursal-chooser id="SUCURSAL" value="" name="" style="" callback="buscarSesiones()"></x-sucursal-chooser>
         </label>
         @else
@@ -54,7 +54,7 @@ Sesiones
         @endif
         @endif
 
-        <label class="text-light d-flex flex-column pe-1"> Por estado:
+        <label class="  d-flex flex-column pe-1"> Por estado:
 
             <select id="ESTADO" onchange="buscarSesiones()">
                 <option value="A">ABIERTAS</option>

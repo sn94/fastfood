@@ -14,11 +14,12 @@ use App\Models\Sesiones;
 use App\Models\Stock;
 use App\Models\Stock_existencias;
 use App\Models\Sucursal;
+use App\Models\Usuario;
 use App\Models\Ventas;
 use App\Models\Ventas_det;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail; 
+use Illuminate\Support\Facades\Mail;
 
 class VentasController extends Controller
 {
@@ -36,6 +37,8 @@ class VentasController extends Controller
         $SUCURSAL = session("SUCURSAL");
         $CAJERO = session("ID");
         $SESION = is_null(session("SESION")) ? FALSE : session("SESION");
+        $FECHA_DESDE = request()->has("FECHA_DESDE") ?   request()->input("FECHA_DESDE") :  "";
+        $FECHA_HASTA = request()->has("FECHA_HASTA") ?   request()->input("FECHA_HASTA") :  "";
 
         if ($SESION == FALSE) {
             //Ultima sesion de cajero
@@ -50,6 +53,12 @@ class VentasController extends Controller
         $ventas = Ventas::where("SUCURSAL", $SUCURSAL)
             ->where("CAJERO", $CAJERO)
             ->where("FECHA", date("Y-m-d"));
+        //Filtrar por fecha
+        if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
+            $ventas = $ventas->where("ventas.FECHA", ">=", $FECHA_DESDE)
+                ->where("ventas.FECHA", "<=", $FECHA_HASTA);
+        else $ventas = $ventas->where("ventas.FECHA", "=", date('Y-m-d'));
+
         //Filtrar por sesion
         if (!$SESION)
             $ventas =  $ventas->where("SESION", $SESION);
@@ -68,11 +77,28 @@ class VentasController extends Controller
             $ventas =  $ventas->get();
             return response()->json($ventas);
         }
+        //O PDF
+        if ($formato == "pdf") {
+            $ventas =  $ventas->get();
+            //Fechas
+            $titulo = "Ventas ";
+            $cajeroModel =  Usuario::find($CAJERO);
+            if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "") {
+                $fecha_d = date('d/m/Y',  strtotime($FECHA_DESDE));
+                $fecha_h = date('d/m/Y',  strtotime($FECHA_HASTA));
+                $titulo .= " (Desde el $fecha_d hasta $fecha_h)";
+            } else {
+                $titulo .= date("d/m/Y");
+            }
+            return $this->responsePdf(
+                "ventas.index.grill",
+                ["VENTAS" => $ventas, "CAJERO" => $cajeroModel],
+                $titulo
+            );
+        }
 
+        //O por defecto HTML
         $ventas =  $ventas->with("cajero")->paginate(20);
-
-        
-
         if (request()->ajax())
             return view("ventas.index.grill", ['VENTAS' =>  $ventas]);
         else
@@ -119,6 +145,7 @@ class VentasController extends Controller
         try {
 
             $resultado =  $this->{$nombreFuncionFiltro}();
+
             $TITULO =  $resultado['titulo'];
             $VENTAS =  $resultado['data'];
         } catch (Exception $x) {
@@ -159,7 +186,7 @@ class VentasController extends Controller
         //Formato html
         try {
 
-            $VENTAS =  is_array($VENTAS)  ?  $VENTAS :  $VENTAS->paginate(20);
+            $VENTAS =   $VENTAS->paginate(20);
         } catch (Exception  $e) {
             return response()->json(['err' =>  $e->getMessage()]);
         }
@@ -247,7 +274,9 @@ class VentasController extends Controller
 
 
         $loMasVendido =  Ventas::join("sucursal", "ventas.SUCURSAL", "=",  "sucursal.REGNRO")
-            ->join("clientes", "clientes.REGNRO", "=",  "ventas.CLIENTE");;
+            ->join("clientes", "clientes.REGNRO", "=",  "ventas.CLIENTE")
+            ->join("usuarios", "usuarios.REGNRO", "=", "ventas.CAJERO");
+
         if ($sucursal != "")
             $loMasVendido = $loMasVendido->where("ventas.SUCURSAL", $sucursal);
 
@@ -266,12 +295,12 @@ class VentasController extends Controller
             "sucursal.DESCRIPCION AS SUCURSAL_NOMBRE",
             "clientes.NOMBRE AS cliente_nom",
             "ventas.REGNRO AS FACTURA",
-
-            DB::raw("IF( ESTADO= 'A', 'ACTIVA', 'ANULADA') AS ESTADO"),
+            "usuarios.NOMBRES as CAJERO",
+            DB::raw("IF( ventas.ESTADO = 'A', 'ACTIVA', 'ANULADA') AS ESTADO"),
             "FECHA",
             DB::raw(" format(TOTAL, 0, 'de_DE') as TOTAL "),
             "ventas.FORMA AS FORMA_PAGO"
-        );
+        )->with("cajero");
 
         //Formular titulo
         $sucursalModel = Sucursal::find($sucursal);
@@ -425,16 +454,15 @@ class VentasController extends Controller
                         $existencia->save(); //disminuir
                     };
 
-                    
+
                     //Detalle Venta Item
                     $DetalleVentaItemModel =  Stock::find($r1);
 
                     //Actualizar existencia Si no es un Combo
                     if ($DetalleVentaItemModel->TIPO != "COMBO") {
                         $descontarStock($r1, $r2);
-                       
-                    } 
-                    
+                    }
+
 
                     //Actualizar EXISTENCIA de ingredientes Si es producto elaborado
                     if (Parametros::first()->DESCONTAR_MP_EN_VENTA == "S") {
@@ -443,21 +471,17 @@ class VentasController extends Controller
                         if (sizeof($receta)) {
                             foreach ($receta as $item) {
                                 $descontarStock($item->MPRIMA_ID, $item->CANTIDAD);
-                                
                             }
                         }
                         /** Receta definida? */
 
-                        if ($DetalleVentaItemModel->TIPO == "COMBO")  {
+                        if ($DetalleVentaItemModel->TIPO == "COMBO") {
                             //Descontar productos del combo
                             $comboModel = Combos::where("COMBO_ID", $r1)->get();
-                            foreach ($comboModel as $comboItem)
-                                {
+                            foreach ($comboModel as $comboItem) {
                                 $descontarStock($comboItem->STOCK_ID,  $comboItem->CANTIDAD);
-                                
                             }
                         }
-                        
                     }
                     /** EnD Actualizacion de stock de ingrediente segun parametro */
 
@@ -501,8 +525,8 @@ class VentasController extends Controller
                 return response()->json(['err' =>  "No se registra un email para este cliente"]);
             else {
 
-             
-                Mail::to( $email)->send( (new TicketSender(  $venta ) ) );
+
+                Mail::to($email)->send((new TicketSender($venta)));
                 return response()->json(['ok' =>  "enviado"]);
             }
         } else    return view("ventas.proceso.ticket.version_impresa", ["VENTA" => $venta, "DETALLE" => $detalle]);
