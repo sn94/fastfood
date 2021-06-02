@@ -25,16 +25,16 @@ use App\Helpers\Utilidades;
             </div>
             <div class="col-6 p-0">
                 <p class="card-text">
-                    <b style="font-size: 12.5px;color:black;">{{$itemStock->DESCRIPCION}}</b>
-                    <span style="display:block;" class="badge bg-success">Precio de venta:
+                    <b  class="text-dark fs-6">{{$itemStock->DESCRIPCION}}</b>
+                    <span style="display:block;" class="badge bg-success fs-6">Precio:
                      {{ Utilidades::number_f( $itemStock->PVENTA) }}</span>
 
-                    <b style="font-size: 12px;display:block;">Cód.Barras: {{($itemStock->BARCODE=='') ? '': $itemStock->BARCODE}}</b>
+                    <b class="d-block fs-6">Cód.Barras: {{($itemStock->BARCODE=='') ? '': $itemStock->BARCODE}}</b>
 
 
-                    @if( $itemStock->CANTIDAD <= 0 ) <span class="badge bg-danger">Sin stock </span>
+                    @if( $itemStock->CANTIDAD <= 0 ) <span class="badge bg-danger fs-6">Sin stock </span>
                         @else
-                        <span class="badge badge-success">Stock: {{ $itemStock->CANTIDAD}} &nbsp;</span>
+                        <span class="badge badge-success fs-6">Stock: {{ $itemStock->CANTIDAD}} &nbsp;</span>
                         @endif
                 </p>
 
@@ -45,7 +45,7 @@ use App\Helpers\Utilidades;
 
 
                 <a class="text-dark p-0" style="text-decoration: none;" onclick="delete_row(event)"   href="{{url('stock').'/'.$itemStock->REGNRO}}">
-                    <i class="fa fa-trash"></i><span class="fw-bold">Borrar</span></a>
+                    <i class="fas fa-trash"></i><span class="fw-bold">Borrar</span></a>
                 @endif
             </div>
         </div>

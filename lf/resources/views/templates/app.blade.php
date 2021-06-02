@@ -1,11 +1,14 @@
  <!DOCTYPE html>
- <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+ <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" manifest="{{url('fastfood_cache.manifest')}}" >
 
  <head>
    
      <title> @yield("PageTitle", "Fast Food")</title>
      <meta charset="utf-8">
      <link rel="manifest" href="{{url('manifest.json')}}" />
+     <script src="{{url('/')}}/install_sw.js?v={{rand()*1000}}"> </script>
+ 
+ 
      <link rel="apple-touch-icon" href="{{url('assets/icons/maskable/burger144.png')}}" />
      <meta name="viewport" content="width=device-width, initial-scale=1">
      <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -25,8 +28,7 @@
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}" />
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/navbar_style3.css?v={{rand()*1000}}" />
      <script src="{{$BASE_ASSETS}}/js/custom.js?v={{rand()*1000}}"> </script>
-     <script src="{{url('/')}}/install_sw.js?v={{rand()*1000}}"> </script>
- 
+    
  @yield("cssStyles")
  
  </head>

@@ -9,7 +9,7 @@
                 EDITAR<i class="fas fa-edit"></i></a>
 
                 <a class="ml-3 mr-3 btn btn-sm btn-warning" onclick="delete_row(event)" style="color: black;" href="{{url('proveedores').'/'.$prov->REGNRO}}">
-                BORRAR <i class="fa fa-trash"></i></a>
+                BORRAR <i class="fas fa-trash"></i></a>
             </div>
 
         </li>

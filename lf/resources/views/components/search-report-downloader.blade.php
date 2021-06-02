@@ -37,7 +37,7 @@
     </div>
 
     @endif
-    <div  class="container-fluid m-0 p-0 d-flex flex-row " >
+    <div  class="container-fluid m-0 p-0 d-flex flex-row flex-wrap " >
 
         <div id="search-report-downloader-center-panel" class="d-flex flex-row flex-wrap w-100 align-items-center justify-content-start" >
             {{$slot}}
