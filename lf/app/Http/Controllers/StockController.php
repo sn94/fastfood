@@ -615,10 +615,10 @@ class StockController extends Controller
         } else {
 
             if ($accion ==  "INC")
-                $registrado->CANTIDAD =  ($registrado->CANTIDAD < 0 ? 0 : $registrado->CANTIDAD) + $cantidad;
+                $registrado->CANTIDAD =  ($registrado->CANTIDAD ) + $cantidad;
             else {
                 if ($accion ==  "DEC")
-                    $registrado->CANTIDAD =   ($registrado->CANTIDAD < 0 ? 0 : $registrado->CANTIDAD) - $cantidad;
+                    $registrado->CANTIDAD =   ($registrado->CANTIDAD ) - $cantidad;
                 else
                     $registrado->delete();
             }

@@ -227,6 +227,17 @@ Route::group(['prefix' => 'cargo', 'middleware' => ['auth.Admin']], function () 
     Route::delete('/{id}',    'CargosController@delete');
 });
 
+Route::group(['prefix' => 'servicios', 'middleware' => ['auth.Admin']], function () {
+    Route::get('/',   'ServiciosController@index');
+    Route::post('/buscar',   'ServiciosController@index');
+    Route::get('/buscar',   'ServiciosController@index');
+    Route::get('/create',    'ServiciosController@create');
+    Route::post('/',    'ServiciosController@create');
+    Route::get('/update/{id}',    'ServiciosController@update');
+    Route::put('/',    'ServiciosController@update');
+    Route::delete('/{id}',    'ServiciosController@delete');
+});
+
 Route::group(['prefix' => 'origen-venta', 'middleware' => ['auth.Admin']], function () {
     Route::get('/',   'OrigenVentaController@index');
     Route::post('/buscar',   'OrigenVentaController@index');
@@ -383,7 +394,10 @@ Route::prefix('remision-prod-terminados')->group(function () {
 
 
 
-Route::prefix('ventas')->group(function () {
+
+Route::group(['prefix' => 'ventas', 'middleware' => ['auth.Caja']], function () {
+
+ 
     Route::get('/index',   'VentasController@index');
     Route::post('/index',   'VentasController@index');
     Route::get('/filtrar',   'VentasController@filtrar');

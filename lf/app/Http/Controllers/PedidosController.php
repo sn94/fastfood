@@ -5,16 +5,11 @@ namespace App\Http\Controllers;
 use App\Helpers\Utilidades;
 use App\Http\Controllers\Controller;
 use App\Models\Nota_pedido;
-use App\Models\Nota_pedido_detalles;
-use App\Models\Salidas;
-use App\Models\Salidas_detalles;
-use App\Models\Stock;
-use App\Models\Stock_existencias;
+use App\Models\Nota_pedido_detalles; 
+use App\Models\Stock; 
 use App\Models\Usuario;
-use App\Models\Ventas;
-use App\Models\Ventas_det;
-use Exception;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Ventas; 
+use Exception; 
 use Illuminate\Support\Facades\DB;
 
 
@@ -239,9 +234,6 @@ public function editar( $PEDIDOID= NULL){
                 $pedido->save();
                 //Actualizar existencia
                 (new StockController())->actualizar_existencia($item, $cantidad, 'INC');
-
-
-
                 DB::commit();
                 return response()->json(['ok' => "Pedido finalizado exitosamente"]);
             } catch (Exception $ex) {

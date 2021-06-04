@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Config;
+
+$destino = Config::get("app.my_config.destino");
 
 $adminOptionsMenu = [
 
@@ -53,9 +56,9 @@ $adminOptionsMenu = [
     [
         "label" => "REPORTES", "link" =>
         [
-            ["label" => "STOCK", "link" =>   url("stock/filtrar")  ],
+            ["label" => "STOCK", "link" =>   url("stock/filtrar")],
             ["label" => "COMPRAS ", "link" => url("compra/filtrar")],
-            ["label" => "VENTAS", "link" =>  url("ventas/filtrar") ]
+            ["label" => "VENTAS", "link" =>  url("ventas/filtrar")]
         ],
     ],
 
@@ -65,8 +68,20 @@ $adminOptionsMenu = [
 ];
 
 
+
+
+//Links condicionales
 if (session("MATRIZ") ==  "S")
     array_push($adminOptionsMenu[2]["link"],  ["label" => "PEDIDOS RECIBIDOS",  "link" =>  url('pedidos/recibidos')]);
+
+
+
+if ($destino != "clientez") {
+    $adminOptionsMenu[5]['link'][] =  ["label" => "SERVICIOS",  "link" => url('servicios')];
+   
+}
+
+
 
 
 ?>

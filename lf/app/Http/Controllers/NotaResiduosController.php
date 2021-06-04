@@ -76,9 +76,9 @@ class NotaResiduosController extends Controller
                     $datarow = $row;
                     $datarow['NRESIDUO_ID'] = $n_compra->REGNRO;
 
-                    $d_compra =  new Nota_residuos_detalle();
-                    $d_compra->fill($datarow);
-                    $d_compra->save();
+                    $d_nota_residuos =  new Nota_residuos_detalle();
+                    $d_nota_residuos->fill($datarow);
+                    $d_nota_residuos->save();
                     //Actualizar existencia
                   //  (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
 
@@ -122,10 +122,10 @@ class NotaResiduosController extends Controller
             $NotaResiduo->fill($CABECERA);
             $NotaResiduo->save();
             //Volver al estado inicial
-            $NotaResiduoDetalle = Nota_residuos_detalle::where("NRESIDUO_ID",  $N_R_id)->get();
+       /*     $NotaResiduoDetalle = Nota_residuos_detalle::where("NRESIDUO_ID",  $N_R_id)->get();
             foreach ($NotaResiduoDetalle  as $nrd) {
                 (new StockController())->actualizar_existencia($nrd->ITEM, $nrd->CANTIDAD, 'DEC');
-            }
+            }*/
             //borrar
             Nota_residuos_detalle::where("NRESIDUO_ID",  $N_R_id)->delete();
 
@@ -133,9 +133,9 @@ class NotaResiduosController extends Controller
                 $datarow = $row;
                 $datarow['NRESIDUO_ID'] = $N_R_id;
 
-                $d_compra =  new Nota_residuos_detalle();
-                $d_compra->fill($datarow);
-                $d_compra->save();
+                $d_nota_residuos =  new Nota_residuos_detalle();
+                $d_nota_residuos->fill($datarow);
+                $d_nota_residuos->save();
                 //Actualizar existencia
                // (new StockController())->actualizar_existencia($datarow['ITEM'], $datarow['CANTIDAD'], 'INC');
 

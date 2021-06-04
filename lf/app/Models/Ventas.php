@@ -15,7 +15,8 @@ class Ventas extends Model
     protected $fillable = [
         'NUMERO','FECHA','CLIENTE'  ,  'ESTADO', 'FORMA', 'CAJERO', 'SUCURSAL', 'IMPORTE_PAGO', 'VUELTO',
         'TAR_CUENTA', 'TAR_BANCO', 'TAR_CEDULA', 'TAR_BOLETA',
-        'GIRO_TELEFONO', 'GIRO_CEDULA', 'GIRO_TITULAR', 'GIRO_FECHA',  'TOTAL', 'SESION', 'ORIGEN'
+        'GIRO_TELEFONO', 'GIRO_CEDULA', 'GIRO_TITULAR', 'GIRO_FECHA',  'TOTAL', 'SESION', 'ORIGEN',
+        'DELIVERY', 'SERVICIO'
         
     ];
 

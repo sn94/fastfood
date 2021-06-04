@@ -19,12 +19,15 @@ class AdminAuth
 
         //Si no existe sesion Usuario y no accede al inicio de sesion
         if (!$sess->has("USUARIO")  &&  !$accessLogin)
-            return redirect('usuario/sign-in');
+            if ($request->ajax())
+                return response()->json(['err' => "Su sesión ha caducado"]);
+            else
+                return redirect('usuario/sign-in');
         else {
-            if ( $sess->get("NIVEL")  ==  "SUPER"  ||  $sess->get("NIVEL")  ==  "GOD")
+            if ($sess->get("NIVEL")  ==  "SUPER"  ||  $sess->get("NIVEL")  ==  "GOD")
                 //permitir
                 return $next($request);
-                else 
+            else
                 return redirect('modulo-caja');
         }
     }

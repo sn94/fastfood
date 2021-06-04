@@ -50,10 +50,10 @@ class FichaProduccionController extends Controller
         }
 
 
-if( request()->ajax())
-return view("ficha_produccion.index.grill",   ['FICHAS_PRODUCCION' =>  $lista->paginate(20)]);
-else
-        return view("ficha_produccion.index.index",   ['FICHAS_PRODUCCION' =>  $lista->paginate(20)]);
+        if (request()->ajax())
+            return view("ficha_produccion.index.grill",   ['FICHAS_PRODUCCION' =>  $lista->paginate(20)]);
+        else
+            return view("ficha_produccion.index.index",   ['FICHAS_PRODUCCION' =>  $lista->paginate(20)]);
     }
 
 
@@ -68,7 +68,7 @@ else
                 //Edit  
                 $PRODUCCION = Ficha_produccion::find($PRODUCCIONID);
                 $DETALLE = $PRODUCCION->detalle_produccion;
-                
+
 
                 return view(
                     'ficha_produccion.create.index',
@@ -103,7 +103,7 @@ else
                 }
                 //DETALLE
                 //Borrar detalle anterior
-                Ficha_produccion_detalles::where("PRODUCCION_ID", $f_produccion->REGNRO )->delete();
+                Ficha_produccion_detalles::where("PRODUCCION_ID", $f_produccion->REGNRO)->delete();
 
                 foreach ($DETALLE_PRODUCTOS as $row) :
                     $datarow = $row;
@@ -158,19 +158,17 @@ else
     }
 
 
-    public function delete(  $PRODUCCIONID){
-        try{
+    public function delete($PRODUCCIONID)
+    {
+        try {
             DB::beginTransaction();
-         Ficha_produccion::find($PRODUCCIONID)->delete();
+            Ficha_produccion::find($PRODUCCIONID)->delete();
             Ficha_produccion_detalles::where("PRODUCCION_ID",  $PRODUCCIONID)->delete();
             DB::commit();
             return response()->json(['ok' =>  "Eliminado !"]);
-        }catch( Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return response()->json(['err' =>   $ex->getMessage()]);
-
         }
-
-
     }
 }

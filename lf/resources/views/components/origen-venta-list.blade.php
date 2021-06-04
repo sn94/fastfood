@@ -8,7 +8,7 @@
 
    
 
-    $ORIGENS = OrigenVenta::get();
+    $ORIGENS = OrigenVenta::orderBy("ORDEN","ASC")->get();
     
     ?>
 

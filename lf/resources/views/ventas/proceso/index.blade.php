@@ -5,9 +5,9 @@
 Nueva venta
 @endsection
 
- @section("cssStyles")
+@section("cssStyles")
 @include("ventas.proceso.styles")
-@endsection 
+@endsection
 
 @section("menu")
 @endsection
@@ -31,7 +31,7 @@ Nueva venta
 <div id="loaderplace"></div>
 
 
-<div class="container-fluid p-0 p-md-2"  >
+<div class="container-fluid p-0 p-md-2">
     <form class="d-none" action="{{url('ventas')}}" method="POST" id="VENTA-FORM">
 
 
@@ -52,7 +52,7 @@ Nueva venta
                 @include("ventas.proceso.MostradorProductos.index" )
             </div>
 
-            <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0 "  >
+            <div class="col-12 col-md-6 col-lg-6 p-0 p-md-0 ">
                 <div class="col-12 pl-0 pr-0 ">
 
                     @include("ventas.proceso.VentaCabecera.index" )
@@ -103,7 +103,7 @@ Nueva venta
         $("#ini-loader").remove();
     }
 
-    
+
 
 
     function initFormVenta() {
@@ -123,7 +123,7 @@ Nueva venta
 
 
 
-    
+
 
 
     async function imprimirTicket(id_venta) {
@@ -200,15 +200,15 @@ Nueva venta
 
 
     show_ini_loader("DESCARGANDO DATOS");
-    
-        window.onload = function() {
 
-           hide_ini_loader();
-            initFormVenta(); //setear formato numerico para campos
-            // evento para modal de resumen de pago
-            //descargar datos de PRODUCTOS
-            descargarProductos();
-        }
+    window.onload = function() {
+
+        hide_ini_loader();
+        initFormVenta(); //setear formato numerico para campos
+        // evento para modal de resumen de pago
+        //descargar datos de PRODUCTOS
+        descargarProductos();
+    }
 </script>
 
 

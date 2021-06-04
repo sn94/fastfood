@@ -45,7 +45,7 @@
                 <label>CANTIDAD: </label>
                 <div style="display: flex; flex-direction: column;">
                     <input onkeydown="if(event.keyCode==13) {event.preventDefault(); compraObj.cargar_tabla();}" id="COMPRA-CANTIDAD" class="form-control form-control-sm decimal" type="text" />
-                    <label style="color: yellow;" id="COMPRA-MEDIDA"></label>
+                    <label class="MEDIDA" id="COMPRA-MEDIDA"></label>
                 </div>
             </div>
 

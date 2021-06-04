@@ -1,20 +1,20 @@
  <!DOCTYPE html>
- <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" manifest="{{url('fastfood_cache.manifest')}}" >
+ <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" manifest="{{url('fastfood_cache.manifest')}}">
 
  <head>
-   
+
      <title> @yield("PageTitle", "Fast Food")</title>
      <meta charset="utf-8">
      <link rel="manifest" href="{{url('manifest.json')}}" />
      <script src="{{url('/')}}/install_sw.js?v={{rand()*1000}}"> </script>
- 
- 
+
+
      <link rel="apple-touch-icon" href="{{url('assets/icons/maskable/burger144.png')}}" />
      <meta name="viewport" content="width=device-width, initial-scale=1">
      <meta name="csrf-token" content="{{ csrf_token() }}">
-     <meta name="theme-color" content="#a01809"/>
+     <meta name="theme-color" content="#a01809" />
      <link rel="icon" href="{{url('assets/icons/burger_icon.png')}}" />
-   
+
      @php
      $BASE_ASSETS= url('assets');
      @endphp
@@ -25,20 +25,34 @@
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/fontawesome.min.css" />
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/solid.min.css" />
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/brands.min.css" />
+     <!--Estilos Personalizados segun el entorno -->
+     @if( Illuminate\Support\Facades\Config::get("app.my_config.destino") == "clientez" )
+     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}" />
+     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/navbar_style1.css?v={{rand()*1000}}" />
+     @endif
+     @if( Illuminate\Support\Facades\Config::get("app.my_config.destino") == "ccentrall" )
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}" />
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/navbar_style3.css?v={{rand()*1000}}" />
+     @endif
+     @if( Illuminate\Support\Facades\Config::get("app.my_config.destino") == "portafolio" )
+     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}" />
+     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/navbar_style3.css?v={{rand()*1000}}" />
+     @endif
+
+
      <script src="{{$BASE_ASSETS}}/js/custom.js?v={{rand()*1000}}"> </script>
-    
- @yield("cssStyles")
- 
+
+     @yield("cssStyles")
+
  </head>
 
  <body class="h-100 p-0">
 
      @include("templates.mymodal" )
+
      @yield("menu")
      <button class="backward-button" onclick="window.history.go(-1);" class="button">Atrás</button>
-
+    
      <!--  style="background-image: url( $BASE_ASSETS /images/bg_1.jpg);" -->
      @yield("content")
      @yield('jsScripts')

@@ -14,6 +14,7 @@ use App\View\Components\PrettyPaginator;
 use App\View\Components\PrettyRadioButton;
 use App\View\Components\ProveedorChooser; 
 use App\View\Components\SearchReportDownloader;
+use App\View\Components\ServiciosList;
 use App\View\Components\SucursalChooser;
 use App\View\Components\TipoStockChooser;
 use App\View\Components\UserInfoBox;
@@ -62,5 +63,6 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('user-info-box', UserInfoBox::class);
         Blade::component('pretty-paginator', PrettyPaginator::class);
         Blade::component('origen-venta-list', OrigenVentaList::class);
+        Blade::component('servicio-list', ServiciosList::class);
     }
 }

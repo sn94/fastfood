@@ -83,11 +83,7 @@ class SalidaController extends Controller
                     $d_salida->fill($datarow);
                     $d_salida->save();
                     //Actualizar existencia
-                    $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
-                        ->where("STOCK_ID",  $datarow['ITEM'])->first();
-                    $existencia->CANTIDAD =  $existencia->CANTIDAD -  $datarow['CANTIDAD'];
-                    $existencia->save(); //disminuir
-
+                    (new StockController())->actualizar_existencia(  $datarow['ITEM'],  $datarow['CANTIDAD'], 'DEC');
 
                 endforeach;
 
@@ -141,6 +137,11 @@ class SalidaController extends Controller
                 $n_salida->save();
                 //DETALLE
 
+                $detalleSalida= Salidas_detalles::where("SALIDA_ID", $CABECERA['REGNRO'])->get();
+
+                foreach( $detalleSalida as $detail)
+                (new StockController())->actualizar_existencia(  $detail['ITEM'],  $detail['CANTIDAD'], 'INC');
+
                 Salidas_detalles::where("SALIDA_ID", $CABECERA['REGNRO'])->delete();
 
                 foreach ($DETALLE as $row) :
@@ -150,10 +151,8 @@ class SalidaController extends Controller
                     $d_salida->fill($datarow);
                     $d_salida->save();
                     //Actualizar existencia
-                    $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
-                        ->where("STOCK_ID",  $datarow['ITEM'])->first();
-                    $existencia->CANTIDAD =  $existencia->CANTIDAD -  $datarow['CANTIDAD'];
-                    $existencia->save(); //disminuir
+                    (new StockController())->actualizar_existencia(  $datarow['ITEM'],  $datarow['CANTIDAD'], 'DEC');
+                    
 
 
                 endforeach;
@@ -186,6 +185,7 @@ class SalidaController extends Controller
             Salidas::find($id)->delete();
             //deshacr
             $NotaResiduoDetalle = Salidas_detalles::where("SALIDA_ID",  $id)->get();
+            
             foreach ($NotaResiduoDetalle  as $nrd) {
                 (new StockController())->actualizar_existencia($nrd->ITEM, $nrd->CANTIDAD, 'INC');
             }

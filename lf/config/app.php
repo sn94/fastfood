@@ -230,4 +230,13 @@ return [
 
     ],
 
+
+
+    "my_config"=>[
+
+        "destino"=> "ccentrall" //, "clientez", "ccentrall", "portafolio"
+    ]
+
+
+
 ];

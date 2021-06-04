@@ -84,7 +84,14 @@ $BASE_ASSETS= url('assets');
             <form class="  m-0 p-0 p-md-2 " onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="login(event)" action="{{url('usuario/sign-in')}}" method="POST" style=" display: flex; flex-direction: column;">
 
                 <div class="container d-flex flex-column justify-content-center">
+
+@if(  Illuminate\Support\Facades\Config::get("app.my_config.destino"  )   ==  "clientez")
                     <img class="img-fluid" src="{{url('assets/images/logo.png')}}" alt="">
+                    @endif
+                    @if(  Illuminate\Support\Facades\Config::get("app.my_config.destino"  )   ==  "ccentrall")
+                    <img style="width: 100px !important; height: auto !important;" class="img-fluid" src="{{url('assets/icons/burger_icon.png')}}" alt="">
+                    @endif
+
                     @csrf
 
 

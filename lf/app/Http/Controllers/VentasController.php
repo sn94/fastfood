@@ -5,14 +5,10 @@ namespace App\Http\Controllers;
 use App\Helpers\Utilidades;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketSender;
-use App\Models\Clientes;
 use App\Models\Combos;
 use App\Models\Parametros;
-use App\Models\Salidas;
-use App\Models\Salidas_detalles;
 use App\Models\Sesiones;
 use App\Models\Stock;
-use App\Models\Stock_existencias;
 use App\Models\Sucursal;
 use App\Models\Usuario;
 use App\Models\Ventas;
@@ -23,6 +19,16 @@ use Illuminate\Support\Facades\Mail;
 
 class VentasController extends Controller
 {
+
+
+    /**
+     * 
+     * Estados
+     * 
+     * A  Activa, confirmada
+     * B Anulada
+     * P Pendiente, esperando confirmacion
+     */
 
     /**
      * Show the profile for the given user.
@@ -380,11 +386,9 @@ class VentasController extends Controller
     {
         if (request()->getMethod()  ==  "GET") {
 
-            //Sesion abierta?
+            // Sesion abierta?
             if (!session()->has("SESION"))
                 return view("ventas.no_permitido");
-
-
             return view('ventas.proceso.index');
         } else {
 
@@ -393,17 +397,15 @@ class VentasController extends Controller
             $DATOS = request()->input();
             //Cliente
             if ($DATOS['CABECERA']['CLIENTE']  ==  "") {
-                //cliente predeterminado
-                $DEFAULTCLI = Parametros::first();
-                if (is_null($DEFAULTCLI)) return response()->json(['err' => 'Por favor cargue un cliente']);
-                else {
-                    $defaulcli =  $DEFAULTCLI->CLIENTE_PORDEFECTO;
-                    if ($defaulcli == ""   ||   is_null($defaulcli)) return response()->json(['err' => 'Por favor cargue un cliente']);
-                }
+                return response()->json(['err' => 'Por favor cargue un cliente']);
             }
             try {
                 DB::beginTransaction();
                 //Cabecera
+                //Venta Con delivery?
+                if (array_key_exists("DELIVERY", $DATOS['CABECERA'])  &&  $DATOS['CABECERA']['DELIVERY'] == "S") {
+                    $DATOS['CABECERA']['ESTADO'] = "P";
+                }
                 $DATOS["CABECERA"]['SESION'] =  session("SESION");
                 $nventa->fill($DATOS["CABECERA"]);
                 $nventa->save();
@@ -443,24 +445,14 @@ class VentasController extends Controller
                         ['VENTA_ID' => $nventa->REGNRO, 'ITEM' => $r1, 'CANTIDAD' => $r2, 'P_UNITARIO' => $r3, 'EXENTA' => $p_exe, 'TOT5' => $p_5,  'TOT10' => $p_10];
 
 
-                    // Tratamiento del Stock
-
-                    //Lambdas
-
-                    $descontarStock = function ($StockId, $Cantidad) {
-                        $existencia = Stock_existencias::where("SUCURSAL", session("SUCURSAL"))
-                            ->where("STOCK_ID",  $StockId)->first();
-                        $existencia->CANTIDAD =  $existencia->CANTIDAD - $Cantidad;
-                        $existencia->save(); //disminuir
-                    };
-
+                    // Tratamiento del Stock 
 
                     //Detalle Venta Item
                     $DetalleVentaItemModel =  Stock::find($r1);
 
                     //Actualizar existencia Si no es un Combo
                     if ($DetalleVentaItemModel->TIPO != "COMBO") {
-                        $descontarStock($r1, $r2);
+                        (new StockController())->actualizar_existencia($r1, $r2, 'DEC');
                     }
 
 
@@ -469,18 +461,14 @@ class VentasController extends Controller
 
                         $receta = Stock::find($r1)->receta;
                         if (sizeof($receta)) {
-                            foreach ($receta as $item) {
-                                $descontarStock($item->MPRIMA_ID, $item->CANTIDAD);
-                            }
+                            foreach ($receta as $item) (new StockController())->actualizar_existencia($item->MPRIMA_ID, $item->CANTIDAD, 'DEC');
                         }
                         /** Receta definida? */
 
                         if ($DetalleVentaItemModel->TIPO == "COMBO") {
                             //Descontar productos del combo
                             $comboModel = Combos::where("COMBO_ID", $r1)->get();
-                            foreach ($comboModel as $comboItem) {
-                                $descontarStock($comboItem->STOCK_ID,  $comboItem->CANTIDAD);
-                            }
+                            foreach ($comboModel as $comboItem) (new StockController())->actualizar_existencia($comboItem->STOCK_ID,  $comboItem->CANTIDAD, 'DEC');
                         }
                     }
                     /** EnD Actualizacion de stock de ingrediente segun parametro */
