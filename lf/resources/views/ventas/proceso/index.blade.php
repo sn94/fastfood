@@ -85,6 +85,7 @@ Nueva venta
     var ultimoIdVentaRegistrado = undefined;
 
     var listaDeProductosJSON = [];
+    var listaDeServicios=  [];
 
 
 
@@ -189,25 +190,40 @@ Nueva venta
 
 
     async function descargarProductos() {
+        show_ini_loader("Descargando productos");
+
         let req = await fetch("<?= url('stock/buscar') ?>/VENTA", {
             headers: {
                 'formato': "json"
             }
         });
         listaDeProductosJSON = await req.json();
-        $("#VENTA-FORM").removeClass("d-none");
+       hide_ini_loader();
+    }
+    async function descargarServicios() {
+        show_ini_loader("Descargando otros datos");
+
+        let req = await fetch("<?= url('servicios') ?>", {
+            headers: {
+                'formato': "json"
+            }
+        });
+        listaDeServicios = await req.json();
+       hide_ini_loader();
     }
 
 
-    show_ini_loader("DESCARGANDO DATOS");
+  
+    window.onload =  async function() {
 
-    window.onload = function() {
-
-        hide_ini_loader();
+         
         initFormVenta(); //setear formato numerico para campos
         // evento para modal de resumen de pago
         //descargar datos de PRODUCTOS
-        descargarProductos();
+      
+       await  descargarProductos();
+       await  descargarServicios();
+        $("#VENTA-FORM").removeClass("d-none");
     }
 </script>
 

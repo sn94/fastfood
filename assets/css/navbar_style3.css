@@ -1,5 +1,5 @@
   .fast-food-navbar.navbar {
-      background-image: url(/fastfood/assets/images/navbar-bg-1.jpg) !important;
+      background-image: url(../../assets/images/navbar-bg-1.jpg) !important;
       background-repeat: no-repeat !important;
       background-size: cover !important;
       padding: 0px !important;
@@ -13,7 +13,7 @@
   }
   
   .fast-food-navbar.navbar-expand-lg .navbar-nav .dropdown-menu {
-      background-image: url(/fastfood/assets/images/navbar-bg-1.jpg) !important;
+      background-image: url(../../assets/images/navbar-bg-1.jpg) !important;
       background-repeat: no-repeat;
       background-size: cover;
       border: none !important;

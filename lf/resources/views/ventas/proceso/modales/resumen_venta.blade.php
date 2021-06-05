@@ -1,9 +1,9 @@
 
 
-<div id="RESUMEN" class="container-fluid d-none ">
+<div id="RESUMEN" class="container-fluid d-none  fs-5 text-light">
 
 
-    <div class="container col-12 col-md-4  ">
+    <div class="container col-12 col-md-4  d-flex flex-column ">
 
         <div>
             <button onclick="$('#RESUMEN').addClass('d-none');   nuevaVenta();" class="cierra" type="button">X</button>
@@ -11,30 +11,30 @@
 
 
       
-        <div style="display: flex;flex-direction: row;">
+        <div class="d-flex flex-row" >
             <label for="">TOTAL:</label>
             <input readonly value="0" type="text" id="VENTA-TOTAL-RESUMEN">
         </div>
-        <div style="display: flex;flex-direction: row;">
+        <div  class="d-flex flex-row" >
             <label for="">TICKET N°:</label>
             <input readonly value="0" type="text" id="VENTA-TOTAL-TICKET">
         </div>
-        <div style="display: flex;flex-direction: row;">
+        <div  class="d-flex flex-row" >
             <label for="">ENTREGA:</label>
             <input readonly value="0" type="text" id="VENTA-ENTREGA-RESUMEN">
         </div>
-        <div style="display: flex;flex-direction: row;">
+        <div  class="d-flex flex-row" >
             <label for="">VUELTO:</label>
             <input readonly value="0" type="text" id="VENTA-VUELTO-RESUMEN">
         </div>
-        <div id="RESUMEN-FORMAPAGO" style="border: 1px solid black;display: flex;flex-direction: row;">
+        <div id="RESUMEN-FORMAPAGO" class="d-flex flex-row"  >
 
             <label for="">FORMA DE PAGO:</label>
             <input readonly type="text" id="VENTA-FORMA-PAGO">
         </div>
 
         <!--- tarjeta -->
-        <div id="RESUMEN-PAGO-TARJETA" class="d-none" style="border: 1px solid black;">
+        <div id="RESUMEN-PAGO-TARJETA" class="d-none d-flex flex-row" style="border: 1px solid black;">
 
             <table>
                 <tr>
@@ -53,7 +53,7 @@
 
         </div>
         <!--- giro -->
-        <div id="RESUMEN-PAGO-GIRO" class="d-none" style="border: 1px solid black; ">
+        <div id="RESUMEN-PAGO-GIRO" class="d-none d-flex flex-row" style="border: 1px solid black; ">
 
             <div style="display: flex;flex-direction: column;">
                 <label for="">N° TELÉFONO:</label>

@@ -48,7 +48,7 @@
     }
 
 
-    
+
     function editar_cantidad_item(Esto) {
 
         let btnType = $(Esto).hasClass("plusbtn") ? "plusbtn" : "minusbtn";
@@ -258,6 +258,14 @@
 
         let total__ = calcular_total_modelo();
 
-        $("#TOTAL-VENTA").val(formatoNumerico.darFormatoEnMillares(total__, 0));
+        //Verificar existencia de delivery
+        let cargos_extra = 0;
+        if ($("input[type=hidden][name=DELIVERY]") && $("input[type=hidden][name=DELIVERY]").val() == "S") {
+            let id_service= $("select[name=SERVICIO]").val() ;
+            cargos_extra = parseInt(  listaDeServicios.filter(ar => ar.REGNRO ==  id_service )[0].COSTO );
+        }
+
+        let total_definitivo= total__ + cargos_extra ;
+        $("#TOTAL-VENTA").val(formatoNumerico.darFormatoEnMillares( total_definitivo , 0));
     }
 </script>

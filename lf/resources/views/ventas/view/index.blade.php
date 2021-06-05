@@ -12,7 +12,7 @@ use App\Helpers\Utilidades;
 
 
 <div class="container-fluid fast-food-bg   col-12 col-lg-10  pb-5 mt-2 ">
-    <h3 class="fast-food-big-title" >Venta N° {{ $HEADER->REGNRO}}</h3>
+    <h3 class="fast-food-big-title">Venta N° {{ $HEADER->REGNRO}}</h3>
 
     <div class="container bg-light text-dark">
         <div class="row">
@@ -108,6 +108,7 @@ use App\Helpers\Utilidades;
 
                 @php
                 $TOTAL= 0;
+                $EXTRA_DELIVERY= is_null( $DELIVERY) ? 0 : $DELIVERY->COSTO;
                 @endphp
                 @foreach( $DETALLE as $detalle)
 
@@ -126,9 +127,18 @@ use App\Helpers\Utilidades;
             </tbody>
 
             <tfoot>
+               
+                @if( ! is_null($DELIVERY))
+                <tr>
+                    <td colspan="3" class="p-0">{{$DELIVERY->DESCRIPCION}}</td>
+                    <td class="text-end p-0"> {{ Utilidades::number_f( $DELIVERY->COSTO )}} </td>
+                </tr>
+                
+                @endif
+                
                 <tr>
                     <td colspan="3" class="p-0"></td>
-                    <td class="text-end p-0"> {{ Utilidades::number_f( $TOTAL )}} </td>
+                    <td class="text-end p-0"> {{ Utilidades::number_f( $TOTAL + $EXTRA_DELIVERY )}} </td>
                 </tr>
             </tfoot>
         </table>

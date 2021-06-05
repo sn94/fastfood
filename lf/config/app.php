@@ -174,7 +174,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-       barryvdh\DomPDF\ServiceProvider::class
+        barryvdh\DomPDF\ServiceProvider::class
     ],
 
     /*
@@ -226,15 +226,37 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-       'PDFGEN' =>   Barryvdh\DomPDF\Facade::class,
+        'PDFGEN' =>   Barryvdh\DomPDF\Facade::class,
 
     ],
 
 
 
-    "my_config"=>[
+    "my_config" => [
 
-        "destino"=> "ccentrall" //, "clientez", "ccentrall", "portafolio"
+      
+        "funciones" => [
+            "delivery" => "S"
+        ],
+        "themes" => [
+            "selected"=> "FunnyOrange",
+            
+            "AlEstiloPecchi" => [
+                 
+                "estilos" => [
+                    url('assets/css/custom.css?v=' . rand() * 1000),
+                    url('assets/css/navbar_style1.css?v=' . rand() * 1000)
+                ]
+            ],
+            "FunnyOrange" => [
+                 
+                "estilos" => [
+                    url('assets/css/custom.css?v=' . rand() * 1000),
+                    url('assets/css/navbar_style3.css?v=' . rand() * 1000)
+                ]
+            ]
+
+        ]
     ]
 
 

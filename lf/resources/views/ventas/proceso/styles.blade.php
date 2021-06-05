@@ -136,60 +136,36 @@
 
     #RESUMEN div.container {
 
-        display: flex;
-        flex-direction: column;
-        background: #fae9e8;
+       
+        background: var(--color-secundario);
         border: #ff5131 4px solid;
+        border-radius: 8px;
     }
 
 
 
-    #RESUMEN label {
-        color: black;
-        font-family: titlefont;
-        font-weight: 600;
-        text-align: center;
-        font-size: 14px;
+    #RESUMEN label { 
+        font-weight: 600; 
         width: 100% !important;
     }
 
 
 
-    #RESUMEN input {
-        background-color: #fae9e8;
-        border: none;
-        text-align: right;
-        font-size: 14px;
-        font-family: titlefont;
+    #RESUMEN input { 
+        text-align: right;  
         width: 100%;
     }
 
     #RESUMEN button.cierra {
         background-color: black;
         color: yellow;
-        border-radius: 50px;
-        padding: 5px 10px !important;
+        border-radius: 100%;
+        padding: 2px 12px !important;
     }
 
 
-    #RESUMEN-PAGO-TARJETA,
-    #RESUMEN-PAGO-GIRO {
-
-        display: flex;
-        flex-direction: row;
-    }
-
-    #RESUMEN-PAGO-TARJETA label,
-    #RESUMEN-PAGO-TARJETA input,
-    #RESUMEN-PAGO-GIRO label,
-    #RESUMEN-PAGO-GIRO input,
-    #RESUMEN-FORMAPAGO label,
-    #RESUMEN-FORMAPAGO input {
-        font-size: 11.5px !important;
-        height: 25px;
-        font-family: Arial, Helvetica, sans-serif;
-    } 
-
+   
+    
 
     /**Formas de pago **/
      #FORMAS-DE-PAGO fieldset label {
@@ -211,9 +187,7 @@
         padding: 2px;
         height: 100%;
     }
-    #FORMAS-DE-PAGO fieldset:hover , #FORMAS-DE-PAGO fieldset:active {
-        box-shadow: 0 0 0 10px var(--color-primario-oscuro) !important;
-    }
+    
 
     #FORMAS-DE-PAGO fieldset input {
         height: 29px !important;

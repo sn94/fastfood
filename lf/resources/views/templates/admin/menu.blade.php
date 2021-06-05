@@ -1,9 +1,9 @@
 <?php
-
-use Illuminate\Support\Facades\Config;
-
-$destino = Config::get("app.my_config.destino");
-
+ 
+ 
+$funcionDelivery= Illuminate\Support\Facades\Config::get("app.my_config.funciones.delivery");
+ 
+ 
 $adminOptionsMenu = [
 
 
@@ -76,9 +76,8 @@ if (session("MATRIZ") ==  "S")
 
 
 
-if ($destino != "clientez") {
+if ($funcionDelivery == "S") {
     $adminOptionsMenu[5]['link'][] =  ["label" => "SERVICIOS",  "link" => url('servicios')];
-   
 }
 
 

@@ -25,8 +25,13 @@ use App\Helpers\Utilidades;
             @if( !isset($print_mode))
             <th></th>
             <th></th>
+            @if( Illuminate\Support\Facades\Config::get("app.my_config.funciones.delivery") == "S" )
+            <th></th>
+            @endif
             <th></th>
             <th></th>
+
+
             @endif
             <th>N° TICKET</th>
             <th>SESIÓN</th>
@@ -42,12 +47,28 @@ use App\Helpers\Utilidades;
 
         @foreach( $VENTAS as $ven)
 
-        <tr>
+
+        @php
+        $row_color= $ven->ESTADO =='P' ? 'table-danger' : ( $ven->ESTADO =='A' ? 'table-success' : 'table-secondary' );
+        @endphp
+
+        <tr class="{{$row_color}}">
             @if( !isset($print_mode))
-            <td><a onclick="anular(  event)" class="btn btn-danger btn-sm" href="{{url('ventas/anular/'.$ven->REGNRO)}}">ANULAR</a></td>
-            <td><a onclick="imprimirTicket(<?= $ven->REGNRO ?>)" class="btn btn-danger btn-sm" href="#">RE-IMPRIMIR</a></td>
+            <td><a onclick="anular_confirmar(  event)" class="btn btn-danger btn-sm" href="{{url('ventas/anular/'.$ven->REGNRO)}}">Anular</a></td>
+            <td><a onclick="imprimirTicket(<?= $ven->REGNRO ?>)" class="btn btn-danger btn-sm" href="#">Re-imprimir</a></td>
+
+            @if( Illuminate\Support\Facades\Config::get("app.my_config.funciones.delivery") == "S" )
+            @if( $ven->ESTADO =='P' )
+            <td> <a onclick="anular_confirmar(  event)" href="{{url('ventas/confirmar/'.$ven->REGNRO)}}" class="btn btn-danger btn-sm"> <i class="fas fa-check-circle"></i>Confirmar</a> </td>
+            @else
+            <td>-</td>
+            @endif
+            @endif
+
+
             <td><a onclick="enviarTicketPorEmail(event)" class="text-dark" href="<?= url("ventas/ticket/" . $ven->REGNRO) ?>"><i class="fas fa-envelope"></i></a></td>
             <td> <a href="{{url('ventas/view/'.$ven->REGNRO)}}" class="text-dark"> <i class="fas fa-eye"></i></a> </td>
+
             @endif
 
             <td>{{$ven->REGNRO}}</td>
@@ -56,7 +77,7 @@ use App\Helpers\Utilidades;
             <td>{{ date("H:i:s", strtotime(  $ven->created_at )   )}}</td>
             <td>{{ is_null($ven->cliente) ? '' : $ven->cliente->NOMBRE . "(". $ven->cliente->CEDULA_RUC . ")"}}</td>
             <td>{{ $ven->TOTAL}}</td>
-            <td>{{ $ven->ESTADO =='A'  ? 'ACTIVA'  : 'ANULADA'}}</td>
+            <td>{{ $ven->ESTADO =='A'  ? 'NORMAL'  : (  $ven->ESTADO =='P' ? 'PENDIENTE' : 'ANULADA')   }}</td>
         </tr>
         @endforeach
 
@@ -69,42 +90,6 @@ use App\Helpers\Utilidades;
 
 <x-pretty-paginator :datos="$VENTAS" callback="fill_grill" />
 
-<script>
-    async function anular(ev) {
-
-        ev.preventDefault();
-        let url_ = ev.target.href;
-
-        let req = await fetch(url_);
-        let resp = await req.json();
-        if ("ok" in resp) {
-            alert(resp.ok);
-            fill_grill();
-        } else alert(resp.err);
-
-        //actualizar grill, mostrar estados
-    }
-
-    async function imprimirTicket(id_venta) {
-
-        let idv = id_venta == undefined ? ultimoIdVentaRegistrado : id_venta;
-        if (idv != undefined)
-            printDocument.printFromUrl("<?= url("ventas/ticket") ?>/" + idv);
-
-    }
 
 
-    async function enviarTicketPorEmail(ev) {
 
-        ev.preventDefault();
-        let req = await fetch(ev.currentTarget.href, {
-            headers: {
-                formato: "email"
-            }
-        });
-        let resp = await req.json();
-        if ("ok" in resp)
-            alert("Enviado!");
-        else alert(resp.err);
-    }
-</script>

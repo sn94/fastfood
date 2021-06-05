@@ -21,26 +21,24 @@
      <!--Carga temprana de jquery -->
      <script src="{{$BASE_ASSETS}}/js/jquery.min.js"></script>
      <script src="{{$BASE_ASSETS}}/bootstrap5/bootstrap.bundle.min.js"> </script>
+       <!--Jquery and bootstrap js load End --> 
+
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/bootstrap5/bootstrap.min.css" />
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/fontawesome.min.css" />
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/solid.min.css" />
      <link rel="stylesheet" href="{{$BASE_ASSETS}}/fontawesome/brands.min.css" />
+     
      <!--Estilos Personalizados segun el entorno -->
-     @if( Illuminate\Support\Facades\Config::get("app.my_config.destino") == "clientez" )
-     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}" />
-     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/navbar_style1.css?v={{rand()*1000}}" />
-     @endif
-     @if( Illuminate\Support\Facades\Config::get("app.my_config.destino") == "ccentrall" )
-     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}" />
-     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/navbar_style3.css?v={{rand()*1000}}" />
-     @endif
-     @if( Illuminate\Support\Facades\Config::get("app.my_config.destino") == "portafolio" )
-     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}" />
-     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/navbar_style3.css?v={{rand()*1000}}" />
-     @endif
-
+     @php
+     $themeActual= Illuminate\Support\Facades\Config::get("app.my_config.themes.selected");
+     $estilosTheme= Illuminate\Support\Facades\Config::get("app.my_config.themes.$themeActual.estilos");
+     @endphp
+     @foreach( $estilosTheme as $style)
+     <link rel="stylesheet" href="{{$style}}" />
+     @endforeach
 
      <script src="{{$BASE_ASSETS}}/js/custom.js?v={{rand()*1000}}"> </script>
+<!--Javascript -->
 
      @yield("cssStyles")
 
@@ -52,7 +50,7 @@
 
      @yield("menu")
      <button class="backward-button" onclick="window.history.go(-1);" class="button">Atrás</button>
-    
+
      <!--  style="background-image: url( $BASE_ASSETS /images/bg_1.jpg);" -->
      @yield("content")
      @yield('jsScripts')

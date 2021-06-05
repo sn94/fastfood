@@ -4,8 +4,13 @@ use App\Helpers\Utilidades;
 use App\Models\Parametros;
 
 $TICKETNRO= $VENTA->REGNRO;
+$CON_DELIVERY=  $VENTA->DELIVERY;
+//Cliente
 $CLIENTECI= $VENTA->cliente->CEDULA_RUC;
 $CLIENTENOM= $VENTA->cliente->NOMBRE;
+$CLIENTEDOM= $VENTA->cliente->DIRECCION;
+$CLIENTETEL=$VENTA->cliente->TELEFONO;
+
 $CAJERO= $VENTA->cajero->NOMBRES;
 
 $TOTAL_A_PAGAR= 0;

@@ -10,7 +10,7 @@ $BASE_ASSETS= url('assets');
     <meta charset="utf-8">
     <link rel="manifest" href="{{url('manifest.json')}}" />
     <link rel="apple-touch-icon" href="{{url('assets/icons/maskable/burger144.png')}}" />
-    <meta name="theme-color" content="#a01809"/>
+    <meta name="theme-color" content="#a01809" />
     <link rel="icon" href="{{url('assets/icons/burger_icon.png')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -24,7 +24,7 @@ $BASE_ASSETS= url('assets');
     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}">
     <script src="{{$BASE_ASSETS}}/js/custom.js?v={{rand()*1000}}"> </script>
     <script src="{{url('/')}}/install_sw.js?v={{rand()*1000}}"> </script>
- 
+
 
     <style>
         body {
@@ -43,7 +43,7 @@ $BASE_ASSETS= url('assets');
             color: white !important;
         }
 
-     
+
 
         #login-button {
             background: var(--color-primario) !important;
@@ -85,12 +85,14 @@ $BASE_ASSETS= url('assets');
 
                 <div class="container d-flex flex-column justify-content-center">
 
-@if(  Illuminate\Support\Facades\Config::get("app.my_config.destino"  )   ==  "clientez")
+                    @if( Illuminate\Support\Facades\Config::get("app.my_config.themes.selected") == "AlEstiloPecchi")
                     <img class="img-fluid" src="{{url('assets/images/logo.png')}}" alt="">
                     @endif
-                    @if(  Illuminate\Support\Facades\Config::get("app.my_config.destino"  )   ==  "ccentrall")
+                    @if(  Illuminate\Support\Facades\Config::get("app.my_config.themes.selected") == "FunnyOrange")
                     <img style="width: 100px !important; height: auto !important;" class="img-fluid" src="{{url('assets/icons/burger_icon.png')}}" alt="">
                     @endif
+
+
 
                     @csrf
 

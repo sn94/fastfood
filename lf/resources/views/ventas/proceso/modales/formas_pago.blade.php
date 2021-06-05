@@ -40,7 +40,7 @@
                             <div class="row mb-1 mt-1">
                               <div class="col-12 col-md-6">
                               <div class="d-flex flex-row">
-                                    <label style="width: 120px !important;" class="fs-4  ">Entrega:</label>
+                                    <label style="width: 120px !important;" class="fs-4 text-light ">Entrega:</label>
                                 
                                     <input onfocus="this.value='';" onblur="if(this.value=='') this.value='0';" value="0" type="text" id="IMPORTE_PAGO" name="IMPORTE_PAGO" class="form-control fs-4 entero MONTO" />
                                 </div>
@@ -48,7 +48,7 @@
 
                               <div class="col-12 col-md-6">
                               <div class="d-flex flex-row">
-                              <label style="width: 120px !important;"  class="fs-4  ">Vuelto:&nbsp;</label>
+                              <label style="width: 120px !important;"  class="fs-4 text-light    ">Vuelto:&nbsp;</label>
                                    <input value="0" readonly type="text" id="VUELTO" name="VUELTO" class="form-control fs-4 entero MONTO" />
                               </div>
                               </div>

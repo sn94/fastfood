@@ -34,6 +34,7 @@ class TicketSender extends Mailable
         //  Mail::to($request->user()   )->send(new OrderShipped($order));
         return $this->from(  env("MAIL_FROM_ADDRESS") , 'Al Estilo Pecchi')
         ->subject("Hola!")
-        ->view(  "emails.TicketSender",  ['VENTA'=>  $this->ventas, 'DETALLE'=> $this->ventas->detalle ]); 
+        ->view(  "ventas.proceso.ticket.version_impresa",  [  'VENTA'=>  $this->ventas, 'DETALLE'=> $this->ventas->detalle ]);
+        // ->view(  "emails.TicketSender",  ['VENTA'=>  $this->ventas, 'DETALLE'=> $this->ventas->detalle ]); 
     }
 }

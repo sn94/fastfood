@@ -20,6 +20,14 @@ use App\Helpers\Utilidades;
             <tr>
             <th>Razón social: </th> <th colspan="4"> {{$CLIENTENOM}} </th> 
             </tr>
+            @if(   $CON_DELIVERY == "S")
+    <tr>
+            <th>Domicilio: </th> <th colspan="4"> {{$CLIENTEDOM}} </th> 
+            </tr>
+            <tr>
+            <th>Teléf.: </th> <th colspan="4"> {{$CLIENTETEL}} </th> 
+            </tr>
+    @endif
             <tr>
             <th>Cajero: </th> <th colspan="4"> {{$CAJERO}} </th> 
             </tr>
@@ -103,4 +111,5 @@ use App\Helpers\Utilidades;
     </table>
 
     <p style="text-align: center;"> {{$MENSAJE_TICKET}}</p>
+  
 </div>

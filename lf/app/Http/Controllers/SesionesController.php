@@ -268,6 +268,12 @@ class SesionesController extends Controller
             return view("sesiones.arqueo.index", $parametros);
         } else {
 
+            //Verificar si existen ventas Pendientes de confirmacion
+            $ventas_pendientes= Ventas::where("SUCURSAL", $sesion->SUCURSAL )
+            ->where( "CAJERO", $sesion->CAJERO)->where("ESTADO", "P")->count();
+            if( $ventas_pendientes >0 )
+            return response()->json(['err'=> "No puede cerrarse la Sesión. Antes confirme las ventas pendientes"]);
+            
             try {
                 $sesion->fill(
 

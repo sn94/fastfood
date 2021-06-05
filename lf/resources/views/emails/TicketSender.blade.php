@@ -19,7 +19,7 @@ $MENSAJE_TICKET= "";
 
 @endphp
 
-<img src="{{ $message->embed('./assets/images/logo.png') }}">
+ 
 
 <h1 style="text-align: left;"> {{$params->MENSAJE_TICKET}}</h1>
 <style>

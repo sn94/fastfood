@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\TicketSender;
 use App\Models\Combos;
 use App\Models\Parametros;
+use App\Models\Servicios;
 use App\Models\Sesiones;
 use App\Models\Stock;
 use App\Models\Sucursal;
@@ -381,6 +382,32 @@ class VentasController extends Controller
 
 
 
+    private function ejecutar_actualizar_stock( $r1, $r2){ //item cantidad
+
+        $DetalleVentaItemModel =  Stock::find($r1);
+
+        //Actualizar existencia Si no es un Combo
+        if ($DetalleVentaItemModel->TIPO != "COMBO") {
+            (new StockController())->actualizar_existencia($r1, $r2, 'DEC');
+        }
+
+        //Actualizar EXISTENCIA de ingredientes Si es producto elaborado
+        if (Parametros::first()->DESCONTAR_MP_EN_VENTA == "S") {
+
+            $receta = Stock::find($r1)->receta;
+            if (sizeof($receta)) {
+                foreach ($receta as $item) (new StockController())->actualizar_existencia($item->MPRIMA_ID, $item->CANTIDAD, 'DEC');
+            }
+            /** Receta definida? */
+
+            if ($DetalleVentaItemModel->TIPO == "COMBO") {
+                //Descontar productos del combo
+                $comboModel = Combos::where("COMBO_ID", $r1)->get();
+                foreach ($comboModel as $comboItem) (new StockController())->actualizar_existencia($comboItem->STOCK_ID,  $comboItem->CANTIDAD, 'DEC');
+            }
+        }
+        /** EnD Actualizacion de stock de ingrediente segun parametro */
+    }
 
     public function create()
     {
@@ -405,7 +432,8 @@ class VentasController extends Controller
                 //Venta Con delivery?
                 if (array_key_exists("DELIVERY", $DATOS['CABECERA'])  &&  $DATOS['CABECERA']['DELIVERY'] == "S") {
                     $DATOS['CABECERA']['ESTADO'] = "P";
-                }
+                }else  $DATOS['CABECERA']['ESTADO'] = "A";
+
                 $DATOS["CABECERA"]['SESION'] =  session("SESION");
                 $nventa->fill($DATOS["CABECERA"]);
                 $nventa->save();
@@ -441,41 +469,16 @@ class VentasController extends Controller
                         $p_10 = 0;
                         $p_exe = 0;
                     }
-                    $sql =
+                    $detalleDeVenta_regs =
                         ['VENTA_ID' => $nventa->REGNRO, 'ITEM' => $r1, 'CANTIDAD' => $r2, 'P_UNITARIO' => $r3, 'EXENTA' => $p_exe, 'TOT5' => $p_5,  'TOT10' => $p_10];
 
 
                     // Tratamiento del Stock 
+                   if ( !(array_key_exists("DELIVERY", $DATOS['CABECERA'])  &&  $DATOS['CABECERA']['DELIVERY'] == "S")) {
+                       $this->ejecutar_actualizar_stock(  $r1, $r2);
+                   } 
 
-                    //Detalle Venta Item
-                    $DetalleVentaItemModel =  Stock::find($r1);
-
-                    //Actualizar existencia Si no es un Combo
-                    if ($DetalleVentaItemModel->TIPO != "COMBO") {
-                        (new StockController())->actualizar_existencia($r1, $r2, 'DEC');
-                    }
-
-
-                    //Actualizar EXISTENCIA de ingredientes Si es producto elaborado
-                    if (Parametros::first()->DESCONTAR_MP_EN_VENTA == "S") {
-
-                        $receta = Stock::find($r1)->receta;
-                        if (sizeof($receta)) {
-                            foreach ($receta as $item) (new StockController())->actualizar_existencia($item->MPRIMA_ID, $item->CANTIDAD, 'DEC');
-                        }
-                        /** Receta definida? */
-
-                        if ($DetalleVentaItemModel->TIPO == "COMBO") {
-                            //Descontar productos del combo
-                            $comboModel = Combos::where("COMBO_ID", $r1)->get();
-                            foreach ($comboModel as $comboItem) (new StockController())->actualizar_existencia($comboItem->STOCK_ID,  $comboItem->CANTIDAD, 'DEC');
-                        }
-                    }
-                    /** EnD Actualizacion de stock de ingrediente segun parametro */
-
-
-
-                    (new Ventas_det())->fill($sql)->save();
+                    (new Ventas_det())->fill($detalleDeVenta_regs)->save();
                 endfor;
 
 
@@ -517,7 +520,8 @@ class VentasController extends Controller
                 Mail::to($email)->send((new TicketSender($venta)));
                 return response()->json(['ok' =>  "enviado"]);
             }
-        } else    return view("ventas.proceso.ticket.version_impresa", ["VENTA" => $venta, "DETALLE" => $detalle]);
+        } else 
+           return view("ventas.proceso.ticket.version_impresa", ["VENTA" => $venta, "DETALLE" => $detalle]);
     }
 
 
@@ -541,7 +545,28 @@ class VentasController extends Controller
         }
     }
 
+    public   function  confirmar($IDVENTA)
+    {
 
+        try {
+            DB::beginTransaction();
+            $venta = Ventas::find($IDVENTA);
+            if( $venta->ESTADO == "A")
+            return response()->json(['err' =>  "Esta venta ya ha sido confirmada anteriormente"]);
+
+            $detalle_venta= $venta->detalle;
+            foreach( $detalle_venta as $det)
+                $this->ejecutar_actualizar_stock(  $det->ITEM, $det->CANTIDAD );
+            $venta->ESTADO = "A";
+            $venta->save();
+            DB::commit();
+            return response()->json(['ok' =>  'VENTA CONFIRMADA']);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['err' =>  $e]);
+        }
+    }
 
     public  function view($VENTAID = NULL)
     {
@@ -549,7 +574,10 @@ class VentasController extends Controller
 
             $header =  Ventas::find($VENTAID);
             $detalles = $header->detalle;
-            return view("ventas.view.index", ['HEADER' =>  $header, 'DETALLE' => $detalles]);
+            $delivery= NULL;
+            if( $header->DELIVERY == "S")
+            $delivery= Servicios::find(   $header->SERVICIO );
+            return view("ventas.view.index", ['HEADER' =>  $header, 'DETALLE' => $detalles,   "DELIVERY"=> $delivery ]);
         }
     }
 }

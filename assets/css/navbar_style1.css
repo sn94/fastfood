@@ -1,6 +1,6 @@
  .fast-food-navbar.navbar {
      background-color: #BD2006 !important;
-     background-image: url(/fastfood/assets/images/logo.png);
+     background-image: url(../../assets/images/logo.png);
      background-size: contain;
      background-repeat: no-repeat;
      background-position-x: right;

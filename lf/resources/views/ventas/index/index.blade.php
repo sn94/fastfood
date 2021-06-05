@@ -10,6 +10,11 @@
 @include("ventas.proceso.impresion")
 
 
+<x-fast-food-modal  id="CONFIRMAR-VENTA"  title="Confirmar venta" /> 
+
+
+
+
 <div class="container-fluid fast-food-bg   col-12 col-lg-10  pb-5 mt-2 ">
   <h3 class="fast-food-big-title" >Ventas diarias</h3>
 
@@ -25,7 +30,66 @@
 
 </div>
 
+
+
+
+
+
 <script>
+    async function anular_confirmar(ev) {
+
+        ev.preventDefault();
+        if (!(confirm('Continuar?'))) return;
+        let url_ = ev.target.href;
+
+        let req = await fetch(url_);
+        let resp = await req.json();
+        if ("ok" in resp) {
+            alert(resp.ok);
+            fill_grill();
+        } else alert(resp.err);
+
+        //actualizar grill, mostrar estados
+    }
+
+
+    async function imprimirTicket(id_venta) {
+
+        let idv = id_venta == undefined ? ultimoIdVentaRegistrado : id_venta;
+        if (idv != undefined)
+            printDocument.printFromUrl("<?= url("ventas/ticket") ?>/" + idv);
+
+    }
+
+
+    async function enviarTicketPorEmail(ev) {
+
+        ev.preventDefault();
+        let req = await fetch(ev.currentTarget.href, {
+            headers: {
+                formato: "email"
+            }
+        });
+        let resp = await req.json();
+        if ("ok" in resp)
+            alert("Enviado!");
+        else alert(resp.err);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   async function fill_grill(ev) {
     if (ev != undefined && typeof ev == "object") 
       ev.preventDefault();

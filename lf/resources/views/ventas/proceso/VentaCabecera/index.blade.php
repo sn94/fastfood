@@ -14,10 +14,10 @@
   <div class="col-12">
     @include("ventas.proceso.VentaCabecera.BuscadorCliente")
   </div>
-  @if( Illuminate\Support\Facades\Config::get("app.my_config.destino") != "clientez" )
+  @if( Illuminate\Support\Facades\Config::get("app.my_config.funciones.delivery") == "S" )
   <div class="col-12   text-light   fs-5">
-    <x-pretty-checkbox name="DELIVERY" value="N" label="Con delivery" onValue="S" offValue="N" />
-    <x-servicios-list name="SERVICIO" value="" id="" callback="" style="" class="form-select p-0 text-center  fs-5">
+    <x-pretty-checkbox name="DELIVERY" value="N" label="Con delivery" onValue="S" offValue="N" callback="calcularTotalesVuelto()" />
+    <x-servicios-list name="SERVICIO" value="" id="" callback="calcularTotalesVuelto()" style="" class="form-select p-0 text-center  fs-5">
     </x-servicios-list>
   </div>
   @endif
