@@ -8,7 +8,9 @@
  $MENSAJE_TICKET= isset( $parametros )? $parametros->MENSAJE_TICKET : "";
  $DESCONTAR_MP_EN_VENTA=    isset( $parametros )? $parametros->DESCONTAR_MP_EN_VENTA : "N";
  $EMAIL_ADMIN= isset( $parametros )? $parametros->EMAIL_ADMIN : "";
-
+ $RAZON_SOCIAL= isset( $parametros )? $parametros->RAZON_SOCIAL : "";
+ $DOMICILIO_COMERCIAL= isset( $parametros )? $parametros->DOMICILIO_COMERCIAL : "";
+ $TELEFONO_COMERCIAL= isset( $parametros )? $parametros->TELEFONO_COMERCIAL : "";
  @endphp
 
 
@@ -39,8 +41,18 @@
          <label  >Email administrativo: </label>
          <input style="color:black !important;height: 30px !important; width: 100%;" name="EMAIL_ADMIN" class="form-control" type="text" maxlength="100" value="{{$EMAIL_ADMIN}}" />
      </div>
-
-
+     <div class="col-12  " >
+         <label  >Razón social: </label>
+         <input style="color:black !important;height: 30px !important; width: 100%;" name="RAZON_SOCIAL" class="form-control" type="text" maxlength="80" value="{{$RAZON_SOCIAL}}" />
+     </div>
+     <div class="col-12  " >
+         <label  >Domicilio comercial: </label>
+         <input style="color:black !important;height: 30px !important; width: 100%;" name="DOMICILIO_COMERCIAL" class="form-control" type="text" maxlength="100" value="{{$DOMICILIO_COMERCIAL}}" />
+     </div>
+     <div class="col-12  " >
+         <label  >Teléfono comercial: </label>
+         <input style="color:black !important;height: 30px !important; width: 100%;" name="TELEFONO_COMERCIAL" class="form-control" type="text" maxlength="50" value="{{$TELEFONO_COMERCIAL}}" />
+     </div>
 
      <div class="col-12   d-flex justify-content-center pt-1">
          <button style="height: 30px !important;" type="submit" class="btn fast-food-form-button ">Guardar</button>

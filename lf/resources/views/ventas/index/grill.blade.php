@@ -59,7 +59,7 @@ use App\Helpers\Utilidades;
 
             @if( Illuminate\Support\Facades\Config::get("app.my_config.funciones.delivery") == "S" )
             @if( $ven->ESTADO =='P' )
-            <td> <a onclick="anular_confirmar(  event)" href="{{url('ventas/confirmar/'.$ven->REGNRO)}}" class="btn btn-danger btn-sm"> <i class="fas fa-check-circle"></i>Confirmar</a> </td>
+            <td> <a onclick="mostrar_form(  event)" href="{{url('ventas/confirmar/'.$ven->REGNRO)}}" class="btn btn-danger btn-sm"> <i class="fas fa-check-circle"></i>Confirmar</a> </td>
             @else
             <td>-</td>
             @endif

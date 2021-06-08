@@ -14,7 +14,7 @@ self.addEventListener('fetch', (e) => {
         caches.
             match(e.request).
             then(respuesta =>{ 
-                console.log(" Respuesta de la cache",respuesta ? "de la cache" : "con fetch");
+                console.log(" Respuesta de la cache", respuesta ? "de la cache" : "con fetch");
 
                 return respuesta || fetch(e.request);
             } )
@@ -35,9 +35,16 @@ self.addEventListener('fetch', (e) => {
 self.addEventListener("install", (e) => {
 
  
-    e.waitUntil( caches.open(nombreCache).then((theCache) => {
+    e.waitUntil(
+         caches.
+         open(nombreCache).
+         then((theCache) => {
+
         theCache.addAll(recursosParaCache);
+
     }));
+
+    
     console.log("Instalado ", e);
 
 });

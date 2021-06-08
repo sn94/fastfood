@@ -11,6 +11,7 @@ use App\Models\Ventas_det;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use PhpParser\Node\Stmt\Foreach_;
 
 class SesionesController extends Controller
 {
@@ -35,8 +36,7 @@ class SesionesController extends Controller
         $fecha_desde = request()->has("FECHA_DESDE") ? request()->input("FECHA_DESDE") : NULL;
         $fecha_hasta = request()->has("FECHA_HASTA") ? request()->input("FECHA_HASTA") : NULL;
 
-        $sesiones = Sesiones::where("SUCURSAL",  $SUCURSAL)
-            ->where("ESTADO", $ESTADO);
+        $sesiones = Sesiones::where("SUCURSAL",  $SUCURSAL)->where("ESTADO", $ESTADO);
 
         //Filtrar por Id de usuario
         if (!is_null($USERID))
@@ -54,7 +54,7 @@ class SesionesController extends Controller
             DB::raw("FORMAT(TOTAL_TAR,0,'de_DE') AS TOTAL_TARJETA"),
             DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIROS")
 
-           /* DB::raw("FORMAT(SUM(EFECTIVO_INI) ,0,'de_DE' ) AS EFECTIVO_INI_TOTAL"),
+            /* DB::raw("FORMAT(SUM(EFECTIVO_INI) ,0,'de_DE' ) AS EFECTIVO_INI_TOTAL"),
             DB::raw("FORMAT( SUM(TOTAL_EFE) ,0,'de_DE') AS TOTAL_EFE_TOTAL"),
             DB::raw("FORMAT( SUM(TOTAL_TAR) ,0,'de_DE') AS TOTAL_TAR_TOTAL"),
             DB::raw("FORMAT( SUM(TOTAL_GIRO) ,0,'de_DE') AS TOTAL_GIRO_TOTAL")*/
@@ -73,7 +73,7 @@ class SesionesController extends Controller
         }
 
         if ($formato ==   "pdf")
-            return $this->responsePdf("sesiones.index.grill",  [ 'SESIONES'=> $sesiones->get()], "Sesiones");
+            return $this->responsePdf("sesiones.index.grill",  ['SESIONES' => $sesiones->get()], "Sesiones");
 
         if ($formato ==  "html") {
 
@@ -156,9 +156,9 @@ class SesionesController extends Controller
 
     private function enviarArqueoPorEmail($params)
     {
-        $adminEmail =  Parametros::first()->EMAIL_ADMIN;
-        $tituloArqueoReporte=  "INFORME DE ARQUEO N° {$params['SESION']->REGNRO}";
-        $params =  ['data' => $params,  'view' => "sesiones.arqueo.simple", 'title'=>  $tituloArqueoReporte];
+        $adminEmail =  Parametros::where("SUCURSAL", session("SUCURSAL"))->first()->EMAIL_ADMIN;
+        $tituloArqueoReporte =  "INFORME DE ARQUEO N° {$params['SESION']->REGNRO}";
+        $params =  ['data' => $params,  'view' => "sesiones.arqueo.simple", 'title' =>  $tituloArqueoReporte];
         Mail::to($adminEmail)->send((new GenericEmailSender($params)));
         return response()->json(['ok' => "Se envió por e-mail el informe de arqueo."]);
     }
@@ -179,25 +179,41 @@ class SesionesController extends Controller
         //Obtener datos de la sesion 
         $sesion =  Sesiones::find($SESION);
         //Todos los ticket expedidos (no anulados)
-        $tickets_expedidos = Ventas::where("SESION",  $sesion->REGNRO)
+        $tickets_expedidos = Ventas::join("ventas_det", "ventas_det.VENTA_ID", "=", "ventas.REGNRO")
+            ->leftJoin("servicios", "servicios.REGNRO", "=", "ventas.SERVICIO")
+            ->where("SESION",  $sesion->REGNRO)
             ->where("CAJERO", $sesion->CAJERO)
-            ->where("ESTADO", "A")
-            ->get();
+            ->where("ESTADO", "<>", "B")
+            ->select(
+                "ventas.*",
+                DB::raw("SUM(ventas_det.CANTIDAD * ventas_det.P_UNITARIO) AS TOTAL_VENTA"),
+                "servicios.DESCRIPCION AS SERVICIO",
+                DB::raw("if(servicios.COSTO IS NULL, 0, servicios.COSTO) AS COSTO_SERVICIO")
+            )
+            ->groupBy("ventas.REGNRO")->get();
         //Tickets anulados
         $tickets_anulados = Ventas::where("SESION",  $sesion->REGNRO)
             ->where("CAJERO", $sesion->CAJERO)
             ->where("ESTADO", "B")->get();
 
-        //Totales discriminados por forma de pago
-        $totales =    Ventas::where("SESION",  $sesion->REGNRO)
-            ->select(DB::raw("sum(TOTAL) AS TOTAL"), "FORMA")
+        //Totales por servicios de delivery
 
+        $totalesDelivery =    0;
+        foreach($tickets_expedidos as $ticket)  $totalesDelivery +=  $ticket->COSTO_SERVICIO;
+
+        //Totales discriminados por forma de pago
+        $totales =    Ventas::join("ventas_det", "ventas_det.VENTA_ID", "=", "ventas.REGNRO")
+        ->where("SESION",  $sesion->REGNRO)
+        ->where("ventas.ESTADO","<>",  "B")
+            ->select(DB::raw("sum(ventas_det.CANTIDAD*ventas_det.P_UNITARIO) AS TOTAL"), "FORMA")
             ->groupBy("FORMA")
             ->get();
+
         //TARJETA TIGO_MONEY EFECTIVO
         $t_efe = 0;
         $t_tar = 0;
         $t_giro = 0;
+        $t_cheque= 0;
         foreach ($totales as  $recaudado) :
             //Efectivo
             if ($recaudado->FORMA == "EFECTIVO")
@@ -206,15 +222,20 @@ class SesionesController extends Controller
                 //Tarjeta
                 if ($recaudado->FORMA == "TARJETA")
                     $t_tar = $recaudado->TOTAL;
-                elseif ($recaudado->FORMA == "TIGO_MONEY")
-                    $t_giro =   $recaudado->TOTAL;
+                else {
+                    if ($recaudado->FORMA == "TIGO_MONEY")
+                        $t_giro =   $recaudado->TOTAL;
+                    elseif ($recaudado->FORMA == "CHEQUE")
+                    $t_cheque=    $recaudado->TOTAL;
+                }
             }
         endforeach;
-        $totalTodo =   $t_efe + $t_tar  + $t_giro;
-        $totalesVentas = ['TOTAL' => $totalTodo, 'EFECTIVO' => $t_efe,  'TARJETA' =>  $t_tar,  'TIGO_MONEY' =>   $t_giro];
+        $totalTodo =   $t_efe + $t_tar  + $t_giro + $t_cheque + $totalesDelivery;
+        $totalesVentas = ['TOTAL' => $totalTodo, 'TOTAL_DELIVERY'=>$totalesDelivery, 'EFECTIVO' => $t_efe,  'TARJETA' =>  $t_tar,  'TIGO_MONEY' =>   $t_giro, 'CHEQUE'=> $t_cheque];
 
         //Productos vendidos
         $detalleVentas =  Ventas_det::join("ventas",  "ventas_det.VENTA_ID", "=", "ventas.REGNRO")
+        ->where("ventas.ESTADO","<>",  "B")
             ->where("ventas.SESION",  $sesion->REGNRO)
             ->where("ventas.SUCURSAL", $sesion->SUCURSAL)
             ->select("ventas_det.ITEM", DB::raw("sum(ventas_det.P_UNITARIO * ventas_det.CANTIDAD) as IMPORTE"), DB::raw("sum(ventas_det.CANTIDAD) as CANTIDAD "))
@@ -232,13 +253,12 @@ class SesionesController extends Controller
         else {
 
             if ($formato == "email") {
-               try{
-                $this->enviarArqueoPorEmail($parametros);
-                return response()->json( ['ok'=> "Se ha enviado por email el informe de arqueo."]);
-               }catch( Exception $e){
-                return response()->json( ['err'=>  $e->getMessage()]);
-               }
-             
+                try {
+                    $this->enviarArqueoPorEmail($parametros);
+                    return response()->json(['ok' => "Se ha enviado por email el informe de arqueo."]);
+                } catch (Exception $e) {
+                    return response()->json(['err' =>  $e->getMessage()]);
+                }
             }
             if ($formato ==   "pdf")
                 return $this->responsePdf("sesiones.arqueo.simple", $parametros, "INFORME DE ARQUEO");
@@ -269,11 +289,12 @@ class SesionesController extends Controller
         } else {
 
             //Verificar si existen ventas Pendientes de confirmacion
-            $ventas_pendientes= Ventas::where("SUCURSAL", $sesion->SUCURSAL )
-            ->where( "CAJERO", $sesion->CAJERO)->where("ESTADO", "P")->count();
-            if( $ventas_pendientes >0 )
-            return response()->json(['err'=> "No puede cerrarse la Sesión. Antes confirme las ventas pendientes"]);
-            
+            $ventas_pendientes = Ventas::where("SUCURSAL", $sesion->SUCURSAL)
+                ->where("CAJERO", $sesion->CAJERO)->where("ESTADO", "P")->count();
+
+            if ($ventas_pendientes > 0)
+                return response()->json(['err' => "No puede cerrarse la Sesión. Antes confirme las ventas pendientes"]);
+
             try {
                 $sesion->fill(
 

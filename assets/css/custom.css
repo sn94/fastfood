@@ -161,3 +161,9 @@ Unidad de medida de producto **/
     border-radius: 0px 0px 8px 8px;
     text-align: center;
 }
+
+.user-info-card {
+    background: linear-gradient( to bottom left, black, rgb(29, 28, 28));
+    border-radius: 8px;
+    color: white !important;
+}

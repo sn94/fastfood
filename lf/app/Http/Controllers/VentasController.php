@@ -49,7 +49,8 @@ class VentasController extends Controller
 
         if ($SESION == FALSE) {
             //Ultima sesion de cajero
-            $ultimaSesion =  Sesiones::where("SUCURSAL",  $SUCURSAL)->where("CAJERO",  $CAJERO)->orderBy("FECHA_APE", "DESC")->first();
+            $ultimaSesion =  Sesiones::where("SUCURSAL",  $SUCURSAL)->where("CAJERO",  $CAJERO)
+                ->orderBy("FECHA_APE", "DESC")->first();
             if (!is_null($ultimaSesion))
                 $SESION = $ultimaSesion->REGNRO;
         }
@@ -58,8 +59,7 @@ class VentasController extends Controller
         $CAJERO = request()->has("CAJERO") ? request()->input("CAJERO") : $CAJERO;
 
         $ventas = Ventas::where("SUCURSAL", $SUCURSAL)
-            ->where("CAJERO", $CAJERO)
-            ->where("FECHA", date("Y-m-d"));
+            ->where("CAJERO", $CAJERO);
         //Filtrar por fecha
         if ($FECHA_DESDE != ""  &&  $FECHA_HASTA != "")
             $ventas = $ventas->where("ventas.FECHA", ">=", $FECHA_DESDE)
@@ -382,7 +382,8 @@ class VentasController extends Controller
 
 
 
-    private function ejecutar_actualizar_stock( $r1, $r2){ //item cantidad
+    private function ejecutar_actualizar_stock($r1, $r2)
+    { //item cantidad
 
         $DetalleVentaItemModel =  Stock::find($r1);
 
@@ -392,7 +393,7 @@ class VentasController extends Controller
         }
 
         //Actualizar EXISTENCIA de ingredientes Si es producto elaborado
-        if (Parametros::first()->DESCONTAR_MP_EN_VENTA == "S") {
+        if (Parametros::where("SUCURSAL", session("SUCURSAL"))->first()->DESCONTAR_MP_EN_VENTA == "S") {
 
             $receta = Stock::find($r1)->receta;
             if (sizeof($receta)) {
@@ -432,7 +433,7 @@ class VentasController extends Controller
                 //Venta Con delivery?
                 if (array_key_exists("DELIVERY", $DATOS['CABECERA'])  &&  $DATOS['CABECERA']['DELIVERY'] == "S") {
                     $DATOS['CABECERA']['ESTADO'] = "P";
-                }else  $DATOS['CABECERA']['ESTADO'] = "A";
+                } else  $DATOS['CABECERA']['ESTADO'] = "A";
 
                 $DATOS["CABECERA"]['SESION'] =  session("SESION");
                 $nventa->fill($DATOS["CABECERA"]);
@@ -474,9 +475,9 @@ class VentasController extends Controller
 
 
                     // Tratamiento del Stock 
-                   if ( !(array_key_exists("DELIVERY", $DATOS['CABECERA'])  &&  $DATOS['CABECERA']['DELIVERY'] == "S")) {
-                       $this->ejecutar_actualizar_stock(  $r1, $r2);
-                   } 
+                    if (!(array_key_exists("DELIVERY", $DATOS['CABECERA'])  &&  $DATOS['CABECERA']['DELIVERY'] == "S")) {
+                        $this->ejecutar_actualizar_stock($r1, $r2);
+                    }
 
                     (new Ventas_det())->fill($detalleDeVenta_regs)->save();
                 endfor;
@@ -520,8 +521,15 @@ class VentasController extends Controller
                 Mail::to($email)->send((new TicketSender($venta)));
                 return response()->json(['ok' =>  "enviado"]);
             }
-        } else 
-           return view("ventas.proceso.ticket.version_impresa", ["VENTA" => $venta, "DETALLE" => $detalle]);
+        } else {
+            $delivery = NULL;
+            if ($venta->DELIVERY == "S")
+                $delivery = Servicios::find($venta->SERVICIO);
+            return view(
+                "ventas.proceso.ticket.version_impresa",
+                ["VENTA" => $venta, "DETALLE" => $detalle, "DELIVERY" =>  $delivery]
+            );
+        }
     }
 
 
@@ -545,26 +553,31 @@ class VentasController extends Controller
         }
     }
 
-    public   function  confirmar($IDVENTA)
+    public   function  confirmar($IDVENTA= null)
     {
 
+        if (request()->isMethod("GET"))
+            return view("ventas.confirmar.index", ['REGNRO' =>  $IDVENTA]);
         try {
             DB::beginTransaction();
-            $venta = Ventas::find($IDVENTA);
-            if( $venta->ESTADO == "A")
-            return response()->json(['err' =>  "Esta venta ya ha sido confirmada anteriormente"]);
+            $idventa = request()->input("REGNRO");
+            $venta = Ventas::find($idventa);
+            if ($venta->ESTADO == "A")
+                return response()->json(['err' =>  "Esta venta ya ha sido confirmada anteriormente"]);
 
-            $detalle_venta= $venta->detalle;
-            foreach( $detalle_venta as $det)
-                $this->ejecutar_actualizar_stock(  $det->ITEM, $det->CANTIDAD );
+            $detalle_venta = $venta->detalle;
+            foreach ($detalle_venta as $det)
+                $this->ejecutar_actualizar_stock($det->ITEM, $det->CANTIDAD);
+            //oBTENER MEDIO DE PAGO DEFINITIVO
+            $forma_pago = request()->input("FORMA");
+            $venta->FORMA =  $forma_pago;
             $venta->ESTADO = "A";
             $venta->save();
             DB::commit();
             return response()->json(['ok' =>  'VENTA CONFIRMADA']);
-
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['err' =>  $e]);
+            return response()->json(['err' =>  $e->getMessage()]);
         }
     }
 
@@ -574,10 +587,10 @@ class VentasController extends Controller
 
             $header =  Ventas::find($VENTAID);
             $detalles = $header->detalle;
-            $delivery= NULL;
-            if( $header->DELIVERY == "S")
-            $delivery= Servicios::find(   $header->SERVICIO );
-            return view("ventas.view.index", ['HEADER' =>  $header, 'DETALLE' => $detalles,   "DELIVERY"=> $delivery ]);
+            $delivery = NULL;
+            if ($header->DELIVERY == "S")
+                $delivery = Servicios::find($header->SERVICIO);
+            return view("ventas.view.index", ['HEADER' =>  $header, 'DETALLE' => $detalles,   "DELIVERY" => $delivery]);
         }
     }
 }

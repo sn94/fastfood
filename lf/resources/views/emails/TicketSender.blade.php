@@ -12,7 +12,7 @@ $TOTAL_A_PAGAR= 0;
 $IMPORTE= $VENTA->IMPORTE;
 
 //Mensaje Ticket
-$params= Parametros::first();
+$params= Parametros::where("SUCURSAL", session("SUCURSAL"))->first();
 $MENSAJE_TICKET= "";
 
  

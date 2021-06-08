@@ -17,7 +17,7 @@
     <table id="VENTATABLE" class="table table-stripped table-light">
         <thead class="thead-dark">
             <tr>
-                <th>Cantidad</th>
+                <th class="text-center">Cantidad</th>
                 <th>Descripción</th>
                 <th class="text-end">Precio</th>
                 <!--  <th>Exe.</th>-->
@@ -121,10 +121,11 @@
         let td_cons = function(ar) {
             return Object.keys(ar).map((valo) => {
                 if (valo == "CANTIDAD")
-                    return "<td style='display: flex;' class='text-left'>" + ar[valo] + "</td>";
+                    return `<td style='display: flex;' class='text-start'>"
+                     ${ar[valo]}</td>`;
                 else {
                     if (valo == "DESCRIPCION")
-                        return "<td class='text-left'>" + ar[valo] + "</td>";
+                        return "<td class='text-start'>" + ar[valo] + "</td>";
                     else
                         return "<td class='text-end'>" + ar[valo] + "</td>";
                 }

@@ -14,7 +14,7 @@ class ParametrosController extends Controller {
     {
         if (request()->getMethod()  ==  "GET") {
             
-            $params =   Parametros::first();
+            $params =   Parametros::where("SUCURSAL", session("SUCURSAL"))->first();
             if(  is_null($params) )
             return view('parametros.index');
             else
@@ -28,7 +28,7 @@ class ParametrosController extends Controller {
                 $data = request()->input();
 
                 DB::beginTransaction();
-                $nuevo_producto =   Parametros::first();
+                $nuevo_producto = Parametros::where("SUCURSAL", session("SUCURSAL"))->first();
                 if(  is_null( $nuevo_producto) )
                 $nuevo_producto= new Parametros();
 

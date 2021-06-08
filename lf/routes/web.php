@@ -409,6 +409,7 @@ Route::group(['prefix' => 'ventas', 'middleware' => ['auth.Caja']], function () 
     Route::get('/anular/{id}',   'VentasController@anular');
     Route::get('/view/{id}',   'VentasController@view');
     Route::get('/confirmar/{id}',   'VentasController@confirmar');
+    Route::post('/confirmar',   'VentasController@confirmar');
 });
 
 

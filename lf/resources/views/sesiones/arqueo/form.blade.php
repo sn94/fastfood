@@ -81,15 +81,12 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
       <td>{{$ticket->REGNRO}}</td>
       <td>{{ is_null($ticket->FECHA) ? '':  $ticket->FECHA->format('d/m/Y')}}</td>
       <td>{{ is_null($ticket->cliente) ?  '' : $ticket->cliente->NOMBRE}}</td>
-      <td class="text-end">{{ Utilidades::number_f( $ticket->TOTAL )}}</td>
+      <td class="text-end">{{ Utilidades::number_f( $ticket->TOTAL_VENTA + $ticket->COSTO_SERVICIO)}}</td>
     </tr>
     @endforeach
   </tbody>
   <tfoot>
-    <tr>
-      <td colspan="4">TOTAL VENTAS DE LA SESIÓN:</td>
-      <td class="text-end"> {{ Utilidades::number_f($TOTALES['TOTAL'])  }}</td>
-    </tr>
+    
     <tr>
       <td colspan="4">TOTAL EFECTIVO</td>
       <td class="text-end"> {{ Utilidades::number_f($TOTALES['EFECTIVO'])  }} </td>
@@ -99,9 +96,19 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
       <td class="text-end"> {{ Utilidades::number_f($TOTALES['TARJETA'])  }}</td>
     </tr>
     <tr>
+      <td colspan="4">TOTAL CHEQUE:</td>
+      <td class="text-end"> {{ Utilidades::number_f($TOTALES['CHEQUE'])  }}</td>
+    </tr>
+    <tr>
       <td colspan="4">TOTAL GIROS_TIGO:</td>
       <td class="text-end"> {{ Utilidades::number_f($TOTALES['TIGO_MONEY'])  }}</td>
     </tr>
+    <tr>
+      <td colspan="4" style="font-weight: 600;">TOTAL VENTAS DE LA SESIÓN:</td>
+      <td class="text-end"> {{ Utilidades::number_f($TOTALES['TOTAL'])  }}</td>
+    </tr>
+  
+   
   </tfoot>
 </table>
 
@@ -182,6 +189,14 @@ $VENDIDOS =  isset($datalist) ?  $datalist['VENDIDOS'] :  $VENDIDOS;
         {{ Utilidades::number_f($TOTAL_VENDIDOS)}}
       </td>
     </tr>
+
+    @if( Illuminate\Support\Facades\Config::get("app.my_config.funciones.delivery") == "S" )
+    <tr>
+      <td colspan="3">Delivery:</td>
+      <td class="text-end"> {{ Utilidades::number_f($TOTALES['TOTAL_DELIVERY'])  }}</td>
+    </tr>
+@endif
+
   </tfoot>
 
 </table>
