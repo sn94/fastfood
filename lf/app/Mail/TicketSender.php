@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Models\Parametros;
+use App\Models\Servicios;
 use App\Models\Ventas;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,9 +34,21 @@ class TicketSender extends Mailable
     public function build()
     {
         //  Mail::to($request->user()   )->send(new OrderShipped($order));
-        return $this->from(  env("MAIL_FROM_ADDRESS") , 'Al Estilo Pecchi')
+        $parametros=  Parametros::where("SUCURSAL", session("SUCURSAL"))->first();
+
+        $procedenciaEmail=  ""  ;
+
+        if( ! is_null($parametros))  $procedenciaEmail=  $parametros->RAZON_SOCIAL;
+
+        $delivery = NULL;
+        if ($this->ventas->DELIVERY == "S")
+            $delivery = Servicios::find($this->ventas->SERVICIO);
+
+
+        return $this->from(  env("MAIL_FROM_ADDRESS") , $procedenciaEmail)
         ->subject("Hola!")
-        ->view(  "ventas.proceso.ticket.version_impresa",  [  'VENTA'=>  $this->ventas, 'DETALLE'=> $this->ventas->detalle ]);
+        ->view(  "ventas.proceso.ticket.version_impresa", 
+         [  'VENTA'=>  $this->ventas, 'DETALLE'=> $this->ventas->detalle, "DELIVERY"=>  $delivery ]);
         // ->view(  "emails.TicketSender",  ['VENTA'=>  $this->ventas, 'DETALLE'=> $this->ventas->detalle ]); 
     }
 }

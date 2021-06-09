@@ -1,5 +1,3 @@
-
-
 <div id="RESUMEN" class="container-fluid d-none  fs-5 text-light">
 
 
@@ -10,24 +8,24 @@
         </div>
 
 
-      
-        <div class="d-flex flex-row" >
+
+        <div class="d-flex flex-row">
             <label for="">TOTAL:</label>
             <input readonly value="0" type="text" id="VENTA-TOTAL-RESUMEN">
         </div>
-        <div  class="d-flex flex-row" >
+        <div class="d-flex flex-row">
             <label for="">TICKET N°:</label>
             <input readonly value="0" type="text" id="VENTA-TOTAL-TICKET">
         </div>
-        <div  class="d-flex flex-row" >
+        <div class="d-flex flex-row">
             <label for="">ENTREGA:</label>
             <input readonly value="0" type="text" id="VENTA-ENTREGA-RESUMEN">
         </div>
-        <div  class="d-flex flex-row" >
+        <div class="d-flex flex-row">
             <label for="">VUELTO:</label>
             <input readonly value="0" type="text" id="VENTA-VUELTO-RESUMEN">
         </div>
-        <div id="RESUMEN-FORMAPAGO" class="d-flex flex-row"  >
+        <div id="RESUMEN-FORMAPAGO" class="d-flex flex-row">
 
             <label for="">FORMA DE PAGO:</label>
             <input readonly type="text" id="VENTA-FORMA-PAGO">
@@ -69,8 +67,9 @@
             </div>
         </div>
         <button onclick="imprimirTicket()" class="btn btn-danger">IMPRIMIR</button>
-        <button onclick="enviarTicketPorEmail()" class="btn btn-success">ENVIAR</button>
-        <button onclick="$('#RESUMEN').addClass('d-none');nuevaVenta();" class="btn btn-warning">CONTINUAR</button>
+        <button onclick="enviarTicketPorEmail()" class="btn btn-success">ENVIAR <i class="fa fa-email"></i> </button>
+       
+        <button onclick="$('#RESUMEN').addClass('d-none');nuevaVenta();" class="btn btn-secondary">CONTINUAR</button>
     </div>
 </div>
 
@@ -88,7 +87,7 @@
         $("#VENTA-TOTAL-RESUMEN").val($("#TOTAL-VENTA").val());
         //Si es efectivo
         if (modalidadDePago == "EFECTIVO") {
- 
+
             $("#VENTA-ENTREGA-RESUMEN").val($("input[name=IMPORTE_PAGO]").val());
             $("#VENTA-VUELTO-RESUMEN").val($("input[name=VUELTO]").val());
         }
@@ -121,20 +120,32 @@
         }
     }
 
+    async function imprimirTicket(id_venta) {
 
+      //  $("#RESUMEN").addClass("d-none");
+        let idv = id_venta == undefined ? ultimoIdVentaRegistrado : id_venta;
+        if (idv != undefined)
+            printDocument.printFromUrl("<?= url("ventas/ticket") ?>/" + idv);
+        //   await fetch( "http://localhost:8080/fastfood-print-service/PrinterAssistant");
 
-    async function enviarTicketPorEmail( idd) {
+       // nuevaVenta();
+    }
 
-        let idv = idd ? idd :  ultimoIdVentaRegistrado;
+    async function enviarTicketPorEmail(idd) {
+
+        let idv = idd ? idd : ultimoIdVentaRegistrado;
         let req = await fetch("<?= url("ventas/ticket") ?>/" + idv, {
             headers: {
                 formato: "email"
             }
         });
         let resp = await req.json();
-        if( "ok" in resp)
-        alert("Enviado!");
-        else alert(  resp.err) ;
+        if ("ok" in resp)
+            alert("Enviado!");
+        else alert(resp.err);
 
     }
-</script>
+
+
+   
+    </script>

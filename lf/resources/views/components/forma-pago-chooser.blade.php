@@ -1,6 +1,6 @@
 <select  id="{{$id}}" name="{{$name}}" class="{{$class}}" onchange="{{$callback}}">
     @php
-    $FormasDePago= [ "TARJETA"=> "TARJETA DE CRÉD./DÉB.", "CHEQUE"=> "CHEQUE", "EFECTIVO"=> "EFECTIVO"];
+    $FormasDePago= [ "EFECTIVO"=> "EFECTIVO", "TARJETA"=> "TARJETA DE CRÉD./DÉB.", "CHEQUE"=> "CHEQUE", "TIGO_MONEY"=> "TIGO MONEY"];
 
     @endphp
     @foreach( $FormasDePago as $for=> $forval)

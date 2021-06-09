@@ -127,16 +127,7 @@ Nueva venta
 
 
 
-    async function imprimirTicket(id_venta) {
-
-        $("#RESUMEN").addClass("d-none");
-        let idv = id_venta == undefined ? ultimoIdVentaRegistrado : id_venta;
-        if (idv != undefined)
-            printDocument.printFromUrl("<?= url("ventas/ticket") ?>/" + idv);
-        //   await fetch( "http://localhost:8080/fastfood-print-service/PrinterAssistant");
-
-        nuevaVenta();
-    }
+ 
 
 
 

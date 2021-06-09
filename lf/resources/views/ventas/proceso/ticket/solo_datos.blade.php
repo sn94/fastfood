@@ -6,7 +6,7 @@
 
     $parametros = Parametros::where("SUCURSAL", session("SUCURSAL"))->first();
     $RAZON_SOCIAL = is_null($parametros) ?  '' : $parametros->RAZON_SOCIAL;
-    $DOMICILIO_COMERCIAL =  is_null($parametros) ?  '' : $parametros->TELEFONO_COMERCIAL;
+    $DOMICILIO_COMERCIAL =  is_null($parametros) ?  '' : $parametros->DOMICILIO_COMERCIAL;
     $TELEFONO_COMERCIAL =  is_null($parametros) ?  '' : $parametros->TELEFONO_COMERCIAL;
 
 
@@ -18,6 +18,10 @@
 
      <table>
 
+        
+
+
+         <thead>
          @if( $RAZON_SOCIAL != "")
          <tr>
              <th colspan="5"> {{$RAZON_SOCIAL}}</th>
@@ -32,9 +36,6 @@
              <th colspan="5"> {{$TICKETNRO}}</th>
          </tr>
          @endif
-
-
-         <thead>
              <tr>
                  <th colspan="5"> TICKET N° {{$TICKETNRO}}</th>
              </tr>

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Parametros;
 use App\Models\Ventas;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,8 +43,12 @@ $this->title= $anyObject['title'];
      */
     public function build()
     {
-        //  Mail::to($request->user()   )->send(new OrderShipped($order));
-        return $this->from(  env("MAIL_FROM_ADDRESS") , 'Al Estilo Pecchi')
+        $parametros=  Parametros::where("SUCURSAL", session("SUCURSAL"))->first();
+
+        $procedenciaEmail=  ""  ;
+
+        if( ! is_null($parametros))  $procedenciaEmail=  $parametros->RAZON_SOCIAL;
+        return $this->from(  env("MAIL_FROM_ADDRESS") , $procedenciaEmail)
         ->subject(  $this->title)
         ->view( $this->viewName,  $this->viewData ); 
     }

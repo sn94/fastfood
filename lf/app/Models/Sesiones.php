@@ -16,7 +16,7 @@ class Sesiones extends Model
 
 
         //Datos de arqueo arrojados por el sistema
-        'TOTAL_EFE', 'TOTAL_TAR', "TOTAL_GIRO",
+        'TOTAL_EFE', 'TOTAL_TAR', "TOTAL_GIRO", "TOTAL_CHEQUE",
         //cifras reales
         'TOTAL_EFE_REAL', 'TOTAL_TAR_REAL', "TOTAL_GIRO_REAL",
 

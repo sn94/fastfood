@@ -36,11 +36,14 @@ class SesionesController extends Controller
         $fecha_desde = request()->has("FECHA_DESDE") ? request()->input("FECHA_DESDE") : NULL;
         $fecha_hasta = request()->has("FECHA_HASTA") ? request()->input("FECHA_HASTA") : NULL;
 
-        $sesiones = Sesiones::where("SUCURSAL",  $SUCURSAL)->where("ESTADO", $ESTADO);
+        $sesiones = Sesiones::where("sesiones.SUCURSAL",  $SUCURSAL)->where("sesiones.ESTADO", $ESTADO);
+        //join("ventas", "ventas.SESION", "=", "sesiones.REGNRO")
+      //  ->leftJoin("servicios", "servicios.REGNRO", "=", "ventas.SERVICIO")
+        
 
         //Filtrar por Id de usuario
         if (!is_null($USERID))
-            $sesiones =  $sesiones->where("CAJERO", $USERID);
+            $sesiones =  $sesiones->where("sesiones.CAJERO", $USERID);
 
         //fecha
         if (!is_null($fecha_desde)   &&  !is_null($fecha_hasta))
@@ -50,14 +53,12 @@ class SesionesController extends Controller
         $sesiones =  $sesiones->select(
             "sesiones.*",
             DB::raw("FORMAT(EFECTIVO_INI,0,'de_DE') AS EFECTIVO_INICIAL"),
-            DB::raw("FORMAT(TOTAL_EFE,0,'de_DE') AS TOTAL_EFECTIVO"),
-            DB::raw("FORMAT(TOTAL_TAR,0,'de_DE') AS TOTAL_TARJETA"),
-            DB::raw("FORMAT(TOTAL_GIRO,0,'de_DE') AS TOTAL_GIROS")
+            DB::raw("IF( FORMAT(TOTAL_EFE,0,'de_DE') IS NULL, 0, FORMAT(TOTAL_EFE,0,'de_DE') ) AS TOTAL_EFECTIVO"),
+            DB::raw("IF (FORMAT(TOTAL_TAR,0,'de_DE') IS NULL,0,FORMAT(TOTAL_TAR,0,'de_DE') )  AS TOTAL_TARJETA"),
+            DB::raw("IF( FORMAT(TOTAL_GIRO,0,'de_DE') IS NULL, 0, FORMAT(TOTAL_GIRO,0,'de_DE') )  AS TOTAL_GIROS"),
+            DB::raw("IF( FORMAT(TOTAL_CHEQUE,0,'de_DE') IS NULL, 0 ,  FORMAT(TOTAL_CHEQUE,0,'de_DE')) AS TOTAL_CHEQUES")
 
-            /* DB::raw("FORMAT(SUM(EFECTIVO_INI) ,0,'de_DE' ) AS EFECTIVO_INI_TOTAL"),
-            DB::raw("FORMAT( SUM(TOTAL_EFE) ,0,'de_DE') AS TOTAL_EFE_TOTAL"),
-            DB::raw("FORMAT( SUM(TOTAL_TAR) ,0,'de_DE') AS TOTAL_TAR_TOTAL"),
-            DB::raw("FORMAT( SUM(TOTAL_GIRO) ,0,'de_DE') AS TOTAL_GIRO_TOTAL")*/
+            
 
         );
 
@@ -203,9 +204,12 @@ class SesionesController extends Controller
 
         //Totales discriminados por forma de pago
         $totales =    Ventas::join("ventas_det", "ventas_det.VENTA_ID", "=", "ventas.REGNRO")
+        ->leftJoin("servicios", "servicios.REGNRO", "=", "ventas.SERVICIO")
+
         ->where("SESION",  $sesion->REGNRO)
         ->where("ventas.ESTADO","<>",  "B")
-            ->select(DB::raw("sum(ventas_det.CANTIDAD*ventas_det.P_UNITARIO) AS TOTAL"), "FORMA")
+            ->select(DB::raw("sum(ventas_det.CANTIDAD*ventas_det.P_UNITARIO) AS TOTAL"),
+            DB::raw("if(servicios.COSTO IS NULL, 0, servicios.COSTO) AS COSTO_SERVICIO") , "FORMA")
             ->groupBy("FORMA")
             ->get();
 
@@ -217,21 +221,24 @@ class SesionesController extends Controller
         foreach ($totales as  $recaudado) :
             //Efectivo
             if ($recaudado->FORMA == "EFECTIVO")
-                $t_efe =  $recaudado->TOTAL;
+                $t_efe =  $recaudado->TOTAL + $recaudado->COSTO_SERVICIO;
             else {
                 //Tarjeta
                 if ($recaudado->FORMA == "TARJETA")
-                    $t_tar = $recaudado->TOTAL;
+                    $t_tar =  $recaudado->TOTAL + $recaudado->COSTO_SERVICIO;
                 else {
                     if ($recaudado->FORMA == "TIGO_MONEY")
-                        $t_giro =   $recaudado->TOTAL;
+                        $t_giro =    $recaudado->TOTAL + $recaudado->COSTO_SERVICIO;
                     elseif ($recaudado->FORMA == "CHEQUE")
-                    $t_cheque=    $recaudado->TOTAL;
+                    $t_cheque=     $recaudado->TOTAL + $recaudado->COSTO_SERVICIO;
                 }
             }
         endforeach;
-        $totalTodo =   $t_efe + $t_tar  + $t_giro + $t_cheque + $totalesDelivery;
-        $totalesVentas = ['TOTAL' => $totalTodo, 'TOTAL_DELIVERY'=>$totalesDelivery, 'EFECTIVO' => $t_efe,  'TARJETA' =>  $t_tar,  'TIGO_MONEY' =>   $t_giro, 'CHEQUE'=> $t_cheque];
+        $totalTodo =   $t_efe + $t_tar  + $t_giro + $t_cheque ;
+        $totalesVentas = ['TOTAL' => $totalTodo,
+         'TOTAL_DELIVERY'=>$totalesDelivery, 
+         'EFECTIVO' => $t_efe,  
+         'TARJETA' =>  $t_tar,  'TIGO_MONEY' =>   $t_giro, 'CHEQUE'=> $t_cheque];
 
         //Productos vendidos
         $detalleVentas =  Ventas_det::join("ventas",  "ventas_det.VENTA_ID", "=", "ventas.REGNRO")
@@ -304,7 +311,8 @@ class SesionesController extends Controller
                         "HORA_CIE" => date("H:i"),
                         'TOTAL_EFE' => $parametros['TOTALES']['EFECTIVO'],
                         'TOTAL_TAR' => $parametros['TOTALES']['TARJETA'],
-                        "TOTAL_GIRO" => $parametros['TOTALES']['TIGO_MONEY']
+                        "TOTAL_GIRO" => $parametros['TOTALES']['TIGO_MONEY'],
+                        "TOTAL_CHEQUE" => $parametros['TOTALES']['CHEQUE']
                     ]
                 );
                 $sesion->save();

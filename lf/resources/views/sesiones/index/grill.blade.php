@@ -57,6 +57,8 @@ $SESIONES =  isset($SESIONES) ? $SESIONES :  [];
             <th class="text-end">Tot.Efectivo</th>
             <th class="text-end">Tot.Tarjeta</th>
             <th class="text-end">Tot.Giros</th>
+            <th class="text-end">Tot.Cheques</th>
+
         </tr>
     </thead>
 
@@ -67,6 +69,7 @@ $SESIONES =  isset($SESIONES) ? $SESIONES :  [];
         $t_efectivo= 0;
         $t_tar= 0;
         $tot_giro= 0;
+        $tot_cheque= 0;
         @endphp
 
         @foreach( $SESIONES as $sesion)
@@ -75,7 +78,10 @@ $SESIONES =  isset($SESIONES) ? $SESIONES :  [];
         $t_efectivo += $sesion->TOTAL_EFE;
         $t_tar += $sesion->TOTAL_TAR;
         $tot_giro += $sesion->TOTAL_GIRO;
+        $tot_cheque+= $sesion->TOTAL_CHEQUE;
+        
         @endphp
+       
         <tr>
             @if( !isset($print_mode) )
             <td>
@@ -105,6 +111,7 @@ $SESIONES =  isset($SESIONES) ? $SESIONES :  [];
             <td class="text-end">{{$sesion->TOTAL_EFECTIVO}}</td>
             <td class="text-end">{{$sesion->TOTAL_TARJETA}}</td>
             <td class="text-end">{{$sesion->TOTAL_GIROS}}</td>
+            <td class="text-end">{{$sesion->TOTAL_CHEQUES}}</td>
         </tr>
         @endforeach
     </tbody>
@@ -115,6 +122,7 @@ $SESIONES =  isset($SESIONES) ? $SESIONES :  [];
         <td class="text-end">{{ $t_efectivo}}</td>
         <td class="text-end">{{ $t_tar}}</td>
         <td class="text-end">{{ $tot_giro}}</td>
+        <td class="text-end">{{ $tot_cheque}}</td>
     </tfoot>
 </table>
 </div>
