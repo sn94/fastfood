@@ -228,7 +228,7 @@ Route::group(['prefix' => 'cargo', 'middleware' => ['auth.Admin']], function () 
 });
 
 Route::group(['prefix' => 'servicios', 'middleware' => ['auth.Admin']], function () {
-    Route::get('/',   'ServiciosController@index');
+    
     Route::post('/buscar',   'ServiciosController@index');
     Route::get('/buscar',   'ServiciosController@index');
     Route::get('/create',    'ServiciosController@create');
@@ -236,6 +236,10 @@ Route::group(['prefix' => 'servicios', 'middleware' => ['auth.Admin']], function
     Route::get('/update/{id}',    'ServiciosController@update');
     Route::put('/',    'ServiciosController@update');
     Route::delete('/{id}',    'ServiciosController@delete');
+});
+Route::group(['prefix' => 'servicios', 'middleware' => ['auth.Caja']], function () {
+    Route::get('/',   'ServiciosController@index');
+   
 });
 
 Route::group(['prefix' => 'origen-venta', 'middleware' => ['auth.Admin']], function () {

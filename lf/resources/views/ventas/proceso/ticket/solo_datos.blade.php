@@ -24,7 +24,7 @@
          <thead>
          @if( $RAZON_SOCIAL != "")
          <tr>
-             <th colspan="5"> {{$RAZON_SOCIAL}}</th>
+             <th colspan="5" style=" font-size: 0.60rem;"> {{$RAZON_SOCIAL}}</th>
          </tr>
          <tr>
              <th colspan="5"> {{$DOMICILIO_COMERCIAL}}</th>
@@ -32,9 +32,7 @@
          <tr>
              <th colspan="5"> {{$TELEFONO_COMERCIAL}}</th>
          </tr>
-         <tr>
-             <th colspan="5"> {{$TICKETNRO}}</th>
-         </tr>
+         
          @endif
              <tr>
                  <th colspan="5"> TICKET N° {{$TICKETNRO}}</th>

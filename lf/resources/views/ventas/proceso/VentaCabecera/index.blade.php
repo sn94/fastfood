@@ -16,7 +16,7 @@
   </div>
   @if( Illuminate\Support\Facades\Config::get("app.my_config.funciones.delivery") == "S" )
   <div class="col-12   text-light   fs-5">
-    <x-pretty-checkbox name="DELIVERY" value="N" label="Con delivery" onValue="S" offValue="N" callback="calcularTotalesVuelto()" />
+    <x-pretty-checkbox name="DELIVERY" value="N" label="Forma de entrega" onValue="S" offValue="N" callback="calcularTotalesVuelto()" />
     <x-servicios-list name="SERVICIO" value="" id="" callback="calcularTotalesVuelto()" style="" class="form-select p-0 text-center  fs-5">
     </x-servicios-list>
   </div>

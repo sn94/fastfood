@@ -319,12 +319,20 @@ class SesionesController extends Controller
 
                 //ENVIAR POR EMAIL
                 $datosDelArqueo = $this->totalesArqueo($SesionId, TRUE);
-                $this->enviarArqueoPorEmail($datosDelArqueo);
+                request()->session()->forget('SESION');
+
+                try{ 
+                    $this->enviarArqueoPorEmail($datosDelArqueo);
+                
+                   
+                    return response()->json(['ok' =>  "Sesión cerrada"]);}
+                catch( Exception $ex){
+                    return response()->json(['ok' =>  "La sesion ha sido cerrada correctamente. Pero no se ha podido enviar el email correspondiente. Verifique el funcionamiento de correo."]);
+                }
+               
 
                 //session
 
-                request()->session()->forget('SESION');
-                return response()->json(['ok' =>  "Sesión cerrada"]);
             } catch (Exception $e) {
                 return response()->json(['err' =>  $e->getMessage()]);
             }

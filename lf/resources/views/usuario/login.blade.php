@@ -89,7 +89,7 @@ $BASE_ASSETS= url('assets');
                     <img class="img-fluid" src="{{url('assets/images/logo.png')}}" alt="">
                     @endif
                     @if(  Illuminate\Support\Facades\Config::get("app.my_config.themes.selected") == "FunnyOrange")
-                    <img style="width: 100px !important; height: auto !important;" class="img-fluid" src="{{url('assets/icons/burger_icon.png')}}" alt="">
+                    <img style="width: 100px !important; height: auto !important;align-self: center;" class="img-fluid" src="{{url('assets/icons/burger_icon.png')}}" alt="">
                     @endif
 
 

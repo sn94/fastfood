@@ -1,21 +1,29 @@
 /**SW 1.0 */
 /**Control de cache  */
+const base_url= "/fastfood";
 const nombreCache = "FastFoodCache";
 const recursosParaCache = [
-    "/fastfood/assets/images/fastfood_wallpaper.jpg",
-    "/fastfood/assets/images/navbar-bg-1.jpg"
+    base_url+"/assets/images/fastfood_wallpaper.jpg",
+    base_url+"/assets/images/navbar-bg-1.jpg",
+    base_url+"/assets/icons/burger_icon.png",
+    base_url+"/assets/icons/atencion.png",
+    base_url+"/assets/images/bg-screen.png",
+
+    //js 
+    base_url+"/assets/js/jquery.min.js",
+    base_url+"/assets/bootstrap5/bootstrap.bundle.min.js",
+    base_url+"/assets/js/custom.js?v=366298319000"
 ];
 
 /**Filtrar peticiones, y utilizar la cache cuando es necesario */
 self.addEventListener('fetch', (e) => {
 
-    console.log(" Datos del Fetch", e.request);
+   
     e.respondWith(
         caches.
             match(e.request).
             then(respuesta =>{ 
-                console.log(" Respuesta de la cache", respuesta ? "de la cache" : "con fetch");
-
+              
                 return respuesta || fetch(e.request);
             } )
 
