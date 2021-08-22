@@ -1,0 +1,176 @@
+/*
+
+Botones rojos
+
+
+Titulos en fondo gris */
+
+@font-face {
+    font-family: "mainfont";
+    /*  font-family: 'Dosis', sans-serif;*/
+    src: url(../../assets/fonts/Dosis.ttf);
+    /*src: url('https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap');*/
+}
+
+html {
+    height: 100%;
+}
+
+html>*,
+label {
+    font-family: mainfont !important;
+}
+
+ :root {
+    --bs-warning: #ebc16f !important;
+    /*  #ffb74d*/
+    /**Paleta*/
+    --color-1: #bc7a41;
+    --color-2: #6a3d13;
+    --color-primario: #BD2006;
+    --color-secundario: #c23927;
+    --color-acentuador: #03A631;
+    --color-primario-translucido: #b6190970;
+    --color-primario-oscuro: #a01809;
+    --color-4: #ebcc8c;
+    --color-5: #070707;
+    --color-6: #1b1b1c;
+    --color-7: #141313;
+    --color-8: #3c5510;
+    --color-9: #37200a;
+    --color-10: #75873a;
+    --color-11: #1f0d06;
+    --color-12: #e0b094;
+    --color-13: #213704;
+    --color-14: #7c6c5c;
+    --color-15: #413c36;
+}
+
+body {
+    background-color: #8f998b !important;
+}
+
+.bg-warning {
+    background-color: var(--bs-warning) !important;
+}
+
+.btn-warning {
+    background-color: var(--bs-warning) !important;
+}
+
+
+/**Estilos propios**/
+
+.fast-food-bg {
+    border: 1px solid var(--color-14) !important;
+    box-shadow: 1px 1px 0px 1px gray;
+    background-color: white !important;
+    border-radius: 8px;
+    background-image: url(../../assets/images/bg-screen.png);
+    background-repeat: no-repeat;
+    background-size: 40%;
+    background-position-y: bottom;
+    background-position-x: right;
+}
+
+.fast-food-bg .fast-food-big-title {
+    text-align: center;
+    background: var(--color-14) !important;
+    border-radius: 0px 0px 100% 100% !important;
+    font-size: 1.3em !important;
+    color: white !important;
+}
+
+.fast-food-form-button {
+    color: white !important;
+    background-color: var(--color-primario) !important;
+}
+
+.fast-food-form-button:hover {
+    box-shadow: 0px 0px 5px 1px red;
+}
+
+.fast-food-secondary-button {
+    color: white !important;
+    background-color: var(--color-secundario) !important;
+    margin-right: 1px;
+}
+
+.fast-food-secondary-button:hover {
+    box-shadow: 0px 0px 5px 1px orangered;
+}
+
+.fast-food-table {
+    background-color: white !important;
+}
+
+
+/**
+Sobreescribir estilos **/
+
+div>a i.fa {
+    background-color: var(--color-secundario);
+    border-radius: 40px;
+    padding: 5px;
+    border: 1px solid var(--color-primario);
+    color: white;
+    transition: all .5s ease;
+}
+
+div>a i.fa:hover {
+    border: 1px solid var(--color-primario);
+    box-shadow: 0 0 10px var(--color-primario);
+    background: linear-gradient( to bottom left, var(--color-primario), var(--color-1));
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0px 7px var(--color-primario-translucido) !important;
+}
+
+input[readonly] {
+    background-color: #9b9a9a !important;
+}
+
+
+/**Boton de retroceso **/
+
+.backward-button {
+    border-radius: 0 100% 100% 0;
+    padding: 18px;
+    position: fixed;
+    background-color: var(--color-primario-oscuro);
+    color: white;
+    font-weight: bold;
+    border: none;
+    z-index: 1;
+    bottom: 0%;
+    left: 0%;
+}
+
+.backward-button:hover {
+    background-color: var(--color-primario);
+    box-shadow: 0 0 10px var(--color-primario-oscuro);
+    font-size: calc(1em + 5px);
+}
+
+
+/***
+Unidad de medida de producto **/
+
+.MEDIDA {
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color: var(--color-secundario) !important;
+    position: relative;
+    z-index: 1;
+    top: 1px;
+    color: white;
+    border-radius: 0px 0px 8px 8px;
+    text-align: center;
+}
+
+
+/**
+Panel Informativo 
+informacion de usuario en sesion
+*/

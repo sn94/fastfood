@@ -1,5 +1,6 @@
 pizza-gh-pages/*
-lf/vendor/*
+vendor/*
 node_modules/*
 assets_dev/*
 dist/*
+.env

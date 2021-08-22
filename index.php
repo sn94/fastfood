@@ -4,7 +4,7 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
-define('LARAVEL_DIR',  __DIR__.'/lf');
+define('LARAVEL_DIR',  __DIR__   );
 
 /*
 |--------------------------------------------------------------------------
