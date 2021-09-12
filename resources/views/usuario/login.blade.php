@@ -8,14 +8,14 @@ $BASE_ASSETS= url('assets');
 <head>
     <title>Fast Food</title>
     <meta charset="utf-8">
-    <link rel="manifest" href="{{url('manifest.json')}}" />
-    <link rel="apple-touch-icon" href="{{url('assets/icons/maskable/burger144.png')}}" />
+    <link rel="manifest" href="{{ url('manifest.json')}}" />
+    <link rel="apple-touch-icon" href="{{asset('assets/icons/maskable/burger144.png')}}" />
     <meta name="theme-color" content="#a01809" />
-    <link rel="icon" href="{{url('assets/icons/burger_icon.png')}}">
+    <link rel="icon" href="{{asset('assets/icons/burger_icon.png')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
-    $BASE_ASSETS= url('assets');
+    $BASE_ASSETS= asset('assets');
     @endphp
 
     <!--Carga temprana de jquery -->
@@ -23,14 +23,14 @@ $BASE_ASSETS= url('assets');
     <link rel="stylesheet" href="{{$BASE_ASSETS}}/bootstrap5/bootstrap.min.css">
     <link rel="stylesheet" href="{{$BASE_ASSETS}}/css/custom.css?v={{rand()*1000}}">
     <script src="{{$BASE_ASSETS}}/js/custom.js?v={{rand()*1000}}"> </script>
-    <script src="{{url('/')}}/install_sw.js?v={{rand()*1000}}"> </script>
+    <script src="{{asset('/')}}/install_sw.js?v={{rand()*1000}}"> </script>
 
 
     <style>
         body {
 
             background-color: black !important;
-            background-image: url(<?= url("assets/images/bg-fastfood-login.png") ?>);
+            background-image: url(<?= asset("assets/images/bg-fastfood-login.png") ?>);
             background-size: cover;
             background-repeat: no-repeat;
             height: 100vh;
@@ -78,9 +78,9 @@ $BASE_ASSETS= url('assets');
 
 <body class="d-flex flex-row justify-content-center">
 
-
+ 
     <div class="container-fluid d-flex " style="background-color: #6a3d13a8;">
-        <div class="container pt-5 pt-md-3 pb-5 pb-md-3 col-12 col-md-6 col-lg-4 align-self-center rounded" id="FORM-PANEL" style="background-image: url({{url('assets/images/login_wallpaper.jpg')}});">
+        <div class="container pt-5 pt-md-3 pb-5 pb-md-3 col-12 col-md-6 col-lg-4 align-self-center rounded" id="FORM-PANEL" style="background-image: url({{ asset('assets/images/login_wallpaper.jpg')}});">
             <form class="  m-0 p-0 p-md-2 " onkeypress="if(event.keyCode == 13) event.preventDefault();" onsubmit="login(event)" action="{{url('usuario/sign-in')}}" method="POST" style=" display: flex; flex-direction: column;">
 
                 <div class="container d-flex flex-column justify-content-center">
@@ -89,7 +89,7 @@ $BASE_ASSETS= url('assets');
                     <img class="img-fluid" src="{{url('assets/images/logo.png')}}" alt="">
                     @endif
                     @if(  Illuminate\Support\Facades\Config::get("app.my_config.themes.selected") == "FunnyOrange")
-                    <img style="width: 100px !important; height: auto !important;align-self: center;" class="img-fluid" src="{{url('assets/icons/burger_icon.png')}}" alt="">
+                    <img style="width: 100px !important; height: auto !important;align-self: center;" class="img-fluid" src="{{ asset('assets/icons/burger_icon.png')}}" alt="">
                     @endif
 
 
